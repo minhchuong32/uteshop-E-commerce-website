@@ -1,0 +1,63 @@
+@charset "UTF-8";
+
+/* -------------- Header css ----------------- */
+/* Mini cart mặc định ẩn */
+.mini-cart {
+  position: absolute;
+  top: 40px; /* cách icon xuống dưới */
+  right: 0;
+  width: 250px;
+  background: #fff;
+  border: 1px solid #ddd;
+  display: none;
+  z-index: 9999;
+}
+
+/* Hover vào giỏ hàng thì show */
+.cart-item:hover .mini-cart {
+  display: block;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Hiệu ứng xuất hiện */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn-search:hover,
+.login-btn:hover {
+  opacity: 0.7 !important;
+}
+
+.register-btn:hover {
+  text-decoration: underline;
+  opacity: 0.7;
+}
+
+.cart-item:hover {
+  opacity: 0.8;
+}
+
+/* Responsive chỉnh lại trên màn hình nhỏ */
+@media (max-width: 767px) {
+  .search-form {
+    margin: 10px 0; /* tách search xuống dưới logo */
+    width: 100%;
+  }
+  .user-links {
+    flex-direction: column; /* các link xếp dọc */
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .login-btn {
+    width: 100%; /* nút login full chiều ngang */
+    text-align: center;
+  }
+}
