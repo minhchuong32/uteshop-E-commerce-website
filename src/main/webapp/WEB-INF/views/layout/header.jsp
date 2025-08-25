@@ -4,7 +4,7 @@
 	href="${pageContext.request.contextPath}/assets/css/header.css">
 
 <header>
-	<nav class="navbar navbar-expand-lg navbar-dark"
+	<nav class="navbar navbar-expand-lg navbar-dark fixed-top"
 		style="background-color: #FFFFFF">
 		<div class="container">
 			<!-- Logo -->
