@@ -53,10 +53,10 @@
 					<li class="nav-item px-2 text-primary d-none d-lg-block"
 						style="color: #00558D !important;">|</li>
 
-					<!-- Đăng ký -->
+					<!-- Đăng ký -->	
 					<li class="nav-item fw-semibold register-btn"><a
 						class="nav-link text-primary" style="color: #00558D !important;"
-						href="${pageContext.request.contextPath}/auth/register.jsp">
+						href="${pageContext.request.contextPath}/register">
 							Đăng ký </a></li>
 
 					<!-- Giỏ hàng -->

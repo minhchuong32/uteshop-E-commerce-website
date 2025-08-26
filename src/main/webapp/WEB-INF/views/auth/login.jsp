@@ -65,7 +65,7 @@ body {
                         <li class="nav-item px-2 d-none d-lg-block text-primary" style="color: #00558D !important;">|</li>
                         <li class="nav-item fw-semibold register-btn">
                             <a class="nav-link text-primary" style="color: #00558D !important;"
-                               href="${pageContext.request.contextPath}/auth/register.jsp">Đăng ký</a>
+                               href="${pageContext.request.contextPath}/register">Đăng ký</a>
                         </li>
                     </ul>
                 </div>
@@ -115,7 +115,7 @@ body {
             <!-- Register -->
             <div class="text-center mt-3">
                 <span class="text-muted">Chưa có tài khoản? </span>
-                <a href="register.jsp" class="fw-semibold">Đăng ký</a>
+                <a href="${pageContext.request.contextPath}/register" class="fw-semibold">Đăng ký</a>
             </div>
 
             <!-- Demo Credentials -->
