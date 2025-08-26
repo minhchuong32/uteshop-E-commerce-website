@@ -23,7 +23,7 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(to bottom right, #00558D, #ffffff);
+  background: linear-gradient(to bottom left, #00558D, #ffffff);
 }
 .main-content {
   flex: 1;
@@ -61,11 +61,7 @@ body {
                         <li class="nav-item">
                             <a class="btn btn-sm login-btn text-white" style="background-color: #00558D;"
                                href="${pageContext.request.contextPath}/login">Đăng nhập</a>
-                        </li>
-                        <li class="nav-item px-2 d-none d-lg-block text-primary">|</li>
-                        <li class="nav-item fw-semibold register-btn">
-                            <a class="nav-link text-primary" href="${pageContext.request.contextPath}/register">Đăng ký</a>
-                        </li>
+                        </li>                   
                     </ul>
                 </div>
             </div>

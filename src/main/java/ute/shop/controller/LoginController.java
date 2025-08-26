@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(urlPatterns = { "/login"})
-public class AuthController extends HttpServlet{
+public class LoginController extends HttpServlet{
 
 	/**
 	 * 

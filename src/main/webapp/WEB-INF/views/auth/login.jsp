@@ -53,16 +53,11 @@ body {
                 <!-- Toggle button -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                     aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="navbar-toggler-icon"></span>	
                 </button>
                 <!-- Menu -->
                 <div class="collapse navbar-collapse" id="navbarContent">
                     <ul class="navbar-nav mb-2 mb-lg-0 align-items-center user-links ms-auto">
-                        <li class="nav-item">
-                            <a class="btn btn-sm login-btn text-white" style="background-color: #00558D;"
-                               href="${pageContext.request.contextPath}/login">Đăng nhập</a>
-                        </li>
-                        <li class="nav-item px-2 d-none d-lg-block text-primary" style="color: #00558D !important;">|</li>
                         <li class="nav-item fw-semibold register-btn">
                             <a class="nav-link text-primary" style="color: #00558D !important;"
                                href="${pageContext.request.contextPath}/register">Đăng ký</a>
@@ -106,7 +101,7 @@ body {
                         <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
                         <label class="form-check-label" for="rememberMe">Remember me</label>
                     </div>
-                    <a href="forgot-password.jsp" class="text-decoration-none">Quên mật khẩu?</a>
+                    <a href="${pageContext.request.contextPath}/forgot-password" class="text-decoration-none">Quên mật khẩu?</a>
                 </div>
                 <!-- Submit -->
                 <button type="submit" class="btn w-100" style="background-color: #00558D; color: white;">Đăng nhập</button>
