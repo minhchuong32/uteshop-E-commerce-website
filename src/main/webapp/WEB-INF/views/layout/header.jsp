@@ -42,11 +42,11 @@
 
 				<!-- Liên kết người dùng -->
 				<ul class="navbar-nav mb-2 mb-lg-0 align-items-center user-links">
-					<!-- Đăng nhập có background -->
+					<!-- Đăng nhập-->
 					<li class="nav-item"><a
 						class="btn btn-sm login-btn text-white"
 						style="background-color: #00558D;"
-						href="${pageContext.request.contextPath}/auth/login.jsp"> Đăng
+						href="${pageContext.request.contextPath}/login"> Đăng
 							nhập </a></li>
 
 					<!-- Dấu | -->
