@@ -1,9 +1,14 @@
 @charset "UTF-8";
 
+
 #bannerDiv {
 	overflow: hidden;
 	max-width: 1200px;
 	margin: auto;
+}
+
+.btn:hover {
+	opacity: 0.8 !important;
 }
 
 .banner-img {
@@ -19,4 +24,49 @@ body {
 /* Làm animation trượt chậm hơn */
 .carousel-item {
 	transition: transform 1s ease-in-out; /* mặc định ~0.6s */
+}
+
+
+.container-item:hover{
+	opacity: 0.7;
+	cursor: pointer;
+	border: solid 1px #ddd;
+}
+
+/* Sản phẩm gợi ý */
+/* Ảnh cover, hover scale */
+.product-img {
+    height: 200px; /* chiều cao cố định */
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.05);
+}
+
+/* Hover toàn bộ card (tùy chọn) */
+.product-card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+    transition: box-shadow 0.3s;
+    cursor: pointer;
+}
+
+/* Phân trang */
+.page-active {
+	background-color: #00558D !important;
+	color: white !important;
+}
+
+.pagination .page-item:not(.active) .page-link {
+    color: #00558D;
+}
+
+#newestBtn, #popularBtn {
+	border: 1px solid #00558D;
+}
+
+#newestBtn:hover, #popularBtn:hover {
+	background-color: #00558D;
+	color: white;
 }
