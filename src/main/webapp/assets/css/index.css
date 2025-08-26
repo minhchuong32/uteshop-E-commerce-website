@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+#bannerDiv {
+	overflow: hidden;
+	max-width: 1200px;
+	margin: auto;
+}
+
+.banner-img {
+	height: 400px;
+	object-fit: cover;
+	cursor: pointer;
+}
+body {
+    padding-top: 77px; /* tránh header che nội dung */
+}
+
+	
+/* Làm animation trượt chậm hơn */
+.carousel-item {
+	transition: transform 1s ease-in-out; /* mặc định ~0.6s */
+}

@@ -5,7 +5,7 @@
 
       <!-- Company Info -->
       <div class="col-md-3 mb-4">
-        <img src="${pageContext.request.contextPath}/assets/images/logo_footer.png" 
+        <img src="${pageContext.request.contextPath}/assets/images/logo_footer_strong.png" 
          alt="UTESHOP Logo" 
          style="height:60px; width:auto; margin-right:8px; margin-left: -12px;">
         <p class="small text-light">
@@ -34,7 +34,7 @@
         <h6 class="fw-semibold text-white">Hỗ trợ khách hàng</h6>
         <ul class="list-unstyled">
           <li><a href="#" class="text-light text-decoration-none">Trung tâm trợ giúp</a></li>
-          <li><a href="#" class="text-light text-decoration-none">Đổi trả & Hoàn tiền</a></li>
+          <li><a href="#" class="text-light text-decoration-none">Đổi trả và Hoàn tiền</a></li>
           <li><a href="#" class="text-light text-decoration-none">Thông tin vận chuyển</a></li>
           <li><a href="#" class="text-light text-decoration-none">Theo dõi đơn hàng</a></li>
         </ul>

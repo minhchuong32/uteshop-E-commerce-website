@@ -8,9 +8,9 @@
 		style="background-color: #FFFFFF">
 		<div class="container">
 			<!-- Logo -->
-			<a class="navbar-brand d-flex align-items-center"
+			<a class="navbar-brand d-flex align-items-center w-29px"
 				href="${pageContext.request.contextPath}/"> <img
-				src="${pageContext.request.contextPath}/assets/images/logo.png"
+				src="${pageContext.request.contextPath}/assets/images/logo_strong.png"
 				alt="Logo" height="50" class="me-2">
 			</a>
 

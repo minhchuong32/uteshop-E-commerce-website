@@ -22,7 +22,6 @@ header nav {
   display: block;
   animation: fadeIn 0.2s ease-in-out;
 }
-
 /* Hiệu ứng xuất hiện */
 @keyframes fadeIn {
   from {
