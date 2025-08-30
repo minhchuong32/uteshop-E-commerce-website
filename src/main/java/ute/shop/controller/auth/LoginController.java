@@ -1,4 +1,4 @@
-package ute.shop.controller;
+package ute.shop.controller.auth;
 
 import java.io.IOException;
 
@@ -21,4 +21,10 @@ public class LoginController extends HttpServlet{
         // Forward tới login.jsp trong WEB-INF
         request.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(request, response);
     }
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		super.doPost(req, resp);
+	}
 }

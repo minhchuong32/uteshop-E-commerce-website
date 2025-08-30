@@ -10,33 +10,33 @@
 	<packaging>war</packaging>
 	<name>UTESHOP Servlet Project</name>
 
-	<properties>
-		<maven.compiler.source>22</maven.compiler.source>
-		<maven.compiler.target>22</maven.compiler.target>
-	</properties>
+
 
 	<dependencies>
-		<!-- Jakarta Servlet API -->
-		<dependency>
-			<groupId>jakarta.servlet</groupId>
-			<artifactId>jakarta.servlet-api</artifactId>
-			<version>6.1.0</version>
-			<scope>provided</scope>
-		</dependency>
+	
+		<!-- CONNECT JSP FILE EXEC -->
+			<!-- Jakarta Servlet API -->
+			<dependency>
+				<groupId>jakarta.servlet</groupId>
+				<artifactId>jakarta.servlet-api</artifactId>
+				<version>6.1.0</version>
+				<scope>provided</scope>
+			</dependency>
+	
+			<!-- JSTL API -->
+			<dependency>
+				<groupId>jakarta.servlet.jsp.jstl</groupId>
+				<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+				<version>3.0.2</version>
+			</dependency>
+	
+			<!-- JSTL Implementation -->
+			<dependency>
+				<groupId>org.glassfish.web</groupId>
+				<artifactId>jakarta.servlet.jsp.jstl</artifactId>
+				<version>3.0.1</version>
+			</dependency>
 
-		<!-- JSTL API -->
-		<dependency>
-			<groupId>jakarta.servlet.jsp.jstl</groupId>
-			<artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-			<version>3.0.2</version>
-		</dependency>
-
-		<!-- JSTL Implementation -->
-		<dependency>
-			<groupId>org.glassfish.web</groupId>
-			<artifactId>jakarta.servlet.jsp.jstl</artifactId>
-			<version>3.0.1</version>
-		</dependency>
 
 		<!-- MySQL Connector -->
 		<dependency>
@@ -44,8 +44,16 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.33</version>
 		</dependency>
+		
+		<!-- SQL SERVER -->
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>13.2.0.jre11</version>
+			<scope>compile</scope>
+		</dependency>
 
-		<!-- Bootstrap (nếu muốn load từ Maven, optional) -->
+		<!-- Bootstrap-->
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>bootstrap</artifactId>
@@ -62,8 +70,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.14.0</version>
 				<configuration>
-					<source>${maven.compiler.source}</source>
-					<target>${maven.compiler.target}</target>
+					<source>22</source>
+					<target>22</target>
 				</configuration>
 			</plugin>
 

@@ -1,19 +1,33 @@
 package ute.shop.test;
 
-import ute.shop.utils.DBConnectMySql;
 import java.sql.Connection;
 
-public class TestDb {
-    public static void main(String[] args) {
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
+import java.io.IOException;
+import ute.shop.connection.DBConnectSQLServer;
+
+@WebServlet("/testdb")
+public class TestDb extends HttpServlet {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("text/html;charset=UTF-8");
         try {
-            Connection conn = DBConnectMySql.getConnection();
+        	DBConnectSQLServer db = new DBConnectSQLServer();  // tạo đối tượng
+        	Connection conn = db.getConnection();  	
             if (conn != null) {
-                System.out.println("✅ Đã kết nối thành công tới MySQL!");
+                resp.getWriter().println("<h3>Kết nối DataBase thành công!</h3>");
             } else {
-                System.out.println("❌ Kết nối thất bại!");
+                resp.getWriter().println("<h3>Kết nối DB thất bại!</h3>");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            resp.getWriter().println("<h3>Lỗi: " + e.getMessage() + "</h3>");
         }
     }
 }

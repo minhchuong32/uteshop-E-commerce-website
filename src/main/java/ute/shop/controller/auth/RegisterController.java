@@ -1,4 +1,4 @@
-package ute.shop.controller;
+package ute.shop.controller.auth;
 
 import java.io.IOException;
 

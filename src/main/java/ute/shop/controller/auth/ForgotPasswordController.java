@@ -1,4 +1,4 @@
-package ute.shop.controller;
+package ute.shop.controller.auth;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ public class ForgotPasswordController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Lấy email hoặc số điện thoại từ form
-        String emailOrPhone = request.getParameter("emailOrPhone");
+//        String emailOrPhone = request.getParameter("emailOrPhone");
 
         // TODO: kiểm tra trong DB xem có tồn tại tài khoản không
         boolean userExists = true; // tạm thời giả sử có
