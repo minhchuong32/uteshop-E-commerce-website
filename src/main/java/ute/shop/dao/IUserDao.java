@@ -16,5 +16,7 @@ public interface IUserDao {
 	
 	User findByUsername(String username);
 
+	User getUserById(int id);
+	
 	void updatePassword(String email, String newPassword);
 }

@@ -1,44 +1,30 @@
-/* Header cố định 80px */
-.admin-header {
-    height: 80px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+
+/* Mặc định: chữ trắng, icon xám */
+.nav-link {
+	text-decoration: none;
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;           /* khoảng cách giữa icon và chữ */
+}
+.nav-link i {
+    color: white;
 }
 
-/* Sidebar */
-.sidebar {
-    width: 220px;
-    background-color: #00558D;
-    color: #fff;
-    min-height: 100vh;
-    padding-top: 100px; /* Thêm khoảng trống 100px để không bị che header */
-    position: fixed; /* Giữ sidebar cố định */
+/* Hover: nền xám nhạt, chữ + icon xanh */
+.nav-link:hover {
+    background-color: #f0f0f0;
+    color: #00558D !important;
+}
+.nav-link:hover i {
+    color: #00558D !important;
 }
 
-/* Main content */
-.main {
-    margin-left: 220px; /* bằng width sidebar */
-    padding: 100px 20px 20px 20px; /* padding-top = header height + 20px */
-    background-color: #f8f9fa;
-    min-height: 100vh;
+/* Active: nền xanh nhạt, chữ + icon xanh */
+.nav-link.active {
+    background-color: #e0f0ff;
+    color: #00558D !important;
 }
-
-/* Cards thống kê */
-.stat-card {
-    border-radius: 10px;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-}
-.stat-card:hover {
-    transform: translateY(-5px);
-}
-
-/* Product card admin */
-.product-card {
-    transition: 0.3s;
-}
-.product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+.nav-link.active i {
+    color: #00558D !important;
 }

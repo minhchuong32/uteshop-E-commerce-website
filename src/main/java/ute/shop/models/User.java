@@ -1,6 +1,7 @@
 package ute.shop.models;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class User implements Serializable  {
 	private static final long serialVersionUID = 1L;
@@ -10,8 +11,9 @@ public class User implements Serializable  {
 	private String email;
 	private String role;
 	private String status;
+	private Date createDate;
 	
-	public User (int user_id, String username, String password, String email, String role, String status) {
+	public User (int user_id, String username, String password, String email, String role, String status, Date createDate) {
 		super();
 		this.user_id = user_id;
 		this.username = username;
@@ -19,6 +21,7 @@ public class User implements Serializable  {
 		this.email = email;
 		this.role = role;
 		this.status = status;
+		this.createDate = createDate;
 	}
 
 	public User() {
@@ -78,10 +81,19 @@ public class User implements Serializable  {
 		return serialVersionUID;
 	}
 
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
 	@Override
 	public String toString() {
 		return "User [user_id=" + user_id + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", role=" + role + ", status=" + status + "]";
+				+ ", role=" + role + ", status=" + status + ", createDate=" + createDate + "]";
 	}
 	
 	

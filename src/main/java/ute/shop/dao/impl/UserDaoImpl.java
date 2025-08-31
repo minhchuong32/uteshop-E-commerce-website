@@ -23,7 +23,7 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 
 			while (rs.next()) {
 				User user = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
-						rs.getString("email"), rs.getString("role"), rs.getString("status"));
+						rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"));
 				list.add(user);
 			}
 		} catch (Exception e) {
@@ -88,7 +88,7 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
-							rs.getString("email"), rs.getString("role"), rs.getString("status"));
+							rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"));
 				}
 			}
 		} catch (Exception e) {
@@ -106,7 +106,7 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
-							rs.getString("email"), rs.getString("role"), rs.getString("status"));
+							rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"));
 				}
 			}
 		} catch (Exception e) {
@@ -126,5 +126,25 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public User getUserById(int id) {
+		// TODO Auto-generated method stub
+		String sql = "SELECT * FROM Users WHERE user_id=?";
+		try (Connection conn = super.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+			ps.setInt(1, id);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
+							rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 }

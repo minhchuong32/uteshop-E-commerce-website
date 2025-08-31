@@ -2,6 +2,7 @@ package ute.shop.service.impl;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import ute.shop.models.User;
 import ute.shop.dao.IUserDao;
@@ -100,5 +101,18 @@ public class UserServiceImpl implements IUserService {
 		// Hash trước khi update
 		String hashedPassword = hashPassword(newPassword);
 		userDao.updatePassword(email, hashedPassword);
+	}
+
+	@Override
+	public List<User> getAllUsers() {
+		// TODO Auto-generated method stub
+		List<User> users = userDao.findAll();
+		return users;
+	}
+
+	@Override
+	public User getUserById(int id) {
+		// TODO Auto-generated method stub
+		return userDao.getUserById(id);
 	}
 }

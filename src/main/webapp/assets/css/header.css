@@ -5,23 +5,7 @@ header nav {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); /* ngang dọc, blur, màu */
 }
 
-/* Mini cart mặc định ẩn */
-.mini-cart {
-  position: absolute;
-  top: 40px; /* cách icon xuống dưới */
-  right: 0;
-  width: 250px;
-  background: #fff;
-  border: 1px solid #ddd;
-  display: none;
-  z-index: 9999;
-}	
 
-/* Hover vào giỏ hàng thì show */
-.cart-item:hover .mini-cart {
-  display: block;
-  animation: fadeIn 0.2s ease-in-out;
-}
 /* Hiệu ứng xuất hiện */
 @keyframes fadeIn {
   from {

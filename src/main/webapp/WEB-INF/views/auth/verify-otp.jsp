@@ -74,15 +74,6 @@ body {
 	<div class="main-content">
 		<div class="reset-card py-4 mb-3">
 			<h4>Nhập mã OTP</h4>
-
-			<% if (request.getAttribute("error") != null) { %>
-			<div class="alert alert-danger"><%= request.getAttribute("error") %></div>
-			<% } %>
-
-			<% if (request.getAttribute("message") != null) { %>
-			<div class="alert alert-success"><%= request.getAttribute("message") %></div>
-			<% } %>
-
 			<form
 				action="${pageContext.request.contextPath}/forgot-password/verify-otp"
 				method="post">
