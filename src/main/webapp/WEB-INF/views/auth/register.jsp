@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -81,11 +84,14 @@ body {
 
             <!-- Register Form -->
             <form action="register" method="post">
-                <!-- Fullname -->
+            <c:if test="${alert !=null}">
+				<h3 class="alert alertdanger">${alert}</h3>
+			</c:if>
+                <!-- Username -->
                 <div class="mb-3">
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-person"></i></span>
-                        <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Tên đăng nhập" required>
+                        <input type="text" class="form-control" id="fullname" name="username" placeholder="Tên đăng nhập" required>
                     </div>
                 </div>
                 <!-- Email -->

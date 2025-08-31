@@ -1,5 +1,20 @@
 package ute.shop.dao;
 
-public interface IUserDao {
+import java.util.List;
+import ute.shop.models.User;
 
+public interface IUserDao {
+	List<User> findAll();
+	
+	void Insert(User user); 
+	
+	void Update(User user);
+	
+	void Delete(int id);
+	
+	User findByEmail(String email);
+	
+	User findByUsername(String username);
+
+	void updatePassword(String email, String newPassword);
 }

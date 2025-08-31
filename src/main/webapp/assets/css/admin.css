@@ -1,0 +1,44 @@
+/* Header cố định 80px */
+.admin-header {
+    height: 80px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 220px;
+    background-color: #00558D;
+    color: #fff;
+    min-height: 100vh;
+    padding-top: 100px; /* Thêm khoảng trống 100px để không bị che header */
+    position: fixed; /* Giữ sidebar cố định */
+}
+
+/* Main content */
+.main {
+    margin-left: 220px; /* bằng width sidebar */
+    padding: 100px 20px 20px 20px; /* padding-top = header height + 20px */
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Cards thống kê */
+.stat-card {
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Product card admin */
+.product-card {
+    transition: 0.3s;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}

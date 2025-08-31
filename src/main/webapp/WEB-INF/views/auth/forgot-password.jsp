@@ -1,4 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +36,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-top:100px;
+	margin-top: 100px;
 }
 
 .reset-card {
@@ -62,22 +65,21 @@ body {
 	font-weight: 600;
 	border-radius: 0.5rem;
 }
+
 .back-btn {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    font-size: 30px;
-    color: #00558D;
-    text-decoration: none;
-    margin-bottom: 1rem; /* tạo khoảng cách với tiêu đề */
-    width: fit-content; /* chỉ chiếm chỗ icon */
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	font-size: 30px;
+	color: #00558D;
+	text-decoration: none;
+	margin-bottom: 1rem; /* tạo khoảng cách với tiêu đề */
+	width: fit-content; /* chỉ chiếm chỗ icon */
 }
 
 .back-btn:hover {
-    opacity: 0.4;
+	opacity: 0.4;
 }
-
-
 </style>
 </head>
 <body>
@@ -130,18 +132,26 @@ body {
 				<i class="bi bi-arrow-left"></i>
 			</a>
 			<h4>Đặt lại mật khẩu</h4>
-			<form action="reset-password" method="post">
+			<form action="${pageContext.request.contextPath}/forgot-password"
+				method="post">
+				<c:if test="${not empty error}">
+					<div class="alert alert-danger">${error}</div>
+				</c:if>
 				<div class="mb-3">
-					<input type="text" class="form-control" name="emailOrPhone"
-						placeholder="Email/Số Điện thoại" required>
+					<input type="email" class="form-control"
+						name="email_forgot_password" placeholder="Nhập Email đăng ký"
+						required>
 				</div>
-				<button type="submit" class="btn w-100 text-white"
-					style="background-color: #00558D;">TIẾP THEO</button>
+				<button type="submit"
+					class="btn w-100 d-flex align-items-center justify-content-center text-white"
+					style="background-color: #00558D; height: 45px; border-radius: 8px;">
+					TIẾP THEO</button>
 			</form>
+
 		</div>
 	</div>
 
-	
+
 
 	<!-- Bootstrap Script -->
 	<script
