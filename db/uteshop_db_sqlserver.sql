@@ -310,3 +310,31 @@ INSERT INTO deliveries (shipper_id, order_id, status) VALUES
 (8, 9, 'delivered'),
 (9, 10, 'assigned');
 GO
+
+
+-- ========================
+-- Thêm bảng thông tin settings cho admin (chuong/31/8/2025)
+-- ========================
+
+CREATE TABLE StoreSettings (
+    id INT IDENTITY(1,1) PRIMARY KEY,          -- Khóa chính
+    store_name NVARCHAR(255) NOT NULL,         -- Tên cửa hàng
+    email NVARCHAR(255) NULL,                  -- Email liên hệ
+    hotline NVARCHAR(50) NULL,                 -- Hotline
+    address NVARCHAR(500) NULL,                -- Địa chỉ cửa hàng
+    logo NVARCHAR(500) NULL,                   -- Đường dẫn logo
+    theme NVARCHAR(50) DEFAULT 'default',      -- Giao diện (default, dark, light...)
+    cod_enabled BIT DEFAULT 1,                 -- Cho phép COD
+    momo_enabled BIT DEFAULT 0,                -- Cho phép MoMo
+    vnpay_enabled BIT DEFAULT 0,               -- Cho phép VNPAY
+    created_at DATETIME DEFAULT GETDATE(),     -- Ngày tạo
+    updated_at DATETIME DEFAULT GETDATE()      -- Ngày cập nhật
+);
+
+
+INSERT INTO StoreSettings 
+(store_name, email, hotline, address, logo, theme, cod_enabled, momo_enabled, vnpay_enabled)
+VALUES 
+(N'UteShop', N'support@uteshop.com', N'0123 456 789', 
+ N'123 Nguyễn Văn Bảo, Q. Gò Vấp, TP.HCM',
+ N'/assets/images/logo.png', 'default', 1, 1, 0);
