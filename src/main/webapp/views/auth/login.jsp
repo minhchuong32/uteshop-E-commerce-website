@@ -152,7 +152,7 @@ body {
 	</div>
 
 	<!-- Footer -->
-	<%@ include file="/WEB-INF/views/layout/footer.jsp"%>
+	<%@ include file="/views/layout/footer.jsp"%>
 
 	<!-- Scripts -->
 	<script

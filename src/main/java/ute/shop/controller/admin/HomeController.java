@@ -16,25 +16,62 @@ import ute.shop.service.impl.UserServiceImpl;
 public class HomeController extends HttpServlet {
     private static final long serialVersionUID = 1L;  
 
-    UserServiceImpl userService = new UserServiceImpl();
+    private UserServiceImpl userService = new UserServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
             throws ServletException, IOException {
 
         String page = req.getParameter("page");
-        if (page == null) {
-            page = "dashboard"; // mặc định
+        String view = "/views/admin/dashboard.jsp"; // mặc định
+        String activeMenu = "dashboard";
+
+        if (page != null) {
+            switch (page) {
+                case "dashboard":
+                    view = "/views/admin/dashboard.jsp";
+                    activeMenu = "dashboard";
+                    break;
+
+                case "users":
+                    List<User> users = userService.getAllUsers();
+                    req.setAttribute("users", users);
+                    view = "/views/admin/users/dashboard.jsp";
+                    activeMenu = "users";
+                    break;
+
+                case "products":
+                    view = "/views/admin/products/list.jsp";
+                    activeMenu = "products";
+                    break;
+
+                case "orders":
+                    view = "/views/admin/orders/list.jsp";
+                    activeMenu = "orders";
+                    break;
+
+                case "stats":
+                    view = "/views/admin/stats/index.jsp";
+                    activeMenu = "stats";
+                    break;
+
+                case "settings":
+                    view = "/views/admin/settings.jsp";
+                    activeMenu = "settings";
+                    break;
+
+                default:
+                    view = "/views/admin/dashboard.jsp";
+                    activeMenu = "dashboard";
+                    break;
+            }
         }
 
-        // Nếu vào trang quản lý user thì load danh sách user 
-        if ("users".equals(page)) {
-            List<User> users = userService.getAllUsers();
-            req.setAttribute("users", users);
-        }
+        // Gửi biến sang JSP
+        req.setAttribute("page", activeMenu);
+        req.setAttribute("view", view);
 
-        // Gửi page để home.jsp include trang con 
-        req.setAttribute("page", page);
-        req.getRequestDispatcher("/WEB-INF/views/admin/home.jsp").forward(req, resp);
+        // Forward đến layout admin
+        req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
     }
 }

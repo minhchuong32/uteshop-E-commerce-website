@@ -19,4 +19,6 @@ public interface IUserDao {
 	User getUserById(int id);
 	
 	void updatePassword(String email, String newPassword);
+	
+	void updateStatus(int id, String status);
 }

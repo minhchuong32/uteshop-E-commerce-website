@@ -23,7 +23,7 @@
 <body>
 
 	<!-- Header -->
-	<%@ include file="/WEB-INF/views/layout/header.jsp"%>
+	<%@ include file="/views/layout/header.jsp"%>
 
 	<!-- Banner -->
 	<div id="bannerDiv" class="carousel slide" data-bs-ride="carousel">
@@ -389,7 +389,7 @@
 
 
 	<!-- Footer -->
-	<%@ include file="/WEB-INF/views/layout/footer.jsp"%>
+	<%@ include file="views/layout/footer.jsp"%>
 
 	<!-- Bootstrap JS -->
 	<script

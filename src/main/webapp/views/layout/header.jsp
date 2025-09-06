@@ -67,14 +67,7 @@
 							src="${pageContext.request.contextPath}/assets/icon/cart.png"
 							alt="cart" />
 					</a> <!-- Mini Cart -->
-						<div class="mini-cart shadow rounded">
-							<div class="text-center p-3">
-								<img
-									src="${pageContext.request.contextPath}/assets/images/empty_cart.png"
-									alt="Empty Cart" width="100" class="mb-2">
-								<p class="text-muted mb-0">Chưa có sản phẩm</p>
-							</div>
-						</div>
+						
 					</li>
 				</ul>
 			</div>

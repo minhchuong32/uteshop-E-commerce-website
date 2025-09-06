@@ -66,6 +66,26 @@
 			<artifactId>bootstrap</artifactId>
 			<version>5.3.2</version>
 		</dependency>
+
+		<!-- SiteMesh: Thư viện layout cho JSP/Servlet
+     - Giúp quản lý template chung (header, sidebar, footer)
+     - Nội dung từng trang con sẽ được "inject" vào layout chính qua
+		<decorator:body/> -->
+		<dependency>
+			<groupId>org.sitemesh</groupId>
+			<artifactId>sitemesh</artifactId>
+			<version>3.2.2</version>
+		</dependency>
+
+		<!-- Commons IO: Thư viện tiện ích xử lý Input/Output
+     - Hỗ trợ đọc/ghi file, copy file, thao tác stream
+     - Dùng nhiều trong upload/download file trên web -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.17.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

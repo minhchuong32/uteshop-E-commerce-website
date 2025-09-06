@@ -31,22 +31,26 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 		}
 		return list;
 	}
-
 	@Override
 	public void Insert(User user) {
-		String sql = "INSERT INTO Users(username, password, email, role, status) VALUES(?,?,?,?,?)";
-		try (Connection conn = super.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+	    String sql = "INSERT INTO Users(username, password, email, role, status, createDate) VALUES(?,?,?,?,?,?)";
+	    try (Connection conn = super.getConnection(); 
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
 
-			ps.setString(1, user.getUsername());
-			ps.setString(2, user.getPassword()); // password đã hash ở Service
-			ps.setString(3, user.getEmail());
-			ps.setString(4, user.getRole());
-			ps.setString(5, user.getStatus());
+	        ps.setString(1, user.getUsername());
+	        ps.setString(2, user.getPassword()); // password đã hash ở Service
+	        ps.setString(3, user.getEmail());
+	        ps.setString(4, user.getRole());
+	        ps.setString(5, user.getStatus());
 
-			ps.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	        // Lấy ngày hiện tại
+	        java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis());
+	        ps.setTimestamp(6, now);
+
+	        ps.executeUpdate();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	@Override
@@ -147,4 +151,20 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 		return null;
 		
 	}
+
+	@Override
+	public void updateStatus(int id, String status) {
+	    String sql = "UPDATE users SET status = ? WHERE user_id = ?";
+	    try (Connection conn = super.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        ps.setString(1, status);   // truyền status mới (active/blocked...)
+	        ps.setInt(2, id);          // id user cần cập nhật
+	        ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
 }

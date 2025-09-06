@@ -1,6 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ include file="/commons/taglib.jsp"%>
 <div class="container-fluid">
 	<h3 class="mb-4 fw-bold">Quản lý người dùng</h3>
 
@@ -58,7 +57,7 @@
 											class="badge rounded-pill bg-success-subtle text-success">active</span>
 									</c:when>
 									<c:otherwise>
-										<span class="badge rounded-pill bg-danger-subtle text-danger">blocked</span>
+										<span class="badge rounded-pill bg-danger-subtle text-danger">banned</span>
 									</c:otherwise>
 								</c:choose></td>
 
@@ -67,20 +66,19 @@
 
 							<!-- Action -->
 							<td class="text-center">
-								<!-- Xem chi tiết --> <a
-								href="${pageContext.request.contextPath}/admin/view?id=${u.user_id}"
-								class="text-primary me-3" title="Xem chi tiết"> <i
-									class="bi bi-eye-fill"></i>
-							</a> <!-- Sửa --> <a
+								<!-- Edit --> <a
 								href="${pageContext.request.contextPath}/admin/users/edit?id=${u.user_id}"
 								class="text-warning me-3" title="Sửa"> <i
 									class="bi bi-pencil-square"></i>
-							</a> <!-- Xóa --> <a
-								href="${pageContext.request.contextPath}/admin/users/delete?id=${u.user_id}"
-								class="text-danger me-3"
-								onclick="return confirm('Bạn có chắc muốn xóa người dùng này?')"
-								title="Xóa"> <i class="bi bi-trash-fill"></i>
-							</a> <!-- Khóa/Mở khóa --> <c:choose>
+							</a>    <!-- Delete (sử dụng modal Bootstrap) -->
+                                <a href="javascript:void(0);"
+                                   class="text-danger me-3"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#confirmDeleteModal"
+                                   data-user-id="${u.user_id}"
+                                   title="Xóa">
+                                   <i class="bi bi-trash-fill"></i>
+                                </a><!-- Lock / Unlock --> <c:choose>
 									<c:when test="${u.status eq 'active'}">
 										<a
 											href="${pageContext.request.contextPath}/admin/users/lock?id=${u.user_id}"
@@ -105,3 +103,28 @@
 		</div>
 	</div>
 </div>
+
+<!-- Modal Xác nhận Xóa -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 rounded-3">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i> Xác nhận xóa</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc muốn xóa người dùng này không? Hành động này <strong>không thể hoàn tác</strong>.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+        <a id="deleteConfirmBtn" href="#" class="btn btn-danger rounded-pill px-4">Xóa</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- JS riêng -->
+<script src="${pageContext.request.contextPath}/assets/js/admin/user-dashboard.js"></script>
+

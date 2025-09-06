@@ -115,4 +115,24 @@ public class UserServiceImpl implements IUserService {
 		// TODO Auto-generated method stub
 		return userDao.getUserById(id);
 	}
+
+	@Override
+	public void update(User user) {
+		// TODO Auto-generated method stub
+		// Hash password trước khi lưu
+		user.setPassword(hashPassword(user.getPassword()));
+		userDao.Update(user);
+	}
+
+	@Override
+	public void delete(int id) {
+		// TODO Auto-generated method stub
+		userDao.Delete(id);
+	}
+
+	@Override
+	public void updateStatus(int id, String status) {
+		// TODO Auto-generated method stub
+		userDao.updateStatus(id, status);
+	}
 }
