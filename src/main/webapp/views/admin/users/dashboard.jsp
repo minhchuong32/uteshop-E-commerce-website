@@ -70,15 +70,13 @@
 								href="${pageContext.request.contextPath}/admin/users/edit?id=${u.user_id}"
 								class="text-warning me-3" title="Sửa"> <i
 									class="bi bi-pencil-square"></i>
-							</a>    <!-- Delete (sử dụng modal Bootstrap) -->
-                                <a href="javascript:void(0);"
-                                   class="text-danger me-3"
-                                   data-bs-toggle="modal"
-                                   data-bs-target="#confirmDeleteModal"
-                                   data-user-id="${u.user_id}"
-                                   title="Xóa">
-                                   <i class="bi bi-trash-fill"></i>
-                                </a><!-- Lock / Unlock --> <c:choose>
+							</a> <!-- Delete (sử dụng modal Bootstrap) --> <a
+								href="javascript:void(0);" class="text-danger me-3"
+								data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+								data-id="${u.user_id}"
+								data-url="${pageContext.request.contextPath}/admin/users/delete"
+								title="Xóa"> <i class="bi bi-trash-fill"></i>
+							</a> <!-- Lock / Unlock --> <c:choose>
 									<c:when test="${u.status eq 'active'}">
 										<a
 											href="${pageContext.request.contextPath}/admin/users/lock?id=${u.user_id}"
@@ -105,26 +103,33 @@
 </div>
 
 <!-- Modal Xác nhận Xóa -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content shadow-lg border-0 rounded-3">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i> Xác nhận xóa</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
-      </div>
-      <div class="modal-body">
-        <p>Bạn có chắc muốn xóa người dùng này không? Hành động này <strong>không thể hoàn tác</strong>.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
-        <a id="deleteConfirmBtn" href="#" class="btn btn-danger rounded-pill px-4">Xóa</a>
-      </div>
-    </div>
-  </div>
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content shadow-lg border-0 rounded-3">
+			<div class="modal-header bg-danger text-white">
+				<h5 class="modal-title">
+					<i class="bi bi-exclamation-triangle-fill me-2"></i> Xác nhận xóa
+				</h5>
+				<button type="button" class="btn-close btn-close-white"
+					data-bs-dismiss="modal" aria-label="Đóng"></button>
+			</div>
+			<div class="modal-body">
+				<p>
+					Bạn có chắc muốn xóa người dùng này không? Hành động này <strong>không
+						thể hoàn tác</strong>.
+				</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary rounded-pill px-4"
+					data-bs-dismiss="modal">Hủy</button>
+				<a id="deleteConfirmBtn" href="#"
+					class="btn btn-danger rounded-pill px-4">Xóa</a>
+			</div>
+		</div>
+	</div>
 </div>
 
-
-
-<!-- JS riêng -->
-<script src="${pageContext.request.contextPath}/assets/js/admin/user-dashboard.js"></script>
+<script
+	src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
 

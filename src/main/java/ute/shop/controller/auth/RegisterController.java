@@ -25,7 +25,7 @@ public class RegisterController extends HttpServlet {
 
 		// Nếu đã login thì redirect sang /admin
 		if (session != null && session.getAttribute("email") != null) {
-			resp.sendRedirect(req.getContextPath() + "/admin/dashboard");
+			resp.sendRedirect(req.getContextPath() + "/admin/home");
 			return;
 		}
 
@@ -36,7 +36,7 @@ public class RegisterController extends HttpServlet {
 				if (cookie.getName().equals("email")) {
 					session = req.getSession(true);
 					session.setAttribute("username", cookie.getValue());
-					resp.sendRedirect(req.getContextPath() + "/admin/dashboard");
+					resp.sendRedirect(req.getContextPath() + "/admin/home");
 					return;
 				}
 			}

@@ -86,7 +86,7 @@ public class UserController extends HttpServlet {
             User u = new User();
             u.setUsername(username);
             u.setEmail(email);
-            u.setPassword(password); // có thể mã hóa sau
+            u.setPassword(password); 
             u.setRole(role);
             u.setStatus("active");
 

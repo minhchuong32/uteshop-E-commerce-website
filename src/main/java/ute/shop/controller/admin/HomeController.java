@@ -8,20 +8,43 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import ute.shop.models.User;
+import jakarta.servlet.http.HttpSession;
+import ute.shop.models.*;
+import ute.shop.service.impl.OrderServiceImpl;
+import ute.shop.service.impl.ShopServiceImpl;
 import ute.shop.service.impl.UserServiceImpl;
+
+import ute.shop.service.IShopService;
+import ute.shop.service.IUserService;
+import ute.shop.service.IOrderService;
 
 @WebServlet(urlPatterns = {"/admin/home"})
 public class HomeController extends HttpServlet {
     private static final long serialVersionUID = 1L;  
 
-    private UserServiceImpl userService = new UserServiceImpl();
+    private IUserService userService = new UserServiceImpl();
+    private IShopService shopService = new ShopServiceImpl();
+    private IOrderService orderService = new OrderServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
             throws ServletException, IOException {
+    	  // Lấy session và thông tin user đăng nhập
+        HttpSession session = req.getSession(false); // false: không tạo mới nếu chưa có
+        User userLogin = null;
+        if (session != null) {
+            userLogin = (User) session.getAttribute("account");
+        }
 
+        if (userLogin == null) {
+            // Nếu chưa đăng nhập, redirect về login
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+
+        // Gửi thông tin user sang JSP
+        req.setAttribute("userLogin", userLogin);
+        
         String page = req.getParameter("page");
         String view = "/views/admin/dashboard.jsp"; // mặc định
         String activeMenu = "dashboard";
@@ -40,12 +63,16 @@ public class HomeController extends HttpServlet {
                     activeMenu = "users";
                     break;
 
-                case "products":
-                    view = "/views/admin/products/list.jsp";
-                    activeMenu = "products";
+                case "shops":
+                	  List<Shop> shops = shopService.getAll();
+                      req.setAttribute("shops", shops);
+                    view = "/views/admin/shops/list.jsp";
+                    activeMenu = "shops";
                     break;
-
+                    
                 case "orders":
+                	 List<Order> orders = orderService.getAll();
+                     req.setAttribute("orders", orders);
                     view = "/views/admin/orders/list.jsp";
                     activeMenu = "orders";
                     break;
@@ -59,6 +86,7 @@ public class HomeController extends HttpServlet {
                     view = "/views/admin/settings.jsp";
                     activeMenu = "settings";
                     break;
+       
 
                 default:
                     view = "/views/admin/dashboard.jsp";
