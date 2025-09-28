@@ -141,13 +141,7 @@ body {
 					class="fw-semibold">Đăng ký</a>
 			</div>
 
-			<!-- Demo Credentials -->
-			<div class="mt-4 p-3 bg-light rounded">
-				<h6 class="fw-bold">Demo Credentials:</h6>
-				<small>User: user@example.com / password</small><br> <small>Vendor:
-					vendor@example.com / password</small><br> <small>Admin:
-					admin@example.com / password</small>
-			</div>
+			
 		</div>
 	</div>
 

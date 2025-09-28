@@ -338,3 +338,16 @@ VALUES
 (N'UteShop', N'support@uteshop.com', N'0123 456 789', 
  N'123 Nguyễn Văn Bảo, Q. Gò Vấp, TP.HCM',
  N'/assets/images/logo.png', 'default', 1, 1, 0);
+ 
+ -- Thêm bảng contact lưu nội dung user contact shop [28-09-25]
+ CREATE TABLE Contact (
+    ContactID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT NULL,                         -- Nếu user đã đăng nhập
+    FullName NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(100) NOT NULL,
+    Content NVARCHAR(MAX) NOT NULL,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+
+    CONSTRAINT FK_Contact_User FOREIGN KEY (UserID) REFERENCES users(user_id)
+);
+

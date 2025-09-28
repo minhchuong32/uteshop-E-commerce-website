@@ -8,7 +8,7 @@
 		<div class="container">
 			<!-- Logo -->
 			<a class="navbar-brand d-flex align-items-center"
-				href="${pageContext.request.contextPath}/"> <img
+				href="${pageContext.request.contextPath}/user/home"> <img
 				src="${pageContext.request.contextPath}/assets/images/logo_strong.png"
 				alt="Logo" height="50" class="me-2">
 			</a>
@@ -23,7 +23,7 @@
 				<!-- Navigation -->
 				<ul class="navbar-nav me-3">
 					<li class="nav-item"><a class="nav-link text-dark fw-semibold"
-						href="${pageContext.request.contextPath}/">Trang chủ</a></li>
+						href="${pageContext.request.contextPath}/user/home">Trang chủ</a></li>
 					<!-- Dropdown Sản phẩm -->
 					<li class="nav-item dropdown"><a
 						class="nav-link dropdown-toggle text-dark fw-semibold" href="#"
@@ -62,7 +62,7 @@
 									hồ</a></li>
 						</ul></li>
 					<li class="nav-item"><a class="nav-link text-dark fw-semibold"
-						href="${pageContext.request.contextPath}/contact">Liên hệ</a></li>
+						href="${pageContext.request.contextPath}/user/contact">Liên hệ</a></li>
 				</ul>
 
 				<!-- Người dùng -->

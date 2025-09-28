@@ -2,7 +2,6 @@ package ute.shop.controller.auth;
 
 import ute.shop.service.IUserService;
 import ute.shop.service.impl.UserServiceImpl;
-import ute.shop.utils.Constant;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;

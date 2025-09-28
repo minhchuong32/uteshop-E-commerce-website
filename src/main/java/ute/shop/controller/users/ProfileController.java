@@ -3,14 +3,13 @@ package ute.shop.controller.users;
 import ute.shop.models.User;
 import ute.shop.service.IUserService;
 import ute.shop.service.impl.UserServiceImpl;
-import ute.shop.utils.Constant;
+
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.*;
 
-import java.io.File;
 import java.io.IOException;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
