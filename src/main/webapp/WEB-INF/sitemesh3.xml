@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemesh>
-    <!-- Decorator cho Admin -->
-    <mapping path="/admin/home" decorator="admin.jsp"/>
+	<!-- Decorator cho Admin -->
+	<mapping path="/admin/*" name="admin" decorator="admin.jsp" />
+
+	<!-- Decorator cho User -->
+	<mapping path="/user/*" name="user" decorator="user.jsp" />
+
 </sitemesh>

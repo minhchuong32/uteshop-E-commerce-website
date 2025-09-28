@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-
+<%@ include file="/commons/taglib.jsp"%>
 
 <header>
 	<nav class="navbar navbar-expand-lg fixed-top shadow-sm"
@@ -7,11 +7,10 @@
 		<div class="container-fluid px-4">
 
 			<!-- Logo + tên hệ thống -->
-			<a class="navbar-brand d-flex align-items-center fw-bold text-dark"
+			<a class="navbar-brand d-flex align-items-center"
 				href="${pageContext.request.contextPath}/admin/home"> <img
 				src="${pageContext.request.contextPath}/assets/images/logo_strong.png"
-				alt="Logo" height="40" class="me-2">
-
+				alt="Logo" height="50" class="me-2">
 			</a>
 
 			<!-- Nút toggle cho mobile -->
@@ -55,17 +54,23 @@
 
 					<!-- Avatar Admin -->
 					<li class="nav-item dropdown"><a
-						class="nav-link d-flex align-items-center text-dark" href="#"
-						id="adminDropdown" role="button" data-bs-toggle="dropdown"
-						aria-expanded="false"> <img
-							src="${pageContext.request.contextPath}/assets/images/admin_avt.png"
-							alt="Admin" width="40" height="40"
-							class="rounded-circle border me-2"> <span
-							class="d-none d-lg-inline fw-semibold">
-								${sessionScope.account.username} </span>
-
-
-					</a>
+							class="nav-link dropdown-toggle d-flex align-items-center"
+							href="#" id="userDropdown" role="button"
+							data-bs-toggle="dropdown" aria-expanded="false"> <c:choose>
+									<c:when test="${not empty sessionScope.account.avatar}">
+										<img
+											src="${pageContext.request.contextPath}/uploads/${sessionScope.account.avatar}"
+											alt="avatar" class="rounded-circle me-2" width="32"
+											height="32" style="object-fit: cover;">
+									</c:when>
+									<c:otherwise>
+										<img
+											src="${pageContext.request.contextPath}/assets/images/default_avatar.png"
+											alt="avatar" class="rounded-circle me-2" width="32"
+											height="32" style="object-fit: cover;">
+									</c:otherwise>
+								</c:choose> <span class="fw-semibold text-dark">${sessionScope.account.username}</span>
+						</a>
 
 						<ul class="dropdown-menu shadow dropdown-menu-end"
 							aria-labelledby="adminDropdown">
@@ -76,7 +81,7 @@
 							</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><a class="dropdown-item text-danger"
-								href="${pageContext.request.contextPath}/login"> <i
+								href="${pageContext.request.contextPath}/logout"> <i
 									class="bi bi-box-arrow-right me-2"></i> Đăng xuất
 							</a></li>
 						</ul></li>

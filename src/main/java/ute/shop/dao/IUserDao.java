@@ -8,7 +8,7 @@ public interface IUserDao {
 	
 	void Insert(User user); 
 	
-	void Update(User user);
+	boolean Update(User user);
 	
 	void Delete(int id);
 	
@@ -18,7 +18,9 @@ public interface IUserDao {
 
 	User getUserById(int id);
 	
-	void updatePassword(String email, String newPassword);
+	boolean updatePassword(String email, String newPassword);
 	
 	void updateStatus(int id, String status);
+	
+	boolean UpdatePwd(User user, boolean changePwd);
 }

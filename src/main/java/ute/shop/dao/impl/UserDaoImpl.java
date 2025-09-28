@@ -23,7 +23,7 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 
 			while (rs.next()) {
 				User user = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
-						rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"));
+						rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"), rs.getString("avatar"));
 				list.add(user);
 			}
 		} catch (Exception e) {
@@ -33,7 +33,7 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 	}
 	@Override
 	public void Insert(User user) {
-	    String sql = "INSERT INTO Users(username, password, email, role, status, createDate) VALUES(?,?,?,?,?,?)";
+	    String sql = "INSERT INTO Users(username, password, email, role, status, createDate, avatar) VALUES(?,?,?,?,?,?)";
 	    try (Connection conn = super.getConnection(); 
 	         PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -46,30 +46,45 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 	        // Lấy ngày hiện tại
 	        java.sql.Timestamp now = new java.sql.Timestamp(System.currentTimeMillis());
 	        ps.setTimestamp(6, now);
+	        
+	        ps.setString(7, user.getAvatar());
 
 	        ps.executeUpdate();
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
 	}
-
+	
 	@Override
-	public void Update(User user) {
-		String sql = "UPDATE Users SET username=?, password=?, email=?, role=?, status=? WHERE user_id=?";
-		try (Connection conn = super.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+	public boolean Update(User user) {
+	    String query = "UPDATE Users " +
+	                   "SET username=?, password=?, email=?, role=?, status=?, avatar=? " +
+	                   "WHERE user_id=?";
+	    Connection conn = null;
+	    PreparedStatement ps = null;
 
-			ps.setString(1, user.getUsername());
-			ps.setString(2, user.getPassword()); // password đã hash ở Service
-			ps.setString(3, user.getEmail());
-			ps.setString(4, user.getRole());
-			ps.setString(5, user.getStatus());
-			ps.setInt(6, user.getUser_id());
+	    try {
+	        conn = super.getConnection();
+	        ps = conn.prepareStatement(query);
 
-			ps.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	        ps.setString(1, user.getUsername());
+	        ps.setString(2, user.getPassword());
+	        ps.setString(3, user.getEmail());
+	        ps.setString(4, user.getRole());
+	        ps.setString(5, user.getStatus());
+	        ps.setString(6, user.getAvatar());
+	        ps.setInt(7, user.getUser_id());
+
+	        int rows = ps.executeUpdate();
+	        return rows > 0;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    } 
+	    
 	}
+
 
 	@Override
 	public void Delete(int id) {
@@ -92,7 +107,7 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
-							rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"));
+							rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"), rs.getString("avatar"));
 				}
 			}
 		} catch (Exception e) {
@@ -110,7 +125,7 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
-							rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"));
+							rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"), rs.getString("avatar"));
 				}
 			}
 		} catch (Exception e) {
@@ -120,16 +135,21 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 	}
 
 	@Override
-	public void updatePassword(String email, String newPassword) {
-		String sql = "UPDATE Users SET password=? WHERE email=?";
-		try (Connection conn = super.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+	public boolean updatePassword(String email, String newPassword) {
+	    String sql = "UPDATE Users SET password=? WHERE email=?";
+	    try (Connection conn = super.getConnection(); 
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
 
-			ps.setString(1, newPassword); // password đã hash ở Service
-			ps.setString(2, email);
-			ps.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	        ps.setString(1, newPassword); // password đã hash ở Service
+	        ps.setString(2, email);
+
+	        int rows = ps.executeUpdate();
+	        return rows > 0;   
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;     
+	    }
 	}
 
 	@Override
@@ -142,7 +162,7 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 			try (ResultSet rs = ps.executeQuery()) {
 				if (rs.next()) {
 					return new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("password"),
-							rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"));
+							rs.getString("email"), rs.getString("role"), rs.getString("status"), rs.getDate("createDate"), rs.getString("avatar"));
 				}
 			}
 		} catch (Exception e) {
@@ -166,5 +186,48 @@ public class UserDaoImpl extends DBConnectSQLServer implements IUserDao {
 	        e.printStackTrace();
 	    }
 	}
+	
+	@Override
+	public boolean UpdatePwd(User user, boolean changePwd) {
+	    String query;
+	    if (changePwd) {
+	        query = "UPDATE Users " +
+	                "SET username=?, password=?, email=?, role=?, status=?, avatar=? " +
+	                "WHERE user_id=?";
+	    } else {
+	        query = "UPDATE Users " +
+	                "SET username=?, email=?, role=?, status=?, avatar=? " +
+	                "WHERE user_id=?";
+	    }
+
+	    Connection conn = null;
+	    PreparedStatement ps = null;
+
+	    try {
+	        conn = super.getConnection();
+	        ps = conn.prepareStatement(query);
+
+	        int index = 1;
+	        ps.setString(index++, user.getUsername());
+
+	        if (changePwd) {
+	            ps.setString(index++, user.getPassword()); // có password
+	        }
+
+	        ps.setString(index++, user.getEmail());
+	        ps.setString(index++, user.getRole());
+	        ps.setString(index++, user.getStatus());
+	        ps.setString(index++, user.getAvatar());
+	        ps.setInt(index, user.getUser_id());
+
+	        int rows = ps.executeUpdate();
+	        return rows > 0;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    } 
+	}
+
 
 }

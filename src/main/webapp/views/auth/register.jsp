@@ -128,7 +128,7 @@ body {
     </div>
 
     <!-- Footer -->
-    <%@ include file="/views/layout/footer.jsp" %>
+    <%@ include file="/commons/guest/footer.jsp" %>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

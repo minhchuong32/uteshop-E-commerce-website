@@ -12,8 +12,9 @@ public class User implements Serializable  {
 	private String role;
 	private String status;
 	private Date createDate;
+	private String avatar;
 	
-	public User (int user_id, String username, String password, String email, String role, String status, Date createDate) {
+	public User (int user_id, String username, String password, String email, String role, String status, Date createDate, String avatar) {
 		super();
 		this.user_id = user_id;
 		this.username = username;
@@ -22,11 +23,20 @@ public class User implements Serializable  {
 		this.role = role;
 		this.status = status;
 		this.createDate = createDate;
+		this.avatar = avatar;
 	}
 
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	public int getUser_id() {
@@ -93,7 +103,7 @@ public class User implements Serializable  {
 	@Override
 	public String toString() {
 		return "User [user_id=" + user_id + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", role=" + role + ", status=" + status + ", createDate=" + createDate + "]";
+				+ ", role=" + role + ", status=" + status + ", createDate=" + createDate + ", avatar=" + avatar + "]";
 	}
 	
 	

@@ -21,7 +21,7 @@ public class ForgotPasswordController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/views/auth/forgot-password.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/auth/forgot-password.jsp").forward(request, response);
     }
 
     @Override
@@ -43,11 +43,11 @@ public class ForgotPasswordController extends HttpServlet {
             sm.sendMail(email, subject, body);
 
             request.setAttribute("message", "Mã OTP đã được gửi đến email của bạn!");
-            request.getRequestDispatcher("/WEB-INF/views/auth/verify-otp.jsp").forward(request, response);
-        }
+            request.getRequestDispatcher("/views/auth/verify-otp.jsp").forward(request, response);
+        }	
 else {
             request.setAttribute("error", "Không tìm thấy tài khoản với thông tin này!");
-            request.getRequestDispatcher("/WEB-INF/views/auth/forgot-password.jsp").forward(request, response);
+            request.getRequestDispatcher("/views/auth/forgot-password.jsp").forward(request, response);
         }
     }
 }

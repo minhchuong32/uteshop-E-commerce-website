@@ -14,15 +14,32 @@ public class VerifyOtpController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String otp = request.getParameter("otp");
         String sessionOtp = (String) request.getSession().getAttribute("otp");
 
-        if (sessionOtp != null && sessionOtp.equals(otp)) {
+        // Check OTP nhập vào
+        if (otp == null || otp.trim().isEmpty()) {
+            request.setAttribute("error", "Vui lòng nhập mã OTP!");
+            request.getRequestDispatcher("/views/auth/verify-otp.jsp").forward(request, response);
+            return;
+        }
+
+        // Check session OTP (hết hạn / chưa có)
+        if (sessionOtp == null) {
+            request.setAttribute("error", "Mã OTP đã hết hạn, vui lòng yêu cầu lại!");
+            request.getRequestDispatcher("/views/auth/verify-otp.jsp").forward(request, response);
+            return;
+        }
+
+        // So sánh OTP
+        if (sessionOtp.equals(otp.trim())) {
+            // Xác thực thành công → sang trang đặt lại mật khẩu
             request.setAttribute("message", "Xác thực OTP thành công! Vui lòng đặt lại mật khẩu.");
-            request.getRequestDispatcher("/WEB-INF/views/auth/setting-password.jsp").forward(request, response);
+            request.getRequestDispatcher("/views/auth/setting-password.jsp").forward(request, response);
         } else {
             request.setAttribute("error", "Mã OTP không chính xác!");
-            request.getRequestDispatcher("/WEB-INF/views/auth/verify-otp.jsp").forward(request, response);
+            request.getRequestDispatcher("/views/auth/verify-otp.jsp").forward(request, response);
         }
     }
 }

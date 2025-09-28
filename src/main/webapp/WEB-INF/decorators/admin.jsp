@@ -89,8 +89,6 @@
 				style="margin-top: 76px;">
 				<jsp:include page="${view}" />
 			</main>
-
-
 		</div>
 	</div>
 	<!-- Header -->

@@ -2,7 +2,7 @@ package ute.shop.service;
 
 import java.util.List;
 
-import ute.shop.models.*;
+import ute.shop.models.User;
 
 public interface IUserService {
 	List<User> getAllUsers();
@@ -15,7 +15,7 @@ public interface IUserService {
 
 	void insert(User user);
 
-	void update(User u);
+	boolean update(User u);
 
 	void delete(int id);
 
@@ -25,7 +25,11 @@ public interface IUserService {
 
 	boolean checkExistUsername(String username);
 
-	void updatePassword(String email, String newPassword);
+	boolean updatePassword(String email, String newPassword);
 
 	void updateStatus(int id, String status);
+	
+	String hashPassword(String password);
+	
+	boolean UpdatePwd(User user, boolean pwd);
 }

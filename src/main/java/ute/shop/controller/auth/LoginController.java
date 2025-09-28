@@ -16,60 +16,76 @@ import jakarta.servlet.http.HttpSession;
 
 @WebServlet(urlPatterns = { "/login" })
 public class LoginController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	IUserService service = new UserServiceImpl();
+    private static final long serialVersionUID = 1L;
+    private IUserService service = new UserServiceImpl();
 
-	/**
-	 * 
-	 */
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// Forward tới login.jsp trong WEB-INF
-		request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
-	}
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Forward tới login.jsp
+        request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+    }
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.setContentType("text/html");
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		String remember = request.getParameter("remember");
+        response.setContentType("text/html");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
 
-		boolean isRememberMe = "on".equals(remember);
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String remember = request.getParameter("remember");
 
-		if (email == null || email.isEmpty() || password == null || password.isEmpty()) {
-			request.setAttribute("alert", "Tài khoản hoặc mật khẩu không được rỗng");
-			request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
-			return;
-		}
+        boolean isRememberMe = "on".equals(remember);
 
-		User user = service.login(email, password);
-		if (user != null) {
-			HttpSession session = request.getSession(true);
-			session.setAttribute("account", user);
+        //  Kiểm tra dữ liệu nhập vào
+        if ((email == null || email.trim().isEmpty()) && (password == null || password.trim().isEmpty())) {
+            request.setAttribute("alert", "Vui lòng nhập Email và Mật khẩu");
+            request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+            return;
+        }
 
-			if (isRememberMe) {
-				saveRememberMe(response, email);
-			}
-			response.sendRedirect(request.getContextPath() + "/waiting");
-		} else {
-			request.setAttribute("alert", "Tài khoản hoặc mật khẩu không đúng");
-			request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
-		}
-	
-	}
+        if (email == null || email.trim().isEmpty()) {
+            request.setAttribute("alert", "Email không được để trống");
+            request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+            return;
+        }
 
-	private void saveRememberMe(HttpServletResponse response, String email) {
-		// TODO Auto-generated method stub
-		Cookie cookie = new Cookie(Constant.COOKIE_REMEMBER, email); // set cookie (name, val)
-		cookie.setMaxAge(30 * 60); // 30min
-		response.addCookie(cookie);
-	}
+        if (password == null || password.trim().isEmpty()) {
+            request.setAttribute("alert", "Mật khẩu không được để trống");
+            request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+            return;
+        }
 
+        //  Xử lý login
+        User user = service.login(email, password);
+        if (user != null) {
+            // Login thành công
+            HttpSession session = request.getSession(true);
+            session.setAttribute("account", user);
+
+            // Nếu chọn "Remember me" thì lưu cookie
+            if (isRememberMe) {
+                saveRememberMe(response, email);
+            }
+
+            // Điều hướng sau khi login thành công
+            response.sendRedirect(request.getContextPath() + "/waiting");
+
+        } else {
+            // Login thất bại
+            request.setAttribute("alert", "Email hoặc mật khẩu không đúng");
+            request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+        }
+    }
+
+    //  Hàm lưu cookie remember me
+    private void saveRememberMe(HttpServletResponse response, String email) {
+        Cookie cookie = new Cookie(Constant.COOKIE_REMEMBER, email);
+        cookie.setMaxAge(30 * 60); // 30 phút
+        cookie.setPath("/");       // cookie dùng cho toàn bộ app
+        response.addCookie(cookie);
+    }
 }

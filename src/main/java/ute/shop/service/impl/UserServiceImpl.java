@@ -21,16 +21,28 @@ public class UserServiceImpl implements IUserService {
 			// Hash mật khẩu người dùng nhập
 			String hashedInput = hashPassword(password);
 
+			// ⚡ DEBUG LOG (in ra console)
+			System.out.println(">>> Email nhập: " + email);
+			System.out.println(">>> Password nhập (plain): " + password);
+			System.out.println(">>> Password nhập (hashed): " + hashedInput);
+			System.out.println(">>> Password DB (hashed): " + user.getPassword());
+
 			// So sánh với mật khẩu trong DB
 			if (hashedInput.equals(user.getPassword())) {
+				System.out.println(">>> ✅ Login thành công!");
 				return user;
+			} else {
+				System.out.println(">>> ❌ Sai mật khẩu!");
 			}
+		} else {
+			System.out.println(">>> ⚠️ Không tìm thấy user với email: " + email);
 		}
 		return null;
 	}
-
+	
+	@Override
 	// Hàm hash SHA-256 (nếu muốn bảo mật tốt hơn thì nên thay bằng BCrypt)
-	private String hashPassword(String password) {
+	public String hashPassword(String password) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
 			byte[] hashBytes = md.digest(password.getBytes());
@@ -97,10 +109,10 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public void updatePassword(String email, String newPassword) {
+	public boolean updatePassword(String email, String newPassword) {
 		// Hash trước khi update
 		String hashedPassword = hashPassword(newPassword);
-		userDao.updatePassword(email, hashedPassword);
+		return userDao.updatePassword(email, hashedPassword);
 	}
 
 	@Override
@@ -117,11 +129,11 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public void update(User user) {
-		// TODO Auto-generated method stub
-		// Hash password trước khi lưu
-		user.setPassword(hashPassword(user.getPassword()));
-		userDao.Update(user);
+	public boolean update(User user) {
+		if (user.getPassword() != null && !user.getPassword().trim().isEmpty()) {
+			user.setPassword(hashPassword(user.getPassword()));
+		}
+		return userDao.Update(user);
 	}
 
 	@Override
@@ -134,5 +146,15 @@ public class UserServiceImpl implements IUserService {
 	public void updateStatus(int id, String status) {
 		// TODO Auto-generated method stub
 		userDao.updateStatus(id, status);
+	}
+
+
+	@Override
+	public boolean UpdatePwd(User user, boolean changePwd) {
+		// Nếu có đổi mật khẩu thì hash
+	    if (changePwd) {
+	        user.setPassword(hashPassword(user.getPassword()));
+	    }
+	    return userDao.UpdatePwd(user, changePwd);
 	}
 }
