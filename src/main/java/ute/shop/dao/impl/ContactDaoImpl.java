@@ -1,29 +1,31 @@
 package ute.shop.dao.impl;
 
-import ute.shop.connection.DBConnectSQLServer;
+import jakarta.persistence.*;
 import ute.shop.dao.IContactDao;
-import ute.shop.models.Contact;
+import ute.shop.entity.Contact;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.util.Date;
 
-public class ContactDaoImpl extends DBConnectSQLServer implements IContactDao {
+public class ContactDaoImpl implements IContactDao {
+
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("UteShop");
+
+    @Override
     public boolean insert(Contact c) {
-        String sql = "INSERT INTO Contact (UserID, FullName, Email, Content) VALUES (?,?,?,?)";
-        try (Connection conn = super.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            if (c.getUserId() != null) {
-                ps.setInt(1, c.getUserId());
-            } else {
-                ps.setNull(1, java.sql.Types.INTEGER);
-            }
-            ps.setString(2, c.getFullName());
-            ps.setString(3, c.getEmail());
-            ps.setString(4, c.getContent());
-            return ps.executeUpdate() > 0;
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            c.setCreatedAt(new Date()); // tự động set created_at = now()
+            em.persist(c);
+            tx.commit();
+            return true;
         } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
             e.printStackTrace();
+            return false;
+        } finally {
+            em.close();
         }
-        return false;
     }
 }

@@ -2,6 +2,7 @@ package ute.shop.controller.admin;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,7 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import ute.shop.models.User;
+import ute.shop.entity.User;
 import ute.shop.service.impl.UserServiceImpl;
 
 @WebServlet(urlPatterns = {
@@ -48,8 +49,13 @@ public class UserController extends HttpServlet {
         } else if (uri.endsWith("/edit")) {
             // Lấy user theo id
             int id = Integer.parseInt(req.getParameter("id"));
-            User u = userService.getUserById(id);
-            req.setAttribute("user", u);
+            Optional<User> optUser = userService.getUserById(id);
+
+            if (optUser.isPresent()) {
+                req.setAttribute("user", optUser.get());
+            } else {
+                req.setAttribute("error", "Không tìm thấy user!");
+            }
             req.setAttribute("page", "users");
             req.setAttribute("view", "/views/admin/users/edit.jsp");
             req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
@@ -101,15 +107,27 @@ public class UserController extends HttpServlet {
             String role = req.getParameter("role");
             String status = req.getParameter("status");
 
-            User u = userService.getUserById(id);
-            u.setUsername(username);
-            u.setEmail(email);
-            u.setRole(role);
-            u.setStatus(status);
+            Optional<User> optUser = userService.getUserById(id);
 
-            userService.update(u);
+            if (optUser.isPresent()) {
+                User user = optUser.get();  
+                req.setAttribute("user", user);
 
-            resp.sendRedirect(req.getContextPath() + "/admin/users");
+                user.setUsername(username);
+                user.setEmail(email);
+                user.setRole(role);
+                user.setStatus(status);
+
+                // Cập nhật DB
+                userService.update(user);
+
+                // Redirect sau khi update thành công
+                resp.sendRedirect(req.getContextPath() + "/admin/users");
+            } else {
+                req.setAttribute("error", "Không tìm thấy user!");
+                req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
+            }
+
         }
     }
 }

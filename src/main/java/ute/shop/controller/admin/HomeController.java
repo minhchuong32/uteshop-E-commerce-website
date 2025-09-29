@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-import ute.shop.models.User;
+import ute.shop.entity.User;
 
 @WebServlet(urlPatterns = {"/admin/home"})
 public class HomeController extends HttpServlet {

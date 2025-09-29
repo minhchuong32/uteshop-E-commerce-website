@@ -1,7 +1,7 @@
 package ute.shop.controller.admin;
 
-import ute.shop.models.StoreSettings;
-import ute.shop.models.User;
+import ute.shop.entity.StoreSettings;
+import ute.shop.entity.User;
 import ute.shop.service.IStoreSettingsService;
 import ute.shop.service.IUserService;
 import ute.shop.service.impl.StoreSettingsServiceImpl;
@@ -126,7 +126,7 @@ public class SettingController extends HttpServlet {
 		}
 
 		// Update DB
-		boolean updatedprofile = userService.UpdatePwd(admin, changePwd);
+		boolean updatedprofile = userService.updatePwd(admin, changePwd);
 		// Gọi service update
 		boolean updatesetting = storeService.updateSettings(store);
 

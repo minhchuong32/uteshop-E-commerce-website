@@ -8,9 +8,9 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-import ute.shop.models.Contact;
-import ute.shop.models.StoreSettings;
-import ute.shop.models.User;
+import ute.shop.entity.Contact;
+import ute.shop.entity.StoreSettings;
+import ute.shop.entity.User;
 import ute.shop.service.IContactService;
 import ute.shop.service.IStoreSettingsService;
 import ute.shop.service.impl.ContactServiceImpl;
@@ -53,7 +53,7 @@ public class ContactController extends HttpServlet {
 
 		Contact c = new Contact();
 		if (user != null) {
-			c.setUserId(user.getUser_id());
+		    c.setUser(user);   
 		}
 		c.setFullName(fullname);
 		c.setEmail(email);

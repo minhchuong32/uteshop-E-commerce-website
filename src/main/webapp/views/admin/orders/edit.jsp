@@ -7,13 +7,15 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <form action="${pageContext.request.contextPath}/admin/orders/edit" method="post">
+                <!-- Order ID -->
                 <input type="hidden" name="id" value="${order.orderId}">
 
-                <!-- User ID (khóa ngoại) -->
+                <!-- User -->
                 <div class="mb-3">
-                    <label class="form-label fw-bold">User ID</label>
-                    <input type="number" class="form-control" name="user_id"
-                           value="${order.userId}" readonly>
+                    <label class="form-label fw-bold">Người dùng</label>
+                    <input type="text" class="form-control"
+                           value="ID: ${order.user.userId} - ${order.user.username}"
+                           readonly>
                 </div>
 
                 <!-- Total Amount -->
@@ -27,7 +29,7 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold">Trạng thái</label>
                     <select name="status" class="form-select">
-                        <option value="new"       ${order.status == 'new' ? 'selected' : ''}>Mới</option>
+                        <option value="new"        ${order.status == 'new' ? 'selected' : ''}>Mới</option>
                         <option value="processing" ${order.status == 'processing' ? 'selected' : ''}>Đang xử lý</option>
                         <option value="completed"  ${order.status == 'completed' ? 'selected' : ''}>Hoàn tất</option>
                         <option value="cancelled"  ${order.status == 'cancelled' ? 'selected' : ''}>Đã hủy</option>
@@ -38,9 +40,9 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold">Phương thức thanh toán</label>
                     <select name="payment_method" class="form-select">
-                        <option value="COD"   ${order.paymentMethod == 'COD' ? 'selected' : ''}>COD</option>
-                        <option value="BANK"  ${order.paymentMethod == 'BANK' ? 'selected' : ''}>Chuyển khoản</option>
-                        <option value="CARD"  ${order.paymentMethod == 'CARD' ? 'selected' : ''}>Thẻ</option>
+                        <option value="COD"  ${order.paymentMethod == 'COD' ? 'selected' : ''}>COD</option>
+                        <option value="BANK" ${order.paymentMethod == 'BANK' ? 'selected' : ''}>Chuyển khoản</option>
+                        <option value="CARD" ${order.paymentMethod == 'CARD' ? 'selected' : ''}>Thẻ</option>
                     </select>
                 </div>
 

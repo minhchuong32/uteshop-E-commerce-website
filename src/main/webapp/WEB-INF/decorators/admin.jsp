@@ -77,7 +77,7 @@
 
 				<!-- Đăng xuất (nằm cuối) -->
 				<div class="mt-auto p-3">
-					<a href="${pageContext.request.contextPath}/login"
+					<a href="${pageContext.request.contextPath}/logout"
 						class="btn btn-danger w-100"> <i
 						class="bi bi-box-arrow-right me-2"></i> Đăng xuất
 					</a>

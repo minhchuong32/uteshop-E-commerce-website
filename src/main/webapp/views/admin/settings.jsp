@@ -78,7 +78,7 @@
                  style="height: 80px;">
         </c:when>
         <c:otherwise>
-            <img src="${pageContext.request.contextPath}/assets/images/default_logo.png"
+            <img src="${pageContext.request.contextPath}/assets/images/logo.png"
                  alt="default logo"
                  class="mt-2 mx-auto d-block"
                  style="height: 80px;">

@@ -2,7 +2,7 @@ package ute.shop.controller.auth;
 
 import java.io.IOException;
 
-import ute.shop.models.User;
+import ute.shop.entity.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

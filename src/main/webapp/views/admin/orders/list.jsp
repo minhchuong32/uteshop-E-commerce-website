@@ -28,33 +28,34 @@
                 </thead>
                 <tbody>
                     <c:forEach var="o" items="${orders}">
-                        <tr>
-                            <td>${o.orderId}</td>
-                            <td>${o.userId}</td>
-                            <td><fmt:formatNumber value="${o.totalAmount}" type="currency" currencySymbol="₫"/></td>
-                            <td>${o.status}</td>
-                            <td>${o.paymentMethod}</td>
-                            <td>${o.createdAt}</td>
-                            <td class="text-center">
-                                <!-- Edit -->
-                                <a href="${pageContext.request.contextPath}/admin/orders/edit?id=${o.orderId}"
-                                   class="text-warning me-3" title="Sửa">
-                                   <i class="bi bi-pencil-square"></i>
-                                </a> 
+    <tr>
+        <td>${o.orderId}</td>
+        <td>ID: ${o.user.userId} - ${o.user.username}</td>
+        <td><fmt:formatNumber value="${o.totalAmount}" type="currency" currencySymbol="₫"/></td>
+        <td>${o.status}</td>
+        <td>${o.paymentMethod}</td>
+        <td>${o.createdAt}</td>
+        <td class="text-center">
+            <!-- Edit -->
+            <a href="${pageContext.request.contextPath}/admin/orders/edit?id=${o.orderId}"
+               class="text-warning me-3" title="Sửa">
+               <i class="bi bi-pencil-square"></i>
+            </a> 
 
-                                <!-- Delete -->
-                                <a href="javascript:void(0);"
-                                   class="text-danger me-3"
-                                   data-bs-toggle="modal"
-                                   data-bs-target="#confirmDeleteModal"
-                                   data-id="${o.orderId}"
-                                   data-url="${pageContext.request.contextPath}/admin/orders/delete"
-                                   title="Xóa">
-                                   <i class="bi bi-trash-fill"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </c:forEach>
+            <!-- Delete -->
+            <a href="javascript:void(0);"
+               class="text-danger me-3"
+               data-bs-toggle="modal"
+               data-bs-target="#confirmDeleteModal"
+               data-id="${o.orderId}"
+               data-url="${pageContext.request.contextPath}/admin/orders/delete"
+               title="Xóa">
+               <i class="bi bi-trash-fill"></i>
+            </a>
+        </td>
+    </tr>
+</c:forEach>
+
                 </tbody>
             </table>
         </div>

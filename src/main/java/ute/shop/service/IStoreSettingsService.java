@@ -1,8 +1,9 @@
 package ute.shop.service;
 
-import ute.shop.models.StoreSettings;
+import ute.shop.entity.StoreSettings;
+
 
 public interface IStoreSettingsService {
-    StoreSettings getSettings();
+	StoreSettings getSettings();
     boolean updateSettings(StoreSettings settings);
 }

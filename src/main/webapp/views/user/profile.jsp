@@ -36,7 +36,7 @@
 					</c:otherwise>
 				</c:choose>
 
-				<p class="text-muted mt-2">ID: ${sessionScope.account.user_id}</p>
+				<p class="text-muted mt-2">ID: ${sessionScope.account.userId}</p>
 			</div>
 
 			<div class="mb-3">
@@ -57,12 +57,7 @@
 					readonly>
 			</div>
 
-			<div class="mb-3">
-				<label class="form-label">Ngày tạo</label> <input type="text"
-					class="form-control" value="${sessionScope.account.createDate}"
-					readonly>
-			</div>
-
+			
 			<div class="mb-3">
 				<label class="form-label">Ảnh đại diện (chọn file mới)</label> <input
 					type="file" class="form-control" name="avatarFile" accept="image/*">

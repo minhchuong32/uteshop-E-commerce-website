@@ -3,6 +3,7 @@ package ute.shop.controller.admin;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,7 +11,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import ute.shop.models.Order;
+import ute.shop.entity.Order;
+import ute.shop.entity.User;
 import ute.shop.service.impl.OrderServiceImpl;
 
 @WebServlet(urlPatterns = {
@@ -47,8 +49,9 @@ public class OrderController extends HttpServlet {
             String idParam = req.getParameter("id");
             if (idParam != null && !idParam.isEmpty()) {
                 int id = Integer.parseInt(idParam);
-                Order order = orderService.getById(id);
-                req.setAttribute("order", order);
+                Optional<Order> orderOpt = orderService.getById(id);
+                orderOpt.ifPresent(o -> req.setAttribute("order", o));
+               
                 req.setAttribute("page", "orders");
                 req.setAttribute("view", "/views/admin/orders/edit.jsp");
                 req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
@@ -83,13 +86,20 @@ public class OrderController extends HttpServlet {
             String paymentMethod = req.getParameter("payment_method");
 
             Order order = new Order();
-            order.setUserId(userId);
+
+            // Tạo user "ảo" chỉ set id
+            User u = new User();
+            u.setUserId(userId);
+            order.setUser(u);
+
             order.setTotalAmount(totalAmount);
             order.setStatus(status);
             order.setPaymentMethod(paymentMethod);
 
-            orderService.insert(order);
+            orderService.insert(order);  // Hibernate sẽ map user_id = userId
             resp.sendRedirect(req.getContextPath() + "/admin/orders");
+        
+
 
         } else if (uri.endsWith("/edit")) {
             int id = Integer.parseInt(req.getParameter("id"));
@@ -97,13 +107,14 @@ public class OrderController extends HttpServlet {
             String status = req.getParameter("status");
             String paymentMethod = req.getParameter("payment_method");
 
-            Order order = orderService.getById(id);
-            order.setTotalAmount(totalAmount);
-            order.setStatus(status);
-            order.setPaymentMethod(paymentMethod);
-
-            orderService.update(order);
+            orderService.getById(id).ifPresent(order -> {
+                order.setTotalAmount(totalAmount);
+                order.setStatus(status);
+                order.setPaymentMethod(paymentMethod);
+                orderService.update(order);
+            });
             resp.sendRedirect(req.getContextPath() + "/admin/orders");
+
         }
     }
 }

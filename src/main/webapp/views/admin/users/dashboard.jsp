@@ -19,7 +19,6 @@
 						<th>Người dùng</th>
 						<th>Vai trò</th>
 						<th>Trạng thái</th>
-						<th>Ngày tham gia</th>
 						<th class="text-center">Hành động</th>
 					</tr>
 				</thead>
@@ -61,32 +60,30 @@
 									</c:otherwise>
 								</c:choose></td>
 
-							<!-- Ngày tham gia -->
-							<td>${u.createDate}</td>
 
 							<!-- Action -->
 							<td class="text-center">
 								<!-- Edit --> <a
-								href="${pageContext.request.contextPath}/admin/users/edit?id=${u.user_id}"
+								href="${pageContext.request.contextPath}/admin/users/edit?id=${u.userId}"
 								class="text-warning me-3" title="Sửa"> <i
 									class="bi bi-pencil-square"></i>
 							</a> <!-- Delete (sử dụng modal Bootstrap) --> <a
 								href="javascript:void(0);" class="text-danger me-3"
 								data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-								data-id="${u.user_id}"
+								data-id="${u.userId}"
 								data-url="${pageContext.request.contextPath}/admin/users/delete"
 								title="Xóa"> <i class="bi bi-trash-fill"></i>
 							</a> <!-- Lock / Unlock --> <c:choose>
 									<c:when test="${u.status eq 'active'}">
 										<a
-											href="${pageContext.request.contextPath}/admin/users/lock?id=${u.user_id}"
+											href="${pageContext.request.contextPath}/admin/users/lock?id=${u.userId}"
 											class="text-danger" title="Khóa tài khoản"> <i
 											class="bi bi-lock-fill"></i>
 										</a>
 									</c:when>
 									<c:otherwise>
 										<a
-											href="${pageContext.request.contextPath}/admin/users/unlock?id=${u.user_id}"
+											href="${pageContext.request.contextPath}/admin/users/unlock?id=${u.userId}"
 											class="text-success" title="Mở khóa tài khoản"> <i
 											class="bi bi-unlock-fill"></i>
 										</a>

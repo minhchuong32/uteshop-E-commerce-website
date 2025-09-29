@@ -1,14 +1,16 @@
 package ute.shop.service.impl;
 
-import java.util.List;
 import ute.shop.dao.IOrderDao;
 import ute.shop.dao.impl.OrderDaoImpl;
-import ute.shop.models.Order;
+import ute.shop.entity.Order;
 import ute.shop.service.IOrderService;
+
+import java.util.List;
+import java.util.Optional;
 
 public class OrderServiceImpl implements IOrderService {
 
-    private IOrderDao orderDao = new OrderDaoImpl();
+    private final IOrderDao orderDao = new OrderDaoImpl();
 
     @Override
     public List<Order> getAll() {
@@ -16,7 +18,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public Order getById(int id) {
+    public Optional<Order> getById(int id) {
         return orderDao.getById(id);
     }
 

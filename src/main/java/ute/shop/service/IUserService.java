@@ -1,35 +1,51 @@
 package ute.shop.service;
 
-import java.util.List;
+import ute.shop.entity.User;
 
-import ute.shop.models.User;
+import java.util.List;
+import java.util.Optional;
 
 public interface IUserService {
-	List<User> getAllUsers();
 
-	User login(String username, String password);
+    // Đăng nhập bằng email + mật khẩu
+    User login(String email, String password);
 
-	User findByEmail(String email);
+    // Hash mật khẩu
+    String hashPassword(String password);
 
-	User getUserById(int id);
+    // Thêm user mới
+    void insert(User user);
 
-	void insert(User user);
+    // Đăng ký
+    boolean register(String username, String password, String email, String role, String status);
 
-	boolean update(User u);
+    // Kiểm tra email tồn tại
+    boolean checkExistEmail(String email);
 
-	void delete(int id);
+    // Kiểm tra username tồn tại
+    boolean checkExistUsername(String username);
 
-	boolean register(String username, String password, String email, String role, String status);
+    // Tìm user theo email
+    Optional<User> findByEmail(String email);
 
-	boolean checkExistEmail(String email);
+    // Tìm user theo id
+    Optional<User> getUserById(int id);
 
-	boolean checkExistUsername(String username);
+    // Update user
+    boolean update(User user);
 
-	boolean updatePassword(String email, String newPassword);
+    // Xóa user
+    void delete(int id);
 
-	void updateStatus(int id, String status);
-	
-	String hashPassword(String password);
-	
-	boolean UpdatePwd(User user, boolean pwd);
+    // Update password
+    boolean updatePassword(String email, String newPassword);
+
+    // Lấy tất cả users
+    List<User> getAllUsers();
+
+    // Cập nhật status
+    void updateStatus(int id, String status);
+
+    // Update user có thể đổi mật khẩu hoặc không
+    boolean updatePwd(User user, boolean changePwd);
 }

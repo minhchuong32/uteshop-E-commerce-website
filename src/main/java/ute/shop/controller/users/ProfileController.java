@@ -1,6 +1,6 @@
 package ute.shop.controller.users;
 
-import ute.shop.models.User;
+import ute.shop.entity.User;
 import ute.shop.service.IUserService;
 import ute.shop.service.impl.UserServiceImpl;
 
@@ -90,7 +90,7 @@ public class ProfileController extends HttpServlet {
         }
 
         // Update DB
-        boolean updated = service.UpdatePwd(account, changePwd);
+        boolean updated = service.updatePwd(account, changePwd);
 
 		
 		if (updated) {

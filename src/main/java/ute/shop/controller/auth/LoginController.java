@@ -3,7 +3,7 @@ package ute.shop.controller.auth;
 import java.io.IOException;
 
 import ute.shop.utils.Constant;
-import ute.shop.models.User;
+import ute.shop.entity.User;
 import ute.shop.service.IUserService;
 import ute.shop.service.impl.UserServiceImpl;
 import jakarta.servlet.ServletException;

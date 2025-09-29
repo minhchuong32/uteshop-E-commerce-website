@@ -1,12 +1,13 @@
 package ute.shop.service.impl;
 
-import ute.shop.dao.IStoreSettingsDAO;
-import ute.shop.dao.impl.StoreSettingsDAOImpl;
-import ute.shop.models.StoreSettings;
+import ute.shop.dao.IStoreSettingsDao;
+import ute.shop.dao.impl.StoreSettingsDaoImpl;
+import ute.shop.entity.StoreSettings;
 import ute.shop.service.IStoreSettingsService;
 
+
 public class StoreSettingsServiceImpl implements IStoreSettingsService {
-    private IStoreSettingsDAO dao = new StoreSettingsDAOImpl();
+    private final IStoreSettingsDao dao = new StoreSettingsDaoImpl();
 
     @Override
     public StoreSettings getSettings() {

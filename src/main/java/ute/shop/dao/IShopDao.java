@@ -1,17 +1,17 @@
 package ute.shop.dao;
 
+import ute.shop.entity.Shop;
 import java.util.List;
 
-import ute.shop.models.Shop;
 
 public interface IShopDao {
-	List<Shop> getAll();
+    List<Shop> getAll();
 
-	Shop getById(int id);
+    Shop getById(int id);
 
-	void insert(Shop shop);
+    void insert(Shop shop);
 
-	void update(Shop shop);
+    void update(Shop shop);
 
-	void delete(int id);
+    void delete(int id);
 }

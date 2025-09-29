@@ -18,7 +18,7 @@
 				<thead class="table-light">
 					<tr>
 						<th>Tên cửa hàng</th>
-						<th>Người sở hữu (user_id)</th>
+						<th>Người sở hữu</th>
 						<th>Mô tả</th>
 						<th>Ngày tạo</th>
 						<th class="text-center">Hành động</th>
@@ -28,7 +28,10 @@
 					<c:forEach var="s" items="${shops}">
 						<tr>
 							<td>${s.name}</td>
-							<td>${s.userId}</td>
+							<td>
+								<div class="fw-bold">${s.user.username}</div>
+								<small class="text-muted">${s.user.email}</small>
+							</td>
 							<td>${s.description}</td>
 							<td>${s.createdAt}</td>
 

@@ -1,11 +1,12 @@
 package ute.shop.dao;
 
+import ute.shop.entity.Order;
 import java.util.List;
-import ute.shop.models.Order;
+import java.util.Optional;
 
 public interface IOrderDao {
     List<Order> getAll();
-    Order getById(int id);
+    Optional<Order> getById(int id);
     void insert(Order order);
     void update(Order order);
     void delete(int id);

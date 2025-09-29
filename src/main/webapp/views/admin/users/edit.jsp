@@ -6,7 +6,7 @@
 
 	<form action="${pageContext.request.contextPath}/admin/users/edit"
 		method="post" class="card shadow-sm p-4">
-		<input type="hidden" name="id" value="${user.user_id}" />
+		<input type="hidden" name="id" value="${user.userId}" />
 
 		<div class="mb-3">
 			<label class="form-label">Tên đăng nhập</label> <input type="text"
