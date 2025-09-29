@@ -3,6 +3,7 @@ package ute.shop.service.impl;
 import ute.shop.dao.IOrderDao;
 import ute.shop.dao.impl.OrderDaoImpl;
 import ute.shop.entity.Order;
+import ute.shop.entity.User;
 import ute.shop.service.IOrderService;
 
 import java.util.List;
@@ -23,8 +24,8 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public void insert(Order order) {
-        orderDao.insert(order);
+    public boolean insert(Order order) {
+        return orderDao.insert(order);
     }
 
     @Override
@@ -36,4 +37,9 @@ public class OrderServiceImpl implements IOrderService {
     public void delete(int id) {
         orderDao.delete(id);
     }
+
+	@Override
+	public List<Order> findByUser(User user) {
+		return orderDao.findByUser(user);
+	}
 }

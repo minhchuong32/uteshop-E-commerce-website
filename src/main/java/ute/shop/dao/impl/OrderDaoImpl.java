@@ -3,6 +3,7 @@ package ute.shop.dao.impl;
 import jakarta.persistence.*;
 import ute.shop.dao.IOrderDao;
 import ute.shop.entity.Order;
+import ute.shop.entity.User;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -34,7 +35,7 @@ public class OrderDaoImpl implements IOrderDao {
     }
 
     @Override
-    public void insert(Order order) {
+    public boolean insert(Order order) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
@@ -42,9 +43,11 @@ public class OrderDaoImpl implements IOrderDao {
             order.setCreatedAt(new Timestamp(System.currentTimeMillis())); // tương đương GETDATE()
             em.persist(order);
             tx.commit();
+            return true; // thành công
         } catch (Exception e) {
             if (tx.isActive()) tx.rollback();
             e.printStackTrace();
+            return false; // thất bại
         } finally {
             em.close();
         }
@@ -82,4 +85,16 @@ public class OrderDaoImpl implements IOrderDao {
             em.close();
         }
     }
+
+	@Override
+	public List<Order> findByUser(User user) {
+		EntityManager em = emf.createEntityManager();
+	    try {
+	        return em.createQuery("SELECT o FROM Order o WHERE o.user = :user ORDER BY o.createdAt DESC", Order.class)
+	                 .setParameter("user", user)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
 }
