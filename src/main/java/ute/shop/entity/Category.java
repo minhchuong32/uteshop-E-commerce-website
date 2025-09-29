@@ -23,6 +23,11 @@ public class Category {
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
+    
+    // Category.java
+    @Column(name = "image", length = 255, columnDefinition = "NVARCHAR(255)")
+    private String image;
+
 
     // Danh sách danh mục con
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)

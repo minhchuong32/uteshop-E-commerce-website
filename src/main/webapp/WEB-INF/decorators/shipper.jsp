@@ -1,8 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/commons/taglib.jsp"%>
-
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
     <title>UteShop | User</title>
 
@@ -21,23 +20,8 @@
     <!--SITEMESH:HEAD-->
 </head>
 <body>
-
-    <!-- Header -->
-    <%@ include file="/commons/user/header.jsp"%>
-
-    <!-- Nội dung động -->
-    <div class="container-fluid px-0">
-        <!--SITEMESH:BODY-->
-        <sitemesh:write property="body" />
-    </div>
-
-    <!-- Footer -->
-    <%@ include file="/commons/user/footer.jsp"%>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- JS riêng -->
-    <script src="${pageContext.request.contextPath}/assets/js/index.js"></script>
+	<%@ include file="/commons/shipper/header.jsp"%>
+	<sitemesh:write property="body" />
+	<%@ include file="/commons/shipper/footer.jsp"%>
 </body>
 </html>

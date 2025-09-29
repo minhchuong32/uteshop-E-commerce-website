@@ -112,7 +112,7 @@
 					<!-- Giỏ hàng -->
 					<li class="nav-item cart-item position-relative ms-3"><a
 						class="nav-link"
-						href="${pageContext.request.contextPath}/order/cart.jsp"> <img
+						href="${pageContext.request.contextPath}/user/cart"> <img
 							width="25" height="25"
 							src="${pageContext.request.contextPath}/assets/icon/cart.png"
 							alt="cart" />

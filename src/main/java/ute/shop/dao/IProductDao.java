@@ -1,7 +1,11 @@
 package ute.shop.dao;
 
+import java.util.List;
+
 import ute.shop.entity.Product;
 
 public interface IProductDao {
-    Product findById(int id);
+	List<Product> findAll();
+    Product findById(Integer id);
+    List<Product> findTopProducts(int limit);
 }

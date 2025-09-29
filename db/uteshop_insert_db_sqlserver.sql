@@ -146,3 +146,23 @@ INSERT INTO contact (UserID, fullName, email, content, createdAt) VALUES
 (8, N'Lê Thị H', N'h@example.com', N'Xin tư vấn thêm sản phẩm mới', GETDATE()),
 (9, N'Phan Văn I', N'i@example.com', N'Cần xuất hóa đơn đỏ', GETDATE()),
 (10, N'Nguyễn Thị J', N'j@example.com', N'Cần đổi số điện thoại liên hệ', GETDATE());
+
+--------------------------------------------------------
+-- 13. CART ITEMS
+--------------------------------------------------------
+INSERT INTO cart_items (user_id, product_id, quantity) VALUES
+(1, 1, 1),  -- khachhang1 chọn iPhone 15
+(1, 5, 2),  -- khachhang1 chọn 2 áo sơ mi nam
+(2, 2, 1),  -- khachhang2 chọn Galaxy S23
+(2, 6, 1),  -- khachhang2 chọn váy công chúa
+(3, 3, 1),  -- admin1 test mua MacBook Pro
+(3, 7, 1),  -- admin1 thêm giày sneaker
+(8, 8, 2),  -- khachhang3 chọn 2 quần jeans
+(8, 10, 1), -- khachhang3 thêm dép sandal
+(9, 4, 1),  -- khachhang4 chọn Dell XPS
+(9, 9, 1),  -- khachhang4 thêm áo khoác nữ
+(5, 7, 2),  -- shipper2 chọn 2 giày sneaker
+(6, 1, 1),  -- vendor1 mua thử iPhone 15
+(6, 5, 3),  -- vendor1 thêm 3 áo sơ mi nam
+(7, 2, 1),  -- vendor2 test Samsung Galaxy S23
+(10, 6, 2); -- khachhang5 thêm 2 váy công chúa

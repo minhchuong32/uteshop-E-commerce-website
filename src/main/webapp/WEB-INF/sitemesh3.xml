@@ -5,5 +5,11 @@
 
 	<!-- Decorator cho User -->
 	<mapping path="/user/*" name="user" decorator="user.jsp" />
+	
+	<!-- Decorator cho Vendor -->
+	<mapping path="/vendor/*" name="vendor" decorator="vendor.jsp" />
+
+	<!-- Decorator cho Shipper -->
+	<mapping path="/shipper/*" name="shipper" decorator="shipper.jsp" />
 
 </sitemesh>

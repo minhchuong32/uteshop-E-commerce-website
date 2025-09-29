@@ -1,4 +1,4 @@
-package ute.shop.controller.vendors;
+package ute.shop.controller.shipper;
 
 import java.io.IOException;
 
@@ -8,8 +8,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = {"/vendor/home"})
-public class VendorController extends HttpServlet {
+@WebServlet(urlPatterns = {"/shipper/home"})
+public class HomeController extends HttpServlet {
 
 	/**
 	 * 
@@ -18,7 +18,7 @@ public class VendorController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		req.getRequestDispatcher("/WEB-INF/views/vendors/home.jsp").forward(req, resp);
+		req.getRequestDispatcher("/views/shipper/home.jsp").forward(req, resp);
 	}
 }
 

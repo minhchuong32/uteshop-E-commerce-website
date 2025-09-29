@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
-<div class="container mt-4">
+<div class="container mt-4 mb-4">
 	<div class="card shadow p-4" style="max-width: 650px; margin: auto;">
 		<h3 class="text-center mb-4">Hồ sơ cá nhân</h3>
 

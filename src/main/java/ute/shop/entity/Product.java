@@ -32,9 +32,13 @@ public class Product {
     @Column(name = "name", nullable = false, length = 100, columnDefinition = "NVARCHAR(100)")
     private String name;
 
-    // Giá: DECIMAL(18,2)
+    // Giá hiện tại: DECIMAL(18,2)
     @Column(name = "price", precision = 18, scale = 2, nullable = false)
     private BigDecimal price;
+
+    // Giá cũ (hiển thị khi giảm giá)
+    @Column(name = "old_price", precision = 18, scale = 2)
+    private BigDecimal oldPrice;
 
     // Số lượng tồn kho
     @Column(name = "stock", nullable = false)
@@ -55,5 +59,30 @@ public class Product {
 
     // Liên kết với đánh giá
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
+    private List<Review> reviewList = new ArrayList<>();
+
+    // ====================== Thêm trường tạm tính toán ======================
+
+    // Tổng số review
+    @Transient
+    private int reviewsCount;
+
+    // Rating trung bình
+    @Transient
+    private double averageRating;
+
+    // Tự động tính sau khi load entity
+    @PostLoad
+    public void calculateReviews() {
+        if (reviewList != null && !reviewList.isEmpty()) {
+            this.reviewsCount = reviewList.size();
+            this.averageRating = reviewList.stream()
+                                           .mapToInt(Review::getRating)
+                                           .average()
+                                           .orElse(0.0);
+        } else {
+            this.reviewsCount = 0;
+            this.averageRating = 0.0;
+        }
+    }
 }
