@@ -165,6 +165,9 @@ public class UserDaoImpl implements IUserDao {
                 u.setRole(user.getRole());
                 u.setStatus(user.getStatus());
                 u.setAvatar(user.getAvatar());
+                u.setPhone(user.getPhone());
+                u.setName(user.getName());
+                u.setAddress(user.getAddress());
                 if (changePwd) {
                     u.setPassword(user.getPassword());
                 }

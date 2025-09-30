@@ -54,6 +54,9 @@ public class ProfileController extends HttpServlet {
 		String newPassword = request.getParameter("newPassword");
 		String confirmPassword = request.getParameter("confirmPassword");
 		String username = request.getParameter("username");
+		String phone = request.getParameter("phone");
+		String name = request.getParameter("name");
+		String address = request.getParameter("address");
 
 		// Upload avatar nếu có
 		Part avatarPart = request.getPart("avatarFile");
@@ -71,6 +74,16 @@ public class ProfileController extends HttpServlet {
 		if (email != null && !email.trim().isEmpty()) {
 			account.setEmail(email);
 		}
+		if (phone != null && !phone.trim().isEmpty()) {
+			account.setPhone(phone);
+		}
+		if (address != null && !address.trim().isEmpty()) {
+			account.setAddress(address);
+		}
+		if (name != null && !name.trim().isEmpty()) {
+			account.setName(name);
+		}
+	
 		// Đổi mật khẩu nếu có
         boolean changePwd = false;
         if (oldPassword != null && !oldPassword.isEmpty()) {

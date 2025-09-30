@@ -34,7 +34,7 @@ public class CartController extends HttpServlet {
         List<CartItem> cartItems = cartService.getCartByUser(user);
         req.setAttribute("cartItems", cartItems);
 
-        req.getRequestDispatcher("/views/user/cart.jsp").forward(req, resp);
+        req.getRequestDispatcher("/views/user/order/cart.jsp").forward(req, resp);
     }
 
     @Override

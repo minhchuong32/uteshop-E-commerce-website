@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
-
 <div class="container mt-4 mb-4">
-	<div class="card shadow p-4" style="max-width: 650px; margin: auto;">
+	<div class="card shadow p-4" style="max-width: 900px; margin: auto;">
 		<h3 class="text-center mb-4">Hồ sơ cá nhân</h3>
 
 		<!-- Thông báo -->
@@ -19,69 +18,100 @@
 		<!-- Form update -->
 		<form action="${profileAction}" method="post"
 			enctype="multipart/form-data">
+			<div class="row">
+				<!-- Cột trái: Avatar -->
+				<div class="col-md-4 text-center border-end">
+					<c:choose>
+						<c:when test="${not empty sessionScope.account.avatar}">
+							<img
+								src="${pageContext.request.contextPath}/uploads/${sessionScope.account.avatar}"
+								alt="Avatar" class="rounded-circle img-thumbnail mb-3"
+								style="width: 180px; height: 180px; object-fit: cover;">
+						</c:when>
+						<c:otherwise>
+							<img
+								src="${pageContext.request.contextPath}/uploads/default_avatar.png"
+								alt="Default Avatar" class="rounded-circle img-thumbnail mb-3"
+								style="width: 180px; height: 180px; object-fit: cover;">
+						</c:otherwise>
+					</c:choose>
+					<p class="text-muted">ID: ${sessionScope.account.userId}</p>
 
-			<div class="text-center mb-4">
-				<c:choose>
-					<c:when test="${not empty sessionScope.account.avatar}">
-						<img
-							src="${pageContext.request.contextPath}/uploads/${sessionScope.account.avatar}"
-							alt="Avatar" class="rounded-circle img-thumbnail mx-auto d-block"
-							style="width: 150px; height: 150px; object-fit: cover;">
-					</c:when>
-					<c:otherwise>
-						<img src="${pageContext.request.contextPath}/assets/images/default_avatar.png"
-							alt="Default Avatar"
-							class="rounded-circle img-thumbnail mx-auto d-block"
-							style="width: 150px; height: 150px; object-fit: cover;">
-					</c:otherwise>
-				</c:choose>
+					<div class="mb-3">
+						<label class="form-label">Ảnh đại diện (chọn file mới)</label> <input
+							type="file" class="form-control" name="avatarFile"
+							accept="image/*">
+					</div>
+				</div>
 
-				<p class="text-muted mt-2">ID: ${sessionScope.account.userId}</p>
-			</div>
+				<!-- Cột phải: Thông tin -->
+				<div class="col-md-8 ps-4">
+					<div class="mb-3">
+						<label class="form-label">Tên đăng nhập</label> <input type="text"
+							class="form-control" name="username"
+							value="${sessionScope.account.username}" required>
+					</div>
 
-			<div class="mb-3">
-				<label class="form-label">Tên đăng nhập</label> <input type="text"
-					class="form-control" name="username"
-					value="${sessionScope.account.username}" required>
-			</div>
+					<div class="mb-3">
+						<label class="form-label">Họ và tên</label> <input type="text"
+							class="form-control" name="name"
+							value="${sessionScope.account.name}" required>
+					</div>
 
-			<div class="mb-3">
-				<label class="form-label">Email</label> <input type="email"
-					class="form-control" name="email"
-					value="${sessionScope.account.email}" required>
-			</div>
+					<div class="mb-3">
+						<label class="form-label">Email</label> <input type="email"
+							class="form-control" name="email"
+							value="${sessionScope.account.email}" required>
+					</div>
 
-			<div class="mb-3">
-				<label class="form-label">Trạng thái</label> <input type="text"
-					class="form-control" value="${sessionScope.account.status}"
-					readonly>
-			</div>
+					<div class="mb-3">
+						<label class="form-label">Số điện thoại</label> <input type="text"
+							class="form-control" name="phone"
+							value="${sessionScope.account.phone}" required>
+					</div>
 
-			
-			<div class="mb-3">
-				<label class="form-label">Ảnh đại diện (chọn file mới)</label> <input
-					type="file" class="form-control" name="avatarFile" accept="image/*">
-			</div>
+					<div class="mb-3">
+						<label class="form-label">Địa chỉ</label>
+						<textarea class="form-control" name="address" rows="2">${sessionScope.account.address}</textarea>
 
-			<hr>
-			<h5 class="mb-3">🔒 Đổi mật khẩu</h5>
+					</div>
 
-			<div class="mb-3">
-				<label class="form-label">Mật khẩu hiện tại</label> <input
-					type="password" class="form-control" name="oldPassword">
-			</div>
-			<div class="mb-3">
-				<label class="form-label">Mật khẩu mới</label> <input
-					type="password" class="form-control" name="newPassword">
-			</div>
-			<div class="mb-3">
-				<label class="form-label">Xác nhận mật khẩu mới</label> <input
-					type="password" class="form-control" name="confirmPassword">
-			</div>
+					<div class="mb-3">
+						<label class="form-label">Trạng thái</label> <input type="text"
+							class="form-control" value="${sessionScope.account.status}"
+							readonly>
+					</div>
 
-			<div class="text-center mt-4">
-				<button type="submit" class="btn btn-success">💾 Lưu thay
-					đổi</button>
+					<hr>
+					<h5 class="mb-3">🔒 Đổi mật khẩu</h5>
+
+					<div class="row">
+						<div class="col-md-6 mb-3">
+							<label class="form-label">Mật khẩu hiện tại</label> <input
+								type="password" class="form-control" name="oldPassword">
+						</div>
+						<div class="col-md-6 mb-3">
+							<label class="form-label">Mật khẩu mới</label> <input
+								type="password" class="form-control" name="newPassword">
+						</div>
+						<div class="col-md-6 mb-3">
+							<label class="form-label">Xác nhận mật khẩu mới</label> <input
+								type="password" class="form-control" name="confirmPassword">
+						</div>
+					</div>
+					<!-- Link Quên mật khẩu -->
+					<div class="mb-3">
+						<a href="${pageContext.request.contextPath}/forgot-password"
+							class="text-decoration-none text-primary-custom"> <i
+							class="bi bi-question-circle me-1"></i> Quên mật khẩu?
+						</a>
+					</div>
+					<!-- Nút cập nhật -->
+					<div class="text-end mb-4">
+						<button type="submit" class="btn btn-primary-custom btn-lg px-4">
+							Cập nhật</button>
+					</div>
+				</div>
 			</div>
 		</form>
 	</div>

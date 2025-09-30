@@ -32,6 +32,6 @@ public class OrderHistoryController extends HttpServlet {
             req.setAttribute("orders", orders);
         }
 
-        req.getRequestDispatcher("/views/user/order-history.jsp").forward(req, resp);
+        req.getRequestDispatcher("/views/user/order/history.jsp").forward(req, resp);
     }
 }

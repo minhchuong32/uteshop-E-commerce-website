@@ -3,25 +3,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>UteShop | User</title>
+<title>UteShop | User</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png"
-          href="${pageContext.request.contextPath}/assets/images/favicon.png">
+<!-- Favicon -->
+<link rel="icon" type="image/png"
+	href="${pageContext.request.contextPath}/assets/images/favicon.png">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet" />
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- CSS riêng -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/index.css">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+	rel="stylesheet">
 
-    <!-- Chèn head từ content -->
-    <!--SITEMESH:HEAD-->
+<!-- CSS  -->
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/common.css">
+
 </head>
 <body>
 	<%@ include file="/commons/user/header.jsp"%>
-	<sitemesh:write property="body" />
+	<div id="main-content">
+		<sitemesh:write property="body" />
+	</div>
 	<%@ include file="/commons/user/footer.jsp"%>
 </body>
 </html>

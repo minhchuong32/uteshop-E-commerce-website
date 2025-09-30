@@ -22,6 +22,10 @@ public class CheckoutController extends HttpServlet {
     private final ICartItemService cartService = new CartItemServiceImpl();
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	req.getRequestDispatcher("/views/user/order/checkout.jsp").forward(req, resp);
+    }
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("account");
         if (user == null) {

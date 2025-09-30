@@ -1,3 +1,23 @@
+/* Đảm bảo toàn trang full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Layout chính dùng flexbox để đẩy footer xuống */
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Nội dung chính chiếm phần còn lại */
+#main-content {
+    flex: 1;
+    padding-top: 76px !important;
+}
+
+
 /* ================== THEME CSS ================== */
 
 /* Màu chủ đạo */
@@ -14,8 +34,8 @@
 
 /* Background */
 .bg-primary-custom {
-	background-color: var(--primary-color) !important;
-	color: #fff !important;
+	color: var(--primary-color) !important;
+
 }
 
 /* Button */
@@ -74,7 +94,7 @@
 /* Mặc định: chữ trắng, icon trắng */
 .nav-link {
 	text-decoration: none;
-	color: #ffffff !important;
+	color: var(--primary-color) !important;
 	display: flex;
 	align-items: center;
 	gap: 0.9rem; /* khoảng cách giữa icon và chữ */

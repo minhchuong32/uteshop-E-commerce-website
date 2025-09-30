@@ -1,5 +1,7 @@
 package ute.shop.entity;
 
+import java.util.Date;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,4 +29,8 @@ public class Delivery {
     // Trạng thái giao hàng: NVARCHAR(20) (assigned, delivering, delivered, canceled, returned)
     @Column(name = "status", length = 20, columnDefinition = "NVARCHAR(20) DEFAULT N'Đã gán'")
     private String status;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_at")
+    private Date createdAt = new Date();  // thêm field này
 }

@@ -1,0 +1,6 @@
+@charset "UTF-8";
+/* Tránh banner bị dính sát vào navbar fixed-top */
+#main {
+  padding-top: 76px !important; /* hoặc đúng chiều cao navbar */
+}
+	

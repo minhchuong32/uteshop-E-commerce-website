@@ -18,11 +18,9 @@
 
 <!-- CSS riêng -->
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/css/index.css">
+	href="${pageContext.request.contextPath}/assets/css/user.css">
 </head>
 <body>
-
-
 	<!-- Banner -->
 	<div id="bannerDiv" class="carousel slide" data-bs-ride="carousel">
 		<div class="carousel-inner">

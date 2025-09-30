@@ -32,4 +32,5 @@ public class OrderDetail {
     // Giá tại thời điểm đặt: DECIMAL(18,2)
     @Column(name = "price", precision = 18, scale = 2, nullable = false)
     private BigDecimal price;
+    
 }
