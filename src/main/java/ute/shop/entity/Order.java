@@ -19,20 +19,20 @@ public class Order {
     @Column(name = "order_id")
     private Integer orderId;
 
-    // Mỗi đơn hàng thuộc về 1 user
+    // Mỗi đơn hàng thuộc về 1 user (khách hàng)
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Tổng tiền: DECIMAL(18,2)
+    // Tổng tiền
     @Column(name = "total_amount", precision = 18, scale = 2, nullable = false)
     private BigDecimal totalAmount;
 
-    // Trạng thái đơn hàng: NVARCHAR(20)
+    // Trạng thái đơn hàng
     @Column(name = "status", length = 20, columnDefinition = "NVARCHAR(20) DEFAULT N'new'")
     private String status;
 
-    // Phương thức thanh toán: NVARCHAR(20)
+    // Phương thức thanh toán
     @Column(name = "payment_method", length = 20, columnDefinition = "NVARCHAR(20) DEFAULT N'COD'")
     private String paymentMethod;
 
@@ -41,11 +41,15 @@ public class Order {
     @Column(name = "created_at", nullable = false)
     private Date createdAt = new Date();
 
+    // Địa chỉ giao hàng
+    @Column(name = "address", length = 255, columnDefinition = "NVARCHAR(255)")
+    private String address;
+
     // Chi tiết đơn hàng
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
-    // Giao hàng
+    // Giao hàng (lịch sử)
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Delivery> deliveries = new ArrayList<>();
 }
