@@ -67,24 +67,23 @@
 					</select>
 				</div>
 				<div class="mb-3 text-center">
-    <label class="form-label d-block">Logo</label>
-    <input type="file" class="form-control" name="logo">
+					<label class="form-label d-block">Logo</label> <input type="file"
+						class="form-control" name="logo">
 
-    <c:choose>
-        <c:when test="${not empty store.logo}">
-            <img src="${pageContext.request.contextPath}/uploads/${store.logo}"
-                 alt="logo"
-                 class="mt-2 mx-auto d-block"
-                 style="height: 80px;">
-        </c:when>
-        <c:otherwise>
-            <img src="${pageContext.request.contextPath}/assets/images/logo.png"
-                 alt="default logo"
-                 class="mt-2 mx-auto d-block"
-                 style="height: 80px;">
-        </c:otherwise>
-    </c:choose>
-</div>
+					<c:choose>
+						<c:when test="${not empty store.logo}">
+							<img
+								src="${pageContext.request.contextPath}/uploads/${store.logo}"
+								alt="logo" class="mt-2 mx-auto d-block" style="height: 80px;">
+						</c:when>
+						<c:otherwise>
+							<img
+								src="${pageContext.request.contextPath}/assets/images/logo.png"
+								alt="default logo" class="mt-2 mx-auto d-block"
+								style="height: 80px;">
+						</c:otherwise>
+					</c:choose>
+				</div>
 
 			</div>
 		</div>
@@ -147,10 +146,10 @@
 			</div>
 		</div>
 
-		<!-- Gộp nút cập nhật chung -->
-		<div class="text-center mb-4">
-			<button type="submit" class="btn btn-primary btn-lg">💾 Cập
-				nhật tất cả</button>
+		<!-- Nút cập nhật -->
+		<div class="text-end mb-4">
+			<button type="submit" class="btn btn-primary-custom btn-lg px-4">
+				Cập nhật</button>
 		</div>
 	</form>
 </div>

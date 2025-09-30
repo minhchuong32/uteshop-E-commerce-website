@@ -12,7 +12,7 @@
 	href="${pageContext.request.contextPath}/assets/images/favicon.png">
 <!-- Css -->
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/css/admin.css">
+	href="${pageContext.request.contextPath}/assets/css/common.css">
 <!-- Bootstrap -->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -39,7 +39,7 @@
 				class="col-12 col-md-2 col-xl-2 shadow-sm pt-4 d-flex flex-column position-sticky top-0 vh-100 rounded-end"
 				style="height: calc(100vh - 76px); background-color: #00558D; margin-top: 76px">
 				<h5
-					class="text-center mb-4 text-white border-bottom border-white pb-3">Quản trị shop</h5>
+					class="text-center mb-4 text-white border-bottom border-white pb-3">Quản lý giao hàng</h5>
 
 				<ul class="nav flex-column flex-grow-1">
 					<li class="nav-item mb-1"><a

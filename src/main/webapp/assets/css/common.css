@@ -1,0 +1,105 @@
+/* ================== THEME CSS ================== */
+
+/* Màu chủ đạo */
+:root {
+	--primary-color: #00558D;
+	--primary-hover: #004474;
+	--divider-color: #00558D;
+}
+
+/* Text */
+.text-primary-custom {
+	color: var(--primary-color) !important;
+}
+
+/* Background */
+.bg-primary-custom {
+	background-color: var(--primary-color) !important;
+	color: #fff !important;
+}
+
+/* Button */
+.btn-primary-custom {
+	background-color: var(--primary-color) !important;
+	border-color: var(--primary-color) !important;
+	color: #fff !important;
+	transition: 0.3s;
+}
+
+.btn-primary-custom:hover {
+	background-color: var(--primary-hover) !important;
+	border-color: var(--primary-hover) !important;
+	color: #fff !important;
+}
+
+/* Border */
+.border-primary-custom {
+	border-color: var(--primary-color) !important;
+}
+
+/* Divider (hr) */
+.hr-primary {
+	border: 0;
+	height: 2px;
+	background-color: var(--divider-color);
+	opacity: 0.6;
+	margin: 2rem 0;
+}
+
+/* Section card */
+.section-card {
+	border-left: 5px solid var(--primary-color);
+	padding-left: 1rem;
+	margin-bottom: 1rem;
+}
+
+/* Hiệu ứng xoay ảnh khi scroll */
+.image-box {
+	perspective: 1000px;
+}
+
+.rotate-on-scroll {
+	transition: transform 0.8s ease, opacity 0.8s ease;
+	transform: rotateY(90deg);
+	opacity: 0;
+}
+
+.rotate-on-scroll.visible {
+	transform: rotateY(0);
+	opacity: 1;
+}
+
+/* ================== NAV-LINK ================== */
+
+/* Mặc định: chữ trắng, icon trắng */
+.nav-link {
+	text-decoration: none;
+	color: #ffffff !important;
+	display: flex;
+	align-items: center;
+	gap: 0.9rem; /* khoảng cách giữa icon và chữ */
+}
+
+.nav-link i {
+	color: white;
+}
+
+/* Hover: nền xám nhạt, chữ + icon xanh */
+.nav-link:hover {
+	background-color: #f0f0f0;
+	color: var(--primary-color) !important;
+}
+
+.nav-link:hover i {
+	color: var(--primary-color) !important;
+}
+
+/* Active: nền xanh nhạt, chữ + icon xanh */
+.nav-link.active {
+	background-color: #e0f0ff;
+	color: var(--primary-color) !important;
+}
+
+.nav-link.active i {
+	color: var(--primary-color) !important;
+}
