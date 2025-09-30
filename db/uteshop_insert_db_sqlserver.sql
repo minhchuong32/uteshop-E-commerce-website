@@ -12,8 +12,10 @@ INSERT INTO users (username, password, email, role, status, avatar, name, phone,
 (N'vendor2', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'vendor2@example.com', N'Vendor', N'active', N'vendor2.png', N'Cửa hàng XYZ', N'0907777777', N'99 Phan Đăng Lưu, Bình Thạnh, TP.HCM'),
 (N'khachhang3', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'kh3@example.com', N'User', N'active', N'avatar3.png', N'Hoàng Văn C', N'0908888888', N'11 Điện Biên Phủ, Q.1, TP.HCM'),
 (N'khachhang4', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'kh4@example.com', N'User', N'inactive', N'avatar4.png', N'Đặng Thị D', N'0909999999', N'22 Võ Văn Tần, Q.3, TP.HCM'),
-(N'khachhang5', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'kh5@example.com', N'User', N'banned', N'avatar5.png', N'Phan Văn E', N'0910000000', N'55 Nguyễn Trãi, Q.5, TP.HCM');
-
+(N'khachhang5', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'kh5@example.com', N'User', N'banned', N'avatar5.png', N'Phan Văn E', N'0910000000', N'55 Nguyễn Trãi, Q.5, TP.HCM'),
+(N'vendor3', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'vendor3@example.com', N'Vendor', N'active', N'vendor3.png', N'Cửa hàng MNO', N'0912222333', N'12 Nguyễn Văn Cừ, Q.5, TP.HCM'),
+(N'vendor4', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'vendor4@example.com', N'Vendor', N'active', N'vendor4.png', N'Siêu thị QRS', N'0914444555', N'45 Hai Bà Trưng, Q.1, TP.HCM'),
+(N'vendor5', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'vendor5@example.com', N'Vendor', N'active', N'vendor5.png', N'Cửa hàng TUV', N'0916666777', N'67 Lý Thường Kiệt, Q.10, TP.HCM');
 --------------------------------------------------------
 -- 2. STORE SETTINGS
 --------------------------------------------------------
@@ -26,7 +28,12 @@ INSERT INTO store_settings (store_name, email, hotline, address, logo, theme, co
 --------------------------------------------------------
 INSERT INTO shops (user_id, name, description, created_at) VALUES
 (6, N'Shop Điện Thoại', N'Chuyên bán điện thoại chính hãng', GETDATE()),
-(7, N'Shop Thời Trang', N'Chuyên bán quần áo thời trang', GETDATE());
+(7, N'Shop Thời Trang', N'Chuyên bán quần áo thời trang', GETDATE()),
+(11, N'Shop Gia Dụng', N'Đồ dùng gia đình tiện ích', GETDATE()),
+(12, N'Shop Mỹ Phẩm', N'Mỹ phẩm chính hãng', GETDATE()),
+(13, N'Shop Thực Phẩm', N'Thực phẩm sạch, an toàn', GETDATE());
+
+
 
 --------------------------------------------------------
 -- 4. CATEGORIES
@@ -57,15 +64,48 @@ INSERT INTO products (shop_id, category_id, name, price, old_price, stock, descr
 (2, 7, N'Giày sneaker',       1200000,  1500000, 60, N'Giày thể thao trẻ trung', N'/assets/images/products/sneaker.png'),
 (2, 5, N'Quần jeans nam',      800000,   950000, 90, N'Quần jeans bền đẹp', N'/assets/images/products/jeans.png'),
 (2, 6, N'Áo khoác nữ',         900000,  1100000, 70, N'Áo khoác mùa đông', N'/assets/images/products/aokhoac.png'),
-(2, 7, N'Dép sandal',          300000,   400000, 50, N'Dép sandal tiện lợi', N'/assets/images/products/sandal.png');
-
+(2, 7, N'Dép sandal',          300000,   400000, 50, N'Dép sandal tiện lợi', N'/assets/images/products/sandal.png'),
+(3, 8, N'Nồi cơm điện 1.8L', 1200000, 1500000, 30, N'Nồi cơm điện cao cấp, tiết kiệm điện', N'/assets/images/products/noicom.png'),
+(3, 9, N'Bộ dao nhà bếp', 500000, 700000, 50, N'Bộ dao inox Nhật Bản sắc bén', N'/assets/images/products/dao.png'),
+(3, 10, N'Bàn trà gỗ sồi', 2500000, 3000000, 15, N'Bàn trà phòng khách gỗ sồi tự nhiên', N'/assets/images/products/bantra.png'),
+(3, 8, N'Máy hút bụi mini', 1800000, 2200000, 20, N'Máy hút bụi mini cầm tay', N'/assets/images/products/mayhutbui.png'),
+(4, 4, N'Son môi cao cấp', 350000, 450000, 100, N'Son môi lâu trôi, màu sắc tự nhiên', N'/assets/images/products/son.png'),
+(4, 4, N'Kem dưỡng da ban đêm', 600000, 750000, 80, N'Kem dưỡng trắng và dưỡng ẩm', N'/assets/images/products/kem.png'),
+(4, 4, N'Sữa rửa mặt thiên nhiên', 200000, 250000, 120, N'Sữa rửa mặt chiết xuất trà xanh', N'/assets/images/products/suaruamat.png'),
+(4, 4, N'Nước hoa hồng', 400000, 500000, 90, N'Toner dưỡng ẩm, se khít lỗ chân lông', N'/assets/images/products/nuochoahong.png'),
+(5, 8, N'Gạo ST25', 25000, 30000, 200, N'Gạo ngon nhất thế giới, hạt dài, dẻo thơm', N'/assets/images/products/gao.png'),
+(5, 8, N'Nước mắm Phú Quốc', 70000, 90000, 150, N'Nước mắm truyền thống Phú Quốc 40 độ đạm', N'/assets/images/products/nuocmam.png'),
+(5, 8, N'Trái cây sấy mix', 120000, 150000, 100, N'Hộp trái cây sấy dinh dưỡng', N'/assets/images/products/traicaysay.png'),
+(5, 8, N'Cà phê hạt rang xay', 180000, 220000, 80, N'Cà phê hạt nguyên chất Buôn Ma Thuột', N'/assets/images/products/caphe.png');
 
 --------------------------------------------------------
 -- 6. PROMOTIONS
 --------------------------------------------------------
 INSERT INTO promotions (shop_id, discount_type, value, start_date, end_date) VALUES
-(1, N'percent', 10, '2025-01-01', '2025-12-31'),
-(2, N'fixed', 50000, '2025-02-01', '2025-06-30');
+-- Shop 1: Điện Thoại
+(1, N'Phần trăm', 10, '2025-01-01', '2025-01-31'),
+(1, N'Giảm trực tiếp', 200000, '2025-03-01', '2025-03-15'),
+(1, N'Phần trăm', 5, '2025-06-01', '2025-06-30'),
+
+-- Shop 2: Thời Trang
+(2, N'Giảm trực tiếp', 50000, '2025-02-01', '2025-02-28'),
+(2, N'Phần trăm', 20, '2025-05-01', '2025-05-07'),
+(2, N'Phần trăm', 15, '2025-08-01', '2025-08-31'),
+
+-- Shop 3: Gia Dụng
+(3, N'Phần trăm', 15, '2025-03-01', '2025-03-31'),
+(3, N'Giảm trực tiếp', 100000, '2025-07-01', '2025-07-15'),
+(3, N'Phần trăm', 10, '2025-10-01', '2025-10-31'),
+
+-- Shop 4: Mỹ Phẩm
+(4, N'Giảm trực tiếp', 100000, '2025-04-01', '2025-04-30'),
+(4, N'Phần trăm', 25, '2025-09-01', '2025-09-15'),
+(4, N'Phần trăm', 10, '2025-12-01', '2025-12-31'),
+
+-- Shop 5: Thực Phẩm
+(5, N'Phần trăm', 20, '2025-05-01', '2025-05-15'),
+(5, N'Giảm trực tiếp', 30000, '2025-06-01', '2025-06-30'),
+(5, N'Phần trăm', 5, '2025-11-01', '2025-11-30');
 
 --------------------------------------------------------
 -- 7. ORDERS
