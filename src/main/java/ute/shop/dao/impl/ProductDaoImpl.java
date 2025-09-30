@@ -40,4 +40,30 @@ public class ProductDaoImpl implements IProductDao {
             em.close();
         }
     }
+    
+    //  Đếm tổng số sản phẩm
+    @Override
+    public long countAll() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT COUNT(p) FROM Product p", Long.class)
+                     .getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    //  Lấy sản phẩm phân trang
+    @Override
+    public List<Product> findByPage(int page, int pageSize) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT p FROM Product p ORDER BY p.productId DESC", Product.class)
+                     .setFirstResult((page - 1) * pageSize)
+                     .setMaxResults(pageSize)
+                     .getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }

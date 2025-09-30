@@ -7,11 +7,13 @@ import java.util.List;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "products")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"shop", "category", "orderDetails", "reviewList"})
+@Entity
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

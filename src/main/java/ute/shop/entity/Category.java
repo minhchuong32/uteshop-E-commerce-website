@@ -6,9 +6,11 @@ import java.util.*;
 
 @Entity
 @Table(name = "categories")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"subCategories", "products"})
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
