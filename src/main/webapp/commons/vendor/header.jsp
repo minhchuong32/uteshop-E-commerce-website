@@ -8,7 +8,7 @@
 
 			<!-- Logo + tên hệ thống -->
 			<a class="navbar-brand d-flex align-items-center"
-				href="${pageContext.request.contextPath}/admin/home"> <img
+				href="${pageContext.request.contextPath}/vendor/home"> <img
 				src="${pageContext.request.contextPath}/assets/images/logo_strong.png"
 				alt="Logo" height="50" class="me-2">
 			</a>
@@ -76,7 +76,7 @@
 							aria-labelledby="adminDropdown">
 						
 							<li><a class="dropdown-item"
-								href="${pageContext.request.contextPath}/admin/home?page=settings">
+								href="${pageContext.request.contextPath}/vendor/home?page=settings">
 									<i class="bi bi-gear me-2"></i> Cài đặt
 							</a></li>
 							<li><hr class="dropdown-divider"></li>
