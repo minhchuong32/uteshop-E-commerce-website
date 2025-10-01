@@ -38,17 +38,17 @@ INSERT INTO shops (user_id, name, description, created_at) VALUES
 --------------------------------------------------------
 -- 4. CATEGORIES
 --------------------------------------------------------
-INSERT INTO categories (name, image, parent_id) VALUES
-(N'Điện tử', N'/assets/images/categories/dien-tu.jpg', NULL),
-(N'Điện thoại', N'/assets/images/categories/dien-thoai.jpg', 1),
-(N'Laptop', N'/assets/images/categories/laptop.jpg', 1),
-(N'Thời trang', N'/assets/images/categories/thoi-trang.jpg', NULL),
-(N'Nam', N'/assets/images/categories/nam.jpg', 4),
-(N'Nữ', N'/assets/images/categories/nu.jpg', 4),
-(N'Giày dép', N'/assets/images/categories/giay-dep.jpg', 4),
-(N'Gia dụng', N'/assets/images/categories/gia-dung.jpg', NULL),
-(N'Nhà bếp', N'/assets/images/categories/nha-bep.jpg', 8),
-(N'Phòng khách', N'/assets/images/categories/phong-khach.jpg', 8);
+INSERT INTO categories (name, image) VALUES
+(N'Điện Tử', N'dien-tu.jpg'),
+(N'Điện Thoại', N'dien-thoai.jpg'),
+(N'Laptop', N'laptop.jpg'),
+(N'Thời Trang', N'thoi-trang.jpg'),
+(N'Thời Trang Nam', N'thoi-trang-nam.jpg'),
+(N'Thời Trang Nữ', N'thoi-trang-nu.jpg'),
+(N'Giày Dép', N'giay-dep.jpg'),
+(N'Gia Dụng', N'gia-dung.jpg'),
+(N'Nhà Bếp', N'nha-bep.jpg'),
+(N'Phòng Khách', N'phong-khach.jpg');
 
 
 --------------------------------------------------------

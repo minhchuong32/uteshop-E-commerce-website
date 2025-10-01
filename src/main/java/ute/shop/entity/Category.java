@@ -21,11 +21,6 @@ public class Category {
     @Column(name = "name", nullable = false, length = 100, columnDefinition = "NVARCHAR(100)")
     private String name;
 
-    // Quan hệ cha - con (self reference)
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Category parent;
-    
     // Category.java
     @Column(name = "image", length = 255, columnDefinition = "NVARCHAR(255)")
     private String image;
