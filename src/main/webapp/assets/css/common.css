@@ -3,6 +3,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+    background-color:#F5F5F5;
 }
 
 /* Layout chính dùng flexbox để đẩy footer xuống */
@@ -123,3 +124,30 @@ body {
 .nav-link.active i {
 	color: var(--primary-color) !important;
 }
+
+/* Ưu tiên nav-link trong pagination hơn Bootstrap */
+.pagination .nav-link {
+    border: none;              /* bỏ border mặc định của page-link */
+    border-radius: 6px;        /* bo tròn */
+    margin: 0 2px;             /* khoảng cách giữa các trang */
+    padding: 6px 12px;         /* padding đẹp hơn */
+    background: transparent;   /* nền trong suốt mặc định */
+    font-weight: 500;
+}
+
+/* Hover */
+.pagination .nav-link:hover {
+    background-color: #f0f0f0;
+    color: var(--primary-color) !important;
+}
+
+/* Active */	
+.pagination .nav-link.active {
+    background-color: #e0f0ff;
+    color: var(--primary-color) !important;
+    font-weight: 600;
+}
+
+
+
+

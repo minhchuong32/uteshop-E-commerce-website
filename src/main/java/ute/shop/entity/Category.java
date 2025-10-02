@@ -25,11 +25,6 @@ public class Category {
     @Column(name = "image", length = 255, columnDefinition = "NVARCHAR(255)")
     private String image;
 
-
-    // Danh sách danh mục con
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Category> subCategories = new ArrayList<>();
-
     // Danh sách sản phẩm thuộc danh mục
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products = new ArrayList<>();

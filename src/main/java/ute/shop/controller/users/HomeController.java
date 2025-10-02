@@ -22,7 +22,7 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int page = 1;
-        int size = 9; // số sản phẩm mỗi trang (3 hàng x 3 cột cho grid)
+        int size = 18; // số sản phẩm mỗi trang (3 hàng x 6 cột cho grid)
 
         try {
             page = Integer.parseInt(req.getParameter("page"));

@@ -1,0 +1,123 @@
+/* Card sản phẩm */
+.product-card {
+  transition: all 0.3s ease;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  min-height: 360px; /* đồng bộ chiều cao */
+}
+
+/* Khung ảnh cố định vuông */
+.product-img-wrapper {
+  width: 100%;
+  height: 200px; /* bạn chỉnh 180–220px tùy ý */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.product-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* ảnh lấp đầy khung, cắt bớt nếu cần */
+  transition: transform 0.3s ease;
+}
+
+/* Hover: viền xanh + bóng xanh + scale ảnh */
+.product-card:hover {
+  border-color: #0d6efd !important;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+  transform: translateY(-4px);
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+
+/* Categories  */
+
+.category-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid #dee2e6; /* viền mặc định */
+  border-radius: 0.5rem;
+}
+
+.category-card .category-img {
+  width: 100%;
+  height: 120px; /* cố định khung ảnh */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.category-card img {
+  max-height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+/* Hover card */
+.category-card:hover {
+  border-color: #0d6efd !important; /* viền xanh sáng Bootstrap */
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2); /* bóng xanh nhạt */
+}
+
+/* Hover ảnh */
+.category-card:hover img {
+  transform: scale(1.08); /* phóng to nhẹ ảnh */
+}
+
+/* Hover chữ */
+.category-card:hover .category-title {
+  color: #0d6efd !important;
+}
+
+/* List item  */
+/* item trong list view */
+.list-group-item {
+  transition: all 0.3s ease;
+  border: 1px solid #dee2e6; /* màu viền mặc định */
+  cursor: pointer;
+}
+
+/* Hover toàn bộ item */
+.list-group-item:hover {
+  border-color: #0d6efd; /* viền xanh bootstrap */
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.15); /* bóng xanh nhạt */
+  background-color: #f8f9fa; /* nền sáng hơn khi hover */
+  transform: translateY(-2px); /* nổi nhẹ */
+}
+
+
+/* Pagination custom */
+.pagination .nav-link {
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color) !important;
+    border-radius: 6px;
+    margin: 0 3px;
+    padding: 6px 12px;
+    transition: all 0.2s ease;
+    background-color: #fff;
+    font-weight: 500;
+}
+
+/* Hover */
+.pagination .nav-link:hover {
+    background-color: var(--primary-color);
+    color: #fff !important;
+}
+
+/* Active */
+.pagination .nav-link.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff !important;       /* chữ trắng */
+    font-weight: 600;
+}
+
+
