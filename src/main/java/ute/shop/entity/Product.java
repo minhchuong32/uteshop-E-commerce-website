@@ -62,6 +62,9 @@ public class Product {
     // Liên kết với đánh giá
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductImage> images = new ArrayList<>();
 
     // ====================== Thêm trường tạm tính toán ======================
 

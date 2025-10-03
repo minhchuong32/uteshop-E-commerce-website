@@ -10,7 +10,6 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"subCategories", "products"})
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

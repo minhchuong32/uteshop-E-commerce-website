@@ -202,3 +202,139 @@ INSERT INTO cart_items (user_id, product_id, quantity) VALUES
 (6, 5, 3),  -- vendor1 thêm 3 áo sơ mi nam
 (7, 2, 1),  -- vendor2 test Samsung Galaxy S23
 (10, 6, 2); -- khachhang5 thêm 2 váy công chúa
+
+--------------------------------------------------------
+-- 13. PRODUCT IMAGES
+--------------------------------------------------------
+-- Product 1
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(1, 'iphone15.png', 1),
+(1, 'iphone15_1.png', 0),
+(1, 'iphone15_2.png', 0);
+
+-- Product 2
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(2, 's23.png', 1),
+(2, 's23_1.png', 0),
+(2, 's23_2.png', 0);
+
+-- Product 3
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(3, 'macbook14.png', 1),
+(3, 'macbook14_1.png', 0),
+(3, 'macbook14_2.png', 0);
+
+-- Product 4
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(4, 'dellxps.png', 1),
+(4, 'dellxps_1.png', 0),
+(4, 'dellxps_2.png', 0);
+
+-- Product 5
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(5, 'aosomi.png', 1),
+(5, 'aosomi_1.png', 0),
+(5, 'aosomi_2.png', 0);
+
+-- Product 6
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(6, 'vay.png', 1),
+(6, 'vay_1.png', 0),
+(6, 'vay_2.png', 0);
+
+-- Product 7
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(7, 'sneaker.png', 1),
+(7, 'sneaker_1.png', 0),
+(7, 'sneaker_2.png', 0);
+
+-- Product 8
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(8, 'jeans.png', 1),
+(8, 'jeans_1.png', 0),
+(8, 'jeans_2.png', 0);
+
+-- Product 9
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(9, 'aokhoac.png', 1),
+(9, 'aokhoac_1.png', 0),
+(9, 'aokhoac_2.png', 0);
+
+-- Product 10
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(10, 'sandal.png', 1),
+(10, 'sandal_1.png', 0),
+(10, 'sandal_2.png', 0);
+
+-- Product 11
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(12, 'noicom.png', 1),
+(12, 'noicom_1.png', 0),
+(12, 'noicom_2.png', 0);
+
+-- Product 12
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(13, 'dao.png', 1),
+(13, 'dao_1.png', 0),
+(13, 'dao_2.png', 0);
+
+-- Product 13
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(14, 'bantra.png', 1),
+(14, 'bantra_1.png', 0),
+(14, 'bantra_2.png', 0);
+
+-- Product 14
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(15, 'mayhutbui.png', 1),
+(15, 'mayhutbui_1.png', 0),
+(15, 'mayhutbui_2.png', 0);
+
+-- Product 15
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(16, 'son.png', 1),
+(16, 'son_1.png', 0),
+(16, 'son_2.png', 0);
+
+-- Product 16
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(17, 'kem.png', 1),
+(17, 'kem_1.png', 0),
+(17, 'kem_2.png', 0);
+
+-- Product 17
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(18, 'suaruamat.png', 1),
+(18, 'suaruamat_1.png', 0),
+(18, 'suaruamat_2.png', 0);
+
+-- Product 18
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(19, 'nuochoahong.png', 1),
+(19, 'nuochoahong_1.png', 0),
+(19, 'nuochoahong_2.png', 0);
+
+-- Product 19
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(20, 'gao.png', 1),
+(20, 'gao_1.png', 0),
+(20, 'gao_2.png', 0);
+
+-- Product 20
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(21, 'nuocmam.png', 1),
+(21, 'nuocmam_1.png', 0),
+(21, 'nuocmam_2.png', 0);
+
+-- Product 21
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(22, 'traicaysay.png', 1),
+(22, 'traicaysay_1.png', 0),
+(22, 'traicaysay_2.png', 0);
+
+-- Product 22
+INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
+(23, 'caphe.png', 1),
+(23, 'caphe_1.png', 0),
+(23, 'caphe_2.png', 0);
+

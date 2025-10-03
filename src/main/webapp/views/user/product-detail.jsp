@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<title>${product.name}| UteShop</title>
+<title>${product.name}|UteShop</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet" />
@@ -18,19 +18,26 @@
 		<div class="row g-4">
 			<!-- Hình ảnh sản phẩm -->
 			<div class="col-md-6">
-				<img id="mainImg"
-					src="${pageContext.request.contextPath}/assets/images/products/${product.imageUrl}"
-					alt="${product.name}" class="product-detail-img mb-3" />
+				<!-- ảnh chính -->
+				<c:forEach var="img" items="${images}">
+					<c:if test="${img.main}">
+						<img id="mainImg"
+							src="${pageContext.request.contextPath}/assets/images/products/${img.imageUrl}"
+							alt="${product.name}" class="product-detail-img mb-3" />
+					</c:if>
+				</c:forEach>
+
+				<!-- thumbnails -->
 				<div class="d-flex gap-2">
-					<img
-						src="${pageContext.request.contextPath}/assets/images/products/${product.imageUrl}"
-						class="thumb-img active" onclick="changeImage(this)" /> <img
-						src="${pageContext.request.contextPath}/assets/images/products/sample2.jpg"
-						class="thumb-img" onclick="changeImage(this)" /> <img
-						src="${pageContext.request.contextPath}/assets/images/products/sample3.jpg"
-						class="thumb-img" onclick="changeImage(this)" />
+					<c:forEach var="img" items="${images}">
+						<img
+							src="${pageContext.request.contextPath}/assets/images/products/${img.imageUrl}"
+							class="thumb-img ${img.main ? 'active' : ''}"
+							onclick="changeImage(this)" />
+					</c:forEach>
 				</div>
 			</div>
+
 
 			<!-- Thông tin sản phẩm -->
 			<div class="col-md-6">
