@@ -53,6 +53,9 @@ body {
 	color: #fff !important;
 }
 
+.btn-outline-primary-custom {
+	border-color: var(--primary-color) !important;
+}
 /* Border */
 .border-primary-custom {
 	border-color: var(--primary-color) !important;
@@ -147,6 +150,8 @@ body {
     color: var(--primary-color) !important;
     font-weight: 600;
 }
+
+
 
 
 

@@ -12,7 +12,7 @@
 		<div class="col-12 text-center mb-5">
 			<h3 class="fw-bold text-primary-custom">Về chúng tôi</h3>
 			<p class="lead text-muted">
-				Khám phá hành trình, sứ mệnh và giá trị cốt lõi của <strong>TechShop</strong>
+				Khám phá hành trình, sứ mệnh và giá trị cốt lõi của <strong>UteShop</strong>
 				– cửa hàng thương mại điện tử công nghệ hàng đầu.
 			</p>
 		</div>
@@ -25,13 +25,13 @@
 				<img
 					src="${pageContext.request.contextPath}/assets/images/about_intro.jpg"
 					class="img-fluid rounded shadow-sm rotate-on-scroll"
-					alt="Giới thiệu TechShop">
+					alt="Giới thiệu UteShop">
 			</div>
 		</div>
 		<div class="col-md-6">
 			<h4 class="fw-bold text-primary-custom">Giới thiệu</h4>
 			<p class="fs-5 border-start ps-3">
-				<strong>TechShop</strong> là nền tảng thương mại điện tử chuyên về
+				<strong>UteShop</strong> là nền tảng thương mại điện tử chuyên về
 				các sản phẩm công nghệ chính hãng. Từ <strong>laptop,
 					smartphone, tablet, phụ kiện</strong> đến <strong>thiết bị thông
 					minh</strong>, chúng tôi mang lại sự lựa chọn đa dạng, giá cả minh bạch và
@@ -52,7 +52,7 @@
 				<img
 					src="${pageContext.request.contextPath}/assets/images/about_mission.jpg"
 					class="img-fluid rounded shadow-sm rotate-on-scroll"
-					alt="Sứ mệnh TechShop">
+					alt="Sứ mệnh UteShop">
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -79,12 +79,12 @@
 				<img
 					src="${pageContext.request.contextPath}/assets/images/about_values.jpg"
 					class="img-fluid rounded shadow-sm rotate-on-scroll"
-					alt="Giá trị cốt lõi TechShop">
+					alt="Giá trị cốt lõi UteShop">
 			</div>
 		</div>
 		<div class="col-md-6">
 			<h4 class="fw-bold text-primary-custom">Giá trị cốt lõi</h4>
-			<p class="fs-5 border-start ps-3">TechShop xây dựng thương hiệu
+			<p class="fs-5 border-start ps-3">UteShop xây dựng thương hiệu
 				dựa trên 3 giá trị cốt lõi:</p>
 			<ul class="fs-5 border-start ps-4 list-unstyled">
 				<li>✔️ <strong>Uy tín:</strong> Cam kết sản phẩm chính hãng,
@@ -98,7 +98,7 @@
 				</li>
 			</ul>
 			<p class="fs-5 border-start ps-3">
-				Với đội ngũ trẻ trung, sáng tạo và tận tâm, <strong>TechShop</strong>
+				Với đội ngũ trẻ trung, sáng tạo và tận tâm, <strong>UteShop</strong>
 				hứa hẹn mang đến dịch vụ vượt mong đợi cho mọi khách hàng.
 			</p>
 		</div>
@@ -148,7 +148,7 @@
 				<div class="text-center p-3 border-top">
 					<img
 						src="${pageContext.request.contextPath}/assets/images/hcmute.jpg"
-						alt="Cửa hàng TechShop"
+						alt="Cửa hàng UteShop"
 						class="img-fluid rounded shadow-sm store-image"
 						style="max-height: 300px; object-fit: cover; cursor: pointer;">
 				</div>

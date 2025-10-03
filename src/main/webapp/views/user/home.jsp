@@ -4,14 +4,6 @@
 <html lang="vi">
 <head>
 <title>Uteshop | Trang chủ</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet" />
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-	rel="stylesheet" />
-
-
 </head>
 <body>
 
@@ -144,7 +136,8 @@
 			<!-- Chuyển đổi layout -->
 			<div class="d-flex justify-content-end mb-3">
 				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-primary-custom active" id="btnGrid">
+					<button type="button" class="btn btn-primary-custom active"
+						id="btnGrid">
 						<i class="bi bi-grid"></i>
 					</button>
 					<button type="button" class="btn btn-outline-secondary"
