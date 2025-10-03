@@ -11,4 +11,5 @@ public interface ICartItemService {
     boolean updateQuantity(User user, Product product, int quantity);
     boolean removeFromCart(Integer cartItemId);
     List<CartItem> getCartByUser(User user);
+   
 }

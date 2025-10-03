@@ -6,7 +6,15 @@
 
 <div class="container my-5">
 
-
+	<!-- Thông báo thêm sản phẩm thành công -->
+	<c:if test="${not empty sessionScope.cartMessage}">
+		<div class="alert alert-success alert-dismissible fade show"
+			role="alert">
+			${sessionScope.cartMessage}
+			<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+		</div>
+		<c:remove var="cartMessage" scope="session" />
+	</c:if>
 	<!-- Nếu giỏ hàng trống -->
 	<c:if test="${empty cartItems}">
 		<div class="text-center my-5">

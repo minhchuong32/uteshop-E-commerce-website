@@ -40,9 +40,18 @@
 						${product.shop.name} </a>
 				</p>
 
+				<!-- Hiển thị rating trung bình và số lượng đánh giá -->
 				<div class="mb-2 text-warning">
-					★★★★☆ <span class="text-muted">(89 đánh giá)</span>
+					<c:forEach var="i" begin="1" end="5">
+						<i
+							class="bi ${i <= product.averageRating ? 'bi-star-fill' : 'bi-star'}"></i>
+					</c:forEach>
+					<span class="text-muted"> (<fmt:formatNumber
+							value="${product.averageRating}" maxFractionDigits="1" />/5 từ
+						${product.reviewsCount} đánh giá)
+					</span>
 				</div>
+
 
 				<h4 class="text-danger fw-bold">
 					<fmt:formatNumber value="${product.price}" type="currency"
@@ -105,20 +114,43 @@
 
 				<!-- Nút hành động -->
 				<div class="d-flex gap-2 mb-3">
-					<button class="btn btn-primary-custom flex-fill">
-						<i class="bi bi-cart-plus"></i> Thêm vào giỏ
-					</button>
-					<button class="btn btn-dark flex-fill">Mua ngay</button>
+					<!-- Thêm vào giỏ -->
+					<form action="${pageContext.request.contextPath}/user/cart"
+						method="post" class="flex-fill">
+						<input type="hidden" name="productId" value="${product.productId}">
+						<input type="hidden" name="quantity" id="formQty" value="1">
+						<input type="hidden" name="action" value="add">
+						<button type="submit" class="btn btn-primary-custom w-100">
+							<i class="bi bi-cart-plus"></i> Thêm vào giỏ
+						</button>
+					</form>
+
+					<!-- Mua ngay -->
+					<form action="${pageContext.request.contextPath}/user/cart"
+						method="post" class="flex-fill">
+						<input type="hidden" name="productId" value="${product.productId}">
+						<input type="hidden" name="quantity" id="formQtyNow" value="1">
+						<input type="hidden" name="action" value="buyNow">
+						<button type="submit" class="btn btn-dark w-100">Mua ngay</button>
+					</form>
+
 					<button class="btn btn-outline-secondary">
 						<i class="bi bi-heart"></i>
 					</button>
 				</div>
 
-				<div class="d-flex gap-4 text-muted small">
-					<span><i class="bi bi-truck"></i> Miễn phí vận chuyển</span> <span><i
-						class="bi bi-shield-check"></i> Bảo hành 2 năm</span> <span><i
-						class="bi bi-arrow-repeat"></i> Đổi trả 30 ngày</span>
-				</div>
+				<script>
+					// Đồng bộ số lượng từ input qty vào 2 form
+					function syncQty() {
+						let qty = document.getElementById("qty").value;
+						document.getElementById("formQty").value = qty;
+						document.getElementById("formQtyNow").value = qty;
+					}
+					document.getElementById("qty").addEventListener("input",
+							syncQty);
+				</script>
+
+
 			</div>
 		</div>
 
@@ -149,7 +181,6 @@
 					<p class="mb-0 text-muted small">
 						<i class="bi bi-box-seam"></i> Sản phẩm đang bán: ${productCount}
 					</p>
-
 				</div>
 
 				<!-- Nút xem shop -->
