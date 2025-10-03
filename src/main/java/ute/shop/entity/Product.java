@@ -11,7 +11,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"shop", "category", "orderDetails", "reviewList"})
+@ToString(exclude = {"shop", "category", "orderDetails", "reviews", "images"})
 @Entity
 @Table(name = "products")
 public class Product {
@@ -60,34 +60,34 @@ public class Product {
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
     // Liên kết với đánh giá
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviewList = new ArrayList<>();
-    
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Review> reviews = new ArrayList<>();
+
+    // Danh sách ảnh liên quan 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> images = new ArrayList<>();
 
-    // ====================== Thêm trường tạm tính toán ======================
+    // ====================== Trường tạm tính toán ======================
 
-    // Tổng số review
     @Transient
     private int reviewsCount;
 
-    // Rating trung bình
     @Transient
     private double averageRating;
 
-    // Tự động tính sau khi load entity
+    // Callback sau khi load entity từ DB
     @PostLoad
     public void calculateReviews() {
-        if (reviewList != null && !reviewList.isEmpty()) {
-            this.reviewsCount = reviewList.size();
-            this.averageRating = reviewList.stream()
-                                           .mapToInt(Review::getRating)
-                                           .average()
-                                           .orElse(0.0);
-        } else {
+        if (reviews == null || reviews.isEmpty()) {
             this.reviewsCount = 0;
             this.averageRating = 0.0;
+        } else {
+            this.reviewsCount = reviews.size();
+            this.averageRating = reviews.stream()
+                    .filter(r -> r.getRating() != null)
+                    .mapToInt(Review::getRating)
+                    .average()
+                    .orElse(0.0);
         }
     }
 }

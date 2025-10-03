@@ -42,4 +42,9 @@ public class OrderServiceImpl implements IOrderService {
 	public List<Order> findByUser(User user) {
 		return orderDao.findByUser(user);
 	}
+
+	@Override
+	public boolean hasPurchased(int userId, int productId) {
+		return orderDao.hasPurchased(userId, productId);
+	}
 }

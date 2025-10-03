@@ -4,14 +4,6 @@
 <html lang="vi">
 <head>
 <title>${product.name}|UteShop</title>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet" />
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-	rel="stylesheet" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/css/user-home.css">
 </head>
 <body>
 	<div class="container py-4">
@@ -125,45 +117,105 @@
 			</div>
 		</div>
 
+		<!-- Thông tin cửa hàng  -->
+
+		<!-- Thông tin sản phẩm  -->
+
+
 		<!-- Tabs mô tả & đánh giá -->
-		<div class="mt-5">
-			<ul class="nav nav-tabs">
-				<li class="nav-item"><a class="nav-link active"
-					data-bs-toggle="tab" href="#desc">Mô tả</a></li>
-				<li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-					href="#reviews">Đánh giá (0)</a></li>
-			</ul>
-			<div class="tab-content p-3 border border-top-0 rounded-bottom">
-				<div class="tab-pane fade show active" id="desc">
-					${product.description}
-					<h6 class="fw-bold mt-3">Đặc điểm nổi bật</h6>
-					<ul>
-						<li>Chất liệu cao cấp, bền đẹp</li>
-						<li>Thiết kế thoải mái, phù hợp nhiều dịp</li>
-						<li>Bảo hành chính hãng</li>
-						<li>Có nhiều màu sắc và kích cỡ</li>
-					</ul>
-				</div>
-				<div class="tab-pane fade" id="reviews">
-					<p>Chưa có đánh giá nào.</p>
+		<div class="tab-pane " id="reviews">
+
+			<div class="p-3">
+				<h5 class="fw-bold text-uppercase text-primary-custom">
+					<i class="bi bi-grid me-2"></i> Đánh giá sản phẩm
+				</h5>
+			</div>
+			<!-- Tổng quan đánh giá -->
+			<div class="mb-3">
+				<div class="text-warning">
+					<c:forEach var="i" begin="1" end="5">
+						<i
+							class="bi ${i <= product.averageRating ? 'bi-star-fill' : 'bi-star'}"></i>
+					</c:forEach>
+					<span class="text-muted"> (<fmt:formatNumber
+							value="${product.averageRating}" maxFractionDigits="1" />/5 từ
+						${product.reviewsCount} đánh giá)
+					</span>
+
 				</div>
 			</div>
-		</div>
-	</div>
 
-	<script>
-function changeImage(el) {
-    document.getElementById("mainImg").src = el.src;
-    document.querySelectorAll(".thumb-img").forEach(img => img.classList.remove("active"));
-    el.classList.add("active");
-}
-function changeQty(delta) {
-    let qty = document.getElementById("qty");
-    let val = parseInt(qty.value) + delta;
-    if (val < 1) val = 1;
-    qty.value = val;
-}
-</script>
+
+			<c:if test="${hasPurchased}">
+				<div class="mb-4 d-flex align-items-start">
+					<!-- Avatar -->
+					<img
+						src="${pageContext.request.contextPath}/uploads/${sessionScope.account.avatar}"
+						alt="Avatar" class="rounded-circle me-3"
+						style="width: 50px; height: 50px; object-fit: cover;">
+
+					<div class="flex-grow-1">
+						<form action="${pageContext.request.contextPath}/review/add"
+							method="post">
+							<input type="hidden" name="productId"
+								value="${product.productId}" />
+
+							<!-- Người dùng chọn rating -->
+							<div class="mb-2 text-warning">
+								<c:forEach var="i" begin="1" end="5">
+									<input type="radio" class="btn-check" name="rating"
+										id="star${i}" value="${i}">
+									<label class="bi bi-star-fill btn btn-outline-warning"
+										for="star${i}"></label>
+								</c:forEach>
+							</div>
+
+							<!-- Comment -->
+							<textarea name="comment" rows="3" class="form-control mb-2"
+								placeholder="Chia sẻ cảm nhận của bạn..."></textarea>
+
+							<!-- Nút gửi -->
+							<button type="submit" class="btn btn-primary-custom">Gửi
+								đánh giá</button>
+						</form>
+					</div>
+				</div>
+			</c:if>
+
+			<c:if test="${not hasPurchased}">
+				<p class="text-muted">Bạn cần mua sản phẩm này để viết đánh giá.</p>
+			</c:if>
+
+
+			<!-- Danh sách các review -->
+			<c:forEach var="r" items="${reviews}">
+				<div class="border-bottom pb-2 mb-3 d-flex">
+					<img
+						src="${pageContext.request.contextPath}/uploads/${r.user.avatar}"
+						class="rounded-circle me-3"
+						style="width: 40px; height: 40px; object-fit: cover;">
+					<div>
+						<strong>${r.user.username}</strong>
+						<div class="text-warning small">
+							<c:forEach var="i" begin="1" end="5">
+								<i class="bi ${i <= r.rating ? 'bi-star-fill' : 'bi-star'}"></i>
+							</c:forEach>
+						</div>
+						<p class="mb-0">${r.comment}</p>
+					</div>
+				</div>
+			</c:forEach>
+
+			<!-- Nếu chưa có review nào -->
+			<c:if test="${empty reviews}">
+				<p>Chưa có đánh giá nào.</p>
+			</c:if>
+		</div>
+
+
+	</div>
+	<script
+		src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

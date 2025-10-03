@@ -10,29 +10,47 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ute.shop.entity.Product;
 import ute.shop.entity.ProductImage;
+import ute.shop.entity.Review;
+import ute.shop.entity.User;
 import ute.shop.service.IProductService;
+import ute.shop.service.IOrderService;
 import ute.shop.service.IProductImageService;
+import ute.shop.service.IReviewService;
 import ute.shop.service.impl.ProductServiceImpl;
+import ute.shop.service.impl.OrderServiceImpl;
 import ute.shop.service.impl.ProductImageServiceImpl;
+import ute.shop.service.impl.ReviewServiceImpl;
 
 @WebServlet(urlPatterns = { "/user/product/detail" })
 public class ProductDetailController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final IProductService productService = new ProductServiceImpl();
     private final IProductImageService productImageService = new ProductImageServiceImpl();
+    private final IReviewService reviewService = new ReviewServiceImpl();
+    private final IOrderService orderService = new OrderServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+    	int productId = Integer.parseInt(req.getParameter("id"));
+    	Product product = productService.findById(productId);
+    	
+    	List<Review> reviews = reviewService.getByProductId(productId);
 
-        int productId = Integer.parseInt(req.getParameter("id"));
-        Product product = productService.findById(productId);
+    	// lấy list ảnh từ service
+    	List<ProductImage> images = productImageService.getImagesByProduct((long) productId);
+    	
+    	 // check user có mua chưa
+        User account = (User) req.getSession().getAttribute("account");
+        boolean hasPurchased = false;
+        if (account != null) {
+            hasPurchased = orderService.hasPurchased(account.getUserId(), productId);
+        }
 
-        // lấy list ảnh từ service
-        List<ProductImage> images = productImageService.getImagesByProduct((long) productId);
-
+        req.setAttribute("hasPurchased", hasPurchased);
         req.setAttribute("product", product);
         req.setAttribute("images", images);
+        req.setAttribute("reviews", reviews);
 
         req.getRequestDispatcher("/views/user/product-detail.jsp").forward(req, resp);
     }
