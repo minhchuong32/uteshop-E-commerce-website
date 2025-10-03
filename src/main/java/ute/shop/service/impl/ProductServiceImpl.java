@@ -37,4 +37,30 @@ public class ProductServiceImpl implements IProductService {
     public List<Product> findByPage(int page, int pageSize) {
        return productDao.findByPage(page, pageSize);
     }
+
+	@Override
+	public Product findById(int productId) {
+		return productDao.findById(productId);
+	}
+
+	@Override
+	public List<Product> findByShopId(int shopId) {
+		return productDao.findByShopId(shopId);
+	}
+
+	@Override
+	public void save(Product product) {
+		productDao.save(product);
+	}
+
+	@Override
+	public void update(Product product) {
+		productDao.update(product);
+	}
+
+	@Override
+	public void delete(int productId) {
+		productDao.delete(productId);
+		
+	}
 }

@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import ute.shop.entity.Product;
 import ute.shop.entity.ProductImage;
 import ute.shop.entity.Review;
+import ute.shop.entity.Shop;
 import ute.shop.entity.User;
 import ute.shop.service.IProductService;
 import ute.shop.service.IOrderService;
@@ -46,7 +47,16 @@ public class ProductDetailController extends HttpServlet {
         if (account != null) {
             hasPurchased = orderService.hasPurchased(account.getUserId(), productId);
         }
+        
+        // Thông tin shop
+        Shop shop = product.getShop();
+        
+     // Đếm số sản phẩm của shop (tránh LazyInitException)
+        int productCount = product.getShop().getProducts().size();
 
+
+        req.setAttribute("productCount", productCount);
+        req.setAttribute("shop", shop);
         req.setAttribute("hasPurchased", hasPurchased);
         req.setAttribute("product", product);
         req.setAttribute("images", images);

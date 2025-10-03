@@ -34,7 +34,12 @@
 			<!-- Thông tin sản phẩm -->
 			<div class="col-md-6">
 				<h3 class="fw-bold">${product.name}</h3>
-				<p class="text-muted">Cung cấp bởi UteShop</p>
+				<p class="text-muted">
+					Cung cấp bởi <a
+						href="${pageContext.request.contextPath}/user/shop/detail?id=${product.shop.shopId}">
+						${product.shop.name} </a>
+				</p>
+
 				<div class="mb-2 text-warning">
 					★★★★☆ <span class="text-muted">(89 đánh giá)</span>
 				</div>
@@ -117,10 +122,89 @@
 			</div>
 		</div>
 
-		<!-- Thông tin cửa hàng  -->
+		<!-- Thông tin cửa hàng -->
+		<div class="mt-5">
+			<h5 class="fw-bold text-uppercase text-primary-custom mb-3">
+				<i class="bi bi-shop me-2"></i> Thông tin cửa hàng
+			</h5>
+			<div class="d-flex align-items-center border rounded p-3 bg-light">
+				<!-- Logo shop (dùng ảnh mặc định nếu chưa có) -->
+				<img
+					src="${pageContext.request.contextPath}/assets/images/shop-logo.png"
+					alt="${product.shop.name}" class="rounded me-3"
+					style="width: 80px; height: 80px; object-fit: cover;">
 
-		<!-- Thông tin sản phẩm  -->
+				<!-- Chi tiết shop -->
+				<div class="flex-grow-1">
+					<h6 class="mb-1 fw-bold">${product.shop.name}</h6>
+					<p class="mb-1 text-muted small">
+						<i class="bi bi-person-circle"></i> Chủ shop:
+						${product.shop.user.username}
+					</p>
+					<p class="mb-1 text-muted small">
+						<i class="bi bi-calendar-event"></i> Tham gia ngày
+						<fmt:formatDate value="${product.shop.createdAt}"
+							pattern="dd/MM/yyyy" />
+					</p>
+					<p class="mb-0 text-muted small">
+						<i class="bi bi-box-seam"></i> Sản phẩm đang bán: ${productCount}
+					</p>
 
+				</div>
+
+				<!-- Nút xem shop -->
+				<div>
+					<a
+						href="${pageContext.request.contextPath}/user/shop/detail?id=${product.shop.shopId}"
+						class="btn btn-outline-primary"> Xem Shop </a>
+
+				</div>
+			</div>
+		</div>
+
+		<!-- Thông tin sản phẩm -->
+		<div class="mt-5">
+			<h5 class="fw-bold text-uppercase text-primary-custom mb-3">
+				<i class="bi bi-info-circle me-2"></i> Thông tin sản phẩm
+			</h5>
+			<table class="table table-bordered">
+				<tbody>
+					<tr>
+						<th style="width: 200px;">Tên sản phẩm</th>
+						<td>${product.name}</td>
+					</tr>
+					<tr>
+						<th>Danh mục</th>
+						<td>${product.category.name}</td>
+					</tr>
+					<tr>
+						<th>Giá hiện tại</th>
+						<td><fmt:formatNumber value="${product.price}"
+								type="currency" currencySymbol="₫" /></td>
+					</tr>
+					<tr>
+						<th>Giá cũ</th>
+						<td><c:if test="${not empty product.oldPrice}">
+								<fmt:formatNumber value="${product.oldPrice}" type="currency"
+									currencySymbol="₫" />
+							</c:if> <c:if test="${empty product.oldPrice}">-</c:if></td>
+					</tr>
+					<tr>
+						<th>Tồn kho</th>
+						<td><c:choose>
+								<c:when test="${product.stock > 0}">Còn hàng (${product.stock})</c:when>
+								<c:otherwise>
+									<span class="text-danger">Hết hàng</span>
+								</c:otherwise>
+							</c:choose></td>
+					</tr>
+					<tr>
+						<th>Mô tả</th>
+						<td>${product.description}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
 		<!-- Tabs mô tả & đánh giá -->
 		<div class="tab-pane " id="reviews">

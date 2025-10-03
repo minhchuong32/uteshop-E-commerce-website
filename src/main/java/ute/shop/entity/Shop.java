@@ -37,8 +37,9 @@ public class Shop {
     private Date createdAt = new Date();
 
     // Danh sách sản phẩm của shop
-    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Product> products = new ArrayList<>();
+
 
     // Danh sách khuyến mãi của shop
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true)
