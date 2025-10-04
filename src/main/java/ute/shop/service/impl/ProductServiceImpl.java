@@ -9,34 +9,34 @@ import java.util.List;
 
 public class ProductServiceImpl implements IProductService {
 
-    private final IProductDao productDao = new ProductDaoImpl();
+	private final IProductDao productDao = new ProductDaoImpl();
 
-    @Override
-    public List<Product> findAll() {
-        return productDao.findAll();
-    }
+	@Override
+	public List<Product> findAll() {
+		return productDao.findAll();
+	}
 
-    @Override
-    public Product findById(Integer id) {
-        return productDao.findById(id);
-    }
+	@Override
+	public Product findById(Integer id) {
+		return productDao.findById(id);
+	}
 
-    @Override
-    public List<Product> findTopProducts(int limit) {
-        return productDao.findTopProducts(limit);
-    }
-    
- // Đếm tổng số sản phẩm
-    @Override
-    public long countAll() {
-       return productDao.countAll();
-    }
+	@Override
+	public List<Product> findTopProducts(int limit) {
+		return productDao.findTopProducts(limit);
+	}
 
-    // Lấy sản phẩm phân trang
-    @Override
-    public List<Product> findByPage(int page, int pageSize) {
-       return productDao.findByPage(page, pageSize);
-    }
+	// Đếm tổng số sản phẩm
+	@Override
+	public long countAll() {
+		return productDao.countAll();
+	}
+
+	// Lấy sản phẩm phân trang
+	@Override
+	public List<Product> findByPage(int page, int pageSize) {
+		return productDao.findByPage(page, pageSize);
+	}
 
 	@Override
 	public Product findById(int productId) {
@@ -61,6 +61,11 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public void delete(int productId) {
 		productDao.delete(productId);
-		
+
+	}
+
+	@Override
+	public List<Product> getProductsByCategory(Integer categoryId) {
+		return productDao.findByCategoryId(categoryId);
 	}
 }

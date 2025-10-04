@@ -252,7 +252,7 @@
 //package ute.shop.controller;
 //import jakarta.servlet.*; import jakarta.servlet.annotation.WebServlet; import jakarta.servlet.http.*; import java.io.IOException; import java.util.*; import ute.shop.service.IProductService; import ute.shop.service.impl.ProductServiceImpl; import ute.shop.model.Product;
 //@WebServlet(urlPatterns={"/products","/product"})
-//public class ProductController extends HttpServlet {
+//public class CategoryProductController extends HttpServlet {
 //    private final IProductService productService = new ProductServiceImpl();
 //    @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        String id=req.getParameter("id");

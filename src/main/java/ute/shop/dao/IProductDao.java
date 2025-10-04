@@ -25,4 +25,6 @@ public interface IProductDao {
 
 	void delete(int productId);
 
+	List<Product> findByCategoryId(Integer categoryId);
+
 }

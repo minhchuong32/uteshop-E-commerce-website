@@ -191,43 +191,55 @@
 				</c:forEach>
 			</div>
 
-
 			<!-- List View -->
 			<div class="list-group d-none" id="listView">
-				<c:forEach var="p" items="${products}">
-					<div
-						class="list-group-item d-flex align-items-center justify-content-between border"
-						style="transition: all 0.2s;"
-						onmouseover="this.style.borderColor='var(--bs-primary)'"
-						onmouseout="this.style.borderColor='#dee2e6'">
-						<div class="d-flex align-items-center">
-							<img
-								src="${pageContext.request.contextPath}/assets/images/products/${p.imageUrl}"
-								alt="${p.name}" class="img-thumbnail me-3"
-								style="width: 80px; height: 80px; object-fit: cover;">
-							<div>
-								<h6 class="mb-1">${p.name}</h6>
-								<small class="text-muted">${p.reviewsCount} đánh giá</small>
-							</div>
+				<c:choose>
+					<c:when test="${empty products}">
+						<div class="text-center py-5">
+							<h6 class="text-muted">Chưa có sản phẩm</h6>
 						</div>
-						<div class="text-end">
-							<p class="text-danger fw-bold mb-0">
-								<fmt:formatNumber value="${p.price}" type="currency"
-									currencySymbol="₫" />
-							</p>
-							<c:if test="${p.oldPrice ne null}">
-								<p class="text-muted text-decoration-line-through mb-0 small">
-									<fmt:formatNumber value="${p.oldPrice}" type="currency"
-										currencySymbol="₫" />
-								</p>
-							</c:if>
-							<button class="btn btn-sm btn-primary-custom mt-2">
-								<i class="bi bi-cart-plus"></i> Thêm vào giỏ
-							</button>
-						</div>
-					</div>
-				</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="p" items="${products}">
+							<a
+								href="${pageContext.request.contextPath}/user/product/detail?id=${p.productId}"
+								class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border text-decoration-none text-dark"
+								style="transition: all 0.2s;"
+								onmouseover="this.style.borderColor='var(--bs-primary)'"
+								onmouseout="this.style.borderColor='#dee2e6'">
+
+								<div class="d-flex align-items-center">
+									<img
+										src="${pageContext.request.contextPath}/assets/images/products/${p.imageUrl}"
+										alt="${p.name}" class="img-thumbnail me-3"
+										style="width: 80px; height: 80px; object-fit: cover;">
+									<div>
+										<h6 class="mb-1">${p.name}</h6>
+										<small class="text-muted">${p.reviewsCount} đánh giá</small>
+									</div>
+								</div>
+
+								<div class="text-end">
+									<p class="text-danger fw-bold mb-0">
+										<fmt:formatNumber value="${p.price}" type="currency"
+											currencySymbol="₫" />
+									</p>
+									<c:if test="${p.oldPrice ne null}">
+										<p class="text-muted text-decoration-line-through mb-0 small">
+											<fmt:formatNumber value="${p.oldPrice}" type="currency"
+												currencySymbol="₫" />
+										</p>
+									</c:if>
+									<button class="btn btn-sm btn-primary-custom mt-2">
+										<i class="bi bi-cart-plus"></i> Thêm vào giỏ
+									</button>
+								</div>
+							</a>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
 			</div>
+
 
 			<!-- Pagination -->
 			<c:if test="${totalPages > 1}">
