@@ -68,4 +68,31 @@ public class ProductServiceImpl implements IProductService {
 	public List<Product> getProductsByCategory(Integer categoryId) {
 		return productDao.findByCategoryId(categoryId);
 	}
+
+	@Override
+	public List<Product> findTopByCategoryId(Integer categoryId, int limit) {
+		return productDao.findTopByCategoryId(categoryId, limit);
+	}
+
+
+	@Override
+	public List<Product> searchByKeyword(String keyword, int page, int size) {
+		return productDao.searchByKeyword(keyword, page, size);
+	}
+
+	@Override
+	public long countByKeyword(String keyword) {
+		return productDao.countByKeyword(keyword);
+	}
+
+	@Override
+	public long countFilterProducts(Integer categoryId, Double minPrice, Double maxPrice) {
+		return productDao.countFilterProducts(categoryId, minPrice, maxPrice);
+	}
+
+	@Override
+	public List<Product> filterProducts(Integer categoryId, Double minPrice, Double maxPrice, String sortBy, int page,
+			int size) {
+		return productDao.filterProducts(categoryId, minPrice, maxPrice, sortBy, page, size);
+	}
 }

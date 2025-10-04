@@ -147,7 +147,7 @@
 				<!-- Ảnh minh họa cửa hàng -->
 				<div class="text-center p-3 border-top">
 					<img
-						src="${pageContext.request.contextPath}/assets/images/hcmute.jpg"
+						src="${pageContext.request.contextPath}/assets/images/hcmute.png"
 						alt="Cửa hàng UteShop"
 						class="img-fluid rounded shadow-sm store-image"
 						style="max-height: 300px; object-fit: cover; cursor: pointer;">

@@ -1,19 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="/commons/taglib.jsp"%>
 
 <fmt:setLocale value="vi_VN"/>
 
 <div class="container my-5">
-    <h2 class="mb-4">Checkout</h2>
+    <h2 class="mb-4">Thanh toán</h2>
     <form action="${pageContext.request.contextPath}/user/checkout" method="post">
         <div class="row">
             <!-- Cột trái -->
             <div class="col-md-8">
-                <!-- Order Items -->
+                <!-- Sản phẩm trong giỏ -->
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header bg-white">
-                        <h5 class="mb-0">Order Items</h5>
+                        <h5 class="mb-0">Sản phẩm trong giỏ</h5>
                     </div>
                     <div class="card-body">
                         <c:if test="${empty cartItems}">
@@ -37,9 +36,11 @@
 
                                     <!-- Số lượng -->
                                     <div class="d-flex align-items-center gap-2">
-                                        <a href="${pageContext.request.contextPath}/user/cart?action=decrease&productId=${item.product.productId}" class="btn btn-sm btn-outline-secondary">-</a>
+                                        <a href="${pageContext.request.contextPath}/user/cart?action=decrease&productId=${item.product.productId}" 
+                                           class="btn btn-sm btn-outline-secondary">-</a>
                                         <span>${item.quantity}</span>
-                                        <a href="${pageContext.request.contextPath}/user/cart?action=increase&productId=${item.product.productId}" class="btn btn-sm btn-outline-secondary">+</a>
+                                        <a href="${pageContext.request.contextPath}/user/cart?action=increase&productId=${item.product.productId}" 
+                                           class="btn btn-sm btn-outline-secondary">+</a>
                                     </div>
 
                                     <!-- Thành tiền -->
@@ -48,7 +49,8 @@
                                     </div>
 
                                     <!-- Xóa -->
-                                    <a href="${pageContext.request.contextPath}/user/cart?action=remove&cartItemId=${item.cartItemId}" class="text-danger ms-3">
+                                    <a href="${pageContext.request.contextPath}/user/cart?action=remove&cartItemId=${item.cartItemId}" 
+                                       class="text-danger ms-3">
                                         <i class="bi bi-trash"></i>
                                     </a>
                                 </div>
@@ -58,40 +60,40 @@
                     </div>
                 </div>
 
-                <!-- Shipping Information -->
+                <!-- Thông tin giao hàng -->
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header bg-white">
-                        <h5 class="mb-0"><i class="bi bi-truck"></i> Shipping Information</h5>
+                        <h5 class="mb-0"><i class="bi bi-truck"></i> Thông tin giao hàng</h5>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <label class="form-label">Full Name</label>
+                            <label class="form-label">Họ và tên</label>
                             <input type="text" name="fullname" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Phone Number</label>
+                            <label class="form-label">Số điện thoại</label>
                             <input type="text" name="phone" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Shipping Address</label>
+                            <label class="form-label">Địa chỉ giao hàng</label>
                             <textarea name="address" class="form-control" rows="3" required></textarea>
                         </div>
                     </div>
                 </div>
 
-                <!-- Payment Method -->
+                <!-- Phương thức thanh toán -->
                 <div class="card shadow-sm">
                     <div class="card-header bg-white">
-                        <h5 class="mb-0"><i class="bi bi-credit-card"></i> Payment Method</h5>
+                        <h5 class="mb-0"><i class="bi bi-credit-card"></i> Phương thức thanh toán</h5>
                     </div>
                     <div class="card-body">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="payment" value="COD" checked>
-                            <label class="form-check-label">Cash on Delivery (COD)</label>
+                            <label class="form-check-label">Thanh toán khi nhận hàng (COD)</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="payment" value="MoMo">
-                            <label class="form-check-label">MoMo Wallet</label>
+                            <label class="form-check-label">Ví MoMo</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="payment" value="VNPAY">
@@ -105,25 +107,25 @@
             <div class="col-md-4">
                 <div class="card shadow-sm">
                     <div class="card-header bg-white">
-                        <h5 class="mb-0">Order Summary</h5>
+                        <h5 class="mb-0">Tóm tắt đơn hàng</h5>
                     </div>
                     <div class="card-body">
                         <p class="d-flex justify-content-between">
-<%--                             <span>Subtotal (${fn:length(cartItems)} items)</span> --%>
+                            <span>Tạm tính (${fn:length(cartItems)} sản phẩm)</span>
                             <strong><fmt:formatNumber value="${subtotal}" type="number" groupingUsed="true"/>₫</strong>
                         </p>
                         <p class="d-flex justify-content-between">
-                            <span>Shipping</span>
-                            <strong>30,000₫</strong>
+                            <span>Phí vận chuyển</span>
+                            <strong>30.000₫</strong>
                         </p>
                         <hr>
                         <p class="d-flex justify-content-between fs-5">
-                            <span>Total</span>
+                            <span>Tổng cộng</span>
                             <strong><fmt:formatNumber value="${subtotal + 30000}" type="number" groupingUsed="true"/>₫</strong>
                         </p>
-                        <button type="submit" class="btn btn-primary w-100">Place Order</button>
+                        <button type="submit" class="btn btn-primary-custom w-100">Đặt hàng</button>
                         <small class="text-muted d-block text-center mt-2">
-                            Free shipping on orders over 1,000,000₫
+                            Miễn phí vận chuyển cho đơn hàng từ 1.000.000₫
                         </small>
                     </div>
                 </div>

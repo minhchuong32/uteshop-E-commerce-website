@@ -11,5 +11,8 @@
 
 	<!-- Decorator cho Shipper -->
 	<mapping path="/shipper/*" name="shipper" decorator="shipper.jsp" />
+	
+	<!-- Decorator cho Guest -->
+	<mapping path="/web/*" name="web" decorator="web.jsp" />
 
 </sitemesh>

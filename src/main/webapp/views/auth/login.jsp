@@ -146,7 +146,7 @@ body {
 	</div>
 
 	<!-- Footer -->
-	<%@ include file="/commons/guest/footer.jsp"%>
+	<%@ include file="/commons/web/footer.jsp"%>
 
 	<!-- Scripts -->
 	<script

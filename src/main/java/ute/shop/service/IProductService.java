@@ -15,4 +15,11 @@ public interface IProductService {
     void update(Product product);
     void delete(int productId);
     List<Product> getProductsByCategory(Integer categoryId);
+    List<Product> findTopByCategoryId(Integer categoryId, int limit);
+    List<Product> searchByKeyword(String keyword, int page, int size);
+    long countByKeyword(String keyword);
+	long countFilterProducts(Integer categoryId, Double minPrice, Double maxPrice);
+	List<Product> filterProducts(Integer categoryId, Double minPrice, Double maxPrice, String sortBy, int page,
+			int size);
+
 }

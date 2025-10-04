@@ -26,7 +26,7 @@
 
 /* Hover: viền xanh + bóng xanh + scale ảnh */
 .product-card:hover {
-  border-color: #0d6efd !important;
+  border-color: var(--primary-color) !important;
   box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
   transform: translateY(-4px);
 }
@@ -63,7 +63,7 @@
 
 /* Hover card */
 .category-card:hover {
-  border-color: #0d6efd !important; /* viền xanh sáng Bootstrap */
+  border-color: var(--primary-color) !important; /* viền xanh sáng Bootstrap */
   box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2); /* bóng xanh nhạt */
 }
 
@@ -74,7 +74,7 @@
 
 /* Hover chữ */
 .category-card:hover .category-title {
-  color: #0d6efd !important;
+  color: var(--primary-color) !important;
 }
 
 /* List item  */
@@ -87,7 +87,7 @@
 
 /* Hover toàn bộ item */
 .list-group-item:hover {
-  border-color: #0d6efd; /* viền xanh bootstrap */
+  border-color: var(--primary-color); /* viền xanh bootstrap */
   box-shadow: 0 4px 10px rgba(13, 110, 253, 0.15); /* bóng xanh nhạt */
   background-color: #f8f9fa; /* nền sáng hơn khi hover */
   transform: translateY(-2px); /* nổi nhẹ */
@@ -118,6 +118,11 @@
     border-color: var(--primary-color);
     color: #fff !important;       /* chữ trắng */
     font-weight: 600;
+}
+
+
+#category, #product {
+  scroll-margin-top: 70px; /* bằng hoặc hơn chiều cao header */
 }
 
 

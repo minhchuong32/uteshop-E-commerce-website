@@ -36,7 +36,7 @@
 				<h3 class="fw-bold">${product.name}</h3>
 				<p class="text-muted">
 					Cung cấp bởi <a
-						href="${pageContext.request.contextPath}/user/shop/detail?id=${product.shop.shopId}">
+						href="${pageContext.request.contextPath}/web/shop/detail?id=${product.shop.shopId}">
 						${product.shop.name} </a>
 				</p>
 
@@ -111,15 +111,15 @@
 					<button class="btn btn-outline-secondary btn-sm"
 						onclick="changeQty(1)">+</button>
 				</div>
-
-				<!-- Vùng thông báo -->
+				<!-- Thông báo -->
 				<div id="selectionAlert" class="alert alert-danger d-none mt-2"
 					role="alert">Vui lòng chọn kích cỡ và màu sắc trước khi tiếp
 					tục!</div>
 				<!-- Nút hành động -->
 				<div class="d-flex gap-2 mb-3">
+
 					<!-- Thêm vào giỏ -->
-					<form action="${pageContext.request.contextPath}/user/cart"
+					<form action="${pageContext.request.contextPath}/web/cart"
 						method="post" class="flex-fill"
 						onsubmit="return validateSelection()">
 						<input type="hidden" name="productId" value="${product.productId}">
@@ -131,7 +131,7 @@
 					</form>
 
 					<!-- Mua ngay -->
-					<form action="${pageContext.request.contextPath}/user/cart"
+					<form action="${pageContext.request.contextPath}/web/cart"
 						method="post" class="flex-fill"
 						onsubmit="return validateSelection()">
 						<input type="hidden" name="productId" value="${product.productId}">
@@ -144,19 +144,6 @@
 						<i class="bi bi-heart"></i>
 					</button>
 				</div>
-
-				<script>
-					// Đồng bộ số lượng từ input qty vào 2 form
-					function syncQty() {
-						let qty = document.getElementById("qty").value;
-						document.getElementById("formQty").value = qty;
-						document.getElementById("formQtyNow").value = qty;
-					}
-					document.getElementById("qty").addEventListener("input",
-							syncQty);
-				</script>
-
-
 			</div>
 		</div>
 
@@ -192,7 +179,7 @@
 				<!-- Nút xem shop -->
 				<div>
 					<a
-						href="${pageContext.request.contextPath}/user/shop/detail?id=${product.shop.shopId}"
+						href="${pageContext.request.contextPath}/web/shop/detail?id=${product.shop.shopId}"
 						class="btn btn-outline-primary"> Xem Shop </a>
 
 				</div>
@@ -337,22 +324,9 @@
 	</div>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
-	<script>
-		// kiểm tra đã chọn màu với kích cỡ hay chưa 
-		function validateSelection() {
-		    let size = document.querySelector('input[name="size"]:checked');
-		    let color = document.querySelector('input[name="color"]:checked');
-		    let alertBox = document.getElementById("selectionAlert");
-
-		    if (!size || !color) {
-		        alertBox.classList.remove("d-none");
-		        return false; // chặn submit
-		    }
-		    alertBox.classList.add("d-none");
-		    return true;
-		}
-		</script>
+	<script src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
+		
 </body>
 </html>
+
+

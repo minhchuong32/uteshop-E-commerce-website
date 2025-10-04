@@ -5,7 +5,8 @@
 <head>
 <title>Uteshop | Trang chủ</title>
 </head>
-<body>
+<body id="main">
+
 	<!-- Banner -->
 	<div class="bg-white shadow-sm mb-4 w-100">
 		<div class="container py-3">
@@ -38,22 +39,25 @@
 			</div>
 		</div>
 	</div>
-	<div class="container">
+
+	<div id="category" class="container">
+
 		<!-- Categories -->
-		<div class="bg-white shadow-sm p-0 mb-4 position-relative">
+		<div 
+			class="bg-white shadow-sm p-0 mb-4 position-relative">
 			<div class="p-3">
 				<h5 class="fw-bold text-uppercase text-primary-custom">
 					<i class="bi bi-grid me-2"></i> Danh mục
 				</h5>
 			</div>
+
 			<div class="position-relative">
 				<div id="categorySlider"
 					class="row flex-nowrap overflow-auto text-center g-0 p-0">
 					<c:forEach var="c" items="${categories}" varStatus="status">
 						<c:if test="${status.index < 12}">
 							<div class="col-2 category-card border rounded">
-								<a
-									href="${pageContext.request.contextPath}/user/products?categoryId=${c.categoryId}"
+								<a href="${pageContext.request.contextPath}/web/products?categoryId=${c.categoryId}"
 									class="text-decoration-none text-dark d-block">
 									<div class="category-img">
 										<img
@@ -66,29 +70,19 @@
 						</c:if>
 					</c:forEach>
 				</div>
-				<!-- Nút điều hướng -->
-				<button id="prevCategory"
-					class="btn btn-light shadow position-absolute top-50 translate-middle-y"
-					style="left: -25px;">
-					<i class="bi bi-chevron-left"></i>
-				</button>
-				<button id="nextCategory"
-					class="btn btn-light shadow position-absolute top-50 translate-middle-y"
-					style="right: -25px;">
-					<i class="bi bi-chevron-right"></i>
-				</button>
 			</div>
 		</div>
+
 		<!-- Bộ lọc + Sản phẩm -->
-		<div class="bg-white rounded shadow-sm p-3 mb-4">
-			<!-- Tiêu đề -->
+		<div id="product" class="bg-white rounded shadow-sm p-3 mb-4">
 			<div class="mb-3">
 				<h5 class="fw-bold text-uppercase text-primary-custom">
 					<i class="bi bi-box-seam me-2"></i> Sản phẩm
 				</h5>
 			</div>
+
 			<!-- Bộ lọc -->
-			<form action="${pageContext.request.contextPath}/user/home"
+			<form action="${pageContext.request.contextPath}/web/home"
 				method="get" class="row g-3 align-items-end mb-4">
 				<div class="col-md-3">
 					<label class="form-label fw-bold">Danh mục</label> <select
@@ -120,7 +114,7 @@
 					<button type="submit" class="btn btn-primary-custom w-50">
 						<i class="bi bi-filter"></i> Lọc
 					</button>
-					<a href="${pageContext.request.contextPath}/user/home"
+					<a href="${pageContext.request.contextPath}/web/home"
 						class="btn btn-outline-secondary w-50">Xóa lọc</a>
 				</div>
 			</form>
@@ -140,45 +134,67 @@
 			<!-- Grid View -->
 			<div class="row g-3" id="gridView">
 				<c:forEach var="p" items="${products}">
-					<!-- col-6: 2 sp/hàng trên mobile, col-md-4: 3 sp/hàng tablet, col-lg-2: 6 sp/hàng desktop -->
 					<div class="col-6 col-md-4 col-lg-2">
-						<a
-							href="${pageContext.request.contextPath}/user/product/detail?id=${p.productId}"
-							class="text-decoration-none text-dark d-block h-100">
-							<div class="card product-card h-100">
+						<div class="card product-card h-100">
+							<!-- Link chỉ bao ảnh -->
+							<a href="${pageContext.request.contextPath}/web/product/detail?id=${p.productId}"
+								class="text-decoration-none text-dark">
 								<div class="product-img-wrapper">
 									<img
 										src="${pageContext.request.contextPath}/assets/images/products/${p.imageUrl}"
 										class="card-img-top" alt="${p.name}">
 								</div>
-								<div
-									class="card-body d-flex flex-column justify-content-between">
+							</a>
+							<div class="card-body d-flex flex-column justify-content-between">
+								<!-- Link bao tên -->
+								<a href="${pageContext.request.contextPath}/user/product/detail?id=${p.productId}"
+									class="text-decoration-none text-dark">
 									<h6 class="card-title mb-1">${p.name}</h6>
-									<div class="mb-1">
-										<span class="text-warning">★★★★☆</span> <small
-											class="text-muted">(${p.reviewsCount} đánh giá)</small>
-									</div>
-									<div class="price-wrapper">
-										<p class="text-danger fw-bold mb-1" style="font-size: 15px;">
-											<fmt:formatNumber value="${p.price}" type="currency"
+								</a>
+
+								<div class="mb-1">
+									<span class="text-warning">★★★★☆</span> <small
+										class="text-muted">(${p.reviewsCount} đánh giá)</small>
+								</div>
+
+								<div class="price-wrapper">
+									<p class="text-danger fw-bold mb-1" style="font-size: 15px;">
+										<fmt:formatNumber value="${p.price}" type="currency"
+											currencySymbol="₫" />
+									</p>
+									<c:if test="${p.oldPrice ne null}">
+										<p class="text-muted text-decoration-line-through mb-0 small">
+											<fmt:formatNumber value="${p.oldPrice}" type="currency"
 												currencySymbol="₫" />
 										</p>
-										<c:if test="${p.oldPrice ne null}">
-											<p class="text-muted text-decoration-line-through mb-0 small">
-												<fmt:formatNumber value="${p.oldPrice}" type="currency"
-													currencySymbol="₫" />
-											</p>
-										</c:if>
-									</div>
-									<button class="btn btn-sm btn-primary-custom w-100 mt-2">
-										<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
-									</button>
+									</c:if>
 								</div>
+
+								<!-- Điều kiện kiểm tra đăng nhập -->
+								<c:choose>
+									<c:when test="${not empty sessionScope.account}">
+										<form action="${pageContext.request.contextPath}/user/cart"
+											method="post">
+											<input type="hidden" name="productId" value="${p.productId}">
+											<button type="submit"
+												class="btn btn-sm btn-primary-custom w-100 mt-2">
+												<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+											</button>
+										</form>
+									</c:when>
+									<c:otherwise>
+										<a href="${pageContext.request.contextPath}/login"
+											class="btn btn-sm btn-outline-primary w-100 mt-2"> <i
+											class="bi bi-box-arrow-in-right"></i> Đăng nhập để mua
+										</a>
+									</c:otherwise>
+								</c:choose>
 							</div>
-						</a>
+						</div>
 					</div>
 				</c:forEach>
 			</div>
+
 			<!-- List View -->
 			<div class="list-group d-none" id="listView">
 				<c:choose>
@@ -189,22 +205,28 @@
 					</c:when>
 					<c:otherwise>
 						<c:forEach var="p" items="${products}">
-							<a
-								href="${pageContext.request.contextPath}/user/product/detail?id=${p.productId}"
-								class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border text-decoration-none text-dark"
+							<div
+								class="list-group-item d-flex align-items-center justify-content-between border"
 								style="transition: all 0.2s;"
 								onmouseover="this.style.borderColor='var(--bs-primary)'"
 								onmouseout="this.style.borderColor='#dee2e6'">
+
+								<!-- Ảnh + tên sản phẩm bọc trong <a> -->
 								<div class="d-flex align-items-center">
-									<img
+									<a href="${pageContext.request.contextPath}/user/product/detail?id=${p.productId}"
+										class="d-flex align-items-center text-decoration-none text-dark">
+										<img
 										src="${pageContext.request.contextPath}/assets/images/products/${p.imageUrl}"
 										alt="${p.name}" class="img-thumbnail me-3"
 										style="width: 80px; height: 80px; object-fit: cover;">
-									<div>
-										<h6 class="mb-1">${p.name}</h6>
-										<small class="text-muted">${p.reviewsCount} đánh giá</small>
-									</div>
+										<div>
+											<h6 class="mb-1">${p.name}</h6>
+											<small class="text-muted">${p.reviewsCount} đánh giá</small>
+										</div>
+									</a>
 								</div>
+
+								<!-- Giá + nút hành động -->
 								<div class="text-end">
 									<p class="text-danger fw-bold mb-0">
 										<fmt:formatNumber value="${p.price}" type="currency"
@@ -216,44 +238,60 @@
 												currencySymbol="₫" />
 										</p>
 									</c:if>
-									<button class="btn btn-sm btn-primary-custom mt-2">
-										<i class="bi bi-cart-plus"></i> Thêm vào giỏ
-									</button>
+
+									<!-- Kiểm tra login -->
+									<c:choose>
+										<c:when test="${not empty sessionScope.account}">
+											<form action="${pageContext.request.contextPath}/user/cart"
+												method="post">
+												<input type="hidden" name="productId" value="${p.productId}">
+												<button type="submit"
+													class="btn btn-sm btn-primary-custom mt-2">
+													<i class="bi bi-cart-plus"></i> Thêm vào giỏ
+												</button>
+											</form>
+										</c:when>
+										<c:otherwise>
+											<a href="${pageContext.request.contextPath}/login"
+												class="btn btn-sm btn-outline-primary mt-2"> <i
+												class="bi bi-box-arrow-in-right"></i> Đăng nhập để mua
+											</a>
+										</c:otherwise>
+									</c:choose>
 								</div>
-							</a>
+							</div>
 						</c:forEach>
 					</c:otherwise>
 				</c:choose>
 			</div>
+
+
 			<!-- Pagination -->
 			<c:if test="${totalPages > 1}">
 				<nav aria-label="Page navigation" class="mt-4">
 					<ul class="pagination justify-content-center">
-						<!-- Nút Previous -->
 						<li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
 							<a class="page-link nav-link"
-							href="${pageContext.request.contextPath}/user/home?page=${currentPage - 1}">
-								Trước </a>
+							href="${pageContext.request.contextPath}/web/home?page=${currentPage - 1}">Trước</a>
 						</li>
-						<!-- Các số trang -->
 						<c:forEach var="i" begin="1" end="${totalPages}">
 							<li class="page-item ${i == currentPage ? 'active' : ''}"><a
 								class="page-link nav-link ${i == currentPage ? 'active' : ''}"
-								href="${pageContext.request.contextPath}/user/home?page=${i}">
-									${i} </a></li>
+								href="${pageContext.request.contextPath}/web/home?page=${i}">${i}</a>
+							</li>
 						</c:forEach>
-						<!-- Nút Next -->
 						<li
 							class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
 							<a class="page-link nav-link"
-							href="${pageContext.request.contextPath}/user/home?page=${currentPage + 1}">
-								Sau </a>
+							href="${pageContext.request.contextPath}/web/home?page=${currentPage + 1}">Sau</a>
 						</li>
 					</ul>
 				</nav>
 			</c:if>
+
 		</div>
 	</div>
+
 	<script src="${pageContext.request.contextPath}/assets/js/user-home.js"></script>
 </body>
 </html>

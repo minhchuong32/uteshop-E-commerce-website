@@ -5,7 +5,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Uteshop | Admin</title>
+<title>Uteshop | Vendor</title>
 
 <!-- Favicon -->
 <link rel="icon" type="image/png"
