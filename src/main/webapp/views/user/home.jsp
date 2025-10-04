@@ -5,7 +5,7 @@
 <head>
 <title>Uteshop | Trang chủ</title>
 </head>
-<body>
+<body id="main">
 	<!-- Banner -->
 	<div class="bg-white shadow-sm mb-4 w-100">
 		<div class="container py-3">
@@ -38,7 +38,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="container">
+	<div id="category"  class="container">
 		<!-- Categories -->
 		<div class="bg-white shadow-sm p-0 mb-4 position-relative">
 			<div class="p-3">
@@ -80,7 +80,7 @@
 			</div>
 		</div>
 		<!-- Bộ lọc + Sản phẩm -->
-		<div class="bg-white rounded shadow-sm p-3 mb-4">
+		<div id="product"  class="bg-white rounded shadow-sm p-3 mb-4">
 			<!-- Tiêu đề -->
 			<div class="mb-3">
 				<h5 class="fw-bold text-uppercase text-primary-custom">

@@ -84,7 +84,7 @@
 			<!-- Bộ lọc -->
 			<form action="${pageContext.request.contextPath}/web/home"
 				method="get" class="row g-3 align-items-end mb-4">
-				<div class="col-md-3">
+				<div class="col-md-3">	
 					<label class="form-label fw-bold">Danh mục</label> <select
 						class="form-select" name="categoryId">
 						<option value="">Tất cả</option>
@@ -147,7 +147,7 @@
 							</a>
 							<div class="card-body d-flex flex-column justify-content-between">
 								<!-- Link bao tên -->
-								<a href="${pageContext.request.contextPath}/user/product/detail?id=${p.productId}"
+								<a href="${pageContext.request.contextPath}/web/product/detail?id=${p.productId}"
 									class="text-decoration-none text-dark">
 									<h6 class="card-title mb-1">${p.name}</h6>
 								</a>
@@ -173,7 +173,7 @@
 								<!-- Điều kiện kiểm tra đăng nhập -->
 								<c:choose>
 									<c:when test="${not empty sessionScope.account}">
-										<form action="${pageContext.request.contextPath}/user/cart"
+										<form action="${pageContext.request.contextPath}/web/cart"
 											method="post">
 											<input type="hidden" name="productId" value="${p.productId}">
 											<button type="submit"
@@ -213,7 +213,7 @@
 
 								<!-- Ảnh + tên sản phẩm bọc trong <a> -->
 								<div class="d-flex align-items-center">
-									<a href="${pageContext.request.contextPath}/user/product/detail?id=${p.productId}"
+									<a href="${pageContext.request.contextPath}/web/product/detail?id=${p.productId}"
 										class="d-flex align-items-center text-decoration-none text-dark">
 										<img
 										src="${pageContext.request.contextPath}/assets/images/products/${p.imageUrl}"
@@ -242,7 +242,7 @@
 									<!-- Kiểm tra login -->
 									<c:choose>
 										<c:when test="${not empty sessionScope.account}">
-											<form action="${pageContext.request.contextPath}/user/cart"
+											<form action="${pageContext.request.contextPath}/web/cart"
 												method="post">
 												<input type="hidden" name="productId" value="${p.productId}">
 												<button type="submit"

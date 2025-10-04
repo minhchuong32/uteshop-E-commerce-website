@@ -24,13 +24,13 @@ public class HomeController extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		int page = 1;
 		int size = 18;
-
 		try {
 			page = Integer.parseInt(req.getParameter("page"));
 		} catch (Exception e) {
 			page = 1;
 		}
 
+		String keyword = req.getParameter("keyword"); // 👈 bắt tham số tìm kiếm
 		String categoryIdStr = req.getParameter("categoryId");
 		String minPriceStr = req.getParameter("minPrice");
 		String maxPriceStr = req.getParameter("maxPrice");
@@ -41,18 +41,28 @@ public class HomeController extends HttpServlet {
 		Double minPrice = (minPriceStr != null && !minPriceStr.isEmpty()) ? Double.parseDouble(minPriceStr) : null;
 		Double maxPrice = (maxPriceStr != null && !maxPriceStr.isEmpty()) ? Double.parseDouble(maxPriceStr) : null;
 
-		// tổng số sản phẩm
-		long totalProducts = productService.countFilterProducts(categoryId, minPrice, maxPrice);
-		int totalPages = (int) Math.ceil((double) totalProducts / size);
+		List<Product> products;
+		long totalProducts;
 
-		List<Product> products = productService.filterProducts(categoryId, minPrice, maxPrice, sortBy, page, size);
+		if (keyword != null && !keyword.isEmpty()) {
+			//  Nếu có keyword thì search
+			totalProducts = productService.countByKeyword(keyword);
+			products = productService.searchByKeyword(keyword, page, size);
+			req.setAttribute("keyword", keyword);
+		} else {
+			//  Nếu không có keyword thì filter bình thường
+			totalProducts = productService.countFilterProducts(categoryId, minPrice, maxPrice);
+			products = productService.filterProducts(categoryId, minPrice, maxPrice, sortBy, page, size);
+		}
+
+		int totalPages = (int) Math.ceil((double) totalProducts / size);
 
 		req.setAttribute("categories", categoryService.findAll());
 		req.setAttribute("products", products);
 		req.setAttribute("currentPage", page);
 		req.setAttribute("totalPages", totalPages);
 
-		// giữ lại filter khi load lại trang
+		// giữ lại filter
 		req.setAttribute("selectedCategoryId", categoryId);
 		req.setAttribute("minPrice", minPrice);
 		req.setAttribute("maxPrice", maxPrice);
@@ -60,4 +70,5 @@ public class HomeController extends HttpServlet {
 
 		req.getRequestDispatcher("/views/web/home.jsp").forward(req, resp);
 	}
+
 }

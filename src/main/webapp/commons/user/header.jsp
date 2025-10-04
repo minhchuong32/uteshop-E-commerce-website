@@ -1,7 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/commons/taglib.jsp"%>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/css/header.css">
 <header>
 	<nav class="navbar navbar-expand-lg navbar-dark fixed-top"
 		style="background-color: #FFFFFF">
@@ -20,61 +18,38 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarContent">
+
 				<!-- Navigation -->
 				<ul class="navbar-nav me-3">
-					<li class="nav-item"><a
-						class="nav-link text-primary-custom fw-semibold"
-						href="${pageContext.request.contextPath}/user/home">Trang chủ</a></li>
-					<!-- Dropdown Sản phẩm -->
-					<li class="nav-item dropdown"><a
-						class="nav-link dropdown-toggle text-primary-custom fw-semibold"
-						href="#" id="productsDropdown" role="button"
-						data-bs-toggle="dropdown" aria-expanded="false"> Sản phẩm </a>
-						<ul class="dropdown-menu" aria-labelledby="productsDropdown">
-							<li><a class="dropdown-item"
-								href="${pageContext.request.contextPath}/products?category=men">Thời
-									trang nam</a></li>
-							<li><a class="dropdown-item"
-								href="${pageContext.request.contextPath}/products?category=women">Thời
-									trang nữ</a></li>
-							<li><a class="dropdown-item"
-								href="${pageContext.request.contextPath}/products?category=electronics">Điện
-									tử</a></li>
-							<li><a class="dropdown-item"
-								href="${pageContext.request.contextPath}/products?category=accessories">Phụ
-									kiện</a></li>
-						</ul></li>
-					<!-- Dropdown Danh mục -->
-					<li class="nav-item dropdown"><a
-						class="nav-link dropdown-toggle text-dark fw-semibold" href="#"
-						id="categoriesDropdown" role="button" data-bs-toggle="dropdown"
-						aria-expanded="false"> Danh mục </a>
-						<ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
-							<li><a class="dropdown-item"
-								href="${pageContext.request.contextPath}/category/laptop">Laptop</a></li>
-							<li><a class="dropdown-item"
-								href="${pageContext.request.contextPath}/category/phone">Điện
-									thoại</a></li>
-							<li><a class="dropdown-item"
-								href="${pageContext.request.contextPath}/category/shoes">Giày
-									dép</a></li>
-							<li><a class="dropdown-item"
-								href="${pageContext.request.contextPath}/category/watch">Đồng
-									hồ</a></li>
-						</ul></li>
 					<li class="nav-item"><a class="nav-link text-dark fw-semibold"
-						href="${pageContext.request.contextPath}/user/contact">Liên hệ</a></li>
+						href="#main">Trang chủ</a></li>
+
+					<li class="nav-item"><a class="nav-link text-dark fw-semibold"
+						href="#product">Sản phẩm</a></li>
+
+					<li class="nav-item"><a class="nav-link text-dark fw-semibold"
+						href="#category">Danh mục</a></li>
+
+					<li class="nav-item"><a class="nav-link text-dark fw-semibold"
+						href="${pageContext.request.contextPath}/web/contact">Liên hệ</a>
+					</li>
 				</ul>
-				<!-- Thanh tìm kiếm -->
-				<form class="d-flex ms-auto me-3"
-					action="${pageContext.request.contextPath}/search" method="get">
-					<input class="form-control me-2" type="search" name="keyword"
-						placeholder="Tìm sản phẩm..." aria-label="Search">
-					<button
-						class="btn btn-primary-custom d-flex align-items-center justify-content-center"
-						type="submit">
-						<i class="bi bi-search"></i>
-					</button>
+
+				<!-- Thanh tìm kiếm nhỏ gọn -->
+				<form class="d-flex mx-auto me-3 search-form"
+					action="${pageContext.request.contextPath}/user/home" method="get"
+					style="max-width: 500px; width: 100%;">
+					<div class="input-group">
+						<input type="search" class="form-control form-control-sm"
+							name="keyword" value="${param.keyword}" placeholder="Tìm kiếm..."
+							aria-label="Search">
+						<button class="btn btn-primary btn-search" type="submit"
+							style="background-color: #00558D; border: none;">
+							<img width="18" height="18"
+								src="${pageContext.request.contextPath}/assets/icon/search.png"
+								alt="search" style="filter: invert(1);" />
+						</button>
+					</div>
 				</form>
 
 
