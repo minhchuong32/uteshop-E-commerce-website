@@ -98,10 +98,14 @@ body {
 /* Mặc định: chữ trắng, icon trắng */
 .nav-link {
 	text-decoration: none;
-	color: var(--primary-color) !important;
+	color: #fff !important;
 	display: flex;
 	align-items: center;
 	gap: 0.9rem; /* khoảng cách giữa icon và chữ */
+}
+
+.nav-link-header {
+	color: var(--primary-color) !important;
 }
 
 .nav-link i {

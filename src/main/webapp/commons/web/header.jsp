@@ -25,16 +25,16 @@
 
 				<!-- Navigation -->
 				<ul class="navbar-nav me-3">
-					<li class="nav-item"><a class="nav-link text-dark fw-semibold"
+					<li class="nav-item"><a class="nav-link-header nav-link fw-semibold"
 						href="#main">Trang chủ</a></li>
 
-					<li class="nav-item"><a class="nav-link text-dark fw-semibold"
+					<li class="nav-item"><a class="nav-link-header nav-link fw-semibold"
 						href="#product">Sản phẩm</a></li>
 
-					<li class="nav-item"><a class="nav-link text-dark fw-semibold"
+					<li class="nav-item"><a class="nav-link-header nav-link fw-semibold"
 						href="#category">Danh mục</a></li>
 
-					<li class="nav-item"><a class="nav-link text-dark fw-semibold"
+					<li class="nav-item"><a class="nav-link-header nav-link fw-semibold"
 						href="${pageContext.request.contextPath}/web/contact">Liên hệ</a>
 					</li>
 				</ul>
