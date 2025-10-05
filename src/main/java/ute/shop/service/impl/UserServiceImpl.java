@@ -129,4 +129,9 @@ public class UserServiceImpl implements IUserService {
         }
         return userDao.updatePwd(user, changePwd);
     }
+
+	@Override
+	public List<User> getUsersByRole(String role) {
+		return userDao.getUsersByRole(role);
+	}
 }

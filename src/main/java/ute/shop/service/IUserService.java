@@ -48,4 +48,7 @@ public interface IUserService {
 
     // Update user có thể đổi mật khẩu hoặc không
     boolean updatePwd(User user, boolean changePwd);
+    
+    // Tìm user theo role
+	List<User> getUsersByRole(String role);
 }

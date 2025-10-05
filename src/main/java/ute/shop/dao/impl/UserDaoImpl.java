@@ -184,4 +184,22 @@ public class UserDaoImpl implements IUserDao {
             em.close();
         }
     }
+    
+    @Override
+    public List<User> getUsersByRole(String role) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            // Truy vấn tất cả user có role trùng khớp (ví dụ: "Vendor")
+            TypedQuery<User> query = em.createQuery(
+                "SELECT u FROM User u WHERE u.role = :role", User.class);
+            query.setParameter("role", role);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of(); // trả về danh sách rỗng nếu lỗi
+        } finally {
+            em.close();
+        }
+    }
+
 }

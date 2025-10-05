@@ -36,4 +36,6 @@ public interface IUserDao {
 
     // Cập nhật User, tùy chọn có đổi password hay không
     boolean updatePwd(User user, boolean changePwd);
+
+	List<User> getUsersByRole(String role);
 }
