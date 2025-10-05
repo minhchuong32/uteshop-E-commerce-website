@@ -45,13 +45,13 @@
 			<table id="userTable" class="table table-hover align-middle mb-0">
 				<thead class="table-light">
 					<tr>
-						<th class="text-center">#</th>
-						<th>Người dùng</th>
-						<th>Email</th>
-						<th>Số điện thoại</th>
-						<th>Địa chỉ</th>
-						<th>Vai trò</th>
-						<th>Trạng thái</th>
+						<th class="text-center" >ID</th>
+						<th class="text-center" >Người dùng</th>
+						<th class="text-center" >Email</th>
+						<th class="text-center" >Số điện thoại</th>
+						<th class="text-center" >Địa chỉ</th>
+						<th class="text-center" >Vai trò</th>
+						<th class="text-center" >Trạng thái</th>
 						<th class="text-center">Hành động</th>
 					</tr>
 				</thead>
