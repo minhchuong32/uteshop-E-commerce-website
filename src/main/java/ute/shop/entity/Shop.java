@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Shop {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shop_id")
@@ -31,6 +32,10 @@ public class Shop {
     @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
+    // 🆕 Logo cửa hàng (có thể null)
+    @Column(name = "logo", length = 255)
+    private String logo;
+
     // Ngày tạo
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
@@ -39,7 +44,6 @@ public class Shop {
     // Danh sách sản phẩm của shop
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Product> products = new ArrayList<>();
-
 
     // Danh sách khuyến mãi của shop
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true)

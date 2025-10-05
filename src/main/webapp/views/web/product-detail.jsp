@@ -155,7 +155,7 @@
 			<div class="d-flex align-items-center border rounded p-3 bg-light">
 				<!-- Logo shop (dùng ảnh mặc định nếu chưa có) -->
 				<img
-					src="${pageContext.request.contextPath}/assets/images/shop-logo.png"
+					src="${pageContext.request.contextPath}/assets/images/shops/default-shop-logo.png"
 					alt="${product.shop.name}" class="rounded me-3"
 					style="width: 80px; height: 80px; object-fit: cover;">
 
