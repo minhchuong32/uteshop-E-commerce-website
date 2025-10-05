@@ -1,5 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/commons/taglib.jsp"%>
+
+<!-- CSS DataTables -->
+<link rel="stylesheet"
+	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+
 <div class="container-fluid">
 	<h3 class="mb-4 fw-bold">Quản lý người dùng</h3>
 
@@ -12,84 +17,124 @@
 	</div>
 
 	<div class="card shadow-sm">
-		<div class="card-body">
-			<table class="table align-middle mb-0">
+		<div class="card-body table-responsive">
+			<!-- Hiển thị thông báo thành công -->
+			<c:if test="${not empty sessionScope.success}">
+				<div
+					class="alert alert-success alert-dismissible fade show mt-3 shadow-sm"
+					role="alert">
+					<i class="bi bi-check-circle-fill me-2"></i>
+					${sessionScope.success}
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Đóng"></button>
+				</div>
+				<c:remove var="success" scope="session" />
+			</c:if>
+
+			<!-- Hiển thị thông báo lỗi -->
+			<c:if test="${not empty error}">
+				<div
+					class="alert alert-danger alert-dismissible fade show mt-3 shadow-sm"
+					role="alert">
+					<i class="bi bi-exclamation-triangle-fill me-2"></i> ${error}
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Đóng"></button>
+				</div>
+			</c:if>
+
+			<table id="userTable" class="table table-hover align-middle mb-0">
 				<thead class="table-light">
 					<tr>
+						<th class="text-center">#</th>
 						<th>Người dùng</th>
+						<th>Email</th>
+						<th>Số điện thoại</th>
+						<th>Địa chỉ</th>
 						<th>Vai trò</th>
 						<th>Trạng thái</th>
 						<th class="text-center">Hành động</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="u" items="${users}">
+					<c:forEach var="u" items="${users}" varStatus="loop">
 						<tr>
-							<!-- Tên + email -->
+							<td class="text-center">${loop.index + 1}</td>
+
 							<td>
-								<div class="fw-bold">${u.username}</div> <small
-								class="text-muted">${u.email}</small>
+								<div class="d-flex align-items-center">
+									<img
+										src="${empty u.avatar 
+											? pageContext.request.contextPath.concat('/assets/images/default-avatar.png') 
+											: pageContext.request.contextPath.concat('/assets/images/avatars/').concat(u.avatar)}"
+										alt="avatar" class="rounded-circle me-3"
+										style="width: 48px; height: 48px; object-fit: cover;">
+									<div>
+										<div class="fw-bold">${empty u.name ? u.username : u.name}</div>
+										<small class="text-muted">@${u.username}</small>
+									</div>
+								</div>
 							</td>
 
-							<!-- Vai trò -->
+							<td>${u.email}</td>
+							<td>${empty u.phone ? '-' : u.phone}</td>
+							<td>${empty u.address ? '-' : u.address}</td>
+
 							<td><c:choose>
 									<c:when test="${u.role eq 'Admin'}">
-										<span class="badge rounded-pill bg-dark text-white">Admin</span>
+										<span class="badge bg-dark">Admin</span>
 									</c:when>
 									<c:when test="${u.role eq 'Vendor'}">
-										<span
-											class="badge rounded-pill bg-primary-subtle text-primary">Vendor</span>
+										<span class="badge bg-primary">Vendor</span>
 									</c:when>
 									<c:when test="${u.role eq 'Shipper'}">
-										<span
-											class="badge rounded-pill bg-warning-subtle text-warning">Shipper</span>
+										<span class="badge bg-warning text-dark">Shipper</span>
+									</c:when>
+									<c:when test="${u.role eq 'Guest'}">
+										<span class="badge bg-secondary">Guest</span>
 									</c:when>
 									<c:otherwise>
-										<span class="badge rounded-pill bg-light text-dark">User</span>
+										<span class="badge bg-info text-dark">User</span>
 									</c:otherwise>
 								</c:choose></td>
 
-							<!-- Trạng thái -->
 							<td><c:choose>
 									<c:when test="${u.status eq 'active'}">
-										<span
-											class="badge rounded-pill bg-success-subtle text-success">active</span>
+										<span class="badge bg-success">Active</span>
+									</c:when>
+									<c:when test="${u.status eq 'inactive'}">
+										<span class="badge bg-secondary">Inactive</span>
 									</c:when>
 									<c:otherwise>
-										<span class="badge rounded-pill bg-danger-subtle text-danger">banned</span>
+										<span class="badge bg-danger">Banned</span>
 									</c:otherwise>
 								</c:choose></td>
 
-
-							<!-- Action -->
 							<td class="text-center">
 								<!-- Edit --> <a
 								href="${pageContext.request.contextPath}/admin/users/edit?id=${u.userId}"
 								class="text-warning me-3" title="Sửa"> <i
-									class="bi bi-pencil-square"></i>
-							</a> <!-- Delete (sử dụng modal Bootstrap) --> <a
-								href="javascript:void(0);" class="text-danger me-3"
-								data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-								data-id="${u.userId}"
+									class="bi bi-pencil-square fs-5"></i>
+							</a> <!-- Delete --> <a href="javascript:void(0);"
+								class="text-danger me-3" data-bs-toggle="modal"
+								data-bs-target="#confirmDeleteModal" data-id="${u.userId}"
 								data-url="${pageContext.request.contextPath}/admin/users/delete"
-								title="Xóa"> <i class="bi bi-trash-fill"></i>
+								title="Xóa người dùng"> <i class="bi bi-trash-fill fs-5"></i>
 							</a> <!-- Lock / Unlock --> <c:choose>
 									<c:when test="${u.status eq 'active'}">
 										<a
 											href="${pageContext.request.contextPath}/admin/users/lock?id=${u.userId}"
 											class="text-danger" title="Khóa tài khoản"> <i
-											class="bi bi-lock-fill"></i>
+											class="bi bi-lock-fill fs-5"></i>
 										</a>
 									</c:when>
 									<c:otherwise>
 										<a
 											href="${pageContext.request.contextPath}/admin/users/unlock?id=${u.userId}"
 											class="text-success" title="Mở khóa tài khoản"> <i
-											class="bi bi-unlock-fill"></i>
+											class="bi bi-unlock-fill fs-5"></i>
 										</a>
 									</c:otherwise>
 								</c:choose>
-
 							</td>
 						</tr>
 					</c:forEach>
@@ -118,15 +163,54 @@
 				</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary rounded-pill px-4"
+				<button type="button"
+					class="btn btn-outline-secondary rounded-pill px-4"
 					data-bs-dismiss="modal">Hủy</button>
 				<a id="deleteConfirmBtn" href="#"
-					class="btn btn-danger rounded-pill px-4">Xóa</a>
+					class="btn btn-danger rounded-pill px-4"> <i
+					class="bi bi-trash-fill me-1"></i> Xóa
+				</a>
 			</div>
 		</div>
 	</div>
 </div>
 
+
+<!-- JS DataTables -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- JS Xử lý Modal Xóa -->
 <script
 	src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
 
+<script>
+	$(document).ready(function() {
+		$('#userTable').DataTable({
+			"pageLength" : 10, // Mỗi trang 10 user
+			"lengthChange" : false, // Ẩn lựa chọn số dòng
+			"ordering" : true, // Cho phép sắp xếp
+			"searching" : true, // Ô tìm kiếm
+			"language" : { // Dịch sang tiếng Việt
+				"search" : "Tìm kiếm:",
+				"paginate" : {
+					"first" : "Đầu",
+					"last" : "Cuối",
+					"next" : "›",
+					"previous" : "‹"
+				},
+				"info" : "Hiển thị _START_ - _END_ / _TOTAL_ người dùng",
+				"infoEmpty" : "Không có dữ liệu",
+				"zeroRecords" : "Không tìm thấy kết quả phù hợp"
+			},
+			"columnDefs" : [ {
+				"orderable" : false,
+				"targets" : [ 1, 7 ]
+			} // Không cho sắp xếp cột ảnh + hành động
+			]
+		});
+	});
+</script>

@@ -1,9 +1,27 @@
-/* Đảm bảo toàn trang full height */
+/* ================== RESET LAYOUT ================== */
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color:#F5F5F5;
+    background-color: #F5F5F5;
+}
+
+/* Thanh cuộn tùy chỉnh */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #e6e6e6;
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-hover);
 }
 
 /* Layout chính dùng flexbox để đẩy footer xuống */
@@ -18,10 +36,7 @@ body {
     padding-top: 76px !important;
 }
 
-
-/* ================== THEME CSS ================== */
-
-/* Màu chủ đạo */
+/* ================== THEME COLOR ================== */
 :root {
 	--primary-color: #00558D;
 	--primary-hover: #004474;
@@ -35,27 +50,32 @@ body {
 
 /* Background */
 .bg-primary-custom {
-	color: var(--primary-color) !important;
-
+	background-color: var(--primary-color) !important;
+	color: #fff !important;
 }
 
-/* Button */
+/* ================== BUTTON ================== */
 .btn-primary-custom {
 	background-color: var(--primary-color) !important;
 	border-color: var(--primary-color) !important;
 	color: #fff !important;
 	transition: 0.3s;
 }
-
 .btn-primary-custom:hover {
 	background-color: var(--primary-hover) !important;
 	border-color: var(--primary-hover) !important;
 	color: #fff !important;
 }
-
 .btn-outline-primary-custom {
 	border-color: var(--primary-color) !important;
+	color: var(--primary-color) !important;
+	transition: 0.3s;
 }
+.btn-outline-primary-custom:hover {
+	background-color: var(--primary-color) !important;
+	color: #fff !important;
+}
+
 /* Border */
 .border-primary-custom {
 	border-color: var(--primary-color) !important;
@@ -77,86 +97,164 @@ body {
 	margin-bottom: 1rem;
 }
 
-/* Hiệu ứng xoay ảnh khi scroll */
-.image-box {
-	perspective: 1000px;
-}
+/* ================== NAVIGATION ================== */
 
-.rotate-on-scroll {
-	transition: transform 0.8s ease, opacity 0.8s ease;
-	transform: rotateY(90deg);
-	opacity: 0;
-}
-
-.rotate-on-scroll.visible {
-	transform: rotateY(0);
-	opacity: 1;
-}
-
-/* ================== NAV-LINK ================== */
-
-/* Mặc định: chữ trắng, icon trắng */
+/* Nav link mặc định */
 .nav-link {
 	text-decoration: none;
 	color: #fff !important;
 	display: flex;
 	align-items: center;
-	gap: 0.9rem; /* khoảng cách giữa icon và chữ */
+	gap: 0.9rem;
 }
 
+/* Header nav-link */
 .nav-link-header {
 	color: var(--primary-color) !important;
+	font-weight: 600;
 }
 
-.nav-link i {
-	color: white;
-}
-
-/* Hover: nền xám nhạt, chữ + icon xanh */
+/* Hover: nền xám nhạt, chữ xanh */
 .nav-link:hover {
 	background-color: #f0f0f0;
 	color: var(--primary-color) !important;
 }
-
 .nav-link:hover i {
 	color: var(--primary-color) !important;
 }
 
-/* Active: nền xanh nhạt, chữ + icon xanh */
+/* Active */
 .nav-link.active {
 	background-color: #e0f0ff;
 	color: var(--primary-color) !important;
+	font-weight: 600;
 }
 
-.nav-link.active i {
+/* Pagination tuỳ chỉnh */
+.pagination .nav-link {
+	border: none;
+	border-radius: 6px;
+	margin: 0 2px;
+	padding: 6px 12px;
+	background: transparent;
+	font-weight: 500;
+}
+.pagination .nav-link:hover {
+	background-color: #f0f0f0;
 	color: var(--primary-color) !important;
 }
-
-/* Ưu tiên nav-link trong pagination hơn Bootstrap */
-.pagination .nav-link {
-    border: none;              /* bỏ border mặc định của page-link */
-    border-radius: 6px;        /* bo tròn */
-    margin: 0 2px;             /* khoảng cách giữa các trang */
-    padding: 6px 12px;         /* padding đẹp hơn */
-    background: transparent;   /* nền trong suốt mặc định */
-    font-weight: 500;
-}
-
-/* Hover */
-.pagination .nav-link:hover {
-    background-color: #f0f0f0;
-    color: var(--primary-color) !important;
-}
-
-/* Active */	
 .pagination .nav-link.active {
-    background-color: #e0f0ff;
-    color: var(--primary-color) !important;
-    font-weight: 600;
+	background-color: #e0f0ff;
+	color: var(--primary-color) !important;
+	font-weight: 600;
+}
+
+/* ================== ANIMATION ================== */
+.image-box {
+	perspective: 1000px;
+}
+.rotate-on-scroll {
+	transition: transform 0.8s ease, opacity 0.8s ease;
+	transform: rotateY(90deg);
+	opacity: 0;
+}
+.rotate-on-scroll.visible {
+	transform: rotateY(0);
+	opacity: 1;
 }
 
 
+/* ================== THEME CORE ================== */
+:root {
+    --primary-color: #00558D;
+    --primary-hover: #004474;
+    --divider-color: #00558D;
+}
 
+/* Background & Text */
+.bg-primary-custom { background-color: var(--primary-color) !important; color: #fff !important; }
+.text-primary-custom { color: var(--primary-color) !important; }
 
+/* Button */
+.btn-primary-custom {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #fff !important;
+    transition: 0.3s;
+}
+.btn-primary-custom:hover {
+    background-color: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
+    color: #fff !important;
+}
+.btn-outline-primary-custom {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+.btn-outline-primary-custom:hover {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+}
 
+/* ================== TABLE STYLING ================== */
+.table thead th {
+    background-color: var(--primary-color);
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+}
+.table tbody tr:hover {
+    background-color: #e9f4ff !important;
+}
+
+/* Giới hạn chiều rộng hành động + tránh cuộn ngang */
+.table-responsive {
+    overflow-x: auto;
+    max-width: 100%;
+}
+.table td.text-center {
+    white-space: nowrap;
+    width: 90px;
+}
+.table td.text-center a {
+    margin: 0 4px;
+}
+.table .bi {
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.table .bi:hover {
+    transform: scale(1.15);
+}
+
+/* DataTables Custom */
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-left: 0.5em;
+}
+.dataTables_wrapper .dataTables_filter input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(0,85,141,0.4);
+}
+.dataTables_wrapper .dataTables_info {
+    color: var(--primary-color);
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+    border-radius: 6px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #e0f0ff !important;
+    border-radius: 6px;
+}
+
+/* Scrollbar đẹp */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #e6e6e6; border-radius: 5px; }
+::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary-hover); }
 
