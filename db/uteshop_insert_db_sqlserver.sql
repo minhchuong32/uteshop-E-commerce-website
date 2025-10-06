@@ -340,3 +340,52 @@ INSERT INTO ProductImage (product_id, image_url, is_main) VALUES
 (23, 'caphe_1.png', 0),
 (23, 'caphe_2.png', 0);
 
+
+--------------------------------------------------------
+-- 14. COMPLAINTS
+--------------------------------------------------------
+INSERT INTO complaints (order_id, user_id, title, content, status, created_at)
+VALUES
+(1, 1,  N'Hàng bị giao trễ', 
+ N'Tôi đã đặt hàng hơn 3 ngày nhưng chưa nhận được hàng, vui lòng kiểm tra giúp.', 
+ N'Chờ xử lý', GETDATE()),
+
+(2, 2,  N'Sản phẩm chưa đến', 
+ N'Tôi đặt đơn MoMo nhưng vẫn chưa nhận được, xin hỗ trợ gấp.', 
+ N'Đang xử lý', GETDATE()),
+
+(3, 3,  N'Hoàn tiền chưa nhận được', 
+ N'Tôi đã hoàn hàng thành công nhưng chưa thấy tiền hoàn lại.', 
+ N'Chờ xử lý', GETDATE()),
+
+(4, 8,  N'Sản phẩm lỗi nhẹ', 
+ N'Khi mở hộp phát hiện vỏ sản phẩm bị trầy, xin đổi mới.', 
+ N'Đang xử lý', GETDATE()),
+
+(5, 9,  N'Bị hủy không rõ lý do', 
+ N'Tôi không hủy đơn nhưng hệ thống ghi là đơn đã bị hủy.', 
+ N'Chờ xử lý', GETDATE()),
+
+(6, 6,  N'Lỗi khi trả hàng', 
+ N'Hệ thống báo lỗi khi thực hiện trả hàng qua MoMo.', 
+ N'Đang xử lý', GETDATE()),
+
+(7, 3,  N'Sản phẩm giao sai mẫu', 
+ N'Tôi đặt size M nhưng lại giao size L.', 
+ N'Đang xử lý', GETDATE()),
+
+(8, 3,  N'Thiếu phụ kiện đi kèm', 
+ N'Trong hộp không có dây sạc như mô tả.', 
+ N'Chờ xử lý', GETDATE()),
+
+(9, 5,  N'Giao sai địa chỉ', 
+ N'Shipper giao nhầm sang địa chỉ khác, mong kiểm tra lại.', 
+ N'Đã giải quyết', GETDATE()),
+
+(10, 6, N'Sản phẩm trầy xước nhẹ', 
+ N'Hàng giao có vết trầy, không giống hình quảng cáo.', 
+ N'Chờ xử lý', GETDATE()),
+
+(22, 1, N'Lỗi hệ thống đơn hàng', 
+ N'Đơn hàng mới tạo nhưng hiển thị sai thông tin người nhận.', 
+ N'Chờ xử lý', GETDATE());

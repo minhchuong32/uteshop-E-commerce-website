@@ -64,8 +64,13 @@
 					</a></li>
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='deliveries' ? 'active' : ''}"
-						href="${pageContext.request.contextPath}/admin/deliveries"> <i
-							class="bi bi-truck me-2"></i> Quản lý Vận chuyển
+						href="${pageContext.request.contextPath}/admin/home?page=deliveries">
+							<i class="bi bi-truck me-2"></i> Quản lý Vận chuyển
+					</a></li>
+					<li class="nav-item mb-1"><a
+						class="nav-link ${page=='deliveries' ? 'active' : ''}"
+						href="${pageContext.request.contextPath}/admin/home?page=complaints">
+							<i class="bi bi-chat-dots me-2"></i> Quản lý Khiếu nại
 					</a></li>
 
 					<li class="nav-item mb-1"><a
