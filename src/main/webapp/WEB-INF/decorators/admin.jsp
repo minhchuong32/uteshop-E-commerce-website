@@ -20,7 +20,7 @@
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
 	rel="stylesheet">
-	<!-- CSS Bootstrap & DataTables -->
+<!-- CSS Bootstrap & DataTables -->
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
 
@@ -43,7 +43,8 @@
 				class="col-12 col-md-2 col-xl-2 shadow-sm pt-4 d-flex flex-column position-sticky top-0 vh-100 rounded-end"
 				style="height: calc(100vh - 76px); background-color: #00558D; margin-top: 76px">
 				<h5
-					class="text-center mb-4 text-white border-bottom border-white pb-3">Quản trị hệ thống</h5>
+					class="text-center mb-4 text-white border-bottom border-white pb-3">Quản
+					trị hệ thống</h5>
 
 				<ul class="nav flex-column flex-grow-1">
 					<li class="nav-item mb-1"><a
@@ -62,10 +63,11 @@
 							<i class="bi bi-shop me-2"></i> Quản lý Cửa hàng
 					</a></li>
 					<li class="nav-item mb-1"><a
-						class="nav-link ${page=='orders' ? 'active' : ''}"
-						href="${pageContext.request.contextPath}/admin/home?page=orders">
-							<i class="bi bi-cart-check-fill me-2"></i> Quản lý Đơn hàng
+						class="nav-link ${page=='deliveries' ? 'active' : ''}"
+						href="${pageContext.request.contextPath}/admin/deliveries"> <i
+							class="bi bi-truck me-2"></i> Quản lý Vận chuyển
 					</a></li>
+
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='stats' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=stats">

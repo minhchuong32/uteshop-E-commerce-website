@@ -30,7 +30,15 @@ public class Delivery {
     @Column(name = "status", length = 20, columnDefinition = "NVARCHAR(20) DEFAULT N'Đã gán'")
     private String status;
     
+    @Column(name = "note_text", length = 500, columnDefinition = "NVARCHAR(500)")
+    private String noteText; // ghi chú nội dung phiếu
+    
+    @Column(name = "delivery_note", length = 500, columnDefinition = "NVARCHAR(500)")
+    private String deliveryNote; // Ghi chú hoặc đường dẫn file phiếu giao hàng
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    private Date createdAt = new Date();  // thêm field này
+    private Date createdAt = new Date();  
+    
+
 }

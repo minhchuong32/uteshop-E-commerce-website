@@ -9,4 +9,7 @@ public interface IDeliveryService {
     Delivery save(Delivery delivery);
     void updateStatus(Integer deliveryId, String status);
     void delete(Integer id);
+    List<Delivery> findAll();
+    // thống kê hiệu suất (tỷ lệ % delivered)
+    List<Object[]> getPerformanceStats();
 }

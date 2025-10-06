@@ -115,6 +115,7 @@ public class UserController extends HttpServlet {
                 Part filePart = req.getPart("avatar");
                 String avatarFileName = null;
                 if (filePart != null && filePart.getSize() > 0) {
+                	// tránh trùng tên -> randomUUID 
                     avatarFileName = UUID.randomUUID() + "_" + filePart.getSubmittedFileName();
                     filePart.write(uploadDir + File.separator + avatarFileName);
                 }

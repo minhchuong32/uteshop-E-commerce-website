@@ -1,15 +1,20 @@
 package ute.shop.service.impl;
 
 import ute.shop.dao.IDeliveryDao;
+import ute.shop.dao.IUserDao;
 import ute.shop.dao.impl.DeliveryDaoImpl;
+import ute.shop.dao.impl.UserDaoImpl;
 import ute.shop.entity.Delivery;
+import ute.shop.entity.User;
 import ute.shop.service.IDeliveryService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DeliveryServiceImpl implements IDeliveryService {
 
     private final IDeliveryDao deliveryDao = new DeliveryDaoImpl();
+    private final IUserDao userDao = new UserDaoImpl();
 
     @Override
     public List<Delivery> getByShipper(Integer shipperId) {
@@ -35,4 +40,40 @@ public class DeliveryServiceImpl implements IDeliveryService {
     public void delete(Integer id) {
         deliveryDao.delete(id);
     }
+
+    /**
+     * Thống kê hiệu suất giao hàng của từng shipper
+     * Trả về: [Tên Shipper, Tổng số đơn, Tỷ lệ thành công %]
+     */
+    @Override
+    public List<Object[]> getPerformanceStats() {
+        List<User> shippers = userDao.getUsersByRole("Shipper");
+        List<Object[]> stats = new ArrayList<>();
+
+        for (User shipper : shippers) {
+            List<Delivery> deliveries = getByShipper(shipper.getUserId());
+
+            long total = deliveries.size();
+            long delivered = deliveries.stream()
+                    .filter(d -> d.getStatus() != null &&
+                            d.getStatus().trim().equalsIgnoreCase("Đã giao"))
+                    .count();
+
+            double successRate = (total == 0) ? 0.0 : ((double) delivered / total * 100.0);
+
+            // Thêm dữ liệu vào danh sách
+            stats.add(new Object[]{
+                    shipper.getName(),   // 0: tên shipper
+                    total,               // 1: tổng số đơn
+                    Math.round(successRate * 100.0) / 100.0  // 2: làm tròn 2 chữ số
+            });
+        }
+
+        return stats;
+    }
+
+	@Override
+	public List<Delivery> findAll() {
+		return deliveryDao.findAll();
+	}
 }
