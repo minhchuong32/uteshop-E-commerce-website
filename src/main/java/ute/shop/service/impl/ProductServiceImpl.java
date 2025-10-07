@@ -103,4 +103,11 @@ public class ProductServiceImpl implements IProductService {
                          .filter(p -> p.getShop().getShopId() == shopId)
                          .toList();
     }
+
+
+	@Override
+	public Product findByIdWithVariants(int productId) {
+		return productDao.findByIdWithVariants(productId);
+	}
+
 }

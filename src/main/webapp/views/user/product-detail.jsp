@@ -118,8 +118,17 @@
 					tục!</div>
 				<!-- Nút hành động -->
 				<div class="d-flex gap-2 mb-3">
+					<c:if test="${not empty sessionScope.cartMessage}">
+						<div class="alert alert-success alert-dismissible fade show"
+							role="alert">
+							${sessionScope.cartMessage}
+							<button type="button" class="btn-close" data-bs-dismiss="alert"
+								aria-label="Close"></button>
+						</div>
+						<c:remove var="cartMessage" scope="session" />
+					</c:if>
 					<!-- Thêm vào giỏ -->
-					<form action="${pageContext.request.contextPath}/user/cart"
+					<form action="${pageContext.request.contextPath}/user/cart/add"
 						method="post" class="flex-fill"
 						onsubmit="return validateSelection()">
 						<input type="hidden" name="productId" value="${product.productId}">

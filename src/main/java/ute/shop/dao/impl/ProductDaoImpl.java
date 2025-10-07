@@ -188,40 +188,36 @@ public class ProductDaoImpl implements IProductDao {
 	
 	@Override
 	public List<Product> filterProducts(Integer categoryId, Double minPrice, Double maxPrice, String sortBy, int page, int size) {
-	    EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getEntityManager();
 	    try {
-	        StringBuilder jpql = new StringBuilder("SELECT p FROM Product p WHERE 1=1");
+	        StringBuilder jpql = new StringBuilder(
+	            "SELECT DISTINCT p FROM Product p JOIN p.variants v WHERE 1=1"
+	        );
 
 	        if (categoryId != null) {
 	            jpql.append(" AND p.category.categoryId = :cid");
 	        }
 	        if (minPrice != null) {
-	            jpql.append(" AND p.price >= :minPrice");
+	            jpql.append(" AND v.price >= :minPrice");
 	        }
 	        if (maxPrice != null) {
-	            jpql.append(" AND p.price <= :maxPrice");
+	            jpql.append(" AND v.price <= :maxPrice");
 	        }
 
-	        // Sắp xếp
+	        // Sắp xếp theo min price trong variants
 	        if ("priceAsc".equals(sortBy)) {
-	            jpql.append(" ORDER BY p.price ASC");
+	            jpql.append(" ORDER BY v.price ASC");
 	        } else if ("priceDesc".equals(sortBy)) {
-	            jpql.append(" ORDER BY p.price DESC");
+	            jpql.append(" ORDER BY v.price DESC");
 	        } else {
-	            jpql.append(" ORDER BY p.productId DESC"); // newest
+	            jpql.append(" ORDER BY p.productId DESC");
 	        }
 
 	        TypedQuery<Product> query = em.createQuery(jpql.toString(), Product.class);
 
-	        if (categoryId != null) {
-	            query.setParameter("cid", categoryId);
-	        }
-	        if (minPrice != null) {
-	            query.setParameter("minPrice", minPrice);
-	        }
-	        if (maxPrice != null) {
-	            query.setParameter("maxPrice", maxPrice);
-	        }
+	        if (categoryId != null) query.setParameter("cid", categoryId);
+	        if (minPrice != null) query.setParameter("minPrice", minPrice);
+	        if (maxPrice != null) query.setParameter("maxPrice", maxPrice);
 
 	        return query.setFirstResult((page - 1) * size)
 	                    .setMaxResults(size)
@@ -233,36 +229,40 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public long countFilterProducts(Integer categoryId, Double minPrice, Double maxPrice) {
-	    EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getEntityManager();
 	    try {
-	        StringBuilder jpql = new StringBuilder("SELECT COUNT(p) FROM Product p WHERE 1=1");
+	        StringBuilder jpql = new StringBuilder(
+	            "SELECT COUNT(DISTINCT p) FROM Product p JOIN p.variants v WHERE 1=1"
+	        );
 
-	        if (categoryId != null) {
-	            jpql.append(" AND p.category.categoryId = :cid");
-	        }
-	        if (minPrice != null) {
-	            jpql.append(" AND p.price >= :minPrice");
-	        }
-	        if (maxPrice != null) {
-	            jpql.append(" AND p.price <= :maxPrice");
-	        }
+	        if (categoryId != null) jpql.append(" AND p.category.categoryId = :cid");
+	        if (minPrice != null) jpql.append(" AND v.price >= :minPrice");
+	        if (maxPrice != null) jpql.append(" AND v.price <= :maxPrice");
 
 	        TypedQuery<Long> query = em.createQuery(jpql.toString(), Long.class);
 
-	        if (categoryId != null) {
-	            query.setParameter("cid", categoryId);
-	        }
-	        if (minPrice != null) {
-	            query.setParameter("minPrice", minPrice);
-	        }
-	        if (maxPrice != null) {
-	            query.setParameter("maxPrice", maxPrice);
-	        }
+	        if (categoryId != null) query.setParameter("cid", categoryId);
+	        if (minPrice != null) query.setParameter("minPrice", minPrice);
+	        if (maxPrice != null) query.setParameter("maxPrice", maxPrice);
 
 	        return query.getSingleResult();
 	    } finally {
 	        em.close();
 	    }
+	}
+
+	@Override
+	public Product findByIdWithVariants(int productId) {
+		EntityManager em = JPAConfig.getEntityManager();
+        try {
+            // Sử dụng JOIN FETCH để load luôn variants
+            String jpql = "SELECT p FROM Product p LEFT JOIN FETCH p.variants WHERE p.productId = :pid";
+            TypedQuery<Product> query = em.createQuery(jpql, Product.class);
+            query.setParameter("pid", productId);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+        }
 	}
 
 

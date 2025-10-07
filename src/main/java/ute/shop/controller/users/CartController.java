@@ -6,21 +6,25 @@ import jakarta.servlet.http.*;
 import ute.shop.entity.CartItem;
 import ute.shop.entity.User;
 import ute.shop.entity.Product;
+import ute.shop.entity.ProductVariant;
 import ute.shop.service.ICartItemService;
 import ute.shop.service.IProductService;
+import ute.shop.service.IProductVariantService;
 import ute.shop.service.impl.CartItemServiceImpl;
 import ute.shop.service.impl.ProductServiceImpl;
+import ute.shop.service.impl.ProductVariantServiceImpl;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(urlPatterns = { "/user/cart", "/user/cart/add" })
+@WebServlet(urlPatterns = { "/user/cart", "/user/cart/add", "/user/cart/remove" })
 
 public class CartController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private final ICartItemService cartService = new CartItemServiceImpl();
 	private final IProductService productService = new ProductServiceImpl();
+	private final IProductVariantService productVariantService = new ProductVariantServiceImpl();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -40,59 +44,68 @@ public class CartController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("UTF-8");
-		HttpSession session = req.getSession();
-		User user = (User) session.getAttribute("account");
+	    req.setCharacterEncoding("UTF-8");
+	    HttpSession session = req.getSession();
+	    User user = (User) session.getAttribute("account");
 
-		if (user == null) {
-			resp.sendRedirect(req.getContextPath() + "/login");
-			return;
-		}
+	    if (user == null) {
+	        resp.sendRedirect(req.getContextPath() + "/login");
+	        return;
+	    }
 
-		String servletPath = req.getServletPath(); // lấy đường dẫn thực tế
+	    String servletPath = req.getServletPath();
 
-		// ---------------- /user/cart/add ----------------
-		if ("/user/cart/add".equals(servletPath)) {
-			try {
-				int productId = Integer.parseInt(req.getParameter("productId"));
-				int quantity = Integer.parseInt(req.getParameter("quantity"));
-				Product product = productService.findById(productId);
+	 // Thêm sản phẩm vào giỏ
+	    if ("/user/cart/add".equals(servletPath)) {
+	        try {
+	            int variantId = Integer.parseInt(req.getParameter("variantId")); // Lấy variantId
+	            int quantity = Integer.parseInt(req.getParameter("quantity"));
 
-				if (product != null) {
-					cartService.addToCart(user, product, quantity);
-					session.setAttribute("cartMessage", "Đã thêm " + product.getName() + " vào giỏ hàng!");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+	            // Tìm variant
+	            ProductVariant variant = productVariantService.findById(variantId);
+	            if (variant != null) {
+	                cartService.addToCart(user, variant, quantity);
+	                session.setAttribute("cartMessage",
+	                        "Đã thêm " + variant.getProduct().getName() + " - " + variant.getOptionName() + " vào giỏ hàng!");
+	            }
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        String referer = req.getHeader("Referer");
+	        resp.sendRedirect(referer != null ? referer : req.getContextPath() + "/user/home");
+	        return;
+	    }
 
-			// Quay lại trang trước
-			String referer = req.getHeader("Referer");
-			resp.sendRedirect(referer != null ? referer : req.getContextPath() + "/user/home");
-			return;
-		}
 
-		// ---------------- /user/cart (tăng, giảm, xóa) ----------------
-		String action = req.getParameter("action");
-		if (action != null) {
-			int productId = Integer.parseInt(req.getParameter("productId"));
-			Product product = productService.findById(productId);
+	    // Xóa sản phẩm
+	    if ("/user/cart/remove".equals(servletPath)) {
+	        try {
+	            int cartItemId = Integer.parseInt(req.getParameter("cartItemId"));
+	            cartService.removeFromCart(cartItemId);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	        resp.sendRedirect(req.getContextPath() + "/user/cart");
+	        return;
+	    }
 
-			switch (action) {
-				case "increase":
-					cartService.updateQuantity(user, product, 1);
-					break;
-				case "decrease":
-					cartService.updateQuantity(user, product, -1);
-					break;
-				case "remove":
-					int cartItemId = Integer.parseInt(req.getParameter("cartItemId"));
-					cartService.removeFromCart(cartItemId);
-					break;
-			}
-		}
+//	    // Tăng/Giảm số lượng
+//	    String action = req.getParameter("action");
+//	    if (action != null) {
+//	        int productId = Integer.parseInt(req.getParameter("productId"));
+//	        Product product = productService.findById(productId);
+//	        switch (action) {
+//	            case "increase":
+//	                cartService.updateQuantity(user, product, 1);
+//	                break;
+//	            case "decrease":
+//	                cartService.updateQuantity(user, product, -1);
+//	                break;
+//	        }
+//	    }
 
-		resp.sendRedirect(req.getContextPath() + "/user/cart");
+	    resp.sendRedirect(req.getContextPath() + "/user/cart");
 	}
+
 
 }

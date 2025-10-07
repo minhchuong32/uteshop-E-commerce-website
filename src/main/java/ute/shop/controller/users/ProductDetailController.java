@@ -33,27 +33,27 @@ public class ProductDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-    	int productId = Integer.parseInt(req.getParameter("id"));
-    	Product product = productService.findById(productId);
-    	
-    	List<Review> reviews = reviewService.getByProductId(productId);
+int productId = Integer.parseInt(req.getParameter("id"));
+        
+        // Lấy product và variants để tránh LazyInitialization
+        Product product = productService.findByIdWithVariants(productId);
 
-    	// lấy list ảnh từ service
-    	List<ProductImage> images = productImageService.getImagesByProduct((long) productId);
-    	
-    	 // check user có mua chưa
+        // Lấy list ảnh
+        List<ProductImage> images = productImageService.getImagesByProduct((long) productId);
+
+        // Lấy reviews
+        List<Review> reviews = reviewService.getByProductId(productId);
+
+        // Kiểm tra user đã mua chưa
         User account = (User) req.getSession().getAttribute("account");
         boolean hasPurchased = false;
         if (account != null) {
             hasPurchased = orderService.hasPurchased(account.getUserId(), productId);
         }
-        
-        // Thông tin shop
-        Shop shop = product.getShop();
-        
-     // Đếm số sản phẩm của shop (tránh LazyInitException)
-        int productCount = product.getShop().getProducts().size();
 
+        // Shop info và số lượng sản phẩm của shop (tránh LazyInitialization)
+        Shop shop = product.getShop();
+        int productCount = productService.countByShop(shop.getShopId());
 
         req.setAttribute("productCount", productCount);
         req.setAttribute("shop", shop);

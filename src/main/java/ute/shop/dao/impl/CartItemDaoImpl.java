@@ -5,6 +5,7 @@ import ute.shop.dao.ICartItemDao;
 import ute.shop.entity.CartItem;
 import ute.shop.entity.User;
 import ute.shop.entity.Product;
+import ute.shop.entity.ProductVariant;
 
 import java.util.List;
 
@@ -92,18 +93,20 @@ public class CartItemDaoImpl implements ICartItemDao {
         }
     }
 
-    @Override
-    public CartItem findByUserAndProduct(User user, Product product) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            return em.createQuery("SELECT c FROM CartItem c WHERE c.user = :user AND c.product = :product", CartItem.class)
-                     .setParameter("user", user)
-                     .setParameter("product", product)
-                     .getResultStream()
-                     .findFirst()
-                     .orElse(null);
-        } finally {
-            em.close();
-        }
-    }
+	@Override
+	public CartItem findByUserAndVariant(User user, ProductVariant variant) {
+		EntityManager em = emf.createEntityManager();
+	    try {
+	        return em.createQuery("SELECT c FROM CartItem c WHERE c.user = :user AND c.productVariant = :variant", CartItem.class)
+	                 .setParameter("user", user)
+	                 .setParameter("variant", variant)
+	                 .getResultStream()
+	                 .findFirst()
+	                 .orElse(null);
+	    } finally {
+	        em.close();
+	    }
+	}
+
+    
 }

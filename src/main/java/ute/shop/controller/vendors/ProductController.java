@@ -193,7 +193,7 @@ public class ProductController extends HttpServlet {
             p.setName(name);
             p.setDescription(description);
             p.setPrice(price);
-            p.setStock(stock);
+            //p.setStock(stock);
             p.setImageUrl(imageUrl);
             p.setCategory(category);
             p.setShop(shop);
@@ -209,7 +209,7 @@ public class ProductController extends HttpServlet {
                 p.setName(req.getParameter("name"));
                 p.setDescription(req.getParameter("description"));
                 p.setPrice(new BigDecimal(req.getParameter("price")));
-                p.setStock(Integer.parseInt(req.getParameter("stock")));
+                //p.setStock(Integer.parseInt(req.getParameter("stock")));
 
                 int categoryId = Integer.parseInt(req.getParameter("categoryId"));
                 Category c = new Category();
