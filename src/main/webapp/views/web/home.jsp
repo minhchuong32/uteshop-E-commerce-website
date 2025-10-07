@@ -158,17 +158,12 @@
 								</div>
 
 								<div class="price-wrapper">
-									<p class="text-danger fw-bold mb-1" style="font-size: 15px;">
-										<fmt:formatNumber value="${p.price}" type="currency"
-											currencySymbol="₫" />
-									</p>
-									<c:if test="${p.oldPrice ne null}">
-										<p class="text-muted text-decoration-line-through mb-0 small">
-											<fmt:formatNumber value="${p.oldPrice}" type="currency"
+										<c:set var="variant" value="${p.variants[0]}" />
+										<p class="text-danger fw-bold mb-1" style="font-size: 15px;">
+											<fmt:formatNumber value="${variant.price}" type="currency"
 												currencySymbol="₫" />
 										</p>
-									</c:if>
-								</div>
+									</div>
 
 								<!-- Điều kiện kiểm tra đăng nhập -->
 								<c:choose>
@@ -228,16 +223,11 @@
 
 								<!-- Giá + nút hành động -->
 								<div class="text-end">
+									<c:set var="variant" value="${p.variants[0]}" />
 									<p class="text-danger fw-bold mb-0">
-										<fmt:formatNumber value="${p.price}" type="currency"
+										<fmt:formatNumber value="${variant.price}" type="currency"
 											currencySymbol="₫" />
 									</p>
-									<c:if test="${p.oldPrice ne null}">
-										<p class="text-muted text-decoration-line-through mb-0 small">
-											<fmt:formatNumber value="${p.oldPrice}" type="currency"
-												currencySymbol="₫" />
-										</p>
-									</c:if>
 
 									<!-- Kiểm tra login -->
 									<c:choose>
