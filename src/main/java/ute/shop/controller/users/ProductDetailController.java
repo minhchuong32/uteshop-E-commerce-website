@@ -53,9 +53,9 @@ int productId = Integer.parseInt(req.getParameter("id"));
 
         // Shop info và số lượng sản phẩm của shop (tránh LazyInitialization)
         Shop shop = product.getShop();
-        int productCount = productService.countByShop(shop.getShopId());
+        //int productCount = productService.countByShop(shop.getShopId());
 
-        req.setAttribute("productCount", productCount);
+        //req.setAttribute("productCount", productCount);
         req.setAttribute("shop", shop);
         req.setAttribute("hasPurchased", hasPurchased);
         req.setAttribute("product", product);
