@@ -170,15 +170,12 @@
 											</p>
 										</c:if>
 									</div>
-									<form action="${pageContext.request.contextPath}/user/cart/add"
-										method="post" class="mt-2">
-										<input type="hidden" name="productId" value="${p.productId}">
-										<input type="hidden" name="quantity" value="1">
-										<button type="submit"
-											class="btn btn-sm btn-primary-custom w-100">
-											<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
-										</button>
-									</form>
+									<button type="button"
+										class="btn btn-sm btn-primary-custom w-100"
+										onclick="window.location.href='${pageContext.request.contextPath}/user/product/detail?id=${p.productId}'">
+										<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+									</button>
+
 
 								</div>
 							</div>
@@ -223,15 +220,11 @@
 												currencySymbol="₫" />
 										</p>
 									</c:if>
-									<form action="${pageContext.request.contextPath}/user/cart/add"
-										method="post" class="mt-2">
-										<input type="hidden" name="productId" value="${p.productId}">
-										<input type="hidden" name="quantity" value="1">
-										<button type="submit"
-											class="btn btn-sm btn-primary-custom w-100">
-											<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
-										</button>
-									</form>
+									<button type="button"
+										class="btn btn-sm btn-primary-custom w-100"
+										onclick="window.location.href='${pageContext.request.contextPath}/user/product/detail?id=${p.productId}'">
+										<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+									</button>
 
 								</div>
 							</a>
