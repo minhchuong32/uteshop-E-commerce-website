@@ -95,4 +95,9 @@ public class ProductServiceImpl implements IProductService {
 			int size) {
 		return productDao.filterProducts(categoryId, minPrice, maxPrice, sortBy, page, size);
 	}
+
+	@Override
+	public Product findByIdWithVariants(int productId) {
+		return productDao.findByIdWithVariants(productId);
+	}
 }

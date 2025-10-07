@@ -21,5 +21,6 @@ public interface IProductService {
 	long countFilterProducts(Integer categoryId, Double minPrice, Double maxPrice);
 	List<Product> filterProducts(Integer categoryId, Double minPrice, Double maxPrice, String sortBy, int page,
 			int size);
+	Product findByIdWithVariants(int productId);
 
 }

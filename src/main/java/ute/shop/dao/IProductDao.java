@@ -38,4 +38,6 @@ public interface IProductDao {
 	List<Product> filterProducts(Integer categoryId, Double minPrice, Double maxPrice, String sortBy, int page,
 			int size);
 
+	Product findByIdWithVariants(int productId);
+
 }

@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductVariant {
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -28,7 +28,6 @@ public class ProductVariant {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    // Ví dụ: "Màu sắc: Đen", "Dung lượng: 128GB", "Loại: USB-C"
     @Column(nullable = false, length = 100)
     private String optionName;
 
@@ -41,7 +40,9 @@ public class ProductVariant {
     @Column(nullable = false, precision = 18, scale = 2)
     private BigDecimal price;
 
-    // Có thể thêm hình ảnh riêng của variant
+    @Column(precision = 18, scale = 2) // có thể null
+    private BigDecimal oldPrice;
+
     @Column(length = 255)
     private String imageUrl;
 }
