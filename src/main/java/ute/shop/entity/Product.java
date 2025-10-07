@@ -3,7 +3,6 @@ package ute.shop.entity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,10 +10,11 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"shop", "category", "orderDetails", "reviews", "images"})
+@ToString(exclude = {"shop", "category", "variants", "orderDetails", "reviews", "images"})
 @Entity
 @Table(name = "products")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
@@ -30,52 +30,46 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    // Tên sản phẩm: NVARCHAR(100) để lưu tiếng Việt
+    // Tên sản phẩm
     @Column(name = "name", nullable = false, length = 100, columnDefinition = "NVARCHAR(100)")
     private String name;
 
-    // Giá hiện tại: DECIMAL(18,2)
-    @Column(name = "price", precision = 18, scale = 2, nullable = false)
-    private BigDecimal price;
-
-    // Giá cũ (hiển thị khi giảm giá)
-    @Column(name = "old_price", precision = 18, scale = 2)
-    private BigDecimal oldPrice;
-
-    // Số lượng tồn kho
-    @Column(name = "stock", nullable = false)
-    private Integer stock;
-
-    // Mô tả: NVARCHAR(MAX)
+    // Mô tả chung
     @Lob
     @Column(name = "description", columnDefinition = "NVARCHAR(MAX)")
     private String description;
 
-    // Ảnh: NVARCHAR(255)
+    // Ảnh đại diện
     @Column(name = "image_url", length = 255, columnDefinition = "NVARCHAR(255)")
     private String imageUrl;
 
-    // Liên kết với chi tiết đơn hàng
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderDetail> orderDetails = new ArrayList<>();
+    // Liên kết với các variant
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<ProductVariant> variants = new ArrayList<>();
+
+    @Transient
+    private BigDecimal price;
+
+
+//    // Liên kết với chi tiết đơn hàng (nếu chưa tách theo variant)
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<OrderDetail> orderDetails = new ArrayList<>();
 
     // Liên kết với đánh giá
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
 
-    // Danh sách ảnh liên quan 
+    // Danh sách ảnh liên quan
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> images = new ArrayList<>();
 
     // ====================== Trường tạm tính toán ======================
-
     @Transient
     private int reviewsCount;
 
     @Transient
     private double averageRating;
 
-    // Callback sau khi load entity từ DB
     @PostLoad
     public void calculateReviews() {
         if (reviews == null || reviews.isEmpty()) {
