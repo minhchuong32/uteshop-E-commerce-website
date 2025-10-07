@@ -1,31 +1,69 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ include file="/commons/taglib.jsp"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/commons/taglib.jsp" %>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Thêm sản phẩm mới | UteShop</title>
+</head>
+<body>
+<div class="container py-4">
+    <h3 class="fw-bold text-primary-custom mb-4">
+        <i class="bi bi-plus-circle"></i> Thêm sản phẩm mới
+    </h3>
 
-<!-- sửa lại -> products  -->
-<div class="container-fluid">
-    <h3 class="mb-4 fw-bold">Thêm cửa hàng mới</h3>
+    <form action="${pageContext.request.contextPath}/vendor/products/add"
+      method="post" enctype="multipart/form-data">
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <form action="${pageContext.request.contextPath}/vendor/products/add" method="post">
-                <div class="mb-3">
-                    <label for="user_id" class="form-label">User ID</label>
-                    <input type="number" class="form-control" id="user_id" name="user_id" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="name" class="form-label">Tên cửa hàng</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="description" class="form-label">Mô tả</label>
-                    <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-success rounded-pill px-4">Thêm cửa hàng</button>
-                <a href="${pageContext.request.contextPath}/admin/shops" class="btn btn-secondary rounded-pill px-4">Hủy</a>
-            </form>
+        <!-- Tên sản phẩm -->
+        <div class="col-md-6">
+            <label class="form-label fw-bold">Tên sản phẩm</label>
+            <input type="text" name="name" class="form-control" required>
         </div>
-    </div>
+
+        <!-- Danh mục -->
+        <div class="col-md-6">
+            <label class="form-label fw-bold">Danh mục</label>
+            <select name="categoryId" class="form-select" required>
+                <option value="">-- Chọn danh mục --</option>
+                <c:forEach var="c" items="${categories}">
+                    <option value="${c.categoryId}">${c.name}</option>
+                </c:forEach>
+            </select>
+        </div>
+
+        <!-- Giá -->
+        <div class="col-md-6">
+            <label class="form-label fw-bold">Giá bán (₫)</label>
+            <input type="number" name="price" class="form-control" required>
+        </div>
+
+        <!-- Tồn kho -->
+        <div class="col-md-6">
+            <label class="form-label fw-bold">Tồn kho</label>
+            <input type="number" name="stock" class="form-control" required>
+        </div>
+
+        <!-- Hình ảnh -->
+        <div class="col-md-6">
+            <label class="form-label fw-bold">Ảnh sản phẩm</label>
+            <input type="file" name="imageFile" class="form-control" accept="image/*" required>
+        </div>
+
+        <!-- Mô tả -->
+        <div class="col-12">
+            <label class="form-label fw-bold">Mô tả</label>
+            <textarea name="description" class="form-control" rows="5" placeholder="Nhập mô tả sản phẩm..."></textarea>
+        </div>
+
+        <div class="col-12 text-end">
+            <a href="${pageContext.request.contextPath}/vendor/products" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Quay lại
+            </a>
+            <button type="submit" class="btn btn-primary-custom">
+                <i class="bi bi-save"></i> Lưu sản phẩm
+            </button>
+        </div>
+    </form>
 </div>
+</body>
+</html>

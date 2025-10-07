@@ -28,7 +28,7 @@ public class HomeController extends HttpServlet {
 
         if (page != null) {
             switch (page) {
-                case "shops":
+                case "products":
                     resp.sendRedirect(req.getContextPath() + "/vendor/products");
                     return;
                 case "orders":
