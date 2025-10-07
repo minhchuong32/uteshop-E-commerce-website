@@ -49,7 +49,7 @@
 					</a></li>
 
 					<li class="nav-item mb-1"><a
-						class="nav-link ${page=='shops' ? 'active' : ''}"
+						class="nav-link ${page=='products' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/vendor/home?page=products">
 							<i class="bi bi-shop me-2"></i> Quản lý Sản phẩm
 					</a></li>

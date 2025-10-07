@@ -34,4 +34,10 @@ public class ShopServiceImpl implements IShopService {
     public void delete(int id) {
         shopDAO.delete(id);
     }
+    
+    @Override
+    public Shop findByUserId(int id) {
+        return shopDAO.findByUserId(id);
+    }
+
 }
