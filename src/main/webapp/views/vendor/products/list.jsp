@@ -9,7 +9,7 @@
             <i class="bi bi-grid me-2"></i> Danh mục sản phẩm
         </h5>
 
-        <!-- Thanh cuộn ngang danh mục -->
+        <!-- Thanh danh mục -->
         <div class="d-flex flex-row flex-nowrap overflow-auto gap-3 pb-2">
             <!-- Tất cả danh mục -->
             <div class="text-center flex-shrink-0">

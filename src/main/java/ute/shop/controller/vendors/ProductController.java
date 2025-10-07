@@ -31,7 +31,6 @@ public class ProductController extends HttpServlet {
     private ICategoryService categoryService = new CategoryServiceImpl();
     private static final int PAGE_SIZE = 6;
 
-    // ✅ Đường dẫn cố định để lưu ảnh
     private static final String PROJECT_IMAGE_PATH =
             "D:\\Java\\LTWeb\\uteshop-E-commerce-website\\src\\main\\webapp\\assets\\images\\products";
 
@@ -60,7 +59,6 @@ public class ProductController extends HttpServlet {
         }
 
         if (uri.endsWith("/products")) {
-            // --- Danh sách sản phẩm ---
             String categoryParam = req.getParameter("category");
             Integer categoryId = null;
             if (categoryParam != null && !categoryParam.isEmpty()) {
