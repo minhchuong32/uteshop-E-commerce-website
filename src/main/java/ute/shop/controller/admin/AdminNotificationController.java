@@ -48,7 +48,7 @@ public class AdminNotificationController extends HttpServlet {
 
                 // Chuyển tới khung chat khiếu nại tương ứng
                 resp.sendRedirect(req.getContextPath()
-                        + "/admin/complaints/chat?id=" + noti.getRelatedComplaintId());
+                        + "/admin/complaints/chat?id=" + noti.getRelatedComplaint().getComplaintId());
             } else {
                 resp.sendRedirect(req.getContextPath() + "/admin/notifications");
             }

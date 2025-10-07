@@ -13,7 +13,7 @@
 <body class="bg-light">
 <div class="container py-5">
 
-    <h4 class="text-center text-primary mb-3">
+    <h4 class="text-center text-primary-custom mb-3">
         <i class="bi bi-chat-square-text"></i> Trao đổi khiếu nại #${complaint.complaintId}
     </h4>
     <p><strong>Người gửi:</strong> ${complaint.user.username}</p>

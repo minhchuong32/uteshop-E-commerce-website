@@ -61,68 +61,7 @@
 					</div>
 				</form>
 
-				<!-- 🔔 Thông báo -->
-				<ul class="navbar-nav align-items-center me-3">
-					<li class="nav-item dropdown position-relative">
-						<a class="nav-link position-relative" href="#" id="notifDropdown"
-							role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<i class="bi bi-bell-fill fs-5 text-dark"></i>
-							<c:if test="${not empty notifications && fn:length(notifications) > 0}">
-								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-									style="font-size: 0.7rem; padding: 3px 6px;">
-									${fn:length(notifications)}
-								</span>
-							</c:if>
-						</a>
-
-						<!-- Danh sách thông báo -->
-						<ul class="dropdown-menu dropdown-menu-end shadow"
-							aria-labelledby="notifDropdown"
-							style="width: 320px; max-height: 400px; overflow-y: auto;">
-							<li class="dropdown-header fw-semibold">Thông báo</li>
-							<li><hr class="dropdown-divider"></li>
-
-							<c:choose>
-								<c:when test="${not empty notifications}">
-									<c:forEach var="n" items="${notifications}">
-										<li>
-											<a class="dropdown-item small text-wrap"
-												href="${pageContext.request.contextPath}/user/notifications/view?id=${n.id}">
-												<div class="d-flex align-items-start">
-													<i class="bi bi-chat-dots-fill text-primary me-2 fs-5"></i>
-													<div>
-														<strong class="text-dark">
-															Khiếu nại #${n.relatedComplaintId}
-														</strong><br>
-														${n.message}<br>
-														<small class="text-muted">
-															<fmt:formatDate value="${n.createdAt}" pattern="dd/MM/yyyy HH:mm" />
-														</small>
-													</div>
-												</div>
-											</a>
-										</li>
-									</c:forEach>
-								</c:when>
-								<c:otherwise>
-									<li>
-										<p class="dropdown-item text-muted small mb-0">
-											Không có thông báo mới.
-										</p>
-									</li>
-								</c:otherwise>
-							</c:choose>
-
-							<li><hr class="dropdown-divider"></li>
-							<li>
-								<a class="dropdown-item text-center text-primary fw-semibold"
-								   href="${pageContext.request.contextPath}/user/notifications">
-									Xem tất cả
-								</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
+				
 
 				<!-- Avatar người dùng + giỏ hàng -->
 				<ul class="navbar-nav mb-2 mb-lg-0 align-items-center user-links ms-auto">
@@ -146,6 +85,8 @@
 							<span class="fw-semibold text-dark">
 								${sessionScope.account.username}
 							</span>
+							
+							<i class="bi bi-caret-down-fill text-secondary small"></i>
 						</a>
 
 						<ul class="dropdown-menu dropdown-menu-end"
@@ -178,6 +119,69 @@
 								src="${pageContext.request.contextPath}/assets/icon/cart.png"
 								alt="cart" />
 						</a>
+					</li>
+				</ul>
+				
+				<!-- 🔔 Thông báo -->
+				<ul class="navbar-nav align-items-center me-3">
+					<li class="nav-item dropdown position-relative">
+						<a class="nav-link position-relative" href="#" id="notifDropdown"
+							role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="bi bi-bell-fill fs-5 text-primary-custom"></i>
+							<c:if test="${not empty notifications && fn:length(notifications) > 0}">
+								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+									style="font-size: 0.7rem; padding: 3px 6px;">
+									${fn:length(notifications)}
+								</span>
+							</c:if>
+						</a>
+
+						<!-- Danh sách thông báo -->
+						<ul class="dropdown-menu dropdown-menu-end shadow"
+							aria-labelledby="notifDropdown"
+							style="width: 320px; max-height: 400px; overflow-y: auto;">
+							<li class="dropdown-header fw-semibold">Thông báo</li>
+							<li><hr class="dropdown-divider"></li>
+
+							<c:choose>
+								<c:when test="${not empty notifications}">
+									<c:forEach var="n" items="${notifications}">
+										<li>
+											<a class="dropdown-item small text-wrap"
+												href="${pageContext.request.contextPath}/user/notifications/view?id=${n.id}">
+												<div class="d-flex align-items-start">
+													<i class="bi bi-chat-dots-fill text-primary me-2 fs-5"></i>
+													<div>
+														<strong class="text-dark">
+															Khiếu nại #${n.relatedComplaint.complaintId}
+														</strong><br>
+														${n.message}<br>
+														<small class="text-muted">
+															<fmt:formatDate value="${n.createdAt}" pattern="dd/MM/yyyy HH:mm" />
+														</small>
+													</div>
+												</div>
+											</a>
+										</li>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<li>
+										<p class="dropdown-item text-muted small mb-0">
+											Không có thông báo mới.
+										</p>
+									</li>
+								</c:otherwise>
+							</c:choose>
+
+							<li><hr class="dropdown-divider"></li>
+							<li>
+								<a class="dropdown-item text-center text-primary fw-semibold"
+								   href="${pageContext.request.contextPath}/user/notifications">
+									Xem tất cả
+								</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</div>

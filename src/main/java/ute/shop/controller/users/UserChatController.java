@@ -70,7 +70,7 @@ public class UserChatController extends HttpServlet {
                 Notification noti = Notification.builder()
                         .user(admin) // admin nhận thông báo
                         .message("Người dùng " + user.getUsername() + " đã gửi tin nhắn trong khiếu nại #" + complaintId)
-                        .relatedComplaintId(complaintId)
+                        .relatedComplaint(complaint)
                         .build();
                 notiService.insert(noti);
             }

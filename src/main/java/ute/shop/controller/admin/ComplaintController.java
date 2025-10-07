@@ -112,7 +112,7 @@ public class ComplaintController extends HttpServlet {
             Notification noti = Notification.builder()
                     .user(complaint.getUser()) // người gửi complaint sẽ nhận thông báo
                     .message("Admin đã phản hồi khiếu nại #" + complaintId)
-                    .relatedComplaintId(complaintId)
+                    .relatedComplaint(complaint)
                     .build();
 
             new NotificationServiceImpl().insert(noti);

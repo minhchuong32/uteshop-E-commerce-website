@@ -14,9 +14,6 @@ public class UserNotificationController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private final NotificationServiceImpl notiService = new NotificationServiceImpl();
-    private final ComplaintServiceImpl complaintService = new ComplaintServiceImpl();
-    private final ComplaintMessageServiceImpl msgService = new ComplaintMessageServiceImpl();
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -30,7 +27,7 @@ public class UserNotificationController extends HttpServlet {
 
         String uri = req.getRequestURI();
 
-        // ======================== 1️⃣ Click "Xem tất cả" ========================
+        // ======================== 1Click "Xem tất cả" ========================
         if (uri.endsWith("/notifications")) {
             List<Notification> notifications = notiService.getAllByUserId(user.getUserId());
             req.setAttribute("notifications", notifications);
@@ -38,7 +35,7 @@ public class UserNotificationController extends HttpServlet {
             return;
         }
 
-        // ======================== 2️⃣ Click vào 1 thông báo cụ thể ========================
+        // ======================== Click vào 1 thông báo cụ thể ========================
         if (uri.endsWith("/notifications/view")) {
             String notiIdParam = req.getParameter("id");
             if (notiIdParam != null) {
@@ -47,14 +44,14 @@ public class UserNotificationController extends HttpServlet {
                     Notification noti = notiService.findById(notiId);
 
                     // Nếu có complaint liên kết
-                    if (noti != null && noti.getRelatedComplaintId() != null) {
+                    if (noti != null && noti.getRelatedComplaint() != null) {
                         // đánh dấu là đã đọc
                         noti.setRead(true);
                         notiService.update(noti);
 
                         // chuyển hướng đến trang chat khiếu nại tương ứng
                         resp.sendRedirect(req.getContextPath()
-                                + "/user/chat?complaintId=" + noti.getRelatedComplaintId());
+                                + "/user/chat?complaintId=" + noti.getRelatedComplaint().getComplaintId());
                         return;
                     }
                 } catch (NumberFormatException e) {

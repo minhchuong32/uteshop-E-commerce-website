@@ -68,7 +68,7 @@
 							<i class="bi bi-truck me-2"></i> Quản lý Vận chuyển
 					</a></li>
 					<li class="nav-item mb-1"><a
-						class="nav-link ${page=='deliveries' ? 'active' : ''}"
+						class="nav-link ${page=='complaints' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=complaints">
 							<i class="bi bi-chat-dots me-2"></i> Quản lý Khiếu nại
 					</a></li>

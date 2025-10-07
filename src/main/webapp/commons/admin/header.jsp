@@ -29,7 +29,7 @@
                     <li class="nav-item dropdown position-relative me-3">
                         <a class="nav-link position-relative" href="#" id="notifDropdown"
                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-bell-fill fs-5 text-dark"></i>
+                            <i class="bi bi-bell-fill fs-5 text-primary-custom"></i>
                             <c:if test="${not empty notifications && fn:length(notifications) > 0}">
                                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                                       style="font-size: 0.7rem; padding: 3px 6px;">
@@ -55,7 +55,7 @@
                                                     <i class="bi bi-chat-dots-fill text-primary me-2 fs-5"></i>
                                                     <div>
                                                         <strong class="text-dark">
-                                                            Khiếu nại #${n.relatedComplaintId}
+                                                            Khiếu nại #${n.relatedComplaint.complaintId}
                                                         </strong><br>
                                                         ${n.message}<br>
                                                         <small class="text-muted">

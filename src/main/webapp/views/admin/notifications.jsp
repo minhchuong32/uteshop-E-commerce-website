@@ -15,7 +15,7 @@
 <div class="container py-4">
 
     <!-- ===== Tiêu đề ===== -->
-    <h3 class="text-primary mb-4">
+    <h3 class="text-primary-custom mb-4">
         <i class="bi bi-bell-fill"></i> Danh sách thông báo
     </h3>
 
@@ -43,10 +43,10 @@
                                 <td>${n.title}</td>
                                 <td>${n.message}</td>
                                 <td>
-                                    <c:if test="${n.relatedComplaintId != null}">
-                                        #${n.relatedComplaintId}
+                                    <c:if test="${n.relatedComplaint.complaintId != null}">
+                                        #${n.relatedComplaint.complaintId}
                                     </c:if>
-                                    <c:if test="${n.relatedComplaintId == null}">
+                                    <c:if test="${n.relatedComplaint.complaintId == null}">
                                         <span class="text-muted">Không có</span>
                                     </c:if>
                                 </td>

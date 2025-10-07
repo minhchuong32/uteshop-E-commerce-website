@@ -51,4 +51,9 @@ public class Complaint {
     @OrderBy("createdAt ASC")
     @Builder.Default
     private List<ComplaintMessage> messages = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "relatedComplaint", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Notification> notifications = new ArrayList<>();
+
 }
