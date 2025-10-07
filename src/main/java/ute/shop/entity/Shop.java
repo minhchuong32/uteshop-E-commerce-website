@@ -18,9 +18,9 @@ public class Shop {
     @Column(name = "shop_id")
     private Integer shopId;
 
-    // Mỗi shop thuộc 1 user (Vendor)
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+ // 🆕 Mỗi shop chỉ thuộc 1 user, 1 user chỉ có 1 shop (1-1)
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
     // Tên shop: NVARCHAR(100)
