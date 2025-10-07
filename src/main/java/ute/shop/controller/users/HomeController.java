@@ -68,7 +68,7 @@ public class HomeController extends HttpServlet {
 		req.setAttribute("maxPrice", maxPrice);
 		req.setAttribute("sortBy", sortBy);
 
-		req.getRequestDispatcher("/views/web/home.jsp").forward(req, resp);
+		req.getRequestDispatcher("/views/user/home.jsp").forward(req, resp);
 	}
 
 }

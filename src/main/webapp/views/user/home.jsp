@@ -170,9 +170,16 @@
 											</p>
 										</c:if>
 									</div>
-									<button class="btn btn-sm btn-primary-custom w-100 mt-2">
-										<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
-									</button>
+									<form action="${pageContext.request.contextPath}/user/cart/add"
+										method="post" class="mt-2">
+										<input type="hidden" name="productId" value="${p.productId}">
+										<input type="hidden" name="quantity" value="1">
+										<button type="submit"
+											class="btn btn-sm btn-primary-custom w-100">
+											<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+										</button>
+									</form>
+
 								</div>
 							</div>
 						</a>
@@ -216,9 +223,16 @@
 												currencySymbol="₫" />
 										</p>
 									</c:if>
-									<button class="btn btn-sm btn-primary-custom mt-2">
-										<i class="bi bi-cart-plus"></i> Thêm vào giỏ
-									</button>
+									<form action="${pageContext.request.contextPath}/user/cart/add"
+										method="post" class="mt-2">
+										<input type="hidden" name="productId" value="${p.productId}">
+										<input type="hidden" name="quantity" value="1">
+										<button type="submit"
+											class="btn btn-sm btn-primary-custom w-100">
+											<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+										</button>
+									</form>
+
 								</div>
 							</a>
 						</c:forEach>
