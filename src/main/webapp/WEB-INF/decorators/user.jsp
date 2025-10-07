@@ -27,7 +27,8 @@
 	href="${pageContext.request.contextPath}/assets/css/detail-product.css">
 </head>
 <body>
-	<%@ include file="/commons/user/header.jsp"%>
+	
+	<%@ include file="/commons/user/header.jsp" %>
 	<div id="main-content">
 		<sitemesh:write property="body" />
 	</div>

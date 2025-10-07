@@ -24,13 +24,23 @@ public class ComplaintDaoImpl implements IComplaintDao {
 
 	@Override
 	public Complaint findById(int id) {
-		EntityManager em = JPAConfig.getEntityManager();
-		try {
-			return em.find(Complaint.class, id);
-		} finally {
-			em.close();
-		}
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = "SELECT c FROM Complaint c " +
+	                      "LEFT JOIN FETCH c.user " +
+	                      "LEFT JOIN FETCH c.order " +
+	                      "WHERE c.complaintId = :id";
+	        return em.createQuery(jpql, Complaint.class)
+	                 .setParameter("id", id)
+	                 .getSingleResult();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    } finally {
+	        em.close();
+	    }
 	}
+
 
 	@Override
 	public void insert(Complaint c) {
@@ -81,4 +91,17 @@ public class ComplaintDaoImpl implements IComplaintDao {
 			em.close();
 		}
 	}
+	
+	public List<Complaint> findByUserId(int userId) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = "SELECT c FROM Complaint c WHERE c.user.userId = :uid ORDER BY c.createdAt DESC";
+	        return em.createQuery(jpql, Complaint.class)
+	                 .setParameter("uid", userId)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
+
 }

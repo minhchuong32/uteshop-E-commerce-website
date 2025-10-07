@@ -8,7 +8,6 @@ import ute.shop.entity.User;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 
 public class OrderDaoImpl implements IOrderDao {
 
@@ -24,13 +23,13 @@ public class OrderDaoImpl implements IOrderDao {
     }
 
     @Override
-    public Optional<Order> getById(int id) {
+    public Order getById(int id) {
     	 EntityManager em = JPAConfig.getEntityManager();
-        try {
-            return Optional.ofNullable(em.find(Order.class, id));
-        } finally {
-            em.close();
-        }
+    	    try {
+    	        return em.find(Order.class, id);
+    	    } finally {
+    	        em.close();
+    	    }
     }
 
     @Override

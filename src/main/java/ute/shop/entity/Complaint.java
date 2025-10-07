@@ -2,7 +2,9 @@ package ute.shop.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "complaints")
@@ -36,9 +38,17 @@ public class Complaint {
     @Column(name = "status", columnDefinition = "NVARCHAR(50)")
     private String status; // "Chờ xử lý" / "Đang xử lý" / "Đã giải quyết"
 
+    // 📎 Tên file đính kèm (ảnh, video, tài liệu)
+    @Column(name = "attachment", columnDefinition = "NVARCHAR(255)")
+    private String attachment;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
+    @Builder.Default
     private Date createdAt = new Date();
-    
- 
+
+    @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("createdAt ASC")
+    @Builder.Default
+    private List<ComplaintMessage> messages = new ArrayList<>();
 }

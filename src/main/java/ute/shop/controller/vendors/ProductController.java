@@ -3,7 +3,6 @@ package ute.shop.controller.vendors;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -49,9 +48,9 @@ public class ProductController extends HttpServlet {
             String idParam = req.getParameter("id");
             if (idParam != null && !idParam.isEmpty()) {
                 int id = Integer.parseInt(idParam);
-                Optional<Order> orderOpt = orderService.getById(id);
-                orderOpt.ifPresent(o -> req.setAttribute("order", o));
-               
+                Order o = orderService.getById(id);
+                
+                req.setAttribute("order", o);
                 req.setAttribute("page", "orders");
                 req.setAttribute("view", "/views/vendor/products/edit.jsp");
                 req.getRequestDispatcher("/WEB-INF/decorators/vendor.jsp").forward(req, resp);
@@ -107,12 +106,13 @@ public class ProductController extends HttpServlet {
             String status = req.getParameter("status");
             String paymentMethod = req.getParameter("payment_method");
 
-            orderService.getById(id).ifPresent(order -> {
+            Order order = orderService.getById(id);
+            if (order != null) {
                 order.setTotalAmount(totalAmount);
                 order.setStatus(status);
                 order.setPaymentMethod(paymentMethod);
                 orderService.update(order);
-            });
+            }
             resp.sendRedirect(req.getContextPath() + "/vendor/products");
 
         }

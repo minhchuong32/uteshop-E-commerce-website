@@ -4,6 +4,7 @@ encoding//src/main/webapp/WEB-INF/decorators/user.jsp=UTF-8
 encoding//src/main/webapp/commons/user/footer.jsp=UTF-8
 encoding//src/main/webapp/commons/user/header.jsp=UTF-8
 encoding//src/main/webapp/index.jsp=UTF-8
+encoding//src/main/webapp/views/admin/complaints/chat.jsp=UTF-8
 encoding//src/main/webapp/views/admin/dashboard.jsp=UTF-8
 encoding//src/main/webapp/views/admin/users/dashboard.jsp=UTF-8
 encoding//src/main/webapp/views/auth/setting-password.jsp=UTF-8

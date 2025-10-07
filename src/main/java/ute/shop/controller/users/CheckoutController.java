@@ -34,9 +34,9 @@ public class CheckoutController extends HttpServlet {
         }
 
         // Lấy thông tin từ form
-        String fullname = req.getParameter("fullname");
-        String phone = req.getParameter("phone");
-        String address = req.getParameter("address");
+//        String fullname = req.getParameter("fullname");
+//        String phone = req.getParameter("phone");
+//        String address = req.getParameter("address");
         String payment = req.getParameter("payment");
 
         // Lấy giỏ hàng từ DB

@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ include file="/commons/taglib.jsp"%>
 
 <h3 class="mb-4">Quản lý khiếu nại</h3>
 <div class="table-responsive">
@@ -19,23 +19,31 @@
 		<tbody>
 			<c:forEach var="c" items="${complaints}">
 				<tr>
-					<td style=" min-width: 60px !important;">${c.complaintId}</td>
+					<td style="min-width: 60px !important;">${c.complaintId}</td>
 					<td>${c.user.name}</td>
 					<td>${c.order.orderId}</td>
 					<td>${c.title}</td>
 					<td>${c.content}</td>
 					<td><span class="badge bg-info">${c.status}</span></td>
 					<td>${c.createdAt}</td>
-					<td class="text-center"><a
+					<td class="text-center">
+						<!-- Nút Chat --> <a
+						href="${pageContext.request.contextPath}/admin/complaints/chat?id=${c.complaintId}"
+						class="text-success me-3" title="Trao đổi khiếu nại"> <i
+							class="bi bi-chat-dots-fill fs-5"></i>
+					</a> <!-- Nút Sửa --> <a
 						href="${pageContext.request.contextPath}/admin/complaints/edit?id=${c.complaintId}"
-						class="text-primary me-3"><i class="bi bi-pencil-fill"></i></a> <a
-						href="javascript:void(0);" class="text-danger"
+						class="text-primary me-3" title="Chỉnh sửa"> <i
+							class="bi bi-pencil-fill"></i>
+					</a> <!-- Nút Xóa --> <a href="javascript:void(0);" class="text-danger"
 						data-bs-toggle="modal"
 						data-bs-target="#confirmDeleteComplaintModal"
 						data-id="${c.complaintId}"
 						data-url="${pageContext.request.contextPath}/admin/complaints/delete"
 						title="Xóa khiếu nại"> <i class="bi bi-trash-fill fs-5"></i>
-					</a></td>
+					</a>
+					</td>
+
 				</tr>
 			</c:forEach>
 		</tbody>
