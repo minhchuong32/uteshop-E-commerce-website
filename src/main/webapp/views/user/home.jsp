@@ -159,20 +159,20 @@
 											class="text-muted">(${p.reviewsCount} đánh giá)</small>
 									</div>
 									<div class="price-wrapper">
+										<c:set var="variant" value="${p.variants[0]}" />
 										<p class="text-danger fw-bold mb-1" style="font-size: 15px;">
-											<fmt:formatNumber value="${p.price}" type="currency"
+											<fmt:formatNumber value="${variant.price}" type="currency"
 												currencySymbol="₫" />
 										</p>
-										<c:if test="${p.oldPrice ne null}">
-											<p class="text-muted text-decoration-line-through mb-0 small">
-												<fmt:formatNumber value="${p.oldPrice}" type="currency"
-													currencySymbol="₫" />
-											</p>
-										</c:if>
 									</div>
-									<button class="btn btn-sm btn-primary-custom w-100 mt-2">
+
+									<button type="button"
+										class="btn btn-sm btn-primary-custom w-100"
+										onclick="window.location.href='${pageContext.request.contextPath}/user/product/detail?id=${p.productId}'">
 										<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
 									</button>
+
+
 								</div>
 							</div>
 						</a>
@@ -206,20 +206,18 @@
 									</div>
 								</div>
 								<div class="text-end">
+									<c:set var="variant" value="${p.variants[0]}" />
 									<p class="text-danger fw-bold mb-0">
-										<fmt:formatNumber value="${p.price}" type="currency"
+										<fmt:formatNumber value="${variant.price}" type="currency"
 											currencySymbol="₫" />
 									</p>
-									<c:if test="${p.oldPrice ne null}">
-										<p class="text-muted text-decoration-line-through mb-0 small">
-											<fmt:formatNumber value="${p.oldPrice}" type="currency"
-												currencySymbol="₫" />
-										</p>
-									</c:if>
-									<button class="btn btn-sm btn-primary-custom mt-2">
-										<i class="bi bi-cart-plus"></i> Thêm vào giỏ
+									<button type="button"
+										class="btn btn-sm btn-primary-custom w-100"
+										onclick="window.location.href='${pageContext.request.contextPath}/user/product/detail?id=${p.productId}'">
+										<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
 									</button>
 								</div>
+
 							</a>
 						</c:forEach>
 					</c:otherwise>

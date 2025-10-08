@@ -3,6 +3,7 @@ package ute.shop.dao;
 import ute.shop.entity.CartItem;
 import ute.shop.entity.User;
 import ute.shop.entity.Product;
+import ute.shop.entity.ProductVariant;
 
 import java.util.List;
 
@@ -12,5 +13,6 @@ public interface ICartItemDao {
     boolean delete(Integer cartItemId);
     CartItem findById(Integer cartItemId);
     List<CartItem> findByUser(User user);
-    CartItem findByUserAndProduct(User user, Product product);
+//    CartItem findByUserAndProduct(User user, Product product);
+    CartItem findByUserAndVariant(User user, ProductVariant variant);
 }

@@ -64,7 +64,7 @@
 							<p class="fw-bold mb-0 ms-3">${item.product.price * item.quantity}
 								₫</p>
 
-							<!-- Xóa sản phẩm -->
+							<!-- Xóa sản phẩm 
 							<form action="${pageContext.request.contextPath}/user/cart"
 								method="post" class="ms-3">
 								<input type="hidden" name="productId"
@@ -72,7 +72,19 @@
 									name="cartItemId" value="${item.cartItemId}">
 								<button type="submit" name="action" value="remove"
 									class="btn btn-sm btn-danger">🗑</button>
+							</form> -->
+							<!-- Xóa sản phẩm với confirmation và URL remove riêng -->
+							<form
+								action="${pageContext.request.contextPath}/user/cart/remove"
+								method="post" class="ms-3 d-inline">
+								<input type="hidden" name="cartItemId"
+									value="${item.cartItemId}">
+								<button type="submit" class="btn btn-sm btn-danger"
+									onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?');">
+									🗑</button>
 							</form>
+
+
 						</div>
 					</div>
 				</c:forEach>

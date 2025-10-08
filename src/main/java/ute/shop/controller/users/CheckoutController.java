@@ -47,12 +47,17 @@ public class CheckoutController extends HttpServlet {
             return;
         }
 
-        // Tính tổng tiền
+     // Tính tổng tiền
         BigDecimal totalAmount = BigDecimal.ZERO;
         for (CartItem item : cartItems) {
-            totalAmount = totalAmount.add(item.getProduct().getPrice()
-                    .multiply(BigDecimal.valueOf(item.getQuantity())));
+            // Lấy giá từ variant nếu có, không lấy từ product
+            BigDecimal price = (item.getProductVariant() != null) 
+                    ? item.getProductVariant().getPrice() 
+                    : item.getProductVariant().getPrice(); 
+
+            totalAmount = totalAmount.add(price.multiply(BigDecimal.valueOf(item.getQuantity())));
         }
+
 
         // Tạo order
         Order order = new Order();

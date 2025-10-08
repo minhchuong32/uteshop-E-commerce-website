@@ -5,7 +5,7 @@ import ute.shop.dao.IStoreSettingsDao;
 import ute.shop.entity.StoreSettings;
 
 
-public class StoreSettingsDaoImpl implements IStoreSettingsDao {
+public class StoreSettingsDAOImpl implements IStoreSettingsDao {
 
     private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("UteShop");
 

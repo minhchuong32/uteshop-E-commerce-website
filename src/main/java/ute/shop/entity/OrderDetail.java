@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDetail {
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_detail_id")
     private Integer orderDetailId;
@@ -20,17 +20,17 @@ public class OrderDetail {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    // Mỗi dòng chi tiết gắn với 1 sản phẩm
+    // Mỗi dòng chi tiết gắn với 1 variant của sản phẩm
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @JoinColumn(name = "product_variant_id", nullable = false)
+    private ProductVariant productVariant;
 
     // Số lượng
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private Integer quantity;
 
-    // Giá tại thời điểm đặt: DECIMAL(18,2)
-    @Column(name = "price", precision = 18, scale = 2, nullable = false)
+    // Giá tại thời điểm đặt
+    @Column(precision = 18, scale = 2, nullable = false)
     private BigDecimal price;
     
 }

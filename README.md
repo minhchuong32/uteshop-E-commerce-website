@@ -214,11 +214,10 @@ source path_file_sql;
 ## 👥 3. Phân chia công việc
 
 ### 📍 **Chương (Tài khoản & Quản lý người dùng)**
-- **Tuần 1:** Đăng ký / Đăng nhập (Servlet + JSP + JDBC), session + cookie, hash password.
+- **Tuần 1:** Đăng ký / Đăng nhập (Servlet + JSP + JPA), session + cookie, hash password.
 - **Tuần 2:** Phân quyền (Guest/User/Vendor/Admin/Shipper), AuthFilter.
-- **Tuần 3:** Admin CRUD User, Remember Me.
-- **Tuần 4:** Fix bug, viết báo cáo.
-
+- **Tuần 3:** Admin 
+- **Tuần 4:** 
 **File chính:**
 ```
 controller/AuthController.java
