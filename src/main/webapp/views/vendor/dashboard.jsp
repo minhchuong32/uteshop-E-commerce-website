@@ -191,6 +191,7 @@
 	});
 </script>
 <script>
+	// --- Order Status Chart ---
 	const orderStatusLabels = [
 	<c:forEach var="r" items="${orderStatus}" varStatus="loop">
 	'${r[0]}'
@@ -204,17 +205,33 @@
 	<c:if test="${!loop.last}">, </c:if>
 	</c:forEach>
 	];
-	
+
+	// Màu đa dạng cho order status
+	const orderColors = [
+	    '#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', 
+	    '#edc948', '#b07aa1', '#ff9da7', '#9c755f', '#bab0ab'
+	];
+
 	new Chart(document.getElementById('orderStatusChart'), {
 	    type: 'pie',
 	    data: {
 	        labels: orderStatusLabels,
-	        datasets: [{ data: orderStatusData, backgroundColor: ['#28a745','#ffc107','#dc3545'] }]
+	        datasets: [{
+	            data: orderStatusData,
+	            backgroundColor: orderColors.slice(0, orderStatusLabels.length)
+	        }]
 	    },
-	    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+	    options: {
+	        responsive: true,
+	        plugins: {
+	            legend: { position: 'bottom' }
+	        }
+	    }
 	});
 </script>
+
 <script>
+	// --- Category Chart ---
 	const categoryLabels = [
 	<c:forEach var="r" items="${categoryStats}" varStatus="loop">
 	'${r[0]}'
@@ -228,13 +245,27 @@
 	<c:if test="${!loop.last}">, </c:if>
 	</c:forEach>
 	];
-	
+
+	// Màu đa dạng cho category
+	const categoryColors = [
+	    '#36a2eb', '#ff6384', '#ffcd56', '#4bc0c0', '#9966ff',
+	    '#c9cbcf', '#ff9f40', '#8dd3c7', '#bebada', '#fb8072'
+	];
+
 	new Chart(document.getElementById('categoryChart'), {
 	    type: 'doughnut',
 	    data: {
 	        labels: categoryLabels,
-	        datasets: [{ data: categoryData, backgroundColor: ['#36a2eb','#ff6384','#ffcd56','#4bc0c0'] }]
+	        datasets: [{
+	            data: categoryData,
+	            backgroundColor: categoryColors.slice(0, categoryLabels.length)
+	        }]
 	    },
-	    options: { responsive: true, plugins: { legend: { position: 'right' } } }
+	    options: {
+	        responsive: true,
+	        plugins: {
+	            legend: { position: 'right' }
+	        }
+	    }
 	});
 </script>
