@@ -7,25 +7,46 @@
 	<form action="${pageContext.request.contextPath}/vendor/settings"
 		method="post" enctype="multipart/form-data">
 
-		<!-- Thông tin cửa hàng (theo bảng shops) -->
+		<!-- Thông tin cửa hàng -->
 		<div class="card shadow-sm mb-4">
-			<div class="card-header fw-bold bg-light">Thông tin cửa hàng</div>
-			<div class="card-body">
-				<input type="hidden" name="shop_id" value="${shop.shopId}">
-				<div class="mb-3">
-					<label class="form-label">Tên cửa hàng</label> <input type="text"
-						class="form-control" name="name" value="${shop.name}">
-				</div>
-				<div class="mb-3">
-					<label class="form-label">Mô tả</label>
-					<textarea class="form-control" name="description" rows="2">${shop.description}</textarea>
-				</div>
-				<div class="mb-3">
-					<label class="form-label">Ngày tạo</label> <input type="text"
-						class="form-control" value="${shop.createdAt}" disabled>
-				</div>
-			</div>
+		    <div class="card-header fw-bold bg-light">Thông tin cửa hàng</div>
+		    <div class="card-body">
+		        <!-- Logo -->
+		        <div class="mb-3 text-center">
+		            <label class="form-label d-block">Logo cửa hàng</label>
+		            <c:choose>
+		                <c:when test="${not empty shop.logo}">
+		                    <img src="${pageContext.request.contextPath}/uploads/${shop.logo}" 
+		                         alt="logo" class="img-thumbnail mx-auto d-block" width="150" height="150" style="object-fit: cover;">
+		                </c:when>
+		                <c:otherwise>
+		                    <img src="${pageContext.request.contextPath}/uploads/default_logo.png" 
+		                         alt="logo" class="img-thumbnail mx-auto d-block" width="150" height="150" style="object-fit: cover;">
+		                </c:otherwise>
+		            </c:choose>
+		            <input type="file" class="form-control mt-3" name="logoFile" accept="image/*">
+		        </div>
+		
+		        <!-- Tên cửa hàng -->
+		        <div class="mb-3">
+		            <label class="form-label">Tên cửa hàng</label>
+		            <input type="text" class="form-control" name="store_name" value="${shop.name}">
+		        </div>
+		
+		        <!-- Mô tả -->
+		        <div class="mb-3">
+		            <label class="form-label">Mô tả</label>
+		            <textarea class="form-control" name="description" rows="3">${shop.description}</textarea>
+		        </div>
+		
+		        <!-- Ngày tạo -->
+		        <div class="mb-3">
+		            <label class="form-label">Ngày tạo</label>
+		            <input type="text" class="form-control" value="${shop.createdAt}" disabled>
+		        </div>
+		    </div>
 		</div>
+
 
 		<!-- Thông tin cá nhân vendor (theo bảng users) -->
 		<div class="card shadow-sm mb-4">
