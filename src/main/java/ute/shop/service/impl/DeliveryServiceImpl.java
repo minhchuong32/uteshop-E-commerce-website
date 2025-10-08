@@ -93,4 +93,15 @@ public class DeliveryServiceImpl implements IDeliveryService {
         return deliveryDao.getRecentDeliveries(shipperId, limit);
     }
 
+	@Override
+	public List<Delivery> findUnassignedDeliveries() {
+		// TODO Auto-generated method stub
+		return deliveryDao.findUnassignedDeliveries();
+	}
+
+	@Override
+	public void assignToShipper(Integer deliveryId, Integer shipperId) {
+		deliveryDao.assignToShipper(deliveryId, shipperId);
+	}
+
 }

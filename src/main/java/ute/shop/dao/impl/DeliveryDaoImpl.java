@@ -64,26 +64,67 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 		}
 	}
 
+//	@Override
+//	public void updateStatus(Integer deliveryId, String status) {
+//		EntityManager em = emf.createEntityManager();
+//		EntityTransaction tx = em.getTransaction();
+//		try {
+//			tx.begin();
+//			Delivery d = em.find(Delivery.class, deliveryId);
+//			if (d != null) {
+//				d.setStatus(status);
+//				em.merge(d);
+//			}
+//			tx.commit();
+//		} catch (Exception e) {
+//			if (tx.isActive())
+//				tx.rollback();
+//			throw e;
+//		} finally {
+//			em.close();
+//		}
+//	}
 	@Override
 	public void updateStatus(Integer deliveryId, String status) {
-		EntityManager em = emf.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		try {
-			tx.begin();
-			Delivery d = em.find(Delivery.class, deliveryId);
-			if (d != null) {
-				d.setStatus(status);
-				em.merge(d);
-			}
-			tx.commit();
-		} catch (Exception e) {
-			if (tx.isActive())
-				tx.rollback();
-			throw e;
-		} finally {
-			em.close();
-		}
+	    EntityManager em = emf.createEntityManager();
+	    EntityTransaction tx = em.getTransaction();
+	    try {
+	        tx.begin();
+	        Delivery d = em.find(Delivery.class, deliveryId);
+	        if (d != null) {
+	            d.setStatus(status);
+
+	            // ✅ Đồng bộ trạng thái với Order tương ứng
+	            if (d.getOrder() != null) {
+	                switch (status) {
+	                    case "Đang giao":
+	                        d.getOrder().setStatus("Đang giao");
+	                        break;
+	                    case "Đã giao":
+	                        d.getOrder().setStatus("Đã giao");
+	                        break;
+	                    case "Trả lại":
+	                        d.getOrder().setStatus("Trả lại");
+	                        break;
+	                    case "Hủy":
+	                        d.getOrder().setStatus("Đã hủy");
+	                        break;
+	                    default:
+	                        d.getOrder().setStatus(status);
+	                }
+	            }
+
+	            em.merge(d);
+	        }
+	        tx.commit();
+	    } catch (Exception e) {
+	        if (tx.isActive()) tx.rollback();
+	        throw e;
+	    } finally {
+	        em.close();
+	    }
 	}
+
 
 	@Override
 	public void delete(Integer id) {
@@ -164,6 +205,47 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 	        em.close();
 	    }
 	}
+	
+	//Shipper QL đơn
+	@Override
+	public List<Delivery> findUnassignedDeliveries() {
+	    EntityManager em = emf.createEntityManager();
+	    try {
+	        // Lấy các đơn chưa gán shipper hoặc đang trong trạng thái chờ nhận
+	        return em.createQuery("""
+	                SELECT d FROM Delivery d
+	                JOIN FETCH d.order o
+	                WHERE d.status IN ('Tìm shipper', 'Đã gán')
+	                ORDER BY d.createdAt DESC
+	                """, Delivery.class)
+	                .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
+	
+	@Override
+	public void assignToShipper(Integer deliveryId, Integer shipperId) {
+	    EntityManager em = emf.createEntityManager();
+	    EntityTransaction tx = em.getTransaction();
+	    try {
+	        tx.begin();
+	        Delivery d = em.find(Delivery.class, deliveryId);
+	        if (d != null) {
+	            d.setStatus("Đang giao");
+	            d.getOrder().setStatus("Đang giao");
 
+	            d.setShipper(em.getReference(ute.shop.entity.User.class, shipperId));
+
+	            em.merge(d);
+	        }
+	        tx.commit();
+	    } catch (Exception e) {
+	        if (tx.isActive()) tx.rollback();
+	        throw e;
+	    } finally {
+	        em.close();
+	    }
+	}
 
 }

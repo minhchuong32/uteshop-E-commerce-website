@@ -14,4 +14,7 @@ public interface IDeliveryDao {
     List<Object[]> getSuccessRateByMonth(int shipperId);
     List<Object[]> getRecentDeliveries(int shipperId, int limit);
     long countByStatus(int shipperId, String status);
+    
+    List<Delivery> findUnassignedDeliveries();
+    void assignToShipper(Integer deliveryId, Integer shipperId);
 }
