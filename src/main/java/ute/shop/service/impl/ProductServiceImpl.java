@@ -131,5 +131,10 @@ public class ProductServiceImpl implements IProductService {
 		return productDao.getProductCountByCategory(shopId);
 	}
 
+	@Override
+	public List<Object[]> findBestSellingProducts(int limit) {
+		return productDao.findBestSellingProducts(limit);
+	}
+
 
 }

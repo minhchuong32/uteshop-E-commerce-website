@@ -6,12 +6,14 @@
 	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
 
 <div class="container-fluid">
-	<h3 class="mb-4 fw-bold">Quản lý người dùng</h3>
+	<h3 class="text-primary-custom fw-bold mb-4">
+		<i class="bi bi-people-fill me-2"></i> Quản lý người dùng
+	</h3>
 
 	<!-- Nút thêm mới -->
 	<div class="mb-3">
 		<a href="${pageContext.request.contextPath}/admin/users/add"
-			class="btn btn-success"> <i class="bi bi-person-plus-fill me-2"></i>
+			class="btn btn-success"> <i class="bi bi-plus"></i>
 			Thêm người dùng
 		</a>
 	</div>
@@ -45,13 +47,13 @@
 			<table id="userTable" class="table table-hover align-middle mb-0">
 				<thead class="table-light">
 					<tr>
-						<th class="text-center" >ID</th>
-						<th class="text-center" >Người dùng</th>
-						<th class="text-center" >Email</th>
-						<th class="text-center" >Số điện thoại</th>
-						<th class="text-center" >Địa chỉ</th>
-						<th class="text-center" >Vai trò</th>
-						<th class="text-center" >Trạng thái</th>
+						<th class="text-center">ID</th>
+						<th class="text-center">Người dùng</th>
+						<th class="text-center">Email</th>
+						<th class="text-center">Số điện thoại</th>
+						<th class="text-center">Địa chỉ</th>
+						<th class="text-center">Vai trò</th>
+						<th class="text-center">Trạng thái</th>
 						<th class="text-center">Hành động</th>
 					</tr>
 				</thead>

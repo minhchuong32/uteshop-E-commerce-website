@@ -1,6 +1,7 @@
 package ute.shop.dao.impl;
 
 import jakarta.persistence.*;
+import ute.shop.config.JPAConfig;
 import ute.shop.dao.IUserDao;
 import ute.shop.entity.User;
 
@@ -201,5 +202,16 @@ public class UserDaoImpl implements IUserDao {
             em.close();
         }
     }
+    
+    @Override
+    public long countAllUsers() {
+        EntityManager em = JPAConfig.getEntityManager();
+        try {
+            return em.createQuery("SELECT COUNT(u) FROM User u", Long.class).getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
 
 }

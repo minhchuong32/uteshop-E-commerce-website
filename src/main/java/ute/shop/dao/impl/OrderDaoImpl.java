@@ -219,5 +219,37 @@ public class OrderDaoImpl implements IOrderDao {
 	        em.close();
 	    }
 	}
+	
+	@Override
+	public long countAllOrders() {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        return em.createQuery("SELECT COUNT(o) FROM Order o", Long.class).getSingleResult();
+	    } finally {
+	        em.close();
+	    }
+	}
+	
+	@Override
+	public List<Order> findRecentOrders(int limit) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = """
+	            SELECT DISTINCT o FROM Order o
+	            LEFT JOIN FETCH o.orderDetails od
+	            LEFT JOIN FETCH od.productVariant pv
+	            LEFT JOIN FETCH pv.product p
+	            ORDER BY o.createdAt DESC
+	        """;
+	        return em.createQuery(jpql, Order.class)
+	                 .setMaxResults(limit)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
+
+
+	
 
 }

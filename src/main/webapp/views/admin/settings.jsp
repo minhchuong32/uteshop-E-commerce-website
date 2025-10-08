@@ -2,7 +2,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <div class="container-fluid">
-	<h3 class="mb-4 fw-bold">Cài đặt hệ thống</h3>
+	<h3 class="mb-4 text-primary-custom fw-bold">
+		<i class="bi bi-gear-fill me-2"></i> Cài đặt hệ thống
+	</h3>
 
 	<form action="${pageContext.request.contextPath}/admin/settings"
 		method="post" enctype="multipart/form-data">

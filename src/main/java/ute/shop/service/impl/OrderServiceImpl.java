@@ -78,4 +78,14 @@ public class OrderServiceImpl implements IOrderService {
 	public User getOrderShipper(Order order) {
 		return orderDao.getOrderShipper(order);
 	}
+
+	@Override
+	public long countAllOrders() {
+		return orderDao.countAllOrders();
+	}
+
+	@Override
+	public List<Order> findRecentOrders(int limit) {
+		return orderDao.findRecentOrders(limit);
+	}
 }

@@ -22,4 +22,6 @@ public interface IOrderDao {
 	
 	List<Order> getOrdersByShopAndStatuses(int shopId, List<String> statuses);
 	User getOrderShipper(Order order);
+	long countAllOrders();
+	List<Order> findRecentOrders(int limit);
 }

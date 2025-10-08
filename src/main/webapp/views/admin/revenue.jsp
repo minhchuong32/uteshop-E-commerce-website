@@ -13,7 +13,7 @@
 
 <body class="bg-light">
 	<div class="container py-4">
-		<h3 class="text-primary-custom-custom mb-4">
+		<h3 class="text-primary-custom fw-bold mb-4">
 			<i class="bi bi-bar-chart"></i> Quản lý doanh thu sàn thương mại
 		</h3>
 		<!-- 🔹 Bộ lọc doanh thu -->

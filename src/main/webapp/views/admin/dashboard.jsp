@@ -1,119 +1,194 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<h5 class="mb-3">Thống kê nhanh</h5>
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+
+<style>
+/* ====== Hiệu ứng click card ====== */
+.dashboard-card {
+	cursor: pointer;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+	text-decoration: none;
+	color: inherit;
+	display: block;
+}
+.dashboard-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+	text-decoration: none;
+}
+
+/* Bo góc và canh giữa icon + chữ */
+.dashboard-card .card-body {
+	padding: 1.3rem;
+}
+.dashboard-card i {
+	display: block;
+	margin-bottom: 0.4rem;
+}
+</style>
+
+
+
+<h3 class="text-primary-custom fw-bold mb-4">
+	<i class="bi bi-speedometer2"></i> Thống kê nhanh
+</h3>
+
+<!-- === Thống kê nhanh === -->
 <div class="row g-3 mb-4">
-    <div class="col-md-3">
-        <div class="card text-center shadow-sm">
-            <div class="card-body">
-                <i class="bi bi-people-fill fs-2 mb-2 text-primary"></i>
-                <h6 class="card-title">Users</h6>
-                <p class="mb-0">150</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
+
+	<!-- Người dùng -->
+	<div class="col-md-3">
+		<a href="${pageContext.request.contextPath}/admin/users" class="dashboard-card">
 			<div class="card text-center shadow-sm">
 				<div class="card-body">
-					<i class="bi bi-box-seam fs-2 mb-2 text-success"></i>
+					<i class="bi bi-people-fill fs-2 text-primary"></i>
+					<h6 class="card-title">Người dùng</h6>
+					<p class="fw-bold mb-0">${totalUsers}</p>
+				</div>
+			</div>
+		</a>
+	</div>
+
+	<!-- Sản phẩm -->
+	<div class="col-md-3">
+		<a href="${pageContext.request.contextPath}/admin/products" class="dashboard-card">
+			<div class="card text-center shadow-sm">
+				<div class="card-body">
+					<i class="bi bi-box-seam fs-2 text-success"></i>
 					<h6 class="card-title">Sản phẩm</h6>
-					<p class="mb-0">320</p>
+					<p class="fw-bold mb-0">${totalProducts}</p>
 				</div>
 			</div>
-		</div>
-		<div class="col-md-3">
+		</a>
+	</div>
+
+	<!-- Đơn hàng -->
+	<div class="col-md-3">
+		<a href="${pageContext.request.contextPath}/admin/deliveries" class="dashboard-card">
 			<div class="card text-center shadow-sm">
 				<div class="card-body">
-					<i class="bi bi-cart-check-fill fs-2 mb-2 text-warning"></i>
+					<i class="bi bi-cart-check-fill fs-2 text-warning"></i>
 					<h6 class="card-title">Đơn hàng</h6>
-					<p class="mb-0">75</p>
+					<p class="fw-bold mb-0">${totalOrders}</p>
 				</div>
 			</div>
-		</div>
-		<div class="col-md-3">
+		</a>
+	</div>
+
+	<!-- Doanh thu -->
+	<div class="col-md-3">
+		<a href="${pageContext.request.contextPath}/admin/revenue" class="dashboard-card">
 			<div class="card text-center shadow-sm">
 				<div class="card-body">
-					<i class="bi bi-cash-stack fs-2 mb-2 text-danger"></i>
+					<i class="bi bi-cash-stack fs-2 text-danger"></i>
 					<h6 class="card-title">Doanh thu</h6>
-					<p class="mb-0">₫125,000,000</p>
+					<p class="fw-bold mb-0 text-success">
+						<fmt:formatNumber value="${totalRevenue}" type="currency" currencySymbol="₫" />
+					</p>
 				</div>
 			</div>
-		</div>
-    <!-- Thêm các card khác -->
+		</a>
+	</div>
 </div>
+
+
+<!-- === Đơn hàng gần đây & Sản phẩm bán chạy === -->
 <div class="row g-3 mb-4">
-    <!-- Đơn hàng gần đây -->
-    <div class="col-md-6">
-        <div class="card shadow-sm h-100">
-            <div class="card-body">
-                <h5 class="card-title mb-3">Đơn hàng gần đây</h5>
+	<!-- Đơn hàng gần đây -->
+	<div class="col-md-6">
+		<div class="card shadow-sm h-100">
+			<div class="card-body">
+				<h5 class="card-title mb-3">
+					<i class="bi bi-bag-check"></i> Đơn hàng gần đây
+				</h5>
 
-                <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                    <div>
-                        <strong>Đơn hàng #ORD-001</strong><br>
-                        <small class="text-muted">15/01/2024</small>
-                    </div>
-                    <div class="text-end">
-                        <span class="fw-bold">₫7,200,000</span><br>
-                        <span class="text-success">Đã giao</span>
-                    </div>
-                </div>
+				<c:if test="${empty recentOrders}">
+					<p class="text-muted">Chưa có đơn hàng nào gần đây.</p>
+				</c:if>
 
-                <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                    <div>
-                        <strong>Đơn hàng #ORD-002</strong><br>
-                        <small class="text-muted">20/01/2024</small>
-                    </div>
-                    <div class="text-end">
-                        <span class="fw-bold">₫1,400,000</span><br>
-                        <span class="text-primary">Đang giao</span>
-                    </div>
-                </div>
+				<c:forEach var="o" items="${recentOrders}">
+					<div class="border-bottom pb-2 mb-3">
+						<div class="d-flex justify-content-between align-items-center">
+							<div>
+								<strong>Đơn hàng #${o.orderId}</strong><br> <small
+									class="text-muted"> <fmt:formatDate
+										value="${o.createdAt}" pattern="dd/MM/yyyy HH:mm" />
+								</small>
+							</div>
+							<div class="text-end">
+								<span class="fw-bold"> <fmt:formatNumber
+										value="${o.totalAmount}" type="currency" currencySymbol="₫" />
+								</span><br> <span
+									class="${o.status eq 'Đã giao' ? 'text-success' : 'text-primary'}">
+									${o.status} </span>
+							</div>
+						</div>
 
-                <!-- Thêm các đơn hàng khác -->
-            </div>
-        </div>
-    </div>
+						<!-- Danh sách sản phẩm trong đơn hàng -->
+						<div class="mt-2 ps-2">
+							<c:forEach var="d" items="${o.orderDetails}">
+								<div class="d-flex align-items-center mb-2">
+									<img
+										src="${pageContext.request.contextPath}/uploads/default_logo.png"
+									
+										class="rounded me-2" alt="${d.productVariant.product.name}"
+										style="width: 45px; height: 45px; object-fit: cover;">
+									<div>
+										<span class="fw-semibold">${d.productVariant.product.name}</span><br>
+										<small class="text-muted"> SL: ${d.quantity} × <fmt:formatNumber
+												value="${d.price}" type="currency" currencySymbol="₫" />
+										</small>
+									</div>
+								</div>
+							</c:forEach>
+						</div>
+					</div>
+				</c:forEach>
+			</div>
+		</div>
+	</div>
 
-  <!-- Sản phẩm bán chạy -->
-<div class="col-md-6">
-    <div class="card shadow-sm h-100">
-        <div class="card-body">
-            <h5 class="card-title mb-3">Sản phẩm bán chạy</h5>
+	<!-- Sản phẩm bán chạy -->
+	<div class="col-md-6">
+		<div class="card shadow-sm h-100">
+			<div class="card-body">
+				<h5 class="card-title mb-3">
+					<i class="bi bi-star-fill"></i> Top sản phẩm bán chạy
+				</h5>
 
-            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                <div class="d-flex align-items-center">
-                    <img src="${pageContext.request.contextPath}/assets/images/tainghe.png" 
-                         class="rounded me-2" alt="Sản phẩm"
-                         style="width: 50px; height: 50px; object-fit: cover;">
-                    <div>
-                        <strong>Tai nghe không dây cao cấp</strong><br>
-                        <small class="text-muted">124 đánh giá</small>
-                    </div>
-                </div>
-                <div class="text-end">
-                    <span class="fw-bold">₫7,200,000</span><br>
-                    <span class="text-muted">4.8/5</span>
-                </div>
-            </div>
+				<c:if test="${empty bestSellers}">
+					<p class="text-muted">Chưa có sản phẩm nào được bán.</p>
+				</c:if>
 
-            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                <div class="d-flex align-items-center">
-                    <img src="${pageContext.request.contextPath}/assets/images/giay.png" 
-                         class="rounded me-2" alt="Sản phẩm"
-                         style="width: 50px; height: 50px; object-fit: cover;">
-                    <div>
-                        <strong>Giày thể thao</strong><br>
-                        <small class="text-muted">89 đánh giá</small>
-                    </div>
-                </div>
-                <div class="text-end">
-                    <span class="fw-bold">₫690,000</span><br>
-                    <span class="text-muted">4.5/5</span>
-                </div>
-            </div>
+				<c:forEach var="p" items="${bestSellers}" varStatus="i">
+					<div
+						class="d-flex justify-content-between align-items-center border-bottom py-2">
+						<div class="d-flex align-items-center pb-2 mb-3">
+							<!-- Nếu có ảnh sản phẩm, hiển thị; nếu không, dùng ảnh mặc định -->
+							<img
+								src="${pageContext.request.contextPath}/uploads/default-product.jpg"
+								class="rounded me-2" alt="${p.productName}"
+								style="width: 50px; height: 50px; object-fit: cover;">
 
-            <!-- Thêm các sản phẩm khác -->
-        </div>
-    </div>
-</div>
+							<div>
+								<strong>${p.productName}</strong><br> <small
+									class="text-muted">${p.totalSold} lượt bán</small><br> <small
+									class="text-muted">Shop: ${p.shopName}</small>
+							</div>
+						</div>
+
+						<div class="text-end">
+							<span class="fw-bold text-success"> <fmt:formatNumber
+									value="${p.minPrice}" type="currency" currencySymbol="₫" />
+							</span><br> <span class="text-muted">~ <fmt:formatNumber
+									value="${p.maxPrice}" type="currency" currencySymbol="₫" />
+							</span>
+						</div>
+					</div>
+				</c:forEach>
+			</div>
+		</div>
+	</div>
 
 </div>
