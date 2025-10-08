@@ -10,4 +10,8 @@ public interface IDeliveryDao {
     Delivery save(Delivery delivery);
     void updateStatus(Integer deliveryId, String status);
     void delete(Integer id);
+    
+    List<Object[]> getSuccessRateByMonth(int shipperId);
+    List<Object[]> getRecentDeliveries(int shipperId, int limit);
+    long countByStatus(int shipperId, String status);
 }

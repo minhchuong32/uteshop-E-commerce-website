@@ -104,5 +104,66 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 			em.close();
 		}
 	}
+	
+	//Shipper dashboard
+	@Override
+	public long countByStatus(int shipperId, String status) {
+	    EntityManager em = emf.createEntityManager();
+	    try {
+	        String jpql = "SELECT COUNT(d) FROM Delivery d WHERE d.shipper.userId = :sid";
+	        if (status != null && !status.isEmpty()) {
+	            jpql += " AND d.status = :status";
+	        }
+	        Query query = em.createQuery(jpql);
+	        query.setParameter("sid", shipperId);
+	        if (status != null && !status.isEmpty()) {
+	            query.setParameter("status", status);
+	        }
+	        return (Long) query.getSingleResult();
+	    } finally {
+	        em.close();
+	    }
+	}
+
+	@Override
+	public List<Object[]> getSuccessRateByMonth(int shipperId) {
+	    EntityManager em = emf.createEntityManager();
+	    try {
+	        String sql = """
+	            SELECT MONTH(d.created_at) AS month,
+	                   SUM(CASE WHEN d.status = N'Đã giao' THEN 1 ELSE 0 END) AS successCount,
+	                   COUNT(*) AS totalCount
+	            FROM deliveries d
+	            WHERE d.shipper_id = :sid
+	            GROUP BY MONTH(d.created_at)
+	            ORDER BY month
+	        """;
+	        return em.createNativeQuery(sql)
+	                 .setParameter("sid", shipperId)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
+
+	@Override
+	public List<Object[]> getRecentDeliveries(int shipperId, int limit) {
+	    EntityManager em = emf.createEntityManager();
+	    try {
+	        String jpql = """
+	            SELECT d FROM Delivery d 
+	            JOIN FETCH d.order 
+	            WHERE d.shipper.userId = :sid
+	            ORDER BY d.createdAt DESC
+	        """;
+	        return em.createQuery(jpql)
+	                 .setParameter("sid", shipperId)
+	                 .setMaxResults(limit)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
+
 
 }

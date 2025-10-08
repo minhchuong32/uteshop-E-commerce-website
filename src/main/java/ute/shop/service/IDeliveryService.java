@@ -12,4 +12,9 @@ public interface IDeliveryService {
     List<Delivery> findAll();
     // thống kê hiệu suất (tỷ lệ % delivered)
     List<Object[]> getPerformanceStats();
+    
+    //Shipper dashboard
+    List<Object[]> getSuccessRateByMonth(int shipperId);
+    List<Object[]> getRecentDeliveries(int shipperId, int limit);
+    long countByStatus(int shipperId, String status);
 }

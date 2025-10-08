@@ -76,4 +76,21 @@ public class DeliveryServiceImpl implements IDeliveryService {
 	public List<Delivery> findAll() {
 		return deliveryDao.findAll();
 	}
+	
+	//shipper dashboard
+	@Override
+    public long countByStatus(int shipperId, String status) {
+        return deliveryDao.countByStatus(shipperId, status);
+    }
+
+    @Override
+    public List<Object[]> getSuccessRateByMonth(int shipperId) {
+        return deliveryDao.getSuccessRateByMonth(shipperId);
+    }
+
+    @Override
+    public List<Object[]> getRecentDeliveries(int shipperId, int limit) {
+        return deliveryDao.getRecentDeliveries(shipperId, limit);
+    }
+
 }
