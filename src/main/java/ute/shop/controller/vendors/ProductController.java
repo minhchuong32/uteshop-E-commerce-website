@@ -108,6 +108,7 @@ public class ProductController extends HttpServlet {
             String idParam = req.getParameter("id");
             if (idParam != null && !idParam.isEmpty()) {
                 int id = Integer.parseInt(idParam);
+
                 Product product = productService.findById(id);
 
                 if (product != null && product.getShop().getShopId() == shop.getShopId()) {
@@ -209,6 +210,7 @@ public class ProductController extends HttpServlet {
                 p.setPrice(new BigDecimal(req.getParameter("price")));
                 //p.setStock(Integer.parseInt(req.getParameter("stock")));
 
+
                 int categoryId = Integer.parseInt(req.getParameter("categoryId"));
                 Category c = new Category();
                 c.setCategoryId(categoryId);
@@ -232,6 +234,7 @@ public class ProductController extends HttpServlet {
                 }
 
                 productService.update(p);
+
             }
             resp.sendRedirect(req.getContextPath() + "/vendor/products");
         }

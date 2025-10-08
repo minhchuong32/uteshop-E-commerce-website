@@ -7,7 +7,7 @@ import ute.shop.entity.User;
 import ute.shop.service.IOrderService;
 
 import java.util.List;
-import java.util.Optional;
+
 
 public class OrderServiceImpl implements IOrderService {
 
@@ -19,7 +19,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public Optional<Order> getById(int id) {
+    public Order getById(int id) {
         return orderDao.getById(id);
     }
 

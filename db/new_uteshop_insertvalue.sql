@@ -8,7 +8,8 @@ INSERT INTO users (username, password, email, role, status, avatar, name, phone,
 (N'customer1', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'customer1@example.com', N'User', N'active', NULL, N'Nguyen Van A', N'0901234567', N'123 Đường A, TP.HCM'),
 (N'vendor1', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'vendor1@example.com', N'Vendor', N'active', NULL, N'Tran Thi B', N'0902345678', N'456 Đường B, TP.HCM'),
 (N'vendor2', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'vendor2@example.com', N'Vendor', N'active', NULL, N'Le Van D', N'0904567890', N'789 Đường D, TP.HCM'),
-(N'shipper1', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'shipper1@example.com', N'Shipper', N'active', NULL, N'Pham Thi E', N'0905678901', N'101 Đường E, TP.HCM');
+(N'shipper1', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'shipper1@example.com', N'Shipper', N'active', NULL, N'Pham Thi E', N'0905678901', N'101 Đường E, TP.HCM'),
+(N'admin', N'A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3', N'chuongminh3225@gmail.com', N'Admin', N'active', NULL, N'Minh Chuong', N'0905678901', N'24/7 Phung Van Cung , TP.HCM');
 
 -- ============================
 -- 2. CATEGORIES

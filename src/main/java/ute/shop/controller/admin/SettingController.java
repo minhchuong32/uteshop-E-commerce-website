@@ -1,4 +1,4 @@
-package ute.shop.controller.admin;
+	package ute.shop.controller.admin;
 
 import ute.shop.entity.StoreSettings;
 import ute.shop.entity.User;

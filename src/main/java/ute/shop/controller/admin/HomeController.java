@@ -1,11 +1,14 @@
 package ute.shop.controller.admin;
 
 import java.io.IOException;
+import java.util.List;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-
+import ute.shop.entity.Notification;
 import ute.shop.entity.User;
+import ute.shop.service.impl.NotificationServiceImpl;
 
 @WebServlet(urlPatterns = {"/admin/home"})
 public class HomeController extends HttpServlet {
@@ -17,11 +20,15 @@ public class HomeController extends HttpServlet {
 
         // Kiểm tra đăng nhập
         HttpSession session = req.getSession(false);
-        User userLogin = (session != null) ? (User) session.getAttribute("account") : null;
-        if (userLogin == null) {
+        User admin = (session != null) ? (User) session.getAttribute("account") : null;
+        if (admin == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
+        
+        // set att 
+        List<Notification> notis = new NotificationServiceImpl().getUnreadByUserId(admin.getUserId());
+        req.setAttribute("notifications", notis);
 
         // Lấy tham số page
         String page = req.getParameter("page");

@@ -9,4 +9,5 @@ public interface IComplaintService {
     void insert(Complaint c);
     void update(Complaint c);
     void delete(int id);
+    List<Complaint> findByUserId(int userId);
 }

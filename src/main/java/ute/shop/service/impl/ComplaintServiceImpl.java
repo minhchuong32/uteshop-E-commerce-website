@@ -33,4 +33,10 @@ public class ComplaintServiceImpl implements IComplaintService {
     public void delete(int id) {
         dao.delete(id);
     }
+    
+    @Override
+    public List<Complaint> findByUserId(int userId) {
+        return dao.findByUserId(userId);
+    }
+
 }

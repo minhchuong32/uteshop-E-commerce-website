@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ include file="/commons/taglib.jsp"%>
 <h3 class="mb-3">Cập nhật trạng thái khiếu nại</h3>
 
 <form action="${pageContext.request.contextPath}/admin/complaints" method="post">
