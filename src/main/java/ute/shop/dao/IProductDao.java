@@ -39,5 +39,6 @@ public interface IProductDao {
 			int size);
 
 	Product findByIdWithVariants(int productId);
+	
 
 }

@@ -110,4 +110,9 @@ public class ProductServiceImpl implements IProductService {
 		return productDao.findByIdWithVariants(productId);
 	}
 
+	@Override
+	public Product findByIdWithVariants(Integer id) {
+		return productDao.findByIdWithVariants(id);
+	}
+
 }
