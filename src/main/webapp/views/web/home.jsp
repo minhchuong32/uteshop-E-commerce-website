@@ -135,60 +135,58 @@
 			<div class="row g-3" id="gridView">
 				<c:forEach var="p" items="${products}">
 					<div class="col-6 col-md-4 col-lg-2">
-						<div class="card product-card h-100">
-							<!-- Link chỉ bao ảnh -->
-							<a href="${pageContext.request.contextPath}/web/product/detail?id=${p.productId}"
-								class="text-decoration-none text-dark">
+						<a
+							href="${pageContext.request.contextPath}/web/product/detail?id=${p.productId}"
+							class="text-decoration-none text-dark d-block h-100">
+							<div class="card product-card h-100">
 								<div class="product-img-wrapper">
 									<img
 										src="${pageContext.request.contextPath}/assets/images/products/${p.imageUrl}"
 										class="card-img-top" alt="${p.name}">
 								</div>
-							</a>
-							<div class="card-body d-flex flex-column justify-content-between">
-								<!-- Link bao tên -->
-								<a href="${pageContext.request.contextPath}/web/product/detail?id=${p.productId}"
-									class="text-decoration-none text-dark">
+								<div
+									class="card-body d-flex flex-column justify-content-between">
 									<h6 class="card-title mb-1">${p.name}</h6>
-								</a>
-
-								<div class="mb-1">
-									<span class="text-warning">★★★★☆</span> <small
-										class="text-muted">(${p.reviewsCount} đánh giá)</small>
-								</div>
-
-								<div class="price-wrapper">
-										<c:set var="variant" value="${p.variants[0]}" />
-										<p class="text-danger fw-bold mb-1" style="font-size: 15px;">
-											<fmt:formatNumber value="${variant.price}" type="currency"
-												currencySymbol="₫" />
-										</p>
+									<div class="mb-1">
+										<span class="text-warning">★★★★☆</span> <small
+											class="text-muted">(${p.reviewsCount} đánh giá)</small>
 									</div>
 
-								<!-- Điều kiện kiểm tra đăng nhập -->
-								<c:choose>
-									<c:when test="${not empty sessionScope.account}">
-										<form action="${pageContext.request.contextPath}/web/cart"
-											method="post">
-											<input type="hidden" name="productId" value="${p.productId}">
-											<button type="submit"
-												class="btn btn-sm btn-primary-custom w-100 mt-2">
-												<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
-											</button>
-										</form>
-									</c:when>
-									<c:otherwise>
-										<a href="${pageContext.request.contextPath}/login"
-											class="btn btn-sm btn-outline-primary w-100 mt-2"> <i
-											class="bi bi-box-arrow-in-right"></i> Đăng nhập để mua
-										</a>
-									</c:otherwise>
-								</c:choose>
+									<c:forEach var="v" items="${p.variants}" varStatus="status">
+										<c:if test="${status.first}">
+											<c:choose>
+												<c:when test="${v.oldPrice != null && v.oldPrice > v.price}">
+													<p style="text-decoration: line-through;">
+														<fmt:formatNumber value="${v.oldPrice}" type="currency"
+															currencySymbol="₫" />
+													</p>
+													<p class="text-danger fw-bold">
+														<fmt:formatNumber value="${v.price}" type="currency"
+															currencySymbol="₫" />
+													</p>
+												</c:when>
+												<c:otherwise>
+													<p class="text-danger fw-bold">
+														<fmt:formatNumber value="${v.price}" type="currency"
+															currencySymbol="₫" />
+													</p>
+												</c:otherwise>
+											</c:choose>
+										</c:if>
+									</c:forEach>
+
+									<button type="button"
+										class="btn btn-sm btn-primary-custom w-100"
+										onclick="window.location.href='${pageContext.request.contextPath}/login'">
+										<i class="bi bi-cart-plus"></i> Đăng nhập để mua
+									</button>
+								</div>
 							</div>
-						</div>
+						</a>
 					</div>
 				</c:forEach>
 			</div>
+
 
 			<!-- List View -->
 			<div class="list-group d-none" id="listView">
@@ -200,60 +198,58 @@
 					</c:when>
 					<c:otherwise>
 						<c:forEach var="p" items="${products}">
-							<div
-								class="list-group-item d-flex align-items-center justify-content-between border"
+							<a
+								href="${pageContext.request.contextPath}/web/product/detail?id=${p.productId}"
+								class="list-group-item list-group-item-action d-flex align-items-center justify-content-between border text-decoration-none text-dark"
 								style="transition: all 0.2s;"
 								onmouseover="this.style.borderColor='var(--bs-primary)'"
 								onmouseout="this.style.borderColor='#dee2e6'">
-
-								<!-- Ảnh + tên sản phẩm bọc trong <a> -->
 								<div class="d-flex align-items-center">
-									<a href="${pageContext.request.contextPath}/web/product/detail?id=${p.productId}"
-										class="d-flex align-items-center text-decoration-none text-dark">
-										<img
+									<img
 										src="${pageContext.request.contextPath}/assets/images/products/${p.imageUrl}"
 										alt="${p.name}" class="img-thumbnail me-3"
 										style="width: 80px; height: 80px; object-fit: cover;">
-										<div>
-											<h6 class="mb-1">${p.name}</h6>
-											<small class="text-muted">${p.reviewsCount} đánh giá</small>
+									<div>
+										<h6 class="mb-1">${p.name}</h6>
+										<small class="text-muted">${p.reviewsCount} đánh giá</small>
+									</div>
+								</div> <c:forEach var="v" items="${p.variants}" varStatus="status">
+									<c:if test="${status.first}">
+										<div class="text-end">
+											<c:choose>
+												<c:when test="${v.oldPrice != null && v.oldPrice > v.price}">
+													<p class="text-muted mb-0"
+														style="text-decoration: line-through; font-size: 13px;">
+														<fmt:formatNumber value="${v.oldPrice}" type="currency"
+															currencySymbol="₫" />
+													</p>
+													<p class="text-danger fw-bold mb-0">
+														<fmt:formatNumber value="${v.price}" type="currency"
+															currencySymbol="₫" />
+													</p>
+												</c:when>
+												<c:otherwise>
+													<p class="text-danger fw-bold mb-0">
+														<fmt:formatNumber value="${v.price}" type="currency"
+															currencySymbol="₫" />
+													</p>
+												</c:otherwise>
+											</c:choose>
+
+											<button type="button"
+												class="btn btn-sm btn-primary-custom w-100"
+												onclick="window.location.href='${pageContext.request.contextPath}/login'">
+												<i class="bi bi-cart-plus"></i> Đăng nhập để mua
+											</button>
 										</div>
-									</a>
-								</div>
-
-								<!-- Giá + nút hành động -->
-								<div class="text-end">
-									<c:set var="variant" value="${p.variants[0]}" />
-									<p class="text-danger fw-bold mb-0">
-										<fmt:formatNumber value="${variant.price}" type="currency"
-											currencySymbol="₫" />
-									</p>
-
-									<!-- Kiểm tra login -->
-									<c:choose>
-										<c:when test="${not empty sessionScope.account}">
-											<form action="${pageContext.request.contextPath}/web/cart"
-												method="post">
-												<input type="hidden" name="productId" value="${p.productId}">
-												<button type="submit"
-													class="btn btn-sm btn-primary-custom mt-2">
-													<i class="bi bi-cart-plus"></i> Thêm vào giỏ
-												</button>
-											</form>
-										</c:when>
-										<c:otherwise>
-											<a href="${pageContext.request.contextPath}/login"
-												class="btn btn-sm btn-outline-primary mt-2"> <i
-												class="bi bi-box-arrow-in-right"></i> Đăng nhập để mua
-											</a>
-										</c:otherwise>
-									</c:choose>
-								</div>
-							</div>
+									</c:if>
+								</c:forEach>
+							</a>
 						</c:forEach>
 					</c:otherwise>
 				</c:choose>
 			</div>
+
 
 
 			<!-- Pagination -->

@@ -158,29 +158,31 @@
 										<span class="text-warning">★★★★☆</span> <small
 											class="text-muted">(${p.reviewsCount} đánh giá)</small>
 									</div>
-									<c:set var="variant"
-										value="${requestScope['variant_' + p.productId]}" />
-									<c:choose>
-										<c:when
-											test="${variant.oldPrice != null && variant.oldPrice > variant.price}">
-											<!-- Giá cũ gạch -->
-											<p style="text-decoration: line-through;">
-												<fmt:formatNumber value="${variant.oldPrice}"
-													type="currency" currencySymbol="₫" />
-											</p>
-											<!-- Giá mới nổi bật -->
-											<p class="text-danger fw-bold">
-												<fmt:formatNumber value="${variant.price}" type="currency"
-													currencySymbol="₫" />
-											</p>
-										</c:when>
-										<c:otherwise>
-											<p class="text-danger fw-bold">
-												<fmt:formatNumber value="${variant.price}" type="currency"
-													currencySymbol="₫" />
-											</p>
-										</c:otherwise>
-									</c:choose>
+									<c:forEach var="v" items="${p.variants}" varStatus="status">
+										<c:if test="${status.first}">
+											<c:choose>
+												<c:when test="${v.oldPrice != null && v.oldPrice > v.price}">
+													<!-- Giá cũ gạch -->
+													<p style="text-decoration: line-through;">
+														<fmt:formatNumber value="${v.oldPrice}" type="currency"
+															currencySymbol="₫" />
+													</p>
+													<!-- Giá mới nổi bật -->
+													<p class="text-danger fw-bold">
+														<fmt:formatNumber value="${v.price}" type="currency"
+															currencySymbol="₫" />
+													</p>
+												</c:when>
+												<c:otherwise>
+													<p class="text-danger fw-bold">
+														<fmt:formatNumber value="${v.price}" type="currency"
+															currencySymbol="₫" />
+													</p>
+												</c:otherwise>
+											</c:choose>
+										</c:if>
+									</c:forEach>
+
 
 
 
