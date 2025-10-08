@@ -65,5 +65,29 @@ public class RevenueDaoImpl implements IRevenueDao {
             em.close();
         }
     }
+    
+    //vendor dashboard
+    @Override
+    public BigDecimal getTotalRevenueByShop(int shopId) {
+    	EntityManager em = JPAConfig.getEntityManager();
+        try {
+        	String hql = """
+                    SELECT COALESCE(SUM(od.price * od.quantity), 0)
+                    FROM OrderDetail od
+                    JOIN od.order o
+                    WHERE od.productVariant.product.shop.shopId = :sid
+                      AND o.status = :status
+                """;
+                Query query = em.createQuery(hql);
+                query.setParameter("sid", shopId);
+                query.setParameter("status", "Đã giao"); // kiểm tra DB
+
+                BigDecimal result = (BigDecimal) query.getSingleResult();
+
+                return result;
+        } finally {
+            em.close();
+        }
+    }
 
 }

@@ -116,5 +116,37 @@ public class OrderDaoImpl implements IOrderDao {
 	        em.close();
 	    }
 	}
+	
+	//Vendor dashboard
+	@Override
+	public long countOrdersByShop(int shopId) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = "SELECT COUNT(DISTINCT o) " +
+	                      "FROM Order o JOIN o.orderDetails od " +
+	                      "WHERE od.productVariant.product.shop.shopId = :sid";
+	        return em.createQuery(jpql, Long.class)
+	                 .setParameter("sid", shopId)
+	                 .getSingleResult();
+	    } finally {
+	        em.close();
+	    }
+	}
+	
+	@Override
+	public long countDistinctCustomersByShop(int shopId) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = "SELECT COUNT(DISTINCT o.user.userId) " +
+	                      "FROM Order o JOIN o.orderDetails od " +
+	                      "WHERE od.productVariant.product.shop.shopId = :sid";
+	        return em.createQuery(jpql, Long.class)
+	                 .setParameter("sid", shopId)
+	                 .getSingleResult();
+	    } finally {
+	        em.close();
+	    }
+	}
+
 
 }

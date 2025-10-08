@@ -47,4 +47,15 @@ public class OrderServiceImpl implements IOrderService {
 	public boolean hasPurchased(int userId, int productId) {
 		return orderDao.hasPurchased(userId, productId);
 	}
+	
+	//Vendor DashBoard
+	@Override
+    public long getTotalOrders(int shopId) {
+        return orderDao.countOrdersByShop(shopId);
+    }
+
+    @Override
+    public long getTotalCustomers(int shopId) {
+        return orderDao.countDistinctCustomersByShop(shopId);
+    }
 }

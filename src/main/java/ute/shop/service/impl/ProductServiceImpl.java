@@ -109,5 +109,10 @@ public class ProductServiceImpl implements IProductService {
 	public Product findByIdWithVariants(int productId) {
 		return productDao.findByIdWithVariants(productId);
 	}
+	
+	//Vendor dashboard
+	public long getTotalProducts(int shopId) {
+        return productDao.findByShopId(shopId).size();
+    }
 
 }

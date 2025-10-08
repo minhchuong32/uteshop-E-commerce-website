@@ -13,4 +13,6 @@ public interface IOrderDao {
     void delete(int id);
 	List<Order> findByUser(User user);
 	boolean hasPurchased(int userId, int productId);
+	long countOrdersByShop(int shopId);
+	long countDistinctCustomersByShop(int shopId);
 }

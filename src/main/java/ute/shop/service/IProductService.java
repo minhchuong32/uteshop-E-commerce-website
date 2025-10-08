@@ -26,5 +26,8 @@ public interface IProductService {
 	List<Product> findByCategoryAndShop(int categoryId, int shopId);
 
 	Product findByIdWithVariants(int productId);
+	
+	//Vendor dashboard
+	long getTotalProducts(int shopId);
 
 }

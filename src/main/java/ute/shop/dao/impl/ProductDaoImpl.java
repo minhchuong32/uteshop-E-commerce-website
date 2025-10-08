@@ -260,6 +260,18 @@ public class ProductDaoImpl implements IProductDao {
             em.close();
         }
 	}
-
+	
+	@Override
+	public long countByShopId(int shopId) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = "SELECT COUNT(p) FROM Product p WHERE p.shop.shopId = :sid";
+	        return em.createQuery(jpql, Long.class)
+	                 .setParameter("sid", shopId)
+	                 .getSingleResult();
+	    } finally {
+	        em.close();
+	    }
+	}
 
 }

@@ -7,4 +7,5 @@ public interface IRevenueDao {
     BigDecimal getTotalRevenue(BigDecimal platformFeeRate);
     BigDecimal getTotalPlatformFee(BigDecimal platformFeeRate);
     List<Object[]> getRevenueByMonth(); 
+    BigDecimal getTotalRevenueByShop(int shopId);
 }

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <div class="container mt-4">
     <h4 class="mb-4">📊 Dashboard Cửa hàng</h4>
 
@@ -11,7 +11,7 @@
                 <div class="card-body">
                     <i class="bi bi-people-fill fs-2 mb-2 text-primary"></i>
                     <h6 class="card-title">Khách hàng</h6>
-                    <p class="fw-bold mb-0">120</p>
+                    <p class="fw-bold mb-0">${totalCustomers}</p>
                 </div>
             </div>
         </div>
@@ -20,7 +20,7 @@
                 <div class="card-body">
                     <i class="bi bi-box-seam fs-2 mb-2 text-success"></i>
                     <h6 class="card-title">Sản phẩm</h6>
-                    <p class="fw-bold mb-0">85</p>
+                    <p class="fw-bold mb-0">${totalProducts}</p>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
                 <div class="card-body">
                     <i class="bi bi-cart-check-fill fs-2 mb-2 text-warning"></i>
                     <h6 class="card-title">Đơn hàng</h6>
-                    <p class="fw-bold mb-0">42</p>
+                    <p class="fw-bold mb-0">${totalOrders}</p>
                 </div>
             </div>
         </div>
@@ -38,7 +38,7 @@
                 <div class="card-body">
                     <i class="bi bi-cash-stack fs-2 mb-2 text-danger"></i>
                     <h6 class="card-title">Doanh thu</h6>
-                    <p class="fw-bold mb-0">₫57,500,000</p>
+                    <p class="fw-bold mb-0">₫<fmt:formatNumber value="${totalRevenue}" type="currency" currencySymbol=""/></p>
                 </div>
             </div>
         </div>

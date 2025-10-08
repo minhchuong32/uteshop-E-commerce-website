@@ -33,4 +33,10 @@ public class RevenueServiceImpl implements IRevenueService {
     public List<Object[]> getRevenueByMonth() {
         return dao.getRevenueByMonth();
     }
+    
+    //Vendor DashBoard
+    @Override
+    public BigDecimal getTotalRevenue(int shopId) {
+    	return dao.getTotalRevenueByShop(shopId);
+    }
 }

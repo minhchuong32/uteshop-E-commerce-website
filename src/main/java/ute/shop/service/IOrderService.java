@@ -13,4 +13,8 @@ public interface IOrderService {
     void delete(int id);
     List<Order> findByUser(User user);
     boolean hasPurchased(int userId, int productId);
+    
+    //Vendor DashBoard
+    long getTotalOrders(int shopId);
+    long getTotalCustomers(int shopId);
 }
