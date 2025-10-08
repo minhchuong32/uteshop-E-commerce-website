@@ -1,13 +1,10 @@
 package ute.shop.controller.vendors;
 
 import ute.shop.entity.Shop;
-import ute.shop.entity.StoreSettings;
 import ute.shop.entity.User;
 import ute.shop.service.IShopService;
-import ute.shop.service.IStoreSettingsService;
 import ute.shop.service.IUserService;
 import ute.shop.service.impl.ShopServiceImpl;
-import ute.shop.service.impl.StoreSettingsServiceImpl;
 import ute.shop.service.impl.UserServiceImpl;
 
 import jakarta.servlet.ServletException;

@@ -190,28 +190,24 @@ public class ProductDaoImpl implements IProductDao {
 	public List<Product> filterProducts(Integer categoryId, Double minPrice, Double maxPrice, String sortBy, int page, int size) {
 		EntityManager em = JPAConfig.getEntityManager();
 	    try {
-	        StringBuilder jpql = new StringBuilder(
-	            "SELECT DISTINCT p FROM Product p JOIN p.variants v WHERE 1=1"
-	        );
+	    	StringBuilder jpql = new StringBuilder(
+	    		    "SELECT p FROM ProductVariant v JOIN v.product p WHERE 1=1"
+	    		);
 
-	        if (categoryId != null) {
-	            jpql.append(" AND p.category.categoryId = :cid");
-	        }
-	        if (minPrice != null) {
-	            jpql.append(" AND v.price >= :minPrice");
-	        }
-	        if (maxPrice != null) {
-	            jpql.append(" AND v.price <= :maxPrice");
-	        }
+	    		if (categoryId != null) jpql.append(" AND p.category.categoryId = :cid");
+	    		if (minPrice != null) jpql.append(" AND v.price >= :minPrice");
+	    		if (maxPrice != null) jpql.append(" AND v.price <= :maxPrice");
 
-	        // Sắp xếp theo min price trong variants
-	        if ("priceAsc".equals(sortBy)) {
-	            jpql.append(" ORDER BY v.price ASC");
-	        } else if ("priceDesc".equals(sortBy)) {
-	            jpql.append(" ORDER BY v.price DESC");
-	        } else {
-	            jpql.append(" ORDER BY p.productId DESC");
-	        }
+	    		// Sắp xếp theo giá min của product
+	    		jpql.append(" GROUP BY p.productId, p.name, p.description, p.imageUrl, p.category, p.shop");
+
+	    		if ("priceAsc".equals(sortBy)) {
+	    		    jpql.append(" ORDER BY MIN(v.price) ASC");
+	    		} else if ("priceDesc".equals(sortBy)) {
+	    		    jpql.append(" ORDER BY MIN(v.price) DESC");
+	    		} else {
+	    		    jpql.append(" ORDER BY p.productId DESC");
+	    		}
 
 	        TypedQuery<Product> query = em.createQuery(jpql.toString(), Product.class);
 
