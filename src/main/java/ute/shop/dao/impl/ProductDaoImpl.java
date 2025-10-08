@@ -260,6 +260,7 @@ public class ProductDaoImpl implements IProductDao {
 	    }
 	}
 	
+	//vendor dashboard
 	@Override
 	public long countByShopId(int shopId) {
 	    EntityManager em = JPAConfig.getEntityManager();
@@ -272,5 +273,48 @@ public class ProductDaoImpl implements IProductDao {
 	        em.close();
 	    }
 	}
+	
+	@Override
+	// Top sản phẩm bán chạy theo shop
+	public List<Object[]> getTopSellingProducts(int shopId, int limit) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String hql = """
+	            SELECT od.productVariant.product, SUM(od.quantity), SUM(od.price * od.quantity)
+	            FROM OrderDetail od
+	            JOIN od.order o
+	            WHERE od.productVariant.product.shop.shopId = :sid
+	              AND o.status = :status
+	            GROUP BY od.productVariant.product
+	            ORDER BY SUM(od.quantity) DESC
+	        """;
+	        return em.createQuery(hql)
+	                 .setParameter("sid", shopId)
+	                 .setParameter("status", "Đã giao")
+	                 .setMaxResults(limit)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
+	
+	@Override
+	public List<Object[]> getProductCountByCategory(int shopId) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = """
+	            SELECT p.category.name, COUNT(p)
+	            FROM Product p
+	            WHERE p.shop.shopId = :sid
+	            GROUP BY p.category.name
+	        """;
+	        return em.createQuery(jpql, Object[].class)
+	                 .setParameter("sid", shopId)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
+
 
 }

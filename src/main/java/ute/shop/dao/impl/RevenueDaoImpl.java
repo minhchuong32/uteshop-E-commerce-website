@@ -89,5 +89,26 @@ public class RevenueDaoImpl implements IRevenueDao {
             em.close();
         }
     }
+    @Override
+    public List<Object[]> getRevenueByMonthByShop(int shopId) {
+        EntityManager em = JPAConfig.getEntityManager();
+        try {
+            String hql = """
+                SELECT EXTRACT(MONTH FROM o.createdAt), SUM(od.price * od.quantity)
+                FROM OrderDetail od
+                JOIN od.order o
+                WHERE od.productVariant.product.shop.shopId = :sid
+                  AND o.status = :status
+                GROUP BY EXTRACT(MONTH FROM o.createdAt)
+                ORDER BY EXTRACT(MONTH FROM o.createdAt)
+            """;
+            Query query = em.createQuery(hql);
+            query.setParameter("sid", shopId);
+            query.setParameter("status", "Đã giao");
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 
 }

@@ -30,5 +30,7 @@ public interface IProductService {
 	
 	//Vendor dashboard
 	long getTotalProducts(int shopId);
+	List<Object[]> getTopSellingProducts(int shopId, int limit);
+    List<Object[]> getProductCountByCategory(int shopId);
 
 }

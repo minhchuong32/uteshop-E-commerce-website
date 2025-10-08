@@ -147,6 +147,47 @@ public class OrderDaoImpl implements IOrderDao {
 	        em.close();
 	    }
 	}
+	
+	@Override
+	public List<Object[]> getOrderTrendByShop(int shopId) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String sql = """
+	            SELECT CONVERT(date, o.created_at) AS orderDate,
+	                   COUNT(o.order_id) AS total
+	            FROM orders o
+	            JOIN order_details od ON o.order_id = od.order_id
+	            JOIN product_variants pv ON od.product_variant_id = pv.id
+	            JOIN products p ON pv.product_id = p.product_id
+	            WHERE p.shop_id = :sid AND o.status = :status
+	            GROUP BY CONVERT(date, o.created_at)
+	            ORDER BY CONVERT(date, o.created_at)
+	        """;
+	        return em.createNativeQuery(sql)
+	                 .setParameter("sid", shopId)
+	                 .setParameter("status", "Đã giao")
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
 
+	@Override
+	public List<Object[]> getOrderStatusCountByShop(int shopId) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = """
+	            SELECT o.status, COUNT(o)
+	            FROM Order o JOIN o.orderDetails od
+	            WHERE od.productVariant.product.shop.shopId = :sid
+	            GROUP BY o.status
+	        """;
+	        return em.createQuery(jpql, Object[].class)
+	                 .setParameter("sid", shopId)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
 
 }

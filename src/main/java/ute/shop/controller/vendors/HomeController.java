@@ -2,6 +2,7 @@ package ute.shop.controller.vendors;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -59,11 +60,22 @@ public class HomeController extends HttpServlet {
         long totalOrders = orderService.getTotalOrders(shopId);
         long totalCustomers = orderService.getTotalCustomers(shopId);
         BigDecimal totalRevenue = revenueService.getTotalRevenue(shopId);
+        List<Object[]> revenueByMonth = revenueService.getRevenueByMonthByShop(shopId);
+        List<Object[]> topProducts = productService.getTopSellingProducts(shopId, 5);
+        List<Object[]> orderTrend = orderService.getOrderTrendByShop(shopId);
+        List<Object[]> orderStatus = orderService.getOrderStatusCountByShop(shopId);
+        List<Object[]> categoryStats = productService.getProductCountByCategory(shopId);
+
+        req.setAttribute("orderTrend", orderTrend);
+        req.setAttribute("orderStatus", orderStatus);
+        req.setAttribute("categoryStats", categoryStats);
 
         req.setAttribute("totalProducts", totalProducts);
         req.setAttribute("totalOrders", totalOrders);
         req.setAttribute("totalCustomers", totalCustomers);
         req.setAttribute("totalRevenue", totalRevenue);
+        req.setAttribute("revenueByMonth", revenueByMonth);
+        req.setAttribute("topProducts", topProducts);
 
         // Lấy tham số page
         String page = req.getParameter("page");

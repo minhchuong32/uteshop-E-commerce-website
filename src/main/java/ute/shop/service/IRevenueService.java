@@ -8,5 +8,6 @@ public interface IRevenueService {
     BigDecimal getTotalPlatformFee();
     List<Object[]> getRevenueByMonth();
     BigDecimal getTotalRevenue(int shopId);
+    List<Object[]> getRevenueByMonthByShop(int shopId);
 }
 	

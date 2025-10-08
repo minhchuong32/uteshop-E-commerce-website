@@ -58,4 +58,14 @@ public class OrderServiceImpl implements IOrderService {
     public long getTotalCustomers(int shopId) {
         return orderDao.countDistinctCustomersByShop(shopId);
     }
+
+	@Override
+	public List<Object[]> getOrderStatusCountByShop(int shopId) {
+		return orderDao.getOrderStatusCountByShop(shopId);
+	}
+
+	@Override
+	public List<Object[]> getOrderTrendByShop(int shopId) {
+		return orderDao.getOrderTrendByShop(shopId);
+	}
 }
