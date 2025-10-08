@@ -39,5 +39,9 @@ public interface IProductDao {
 			int size);
 
 	Product findByIdWithVariants(int productId);
+	
 
+	long countByShopId(int shopId);
+	List<Object[]> getTopSellingProducts(int shopId, int limit);
+	List<Object[]> getProductCountByCategory(int shopId);
 }

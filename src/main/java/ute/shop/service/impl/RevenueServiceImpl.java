@@ -36,6 +36,7 @@ public class RevenueServiceImpl implements IRevenueService {
         return dao.getRevenueByMonth();
     }
     
+<<<<<<< HEAD
     @Override
     public List<Object[]> getRevenueByFilter(Date startDate, Date endDate, Integer shopId) {
         return dao.getRevenueByFilter(startDate, endDate, shopId);
@@ -78,4 +79,16 @@ public class RevenueServiceImpl implements IRevenueService {
         );
     }
 
+=======
+    //Vendor DashBoard
+    @Override
+    public BigDecimal getTotalRevenue(int shopId) {
+    	return dao.getTotalRevenueByShop(shopId);
+    }
+
+	@Override
+	public List<Object[]> getRevenueByMonthByShop(int shopId) {
+		return dao.getRevenueByMonthByShop(shopId);
+	}
+>>>>>>> 8ea3bf959a76adc8b733df8eb3621fbf2ec65abe
 }

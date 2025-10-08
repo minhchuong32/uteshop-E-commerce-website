@@ -4,88 +4,177 @@
 <div class="container-fluid">
     <h3 class="mb-4 fw-bold">Quản lý đơn hàng</h3>
 
-    <!-- Nút thêm mới -->
-    <div class="mb-3">
-        <a href="${pageContext.request.contextPath}/admin/orders/add"
-           class="btn btn-success"> 
-            <i class="bi bi-cart-plus me-2"></i> Thêm đơn hàng
-        </a>
-    </div>
+    <!-- Đơn hàng mới -->
+    <h4>Đơn hàng mới</h4>
+    <table class="table table-bordered text-center align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Khách hàng</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Shipper</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="o" items="${newOrders}">
+                <tr>
+                    <td>${o.orderId}</td>
+                    <td>${o.user.username}</td>
+                    <td><fmt:formatNumber value="${o.totalAmount}" type="currency" currencySymbol="₫"/></td>
+                    <td>${o.status}</td>
+                    <td>Chưa có</td>
+                    <td>
+                        <button class="btn btn-sm btn-success" onclick="confirmOrder(${o.orderId})">Xác nhận</button>
+                        <button class="btn btn-sm btn-danger" onclick="cancelOrder(${o.orderId})">Hủy</button>
+                    </td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <table class="table align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>User ID</th>
-                        <th>Tổng tiền</th>
-                        <th>Trạng thái</th>
-                        <th>Phương thức thanh toán</th>
-                        <th>Ngày tạo</th>
-                        <th class="text-center">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="o" items="${orders}">
-    <tr>
-        <td>${o.orderId}</td>
-        <td>ID: ${o.user.userId} - ${o.user.username}</td>
-        <td><fmt:formatNumber value="${o.totalAmount}" type="currency" currencySymbol="₫"/></td>
-        <td>${o.status}</td>
-        <td>${o.paymentMethod}</td>
-        <td>${o.createdAt}</td>
-        <td class="text-center">
-            <!-- Edit -->
-            <a href="${pageContext.request.contextPath}/vendor/orders/edit?id=${o.orderId}"
-               class="text-warning me-3" title="Sửa">
-               <i class="bi bi-pencil-square"></i>
-            </a> 
+    <!-- Đơn đã xác nhận / đang giao -->
+    <h4>Đơn đã xác nhận / đang giao</h4>
+    <table class="table table-bordered text-center align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Khách hàng</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Shipper</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="o" items="${confirmedOrders}">
+                <tr>
+                    <td>${o.orderId}</td>
+                    <td>${o.user.username}</td>
+                    <td><fmt:formatNumber value="${o.totalAmount}" type="currency" currencySymbol="₫"/></td>
+                    <td>${o.status}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${not empty shippersMap[o.orderId]}">
+                                ${shippersMap[o.orderId].username}
+                            </c:when>
+                            <c:otherwise>
+                                Chưa có
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td>
+                        <a href="${pageContext.request.contextPath}/vendor/orders/detail?id=${o.orderId}" class="btn btn-sm btn-primary">Xem chi tiết</a>
+                    </td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
 
-            <!-- Delete -->
-            <a href="javascript:void(0);"
-               class="text-danger me-3"
-               data-bs-toggle="modal"
-               data-bs-target="#confirmDeleteModal"
-               data-id="${o.orderId}"
-               data-url="${pageContext.request.contextPath}/vendor/orders/delete"
-               title="Xóa">
-               <i class="bi bi-trash-fill"></i>
-            </a>
-        </td>
-    </tr>
-</c:forEach>
+    <!-- Đơn đã giao -->
+    <h4>Đơn đã giao</h4>
+    <table class="table table-bordered text-center align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Khách hàng</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Shipper</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="o" items="${deliveredOrders}">
+                <tr>
+                    <td>${o.orderId}</td>
+                    <td>${o.user.username}</td>
+                    <td><fmt:formatNumber value="${o.totalAmount}" type="currency" currencySymbol="₫"/></td>
+                    <td>${o.status}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${not empty shippersMap[o.orderId]}">
+                                ${shippersMap[o.orderId].username}
+                            </c:when>
+                            <c:otherwise>
+                                Chưa có
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deleteOrder(${o.orderId})">Xóa</button>
+                    </td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
 
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <!-- Đơn đã hủy -->
+    <h4>Đơn đã hủy</h4>
+    <table class="table table-bordered text-center align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Khách hàng</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Shipper</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach var="o" items="${canceledOrders}">
+                <tr>
+                    <td>${o.orderId}</td>
+                    <td>${o.user.username}</td>
+                    <td><fmt:formatNumber value="${o.totalAmount}" type="currency" currencySymbol="₫"/></td>
+                    <td>${o.status}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${not empty shippersMap[o.orderId]}">
+                                ${shippersMap[o.orderId].username}
+                            </c:when>
+                            <c:otherwise>
+                                Chưa có
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deleteOrder(${o.orderId})">Xóa</button>
+                    </td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+
 </div>
 
-<!-- Modal Xác nhận Xóa -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content shadow-lg border-0 rounded-3">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Xác nhận xóa
-                </h5>
-                <button type="button" class="btn-close btn-close-white"
-                    data-bs-dismiss="modal" aria-label="Đóng"></button>
-            </div>
-            <div class="modal-body">
-                <p>Bạn có chắc muốn xóa đơn hàng này không? 
-                   <strong>Hành động này không thể hoàn tác</strong>.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary rounded-pill px-4"
-                    data-bs-dismiss="modal">Hủy</button>
-                <a id="deleteConfirmBtn" href="#" class="btn btn-danger rounded-pill px-4">Xóa</a>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- JS xử lý confirm / cancel / delete -->
+<script>
+function confirmOrder(orderId) {
+    if (confirm('Bạn có chắc chắn muốn xác nhận đơn hàng này không?')) {
+        fetch('${pageContext.request.contextPath}/vendor/orders/action', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=confirm&id=' + orderId
+        }).then(() => location.reload());
+    }
+}
 
-<!-- Import JS -->
-<script src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
+function cancelOrder(orderId) {
+    if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')) {
+        fetch('${pageContext.request.contextPath}/vendor/orders/action', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=cancel&id=' + orderId
+        }).then(() => location.reload());
+    }
+}
+
+function deleteOrder(orderId) {
+    if (confirm('Bạn có chắc chắn muốn xóa đơn hàng này không?')) {
+        window.location.href = '${pageContext.request.contextPath}/vendor/orders/delete?id=' + orderId;
+    }
+}
+</script>

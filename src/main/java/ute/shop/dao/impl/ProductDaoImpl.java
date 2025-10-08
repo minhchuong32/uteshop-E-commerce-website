@@ -190,28 +190,24 @@ public class ProductDaoImpl implements IProductDao {
 	public List<Product> filterProducts(Integer categoryId, Double minPrice, Double maxPrice, String sortBy, int page, int size) {
 		EntityManager em = JPAConfig.getEntityManager();
 	    try {
-	        StringBuilder jpql = new StringBuilder(
-	            "SELECT DISTINCT p FROM Product p JOIN p.variants v WHERE 1=1"
-	        );
+	    	StringBuilder jpql = new StringBuilder(
+	    		    "SELECT p FROM ProductVariant v JOIN v.product p WHERE 1=1"
+	    		);
 
-	        if (categoryId != null) {
-	            jpql.append(" AND p.category.categoryId = :cid");
-	        }
-	        if (minPrice != null) {
-	            jpql.append(" AND v.price >= :minPrice");
-	        }
-	        if (maxPrice != null) {
-	            jpql.append(" AND v.price <= :maxPrice");
-	        }
+	    		if (categoryId != null) jpql.append(" AND p.category.categoryId = :cid");
+	    		if (minPrice != null) jpql.append(" AND v.price >= :minPrice");
+	    		if (maxPrice != null) jpql.append(" AND v.price <= :maxPrice");
 
-	        // Sắp xếp theo min price trong variants
-	        if ("priceAsc".equals(sortBy)) {
-	            jpql.append(" ORDER BY v.price ASC");
-	        } else if ("priceDesc".equals(sortBy)) {
-	            jpql.append(" ORDER BY v.price DESC");
-	        } else {
-	            jpql.append(" ORDER BY p.productId DESC");
-	        }
+	    		// Sắp xếp theo giá min của product
+	    		jpql.append(" GROUP BY p.productId, p.name, p.description, p.imageUrl, p.category, p.shop");
+
+	    		if ("priceAsc".equals(sortBy)) {
+	    		    jpql.append(" ORDER BY MIN(v.price) ASC");
+	    		} else if ("priceDesc".equals(sortBy)) {
+	    		    jpql.append(" ORDER BY MIN(v.price) DESC");
+	    		} else {
+	    		    jpql.append(" ORDER BY p.productId DESC");
+	    		}
 
 	        TypedQuery<Product> query = em.createQuery(jpql.toString(), Product.class);
 
@@ -254,15 +250,70 @@ public class ProductDaoImpl implements IProductDao {
 	@Override
 	public Product findByIdWithVariants(int productId) {
 		EntityManager em = JPAConfig.getEntityManager();
-        try {
-            // Sử dụng JOIN FETCH để load luôn variants
-            String jpql = "SELECT p FROM Product p LEFT JOIN FETCH p.variants WHERE p.productId = :pid";
-            TypedQuery<Product> query = em.createQuery(jpql, Product.class);
-            query.setParameter("pid", productId);
-            return query.getSingleResult();
-        } finally {
-            em.close();
-        }
+	    try {
+	        String jpql = "SELECT p FROM Product p LEFT JOIN FETCH p.variants WHERE p.id = :pid";
+	        return em.createQuery(jpql, Product.class)
+	                 .setParameter("pid", productId)
+	                 .getSingleResult();
+	    } finally {
+	        em.close();
+	    }
+	}
+	
+	//vendor dashboard
+	@Override
+	public long countByShopId(int shopId) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = "SELECT COUNT(p) FROM Product p WHERE p.shop.shopId = :sid";
+	        return em.createQuery(jpql, Long.class)
+	                 .setParameter("sid", shopId)
+	                 .getSingleResult();
+	    } finally {
+	        em.close();
+	    }
+	}
+	
+	@Override
+	// Top sản phẩm bán chạy theo shop
+	public List<Object[]> getTopSellingProducts(int shopId, int limit) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String hql = """
+	            SELECT od.productVariant.product, SUM(od.quantity), SUM(od.price * od.quantity)
+	            FROM OrderDetail od
+	            JOIN od.order o
+	            WHERE od.productVariant.product.shop.shopId = :sid
+	              AND o.status = :status
+	            GROUP BY od.productVariant.product
+	            ORDER BY SUM(od.quantity) DESC
+	        """;
+	        return em.createQuery(hql)
+	                 .setParameter("sid", shopId)
+	                 .setParameter("status", "Đã giao")
+	                 .setMaxResults(limit)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
+	
+	@Override
+	public List<Object[]> getProductCountByCategory(int shopId) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = """
+	            SELECT p.category.name, COUNT(p)
+	            FROM Product p
+	            WHERE p.shop.shopId = :sid
+	            GROUP BY p.category.name
+	        """;
+	        return em.createQuery(jpql, Object[].class)
+	                 .setParameter("sid", shopId)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
 	}
 
 

@@ -1,10 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/commons/taglib.jsp"%>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <title>${product.name}|UteShop</title>
 </head>
+
 <body>
 	<div class="container py-4">
 		<div class="row g-4">
@@ -66,46 +68,28 @@
 					</c:if>
 				</h4>
 
+				<!-- Thuộc tính sản phẩm -->
+				<c:if test="${not empty optionMap}">
+					<c:forEach var="entry" items="${optionMap}">
+						<div class="mb-3">
+							<!-- Option name row -->
+							<label class="fw-bold d-block mb-2">${entry.key}</label>
+
+							<!-- Values row -->
+							<div class="btn-group flex-wrap" role="group">
+								<c:forEach var="val" items="${entry.value}">
+									<input type="radio" class="btn-check" name="${entry.key}"
+										id="${entry.key}_${val}" value="${val}" required>
+									<label class="btn btn-outline-primary mb-2"
+										for="${entry.key}_${val}">${val}</label>
+								</c:forEach>
+							</div>
+						</div>
+					</c:forEach>
+				</c:if>
 
 
-				<p class="mt-3">${product.description}</p>
 
-				<!-- Kích cỡ -->
-				<div class="mb-3">
-					<label class="fw-bold d-block">Kích cỡ</label>
-					<div class="btn-group flex-wrap" role="group"
-						aria-label="Chọn kích cỡ">
-						<input type="radio" class="btn-check" name="size" id="sizeXS">
-						<label class="btn btn-outline-primary" for="sizeXS">XS</label> <input
-							type="radio" class="btn-check" name="size" id="sizeS"> <label
-							class="btn btn-outline-primary" for="sizeS">S</label> <input
-							type="radio" class="btn-check" name="size" id="sizeM"> <label
-							class="btn btn-outline-primary" for="sizeM">M</label> <input
-							type="radio" class="btn-check" name="size" id="sizeL"> <label
-							class="btn btn-outline-primary" for="sizeL">L</label> <input
-							type="radio" class="btn-check" name="size" id="sizeXL"> <label
-							class="btn btn-outline-primary" for="sizeXL">XL</label>
-					</div>
-				</div>
-
-				<!-- Màu sắc -->
-				<div class="mb-3">
-					<label class="fw-bold d-block">Màu sắc</label>
-					<div class="btn-group flex-wrap" role="group"
-						aria-label="Chọn màu sắc">
-						<input type="radio" class="btn-check" name="color" id="colorWhite">
-						<label class="btn btn-outline-primary" for="colorWhite">White</label>
-
-						<input type="radio" class="btn-check" name="color" id="colorBlack">
-						<label class="btn btn-outline-primary" for="colorBlack">Black</label>
-
-						<input type="radio" class="btn-check" name="color" id="colorNavy">
-						<label class="btn btn-outline-primary" for="colorNavy">Navy</label>
-
-						<input type="radio" class="btn-check" name="color" id="colorGray">
-						<label class="btn btn-outline-primary" for="colorGray">Gray</label>
-					</div>
-				</div>
 
 				<!-- Số lượng -->
 				<div class="mb-3 d-flex align-items-center">
@@ -117,10 +101,7 @@
 					<button class="btn btn-outline-secondary btn-sm"
 						onclick="changeQty(1)">+</button>
 				</div>
-				<!-- Thông báo -->
-				<div id="selectionAlert" class="alert alert-danger d-none mt-2"
-					role="alert">Vui lòng chọn kích cỡ và màu sắc trước khi tiếp
-					tục!</div>
+			
 				<!-- Nút hành động -->
 				<div class="d-flex gap-2 mb-3">
 

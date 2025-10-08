@@ -28,10 +28,10 @@ public class ProductVariant {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String optionName;
 
-    @Column(length = 100, nullable = true)
+    @Column(columnDefinition = "NVARCHAR(MAX)", nullable = true)
     private String optionValue;
 
     @Column(nullable = false)

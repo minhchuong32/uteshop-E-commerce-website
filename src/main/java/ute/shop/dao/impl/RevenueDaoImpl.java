@@ -60,6 +60,7 @@ public class RevenueDaoImpl implements IRevenueDao {
 					    ORDER BY MONTH(o.createdAt)
 					""";
 
+<<<<<<< HEAD
 			Query query = em.createQuery(hql);
 			query.setParameter("status", "Đã giao");
 			return query.getResultList();
@@ -117,5 +118,59 @@ public class RevenueDaoImpl implements IRevenueDao {
 			em.close();
 		}
 	}
+=======
+            Query query = em.createQuery(hql);
+            query.setParameter("status", "Đã giao");
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+    
+    //vendor dashboard
+    @Override
+    public BigDecimal getTotalRevenueByShop(int shopId) {
+    	EntityManager em = JPAConfig.getEntityManager();
+        try {
+        	String hql = """
+                    SELECT COALESCE(SUM(od.price * od.quantity), 0)
+                    FROM OrderDetail od
+                    JOIN od.order o
+                    WHERE od.productVariant.product.shop.shopId = :sid
+                      AND o.status = :status
+                """;
+                Query query = em.createQuery(hql);
+                query.setParameter("sid", shopId);
+                query.setParameter("status", "Đã giao"); // kiểm tra DB
+
+                BigDecimal result = (BigDecimal) query.getSingleResult();
+
+                return result;
+        } finally {
+            em.close();
+        }
+    }
+    @Override
+    public List<Object[]> getRevenueByMonthByShop(int shopId) {
+        EntityManager em = JPAConfig.getEntityManager();
+        try {
+            String hql = """
+                SELECT EXTRACT(MONTH FROM o.createdAt), SUM(od.price * od.quantity)
+                FROM OrderDetail od
+                JOIN od.order o
+                WHERE od.productVariant.product.shop.shopId = :sid
+                  AND o.status = :status
+                GROUP BY EXTRACT(MONTH FROM o.createdAt)
+                ORDER BY EXTRACT(MONTH FROM o.createdAt)
+            """;
+            Query query = em.createQuery(hql);
+            query.setParameter("sid", shopId);
+            query.setParameter("status", "Đã giao");
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+>>>>>>> 8ea3bf959a76adc8b733df8eb3621fbf2ec65abe
 
 }

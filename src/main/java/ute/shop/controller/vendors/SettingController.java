@@ -1,10 +1,10 @@
 package ute.shop.controller.vendors;
 
-import ute.shop.entity.StoreSettings;
+import ute.shop.entity.Shop;
 import ute.shop.entity.User;
-import ute.shop.service.IStoreSettingsService;
+import ute.shop.service.IShopService;
 import ute.shop.service.IUserService;
-import ute.shop.service.impl.StoreSettingsServiceImpl;
+import ute.shop.service.impl.ShopServiceImpl;
 import ute.shop.service.impl.UserServiceImpl;
 
 import jakarta.servlet.ServletException;
@@ -18,7 +18,7 @@ import java.io.IOException;
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 50)
 public class SettingController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private IStoreSettingsService storeService = new StoreSettingsServiceImpl();
+	private IShopService shopService = new ShopServiceImpl();
 	private IUserService userService = new UserServiceImpl();
 
 	@Override
@@ -33,11 +33,12 @@ public class SettingController extends HttpServlet {
 			return;
 		}
 
-		// Load store settings từ DB
-		StoreSettings store = storeService.getSettings();
-
-		// Đặt attribute cho JSP
-		request.setAttribute("store", store);
+		Shop shop = shopService.findByUserId(admin.getUserId());
+		if (shop == null) {
+		    request.setAttribute("error", "Không tìm thấy cửa hàng của bạn!");
+		} else {
+		    request.setAttribute("shop", shop); 
+		}
 
 		// Forward sang settings.jsp
 		request.setAttribute("page", "settings"); // css
@@ -57,25 +58,25 @@ public class SettingController extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/login");
 			return;
 		}
+		// --- Shop ---
+		Shop shop = shopService.findByUserId(admin.getUserId()); 
+	    if (shop == null) {
+	        request.setAttribute("error", "Không tìm thấy cửa hàng của bạn!");
+	        doGet(request, response);
+	        return;
+	    }
 
-		// --- Store settings ---
-		StoreSettings store = storeService.getSettings();
-		store.setStoreName(request.getParameter("store_name"));
-		store.setEmail(request.getParameter("store_email"));
-		store.setHotline(request.getParameter("hotline"));
-		store.setAddress(request.getParameter("address"));
-		store.setTheme(request.getParameter("theme"));
-		store.setCodEnabled(request.getParameter("cod_enabled") != null);
-		store.setMomoEnabled(request.getParameter("momo_enabled") != null);
-		store.setVnpayEnabled(request.getParameter("vnpay_enabled") != null);
+	    shop.setName(request.getParameter("store_name"));
+	    shop.setDescription(request.getParameter("description"));
+	    shop.setCreatedAt(shop.getCreatedAt()); 
 
-		Part logoPart = request.getPart("logo");
-		if (logoPart != null && logoPart.getSize() > 0) {
-			String fileName = logoPart.getSubmittedFileName();
-			String uploadPath = request.getServletContext().getRealPath("/uploads");
-			logoPart.write(uploadPath + "/" + fileName);
-			store.setLogo(fileName); // chỉ lưu tên file
-		}
+	    Part logoPart = request.getPart("logoFile");
+	    if (logoPart != null && logoPart.getSize() > 0) {
+	        String fileName = logoPart.getSubmittedFileName();
+	        String uploadPath = request.getServletContext().getRealPath("/uploads");
+	        logoPart.write(uploadPath + "/" + fileName);
+	        shop.setLogo(fileName);
+	    }
 
 		// --- User profile (admin) ---
 		// Lấy dữ liệu form
@@ -128,20 +129,19 @@ public class SettingController extends HttpServlet {
 		// Update DB
 		boolean updatedprofile = userService.updatePwd(admin, changePwd);
 		// Gọi service update
-		boolean updatesetting = storeService.updateSettings(store);
+		shopService.update(shop);
 
-		if (updatedprofile && updatesetting) {
-			session.setAttribute("account", admin);
-			request.setAttribute("message", "Cập nhật thành công!");
-			request.setAttribute("messageType", "success");
-		} else {
-			request.setAttribute("message", "Có lỗi khi cập nhật!");
-			request.setAttribute("messageType", "error");
-		}
+		if (updatedprofile) {
+	        session.setAttribute("account", admin);
+	        request.setAttribute("message", "Cập nhật thành công!");
+	        request.setAttribute("messageType", "success");
+	    } else {
+	        request.setAttribute("message", "Có lỗi khi cập nhật!");
+	        request.setAttribute("messageType", "error");
+	    }
 
-		// Luôn load lại dữ liệu từ DB để hiển thị
-		StoreSettings updatedStore = storeService.getSettings();
-		request.setAttribute("store", updatedStore);
+		Shop updatedShop = shopService.findByUserId(admin.getUserId());
+	    request.setAttribute("shop", updatedShop);
 
 		// Forward sang settings.jsp
 		request.setAttribute("page", "settings"); // css

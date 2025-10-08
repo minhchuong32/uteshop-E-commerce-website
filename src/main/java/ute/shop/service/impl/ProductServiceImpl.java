@@ -109,5 +109,27 @@ public class ProductServiceImpl implements IProductService {
 	public Product findByIdWithVariants(int productId) {
 		return productDao.findByIdWithVariants(productId);
 	}
+	
+	
+	@Override
+	public Product findByIdWithVariants(Integer id) {
+		return productDao.findByIdWithVariants(id);
+	}
+
+	//Vendor dashboard
+	public long getTotalProducts(int shopId) {
+        return productDao.findByShopId(shopId).size();
+    }
+
+	@Override
+	public List<Object[]> getTopSellingProducts(int shopId, int limit) {
+		return productDao.getTopSellingProducts(shopId, limit);
+	}
+
+	@Override
+	public List<Object[]> getProductCountByCategory(int shopId) {
+		return productDao.getProductCountByCategory(shopId);
+	}
+
 
 }

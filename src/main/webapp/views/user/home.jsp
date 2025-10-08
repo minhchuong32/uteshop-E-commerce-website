@@ -79,52 +79,59 @@
 				</button>
 			</div>
 		</div>
-		<!-- Bộ lọc + Sản phẩm -->
-		<div id="product"  class="bg-white rounded shadow-sm p-3 mb-4">
-			<!-- Tiêu đề -->
-			<div class="mb-3">
-				<h5 class="fw-bold text-uppercase text-primary-custom">
-					<i class="bi bi-box-seam me-2"></i> Sản phẩm
-				</h5>
+		<!-- Bộ lọc -->
+		<form action="${pageContext.request.contextPath}/web/home"
+			method="get" class="row g-3 align-items-end mb-4">
+			<!-- Giữ page hiện tại -->
+			<input type="hidden" name="page" value="${currentPage}" />
+
+			<div class="col-md-3">
+				<label class="form-label fw-bold">Danh mục</label> <select
+					class="form-select" name="categoryId">
+					<option value="">Tất cả</option>
+					<c:forEach var="c" items="${categories}">
+						<option value="${c.categoryId}"
+							<c:if test="${c.categoryId == selectedCategoryId}">selected</c:if>>
+							${c.name}</option>
+					</c:forEach>
+				</select>
 			</div>
-			<!-- Bộ lọc -->
-			<form action="${pageContext.request.contextPath}/user/home"
-				method="get" class="row g-3 align-items-end mb-4">
-				<div class="col-md-3">
-					<label class="form-label fw-bold">Danh mục</label> <select
-						class="form-select" name="categoryId">
-						<option value="">Tất cả</option>
-						<c:forEach var="c" items="${categories}">
-							<option value="${c.categoryId}">${c.name}</option>
-						</c:forEach>
-					</select>
+
+			<div class="col-md-3">
+				<label class="form-label fw-bold">Khoảng giá</label>
+				<div class="input-group">
+					<input type="number" class="form-control" placeholder="Từ"
+						name="minPrice" value="${minPrice != null ? minPrice : ''}" /> <span
+						class="input-group-text">-</span> <input type="number"
+						class="form-control" placeholder="Đến" name="maxPrice"
+						value="${maxPrice != null ? maxPrice : ''}" />
 				</div>
-				<div class="col-md-3">
-					<label class="form-label fw-bold">Khoảng giá</label>
-					<div class="input-group">
-						<input type="number" class="form-control" placeholder="Từ"
-							name="minPrice"> <span class="input-group-text">-</span>
-						<input type="number" class="form-control" placeholder="Đến"
-							name="maxPrice">
-					</div>
-				</div>
-				<div class="col-md-3">
-					<label class="form-label fw-bold">Sắp xếp</label> <select
-						class="form-select" name="sortBy">
-						<option value="newest">Mới nhất</option>
-						<option value="priceAsc">Giá: Thấp → Cao</option>
-						<option value="priceDesc">Giá: Cao → Thấp</option>
-					</select>
-				</div>
-				<div class="col-md-3 d-flex gap-2">
-					<button type="submit" class="btn btn-primary-custom w-50">
-						<i class="bi bi-filter"></i> Lọc
-					</button>
-					<a href="${pageContext.request.contextPath}/user/home"
-						class="btn btn-outline-secondary w-50">Xóa lọc</a>
-				</div>
-			</form>
-			<!-- Chuyển đổi layout -->
+			</div>
+
+			<div class="col-md-3">
+				<label class="form-label fw-bold">Sắp xếp</label> <select
+					class="form-select" name="sortBy">
+					<option value="newest"
+						<c:if test="${sortBy == 'newest'}">selected</c:if>>Mới
+						nhất</option>
+					<option value="priceAsc"
+						<c:if test="${sortBy == 'priceAsc'}">selected</c:if>>Giá:
+						Thấp → Cao</option>
+					<option value="priceDesc"
+						<c:if test="${sortBy == 'priceDesc'}">selected</c:if>>Giá:
+						Cao → Thấp</option>
+				</select>
+			</div>
+
+			<div class="col-md-3 d-flex gap-2">
+				<button type="submit" class="btn btn-primary-custom w-50">
+					<i class="bi bi-filter"></i> Lọc
+				</button>
+				<a href="${pageContext.request.contextPath}/web/home"
+					class="btn btn-outline-secondary w-50">Xóa lọc</a>
+			</div>
+		</form>
+		<!-- Chuyển đổi layout -->
 			<div class="d-flex justify-content-end mb-3">
 				<div class="btn-group" role="group">
 					<button type="button" class="btn btn-primary-custom active"

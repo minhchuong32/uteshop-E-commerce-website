@@ -6,6 +6,7 @@ import java.util.List;
 public interface IProductService {
     List<Product> findAll();
     Product findById(Integer id);
+    Product findByIdWithVariants(Integer id);
     List<Product> findTopProducts(int limit);
     long countAll();
     List<Product> findByPage(int page, int pageSize);
@@ -26,5 +27,10 @@ public interface IProductService {
 	List<Product> findByCategoryAndShop(int categoryId, int shopId);
 
 	Product findByIdWithVariants(int productId);
+	
+	//Vendor dashboard
+	long getTotalProducts(int shopId);
+	List<Object[]> getTopSellingProducts(int shopId, int limit);
+    List<Object[]> getProductCountByCategory(int shopId);
 
 }
