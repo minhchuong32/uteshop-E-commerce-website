@@ -189,5 +189,35 @@ public class OrderDaoImpl implements IOrderDao {
 	        em.close();
 	    }
 	}
+	
+	@Override
+	public List<Order> getOrdersByShopAndStatuses(int shopId, List<String> statuses) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        return em.createQuery(
+	            "SELECT DISTINCT o FROM Order o JOIN o.orderDetails od " +
+	            "WHERE od.productVariant.product.shop.shopId = :sid AND o.status IN :statuses " +
+	            "ORDER BY o.createdAt DESC", Order.class)
+	            .setParameter("sid", shopId)
+	            .setParameter("statuses", statuses)
+	            .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
+	@Override
+	public User getOrderShipper(Order order) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        List<User> list = em.createQuery(
+	            "SELECT d.shipper FROM Delivery d WHERE d.order = :order ORDER BY d.createdAt ASC", User.class)
+	            .setParameter("order", order)
+	            .setMaxResults(1)
+	            .getResultList();
+	        return list.isEmpty() ? null : list.get(0);
+	    } finally {
+	        em.close();
+	    }
+	}
 
 }

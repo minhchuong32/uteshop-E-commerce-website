@@ -19,4 +19,7 @@ public interface IOrderDao {
 	long countDistinctCustomersByShop(int shopId);
 	List<Object[]> getOrderStatusCountByShop(int shopId);
 	List<Object[]> getOrderTrendByShop(int shopId);
+	
+	List<Order> getOrdersByShopAndStatuses(int shopId, List<String> statuses);
+	User getOrderShipper(Order order);
 }

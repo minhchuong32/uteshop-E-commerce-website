@@ -68,4 +68,14 @@ public class OrderServiceImpl implements IOrderService {
 	public List<Object[]> getOrderTrendByShop(int shopId) {
 		return orderDao.getOrderTrendByShop(shopId);
 	}
+
+	@Override
+	public List<Order> getOrdersByShopAndStatuses(int shopId, List<String> statuses) {
+		return orderDao.getOrdersByShopAndStatuses(shopId, statuses);
+	}
+
+	@Override
+	public User getOrderShipper(Order order) {
+		return orderDao.getOrderShipper(order);
+	}
 }
