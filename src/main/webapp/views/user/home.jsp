@@ -158,13 +158,31 @@
 										<span class="text-warning">★★★★☆</span> <small
 											class="text-muted">(${p.reviewsCount} đánh giá)</small>
 									</div>
-									<div class="price-wrapper">
-										<c:set var="variant" value="${p.variants[0]}" />
-										<p class="text-danger fw-bold mb-1" style="font-size: 15px;">
-											<fmt:formatNumber value="${variant.price}" type="currency"
-												currencySymbol="₫" />
-										</p>
-									</div>
+									<c:set var="variant"
+										value="${requestScope['variant_' + p.productId]}" />
+									<c:choose>
+										<c:when
+											test="${variant.oldPrice != null && variant.oldPrice > variant.price}">
+											<!-- Giá cũ gạch -->
+											<p style="text-decoration: line-through;">
+												<fmt:formatNumber value="${variant.oldPrice}"
+													type="currency" currencySymbol="₫" />
+											</p>
+											<!-- Giá mới nổi bật -->
+											<p class="text-danger fw-bold">
+												<fmt:formatNumber value="${variant.price}" type="currency"
+													currencySymbol="₫" />
+											</p>
+										</c:when>
+										<c:otherwise>
+											<p class="text-danger fw-bold">
+												<fmt:formatNumber value="${variant.price}" type="currency"
+													currencySymbol="₫" />
+											</p>
+										</c:otherwise>
+									</c:choose>
+
+
 
 									<button type="button"
 										class="btn btn-sm btn-primary-custom w-100"
@@ -204,19 +222,36 @@
 										<h6 class="mb-1">${p.name}</h6>
 										<small class="text-muted">${p.reviewsCount} đánh giá</small>
 									</div>
-								</div>
+								</div> 
+								<c:set var="variant" value="${p.variants[0]}" />
 								<div class="text-end">
-									<c:set var="variant" value="${p.variants[0]}" />
-									<p class="text-danger fw-bold mb-0">
-										<fmt:formatNumber value="${variant.price}" type="currency"
-											currencySymbol="₫" />
-									</p>
+									<c:choose>
+										<c:when
+											test="${variant.oldPrice != null && variant.oldPrice > variant.price}">
+											<p class="text-muted mb-0"
+												style="text-decoration: line-through; font-size: 13px;">
+												<fmt:formatNumber value="${variant.oldPrice}"
+													type="currency" currencySymbol="₫" />
+											</p>
+											<p class="text-danger fw-bold mb-0">
+												<fmt:formatNumber value="${variant.price}" type="currency"
+													currencySymbol="₫" />
+											</p>
+										</c:when>
+										<c:otherwise>
+											<p class="text-danger fw-bold mb-0">
+												<fmt:formatNumber value="${variant.price}" type="currency"
+													currencySymbol="₫" />
+											</p>
+										</c:otherwise>
+									</c:choose>
 									<button type="button"
 										class="btn btn-sm btn-primary-custom w-100"
 										onclick="window.location.href='${pageContext.request.contextPath}/user/product/detail?id=${p.productId}'">
 										<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
 									</button>
 								</div>
+
 
 							</a>
 						</c:forEach>
