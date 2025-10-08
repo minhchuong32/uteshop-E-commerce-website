@@ -72,7 +72,11 @@
 						href="${pageContext.request.contextPath}/admin/home?page=complaints">
 							<i class="bi bi-chat-dots me-2"></i> Quản lý Khiếu nại
 					</a></li>
-
+					<li class="nav-item mb-1"><a
+						class="nav-link ${page=='revenue' ? 'active' : ''}"
+						href="${pageContext.request.contextPath}/admin/home?page=revenue">
+							<i class="bi bi-cash-stack me-2"></i></i> Quản lý Doanh thu
+					</a></li>
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='stats' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=stats">

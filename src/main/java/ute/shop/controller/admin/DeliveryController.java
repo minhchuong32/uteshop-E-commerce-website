@@ -98,7 +98,8 @@ public class DeliveryController extends HttpServlet {
 
                 // === Tạo file PDF ===
                 System.out.println("\n========== 🧾 TẠO FILE PDF ==========");
-                String pdfPath = PDFGenerator.generateDeliveryNote(d, realPath);
+//                String pdfPath = PDFGenerator.generateDeliveryNote(d, realPath);
+                String pdfPath = null;
                 String fileName = new File(pdfPath).getName();
                 String relativePath = RELATIVE_DIR + "/" + fileName;
 

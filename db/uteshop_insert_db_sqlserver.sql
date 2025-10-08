@@ -137,19 +137,20 @@ INSERT INTO product_variants (product_id, optionName, optionValue, stock, price,
 (20, N'Phiên bản', N'USB-C', 50, 6490000, 6990000, N'/images/variants/airpods-pro2-usbc.jpg');
 
 -- ==================== BẢNG ORDERS ====================
-INSERT INTO orders (user_id, total_amount, status, payment_method, created_at, address) VALUES
-(6, 52990000, N'delivered', N'VNPay', DATEADD(day, -15, GETDATE()), N'111 Lý Tự Trọng, Q1, TP.HCM'),
-(7, 33990000, N'delivered', N'MoMo', DATEADD(day, -12, GETDATE()), N'222 Hai Bà Trưng, Q3, TP.HCM'),
-(8, 42990000, N'delivering', N'COD', DATEADD(day, -3, GETDATE()), N'333 Nguyễn Đình Chiểu, Q1, TP.HCM'),
-(9, 21990000, N'confirmed', N'VNPay', DATEADD(day, -1, GETDATE()), N'444 Trần Hưng Đạo, Q5, TP.HCM'),
-(10, 28990000, N'new', N'COD', GETDATE(), N'555 Pasteur, Q1, TP.HCM'),
-(11, 8990000, N'delivered', N'MoMo', DATEADD(day, -20, GETDATE()), N'666 Nam Kỳ Khởi Nghĩa, Q3, TP.HCM'),
-(12, 48990000, N'delivered', N'VNPay', DATEADD(day, -18, GETDATE()), N'777 Võ Thị Sáu, Q3, TP.HCM'),
-(6, 36990000, N'canceled', N'COD', DATEADD(day, -10, GETDATE()), N'111 Lý Tự Trọng, Q1, TP.HCM'),
-(7, 24990000, N'delivering', N'VNPay', DATEADD(day, -2, GETDATE()), N'222 Hai Bà Trưng, Q3, TP.HCM'),
-(8, 6490000, N'confirmed', N'MoMo', DATEADD(hour, -12, GETDATE()), N'333 Nguyễn Đình Chiểu, Q1, TP.HCM'),
-(9, 38990000, N'new', N'COD', GETDATE(), N'444 Trần Hưng Đạo, Q5, TP.HCM'),
-(10, 29990000, N'delivered', N'VNPay', DATEADD(day, -25, GETDATE()), N'555 Pasteur, Q1, TP.HCM');
+INSERT INTO orders (user_id, total_amount, status, payment_method, created_at, address) VALUES 
+(6, 52990000, N'Đã giao', N'VNPay', DATEADD(day, -15, GETDATE()), N'111 Lý Tự Trọng, Q1, TP.HCM'),
+(7, 33990000, N'Đã giao', N'MoMo', DATEADD(day, -12, GETDATE()), N'222 Hai Bà Trưng, Q3, TP.HCM'),
+(8, 42990000, N'Đang giao', N'COD', DATEADD(day, -3, GETDATE()), N'333 Nguyễn Đình Chiểu, Q1, TP.HCM'),
+(9, 21990000, N'Đã xác nhận', N'VNPay', DATEADD(day, -1, GETDATE()), N'444 Trần Hưng Đạo, Q5, TP.HCM'),
+(10, 28990000, N'Mới', N'COD', GETDATE(), N'555 Pasteur, Q1, TP.HCM'),
+(11, 8990000, N'Đã giao', N'MoMo', DATEADD(day, -20, GETDATE()), N'666 Nam Kỳ Khởi Nghĩa, Q3, TP.HCM'),
+(12, 48990000, N'Đã giao', N'VNPay', DATEADD(day, -18, GETDATE()), N'777 Võ Thị Sáu, Q3, TP.HCM'),
+(6, 36990000, N'Đã hủy', N'COD', DATEADD(day, -10, GETDATE()), N'111 Lý Tự Trọng, Q1, TP.HCM'),
+(7, 24990000, N'Đang giao', N'VNPay', DATEADD(day, -2, GETDATE()), N'222 Hai Bà Trưng, Q3, TP.HCM'),
+(8, 6490000, N'Đã xác nhận', N'MoMo', DATEADD(hour, -12, GETDATE()), N'333 Nguyễn Đình Chiểu, Q1, TP.HCM'),
+(9, 38990000, N'Mới', N'COD', GETDATE(), N'444 Trần Hưng Đạo, Q5, TP.HCM'),
+(10, 29990000, N'Đã giao', N'VNPay', DATEADD(day, -25, GETDATE()), N'555 Pasteur, Q1, TP.HCM');
+
 
 -- ==================== BẢNG ORDER_DETAILS ====================
 INSERT INTO order_details (order_id, product_variant_id, quantity, price) VALUES
