@@ -250,15 +250,14 @@ public class ProductDaoImpl implements IProductDao {
 	@Override
 	public Product findByIdWithVariants(int productId) {
 		EntityManager em = JPAConfig.getEntityManager();
-        try {
-            // Sử dụng JOIN FETCH để load luôn variants
-            String jpql = "SELECT p FROM Product p LEFT JOIN FETCH p.variants WHERE p.productId = :pid";
-            TypedQuery<Product> query = em.createQuery(jpql, Product.class);
-            query.setParameter("pid", productId);
-            return query.getSingleResult();
-        } finally {
-            em.close();
-        }
+	    try {
+	        String jpql = "SELECT p FROM Product p LEFT JOIN FETCH p.variants WHERE p.id = :pid";
+	        return em.createQuery(jpql, Product.class)
+	                 .setParameter("pid", productId)
+	                 .getSingleResult();
+	    } finally {
+	        em.close();
+	    }
 	}
 	
 	@Override

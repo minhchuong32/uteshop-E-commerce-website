@@ -40,5 +40,6 @@ public interface IProductDao {
 
 	Product findByIdWithVariants(int productId);
 	
+
 	long countByShopId(int shopId);
 }

@@ -28,3 +28,5 @@ function syncQty() {
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("qty").addEventListener("input", syncQty);
 });
+
+

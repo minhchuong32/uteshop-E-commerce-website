@@ -115,4 +115,9 @@ public class ProductServiceImpl implements IProductService {
         return productDao.findByShopId(shopId).size();
     }
 
+	@Override
+	public Product findByIdWithVariants(Integer id) {
+		return productDao.findByIdWithVariants(id);
+	}
+
 }

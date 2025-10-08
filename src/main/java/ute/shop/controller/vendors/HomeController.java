@@ -60,7 +60,6 @@ public class HomeController extends HttpServlet {
         long totalCustomers = orderService.getTotalCustomers(shopId);
         BigDecimal totalRevenue = revenueService.getTotalRevenue(shopId);
 
-        // Gửi dữ liệu xuống JSP
         req.setAttribute("totalProducts", totalProducts);
         req.setAttribute("totalOrders", totalOrders);
         req.setAttribute("totalCustomers", totalCustomers);
