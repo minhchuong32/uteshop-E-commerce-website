@@ -98,13 +98,13 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public boolean hasPurchased(int userId, int productId) {
-	    EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getEntityManager();
 	    try {
 	        Long count = em.createQuery(
 	            "SELECT COUNT(od) FROM OrderDetail od " +
 	            "JOIN od.order o " +
 	            "WHERE o.user.userId = :uid " +
-	            "AND od.product.productId = :pid " +
+	            "AND od.productVariant.product.productId = :pid " +
 	            "AND o.status = :status", Long.class)
 	            .setParameter("uid", userId)
 	            .setParameter("pid", productId)

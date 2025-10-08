@@ -226,8 +226,7 @@
 					<tr>
 						<th>Tồn kho</th>
 						<td><c:choose>
-								<c:when test="${minVariant != null && minVariant.stock > 0}">
-                Còn hàng (${minVariant.stock})
+								<c:when test="${minVariant != null && minVariant.stock > 0}">Còn hàng (${minVariant.stock})
             </c:when>
 								<c:otherwise>
 									<span class="text-danger">Hết hàng</span>

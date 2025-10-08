@@ -1,6 +1,7 @@
 package ute.shop.controller.users;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ute.shop.entity.Product;
 import ute.shop.entity.ProductImage;
+import ute.shop.entity.ProductVariant;
 import ute.shop.entity.Review;
 import ute.shop.entity.Shop;
 import ute.shop.entity.User;
@@ -54,6 +56,24 @@ int productId = Integer.parseInt(req.getParameter("id"));
         // Shop info và số lượng sản phẩm của shop (tránh LazyInitialization)
         Shop shop = product.getShop();
         //int productCount = productService.countByShop(shop.getShopId());
+        
+        // Xử lý variant: chọn variant rẻ nhất
+        List<ProductVariant> variants = product.getVariants();
+        ProductVariant minVariant = null;
+        if (variants != null && !variants.isEmpty()) {
+            minVariant = variants.stream()
+                    .min((v1, v2) -> v1.getPrice().compareTo(v2.getPrice()))
+                    .orElse(variants.get(0));
+
+            // Gán giá hiển thị cho product (dễ dùng trong JSP)
+            product.setPrice(minVariant.getPrice());
+        } else {
+            product.setPrice(BigDecimal.ZERO);
+        }
+
+        // Gán minVariant vào request để JSP dùng hiển thị oldPrice và stock
+        req.setAttribute("minVariant", minVariant);
+        
 
         //req.setAttribute("productCount", productCount);
         req.setAttribute("shop", shop);
