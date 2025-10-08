@@ -54,18 +54,23 @@ public class HomeController extends HttpServlet {
             products = productService.filterProducts(categoryId, minPrice, maxPrice, sortBy, page, size);
         }
 
-        // Gán giá hiển thị từ variant rẻ nhất
-        for (Product p : products) {
-            if (p.getVariants() != null && !p.getVariants().isEmpty()) {
-                BigDecimal minVariantPrice = p.getVariants().stream()
-                        .map(ProductVariant::getPrice)
-                        .min(BigDecimal::compareTo)
-                        .orElse(BigDecimal.ZERO);
-                p.setPrice(minVariantPrice);
-            } else {
-                p.setPrice(BigDecimal.ZERO);
-            }
-        }
+		// Gán giá hiển thị từ variant rẻ nhất và lưu variant tạm để hiển thị oldPrice
+		for (Product p : products) {
+			if (p.getVariants() != null && !p.getVariants().isEmpty()) {
+				// Chọn variant có giá hiện tại thấp nhất
+				ProductVariant minVariant = p.getVariants().stream()
+						.min((v1, v2) -> v1.getPrice().compareTo(v2.getPrice())).orElse(p.getVariants().get(0));
+
+				// Set giá hiển thị
+				p.setPrice(minVariant.getPrice());
+
+				// Lưu variant vào request để JSP dùng hiển thị oldPrice nếu có
+				req.setAttribute("variant_" + p.getProductId(), minVariant);
+			} else {
+				p.setPrice(BigDecimal.ZERO);
+			}
+		}
+
 
         int totalPages = (int) Math.ceil((double) totalProducts / size);
 

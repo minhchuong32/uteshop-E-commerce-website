@@ -1,6 +1,7 @@
 package ute.shop.controller.web;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ute.shop.entity.Product;
 import ute.shop.entity.ProductImage;
+import ute.shop.entity.ProductVariant;
 import ute.shop.entity.Review;
 import ute.shop.entity.Shop;
 import ute.shop.entity.User;
@@ -48,13 +50,33 @@ public class ProductDetailController extends HttpServlet {
             hasPurchased = orderService.hasPurchased(account.getUserId(), productId);
         }
         
+     // Lấy list variant
+        List<ProductVariant> variants = product.getVariants();
+        ProductVariant minVariant = null;
+
+        if (variants != null && !variants.isEmpty()) {
+            // Chọn variant có giá hiện tại thấp nhất
+            minVariant = variants.stream()
+                    .min((v1, v2) -> v1.getPrice().compareTo(v2.getPrice()))
+                    .orElse(variants.get(0));
+
+            // Gán giá hiển thị cho product
+            product.setPrice(minVariant.getPrice());
+        } else {
+            product.setPrice(BigDecimal.ZERO);
+        }
+
+        // Gán variant rẻ nhất vào request để JSP sử dụng oldPrice
+        req.setAttribute("minVariant", minVariant);
+        req.setAttribute("product", product);
+        
+        
         // Thông tin shop
         Shop shop = product.getShop();
         
      // Đếm số sản phẩm của shop (tránh LazyInitException)
         int productCount = product.getShop().getProducts().size();
-
-
+        
         req.setAttribute("productCount", productCount);
         req.setAttribute("shop", shop);
         req.setAttribute("hasPurchased", hasPurchased);

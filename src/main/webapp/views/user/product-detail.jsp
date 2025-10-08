@@ -54,13 +54,18 @@
 
 
 				<h4 class="text-danger fw-bold">
-					<fmt:formatNumber value="${product.price}" type="currency"
+					<fmt:formatNumber value="${minVariant.price}" type="currency"
 						currencySymbol="₫" />
-					<small class="text-muted text-decoration-line-through ms-2">
-						<fmt:formatNumber value="${product.oldPrice}" type="currency"
-							currencySymbol="₫" />
-					</small> <span class="badge bg-danger ms-2">Tiết kiệm 10%</span>
+					<c:if
+						test="${not empty minVariant.oldPrice && minVariant.oldPrice > minVariant.price}">
+						<small class="text-muted text-decoration-line-through ms-2">
+							<fmt:formatNumber value="${minVariant.oldPrice}" type="currency"
+								currencySymbol="₫" />
+						</small>
+						<span class="badge bg-danger ms-2">Tiết kiệm</span>
+					</c:if>
 				</h4>
+
 
 				<p class="mt-3">${product.description}</p>
 
@@ -225,20 +230,25 @@
 					</tr>
 					<tr>
 						<th>Giá hiện tại</th>
-						<td><fmt:formatNumber value="${product.price}"
+						<td><fmt:formatNumber value="${minVariant.price}"
 								type="currency" currencySymbol="₫" /></td>
 					</tr>
 					<tr>
 						<th>Giá cũ</th>
-						<td><c:if test="${not empty product.oldPrice}">
-								<fmt:formatNumber value="${product.oldPrice}" type="currency"
+						<td><c:if
+								test="${not empty minVariant.oldPrice && minVariant.oldPrice > minVariant.price}">
+								<fmt:formatNumber value="${minVariant.oldPrice}" type="currency"
 									currencySymbol="₫" />
-							</c:if> <c:if test="${empty product.oldPrice}">-</c:if></td>
+							</c:if> <c:if
+								test="${empty minVariant.oldPrice || minVariant.oldPrice <= minVariant.price}">-</c:if>
+						</td>
 					</tr>
+
 					<tr>
 						<th>Tồn kho</th>
 						<td><c:choose>
-								<c:when test="${product.stock > 0}">Còn hàng (${product.stock})</c:when>
+								<c:when test="${minVariant != null && minVariant.stock > 0}">Còn hàng (${minVariant.stock})
+            </c:when>
 								<c:otherwise>
 									<span class="text-danger">Hết hàng</span>
 								</c:otherwise>
