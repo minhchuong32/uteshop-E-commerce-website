@@ -84,32 +84,47 @@
 			<!-- Bộ lọc -->
 			<form action="${pageContext.request.contextPath}/web/home"
 				method="get" class="row g-3 align-items-end mb-4">
-				<div class="col-md-3">	
+				<!-- Giữ page hiện tại -->
+				<input type="hidden" name="page" value="${currentPage}" />
+
+				<div class="col-md-3">
 					<label class="form-label fw-bold">Danh mục</label> <select
 						class="form-select" name="categoryId">
 						<option value="">Tất cả</option>
 						<c:forEach var="c" items="${categories}">
-							<option value="${c.categoryId}">${c.name}</option>
+							<option value="${c.categoryId}"
+								<c:if test="${c.categoryId == selectedCategoryId}">selected</c:if>>
+								${c.name}</option>
 						</c:forEach>
 					</select>
 				</div>
+
 				<div class="col-md-3">
 					<label class="form-label fw-bold">Khoảng giá</label>
 					<div class="input-group">
 						<input type="number" class="form-control" placeholder="Từ"
-							name="minPrice"> <span class="input-group-text">-</span>
-						<input type="number" class="form-control" placeholder="Đến"
-							name="maxPrice">
+							name="minPrice" value="${minPrice != null ? minPrice : ''}" /> <span
+							class="input-group-text">-</span> <input type="number"
+							class="form-control" placeholder="Đến" name="maxPrice"
+							value="${maxPrice != null ? maxPrice : ''}" />
 					</div>
 				</div>
+
 				<div class="col-md-3">
 					<label class="form-label fw-bold">Sắp xếp</label> <select
 						class="form-select" name="sortBy">
-						<option value="newest">Mới nhất</option>
-						<option value="priceAsc">Giá: Thấp → Cao</option>
-						<option value="priceDesc">Giá: Cao → Thấp</option>
+						<option value="newest"
+							<c:if test="${sortBy == 'newest'}">selected</c:if>>Mới
+							nhất</option>
+						<option value="priceAsc"
+							<c:if test="${sortBy == 'priceAsc'}">selected</c:if>>Giá:
+							Thấp → Cao</option>
+						<option value="priceDesc"
+							<c:if test="${sortBy == 'priceDesc'}">selected</c:if>>Giá:
+							Cao → Thấp</option>
 					</select>
 				</div>
+
 				<div class="col-md-3 d-flex gap-2">
 					<button type="submit" class="btn btn-primary-custom w-50">
 						<i class="bi bi-filter"></i> Lọc
