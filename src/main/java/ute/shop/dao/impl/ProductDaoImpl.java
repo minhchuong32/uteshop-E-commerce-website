@@ -117,21 +117,25 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public void delete(int productId) {
-		EntityManager em = JPAConfig.getEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		try {
-			tx.begin();
-			Product p = em.find(Product.class, productId);
-			if (p != null) {
-				em.remove(p);
-			}
-			tx.commit();
-		} catch (Exception e) {
-			tx.rollback();
-			e.printStackTrace();
-		} finally {
-			em.close();
-		}
+	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityTransaction tx = em.getTransaction();
+
+	    try {
+	        tx.begin();
+	        Product p = em.find(Product.class, productId);
+	        if (p != null) {
+	            if (!em.contains(p)) {
+	                p = em.merge(p);
+	            }
+	            em.remove(p);
+	        }
+	        tx.commit();
+	    } catch (Exception e) {
+	        if (tx.isActive()) tx.rollback();
+	        e.printStackTrace();
+	    } finally {
+	        em.close();
+	    }
 	}
 
 	@Override
@@ -245,6 +249,20 @@ public class ProductDaoImpl implements IProductDao {
 	    } finally {
 	        em.close();
 	    }
+	}
+
+	@Override
+	public Product findByIdWithVariants(int productId) {
+		EntityManager em = JPAConfig.getEntityManager();
+        try {
+            // Sử dụng JOIN FETCH để load luôn variants
+            String jpql = "SELECT p FROM Product p LEFT JOIN FETCH p.variants WHERE p.productId = :pid";
+            TypedQuery<Product> query = em.createQuery(jpql, Product.class);
+            query.setParameter("pid", productId);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+        }
 	}
 
 

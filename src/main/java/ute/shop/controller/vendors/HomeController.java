@@ -28,7 +28,7 @@ public class HomeController extends HttpServlet {
 
         if (page != null) {
             switch (page) {
-                case "shops":
+                case "products":
                     resp.sendRedirect(req.getContextPath() + "/vendor/products");
                     return;
                 case "orders":
@@ -46,7 +46,6 @@ public class HomeController extends HttpServlet {
             }
         }
 
-        // Nếu không có page → mặc định Dashboard
         req.setAttribute("page", "dashboard");
         req.setAttribute("view", "/views/vendor/dashboard.jsp");
         req.getRequestDispatcher("/WEB-INF/decorators/vendor.jsp").forward(req, resp);

@@ -1,92 +1,113 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ include file="/commons/taglib.jsp"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
+<div class="container mt-4">
+    <!-- DANH MỤC -->
+    <div class="bg-white shadow-sm p-3 mb-4 rounded">
+        <h5 class="fw-bold text-uppercase text-primary mb-3">
+            <i class="bi bi-grid me-2"></i> Danh mục sản phẩm
+        </h5>
 
-<!-- sửa lại -> products  -->
-<div class="container-fluid">
-	<h3 class="mb-4 fw-bold">Quản lý cửa hàng</h3>
+        <!-- Thanh danh mục -->
+        <div class="d-flex flex-row flex-nowrap overflow-auto gap-3 pb-2">
+            <!-- Tất cả danh mục -->
+            <div class="text-center flex-shrink-0">
+                <a href="${pageContext.request.contextPath}/vendor/products"
+                   class="d-block text-decoration-none ${empty selectedCategory ? 'fw-bold text-primary' : 'text-dark'}">
+                    <div class="py-2">
+                        <div>Tất cả</div>
+                    </div>
+                </a>
+            </div>
 
-	<!-- Nút thêm mới -->
-	<div class="mb-3">
-		<a href="${pageContext.request.contextPath}/admin/shops/add"
-			class="btn btn-success"> 
-            <i class="bi bi-shop me-2"></i> Thêm cửa hàng
-		</a>
-	</div>
+            <!-- Danh mục động -->
+            <c:forEach var="c" items="${categories}">
+                <div class="text-center flex-shrink-0">
+                    <a href="${pageContext.request.contextPath}/vendor/products?category=${c.categoryId}"
+                       class="d-block text-decoration-none ${selectedCategory == c.categoryId ? 'fw-bold text-primary' : 'text-dark'}">
+                        <div class="py-2">
+                            <img src="${pageContext.request.contextPath}/assets/images/categories/${c.image}" 
+                                 class="img-fluid rounded mb-1 border"
+                                 style="height:60px; width:60px; object-fit:cover;">
+                            <div>${c.name}</div>
+                        </div>
+                    </a>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
 
-	<div class="card shadow-sm">
-		<div class="card-body">
-			<table class="table align-middle mb-0">
-				<thead class="table-light">
-					<tr>
-						<th>Tên cửa hàng</th>
-						<th>Người sở hữu</th>
-						<th>Mô tả</th>
-						<th>Ngày tạo</th>
-						<th class="text-center">Hành động</th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="s" items="${shops}">
-						<tr>
-							<td>${s.name}</td>
-							<td>
-								<div class="fw-bold">${s.user.username}</div>
-								<small class="text-muted">${s.user.email}</small>
-							</td>
-							<td>${s.description}</td>
-							<td>${s.createdAt}</td>
+    <!-- SẢN PHẨM -->
+    <div class="bg-white rounded shadow-sm p-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-uppercase text-primary">
+                <i class="bi bi-box-seam me-2"></i> Sản phẩm trong cửa hàng
+            </h5>
+            <a href="${pageContext.request.contextPath}/vendor/products/add" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle"></i> Thêm sản phẩm
+            </a>
+        </div>
 
-							<td class="text-center">
-								<!-- Edit -->
-								<a href="${pageContext.request.contextPath}/admin/shops/edit?id=${s.shopId}"
-								   class="text-warning me-3" title="Sửa">
-								   <i class="bi bi-pencil-square"></i>
-								</a> 
+        <!-- Grid View -->
+        <div class="row g-3">
+            <c:choose>
+                <c:when test="${empty list}">
+                    <div class="text-center py-5">
+                        <h6 class="text-muted">Chưa có sản phẩm nào</h6>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="p" items="${list}">
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <div class="card h-100 shadow-sm product-card">
+                                <div class="product-img-wrapper position-relative">
+                                    <img src="${pageContext.request.contextPath}/${p.imageUrl}" 
+                                         class="card-img-top" alt="${p.name}"
+                                         style="height:180px;object-fit:cover;">
+                                </div>
+                                <div class="card-body d-flex flex-column justify-content-between">
+                                    <h6 class="card-title mb-1 text-truncate">${p.name}</h6>
+                                    <div class="text-muted small mb-1">${p.category.name}</div>
+                                    <p class="fw-bold text-danger mb-2">
+                                        <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="₫"/>
+                                    </p>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="${pageContext.request.contextPath}/vendor/products/edit?id=${p.productId}" 
+   											class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+                                        <a href="${pageContext.request.contextPath}/vendor/products/delete?id=${p.productId}" 
+										   class="btn btn-sm btn-danger"
+										   onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+										   <i class="bi bi-trash"></i>
+										</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
+        </div>
 
-								<!-- Delete dùng modal chung -->
-								<a href="javascript:void(0);"
-								   class="text-danger me-3"
-								   data-bs-toggle="modal"
-								   data-bs-target="#confirmDeleteModal"
-								   data-id="${s.shopId}"
-								   data-url="${pageContext.request.contextPath}/admin/shops/delete"
-								   title="Xóa">
-								   <i class="bi bi-trash-fill"></i>
-								</a>
-							</td>
-						</tr>
-					</c:forEach>
-				</tbody>
-			</table>
-		</div>
-	</div>
+        <!-- PHÂN TRANG -->
+        <c:if test="${totalPages > 1}">
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                       <a class="page-link" href="${pageContext.request.contextPath}/vendor/products?page=${currentPage - 1}">Trước</a>
+                    </li>
+
+                    <c:forEach var="i" begin="1" end="${totalPages}">
+                        <li class="page-item ${i == currentPage ? 'active' : ''}">
+                            <a class="page-link" href="${pageContext.request.contextPath}/vendor/products?page=${i}">${i}</a>
+                        </li>
+                    </c:forEach>
+
+                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                        <a class="page-link" href="${pageContext.request.contextPath}/vendor/products?page=${currentPage + 1}">Sau</a>
+                    </li>
+                </ul>
+            </nav>
+        </c:if>
+    </div>
 </div>
-
-<!-- Modal Xác nhận Xóa (dùng chung cho tất cả entity) -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content shadow-lg border-0 rounded-3">
-			<div class="modal-header bg-danger text-white">
-				<h5 class="modal-title">
-					<i class="bi bi-exclamation-triangle-fill me-2"></i> Xác nhận xóa
-				</h5>
-				<button type="button" class="btn-close btn-close-white"
-					data-bs-dismiss="modal" aria-label="Đóng"></button>
-			</div>
-			<div class="modal-body">
-				<p>Bạn có chắc muốn xóa mục này không? Hành động này 
-				   <strong>không thể hoàn tác</strong>.
-				</p>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary rounded-pill px-4"
-					data-bs-dismiss="modal">Hủy</button>
-				<a id="deleteConfirmBtn" href="#" class="btn btn-danger rounded-pill px-4">Xóa</a>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Import file JS dùng chung -->
-<script src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>

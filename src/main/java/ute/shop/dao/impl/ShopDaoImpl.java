@@ -82,4 +82,18 @@ public class ShopDaoImpl implements IShopDao {
             em.close();
         }
     }
+    
+    @Override
+    public Shop findByUserId(int userId) {
+    	EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            return em.createQuery("SELECT s FROM Shop s WHERE s.user.userId = :uid", Shop.class)
+                     .setParameter("uid", userId)
+                     .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 }

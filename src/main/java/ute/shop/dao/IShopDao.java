@@ -14,4 +14,6 @@ public interface IShopDao {
     void update(Shop shop);
 
     void delete(int id);
+    
+    Shop findByUserId(int userId);
 }

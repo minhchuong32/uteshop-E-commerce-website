@@ -87,7 +87,6 @@ public class OrderController extends HttpServlet {
 
             Order order = new Order();
 
-            // Tạo user "ảo" chỉ set id
             User u = new User();
             u.setUserId(userId);
             order.setUser(u);

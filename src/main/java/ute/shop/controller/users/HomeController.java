@@ -74,15 +74,10 @@ public class HomeController extends HttpServlet {
         req.setAttribute("currentPage", page);
         req.setAttribute("totalPages", totalPages);
 
-<<<<<<< HEAD
-		req.getRequestDispatcher("/views/user/home.jsp").forward(req, resp);
-	}
-=======
         req.setAttribute("selectedCategoryId", categoryId);
         req.setAttribute("minPrice", minPrice);
         req.setAttribute("maxPrice", maxPrice);
         req.setAttribute("sortBy", sortBy);
->>>>>>> c0323f4aeb7318255c449da3ac2c01431a536100
 
         req.getRequestDispatcher("/views/user/home.jsp").forward(req, resp);
     }

@@ -95,4 +95,19 @@ public class ProductServiceImpl implements IProductService {
 			int size) {
 		return productDao.filterProducts(categoryId, minPrice, maxPrice, sortBy, page, size);
 	}
+	
+	@Override
+    public List<Product> findByCategoryAndShop(int categoryId, int shopId) {
+        return productDao.findByCategoryId(categoryId)
+                         .stream()
+                         .filter(p -> p.getShop().getShopId() == shopId)
+                         .toList();
+    }
+
+
+	@Override
+	public Product findByIdWithVariants(int productId) {
+		return productDao.findByIdWithVariants(productId);
+	}
+
 }

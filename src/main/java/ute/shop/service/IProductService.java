@@ -22,4 +22,9 @@ public interface IProductService {
 	List<Product> filterProducts(Integer categoryId, Double minPrice, Double maxPrice, String sortBy, int page,
 			int size);
 
+	
+	List<Product> findByCategoryAndShop(int categoryId, int shopId);
+
+	Product findByIdWithVariants(int productId);
+
 }
