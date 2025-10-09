@@ -251,7 +251,7 @@
 
 
 		</table>
-
+<!--  
 <script>
 function getSelectedOptions() {
     const options = {};
@@ -338,7 +338,7 @@ document.querySelectorAll(".btn-check").forEach(radio => {
     });
 });
 </script>
-
+-->
 
 
 		<!-- Tabs mô tả & đánh giá -->
@@ -435,6 +435,10 @@ document.querySelectorAll(".btn-check").forEach(radio => {
 	</div>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Truyền biến từ JSP sang JS -->
+	<div id="product-detail" data-product-id="${product.productId}"
+		data-context="${pageContext.request.contextPath}"></div>
+
 	<script
 		src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
 	<script>
