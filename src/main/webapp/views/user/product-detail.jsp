@@ -54,17 +54,26 @@
 
 
 				<h4 class="text-danger fw-bold">
-					<fmt:formatNumber value="${minVariant.price}" type="currency"
-						currencySymbol="₫" />
-					<c:if
-						test="${not empty minVariant.oldPrice && minVariant.oldPrice > minVariant.price}">
-						<small class="text-muted text-decoration-line-through ms-2">
-							<fmt:formatNumber value="${minVariant.oldPrice}" type="currency"
-								currencySymbol="₫" />
-						</small>
-						<span class="badge bg-danger ms-2">Tiết kiệm</span>
+					<c:if test="${not empty minVariant}">
+						<span id="current-price"> <fmt:formatNumber
+								value="${minVariant.price}" type="currency" currencySymbol="₫" />
+						</span>
+						<c:if
+							test="${not empty minVariant.oldPrice && minVariant.oldPrice > minVariant.price}">
+							<small id="old-price"
+								class="text-muted text-decoration-line-through ms-2"> <fmt:formatNumber
+									value="${minVariant.oldPrice}" type="currency"
+									currencySymbol="₫" />
+							</small>
+							<span class="badge bg-danger ms-2">Tiết kiệm</span>
+						</c:if>
+					</c:if>
+					<c:if test="${empty minVariant}">
+						<span class="text-muted">Chưa có biến thể</span>
 					</c:if>
 				</h4>
+
+
 
 
 				<p class="mt-3">${product.description}</p>
@@ -191,55 +200,146 @@
 				</div>
 			</div>
 		</div>
+		<c:set var="variants" value="${product.variants}" />
 
-		<!-- Thông tin sản phẩm -->
-		<div class="mt-5">
-			<h5 class="fw-bold text-uppercase text-primary-custom mb-3">
-				<i class="bi bi-info-circle me-2"></i> Thông tin sản phẩm
-			</h5>
-			<table class="table table-bordered">
-				<tbody>
-					<tr>
-						<th style="width: 200px;">Tên sản phẩm</th>
-						<td>${product.name}</td>
-					</tr>
-					<tr>
-						<th>Danh mục</th>
-						<td>${product.category.name}</td>
-					</tr>
-					<tr>
-						<th>Giá hiện tại</th>
-						<td><fmt:formatNumber value="${minVariant.price}"
-								type="currency" currencySymbol="₫" /></td>
-					</tr>
-					<tr>
-						<th>Giá cũ</th>
-						<td><c:if
-								test="${not empty minVariant.oldPrice && minVariant.oldPrice > minVariant.price}">
+		<!-- BẢNG THÔNG TIN -->
+		<table class="table table-bordered align-middle">
+			<tr>
+				<th>Danh mục</th>
+				<td>${product.category != null ? product.category.name : '-'}</td>
+			</tr>
+
+			<tr>
+				<th>Giá hiện tại</th>
+				<td id="current-price"><span id="price-value"> <c:choose>
+							<c:when test="${not empty minVariant}">
+								<fmt:formatNumber value="${minVariant.price}" type="currency"
+									currencySymbol="₫" />
+							</c:when>
+							<c:otherwise>-</c:otherwise>
+						</c:choose>
+				</span></td>
+			</tr>
+
+			<tr>
+				<th>Giá cũ</th>
+				<td id="old-price"><span id="oldprice-value"> <c:choose>
+							<c:when
+								test="${not empty minVariant.oldPrice and minVariant.oldPrice > minVariant.price}">
 								<fmt:formatNumber value="${minVariant.oldPrice}" type="currency"
 									currencySymbol="₫" />
-							</c:if> <c:if
-								test="${empty minVariant.oldPrice || minVariant.oldPrice <= minVariant.price}">-</c:if>
-						</td>
-					</tr>
+							</c:when>
+							<c:otherwise>-</c:otherwise>
+						</c:choose>
+				</span></td>
+			</tr>
 
-					<tr>
-						<th>Tồn kho</th>
-						<td><c:choose>
-								<c:when test="${minVariant != null && minVariant.stock > 0}">Còn hàng (${minVariant.stock})
-            </c:when>
-								<c:otherwise>
-									<span class="text-danger">Hết hàng</span>
-								</c:otherwise>
-							</c:choose></td>
-					</tr>
-					<tr>
-						<th>Mô tả</th>
-						<td>${product.description}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+			<tr>
+				<th>Tồn kho</th>
+				<td id="stock-status">
+				<span id="stock-value"> 
+				<c:choose>
+							<c:when test="${not empty minVariant and minVariant.stock > 0}">
+                    Còn hàng (${minVariant.stock})
+                </c:when>
+							<c:otherwise>
+								<span class="text-danger">Hết hàng</span>
+							</c:otherwise>
+						</c:choose>
+				</span></td>
+			</tr>
+
+
+		</table>
+
+<script>
+function getSelectedOptions() {
+    const options = {};
+    document.querySelectorAll(".btn-check:checked").forEach(radio => {
+        options[radio.name] = radio.value;
+    });
+    return options;
+}
+
+document.querySelectorAll(".btn-check").forEach(radio => {
+    radio.addEventListener("change", () => {
+        const options = getSelectedOptions();
+        const productId = ${product.productId};
+        options["productId"] = productId;
+
+        console.log("Đã chọn variant:", options);
+
+        fetch("${pageContext.request.contextPath}/api/variant/select", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(options)
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Không tìm thấy variant phù hợp");
+            return res.json();
+        })
+        .then(data => {
+            console.log("Kết quả variant:", data);
+
+            // 🔹 Phần tag 1 (giá hiển thị phía trên)
+            const currentPrice = document.querySelector("#current-price");
+            const oldPrice = document.querySelector("#old-price");
+            const stockStatus = document.querySelector("#stock-status");
+
+            // 🔹 Phần tag 2 (bảng thông tin)
+            const priceValue = document.querySelector("#price-value");
+            const oldPriceValue = document.querySelector("#oldprice-value");
+            const stockValue = document.querySelector("#stock-value");
+
+            // 🔹 Ảnh chính
+            const mainImg = document.querySelector("#mainImg");
+
+            // =============================
+            // 🟢 Cập nhật giá hiện tại
+            // =============================
+            const formattedPrice = data.price !== undefined
+                ? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(data.price)
+                : "-";
+            if (currentPrice) currentPrice.innerHTML = formattedPrice;
+            if (priceValue) priceValue.textContent = formattedPrice;
+
+            // =============================
+            // 🟢 Cập nhật giá cũ
+            // =============================
+            const formattedOldPrice = data.oldPrice && data.oldPrice > data.price
+                ? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(data.oldPrice)
+                : "-";
+            if (oldPrice) oldPrice.innerHTML = formattedOldPrice;
+            if (oldPriceValue) oldPriceValue.textContent = formattedOldPrice;
+
+           
+            // =============================
+            // 🟢 Cập nhật tồn kho
+			if (stockValue) {
+		    stockValue.innerHTML = data.stock;
+			}
+
+
+            // =============================
+            // 🟢 Cập nhật ảnh chính
+            // =============================
+            if (data.imageUrl && mainImg) {
+                const basePath = "${pageContext.request.contextPath}";
+                const cleanPath = data.imageUrl.startsWith("/")
+                    ? `${basePath}${data.imageUrl}`
+                    : `${basePath}/${data.imageUrl}`;
+                mainImg.src = cleanPath;
+                console.log("Ảnh mới:", cleanPath);
+            }
+        })
+        .catch(err => {
+            console.error("Lỗi khi cập nhật variant:", err);
+        });
+    });
+});
+</script>
+
+
 
 		<!-- Tabs mô tả & đánh giá -->
 		<div class="tab-pane " id="reviews">

@@ -44,4 +44,9 @@ public class ProductVariantServiceImpl implements IProductVariantService{
 	    return result;
 	}
 
+	@Override
+	public ProductVariant findByOptions(Integer productId, Map<String, Object> selectedOptions) {
+		return variantDao.findByOptions(productId, selectedOptions);
+	}
+
 }
