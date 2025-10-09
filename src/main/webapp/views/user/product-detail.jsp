@@ -73,9 +73,6 @@
 					</c:if>
 				</h4>
 
-
-
-
 				<p class="mt-3">${product.description}</p>
 
 					<!-- Thuộc tính sản phẩm -->
@@ -236,9 +233,7 @@
 
 			<tr>
 				<th>Tồn kho</th>
-				<td id="stock-status">
-				<span id="stock-value"> 
-				<c:choose>
+				<td id="stock-status"><span id="stock-value"> <c:choose>
 							<c:when test="${not empty minVariant and minVariant.stock > 0}">
                     Còn hàng (${minVariant.stock})
                 </c:when>
@@ -248,10 +243,12 @@
 						</c:choose>
 				</span></td>
 			</tr>
-
-
+			<tr>
+				<th>Mô tả</th>
+				<td>${product.description}</td>
+			</tr>
 		</table>
-<!--  
+		<!--  
 <script>
 function getSelectedOptions() {
     const options = {};
