@@ -17,4 +17,12 @@ public interface IOrderService {
     //Vendor DashBoard
     long getTotalOrders(int shopId);
     long getTotalCustomers(int shopId);
+	List<Object[]> getOrderStatusCountByShop(int shopId);
+	List<Object[]> getOrderTrendByShop(int shopId);
+	
+	List<Order> getOrdersByShopAndStatuses(int shopId, List<String> statuses);
+	User getOrderShipper(Order order);
+	
+	long countAllOrders();
+	List<Order> findRecentOrders(int limit);
 }

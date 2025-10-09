@@ -35,6 +35,7 @@ public class HomeController extends HttpServlet {
 
         if (page != null) {
             switch (page) {
+          
                 case "users":
                     resp.sendRedirect(req.getContextPath() + "/admin/users");
                     return;
@@ -63,8 +64,7 @@ public class HomeController extends HttpServlet {
         }
 
         // Nếu không có page → mặc định Dashboard
-        req.setAttribute("page", "dashboard");
-        req.setAttribute("view", "/views/admin/dashboard.jsp");
-        req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
+        resp.sendRedirect(req.getContextPath() + "/admin/dashboard");
+        return;
     }
 }

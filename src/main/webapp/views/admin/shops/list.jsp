@@ -6,13 +6,15 @@
 	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
 
 <div class="container-fluid">
-	<h3 class="mb-4 fw-bold">Quản lý cửa hàng</h3>
+	<h3 class="mb-4 fw-bold text-primary-custom">
+		<i class="bi bi-shop me-2"></i> Quản lý cửa hàng
+	</h3>
 
 	<!-- Nút thêm mới -->
 	<div class="mb-3">
 		<a href="${pageContext.request.contextPath}/admin/shops/add"
-			class="btn btn-success">
-			<i class="bi bi-shop me-2"></i> Thêm cửa hàng
+			class="btn btn-success"> <i class="bi bi-plus"></i> Thêm cửa
+			hàng
 		</a>
 	</div>
 
@@ -22,18 +24,24 @@
 
 			<!-- Thông báo thành công -->
 			<c:if test="${not empty sessionScope.success}">
-				<div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+				<div
+					class="alert alert-success alert-dismissible fade show shadow-sm"
+					role="alert">
 					<i class="bi bi-check-circle-fill me-2"></i>${sessionScope.success}
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Đóng"></button>
 				</div>
 				<c:remove var="success" scope="session" />
 			</c:if>
 
 			<!-- Thông báo lỗi -->
 			<c:if test="${not empty error}">
-				<div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+				<div
+					class="alert alert-danger alert-dismissible fade show shadow-sm"
+					role="alert">
 					<i class="bi bi-exclamation-triangle-fill me-2"></i>${error}
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Đóng"></button>
 				</div>
 			</c:if>
 
@@ -56,25 +64,25 @@
 							<!-- Avatar + tên cửa hàng -->
 							<td>
 								<div class="d-flex align-items-center">
-									<img src="${empty s.logo 
+									<img
+										src="${empty s.logo 
 										? pageContext.request.contextPath.concat('/assets/images//shops/default-shop-logo.png') 
 										: pageContext.request.contextPath.concat('/assets/images/shops/').concat(s.logo)}"
 										class="rounded me-3 border"
 										style="width: 48px; height: 48px; object-fit: cover;"
 										alt="shop-logo">
-									
+
 								</div>
 							</td>
 
 							<!-- Chủ sở hữu -->
 							<td>
-								<div class="fw-semibold">${s.user.username}</div>
-								<small class="text-muted">${s.user.email}</small>
+								<div class="fw-semibold">${s.user.username}</div> <small
+								class="text-muted">${s.user.email}</small>
 							</td>
 
 							<!-- Mô tả -->
-							<td style="max-width: 250px;">
-								<c:choose>
+							<td style="max-width: 250px;"><c:choose>
 									<c:when test="${empty s.description}">
 										<span class="text-muted">-</span>
 									</c:when>
@@ -83,32 +91,24 @@
 											? fn:substring(s.description, 0, 60).concat("...") 
 											: s.description}</span>
 									</c:otherwise>
-								</c:choose>
-							</td>
+								</c:choose></td>
 
 							<!-- Ngày tạo -->
-							<td>
-								<fmt:formatDate value="${s.createdAt}" pattern="dd/MM/yyyy" />
-							</td>
+							<td><fmt:formatDate value="${s.createdAt}"
+									pattern="dd/MM/yyyy" /></td>
 
 							<!-- Hành động -->
 							<td class="text-center">
-								<!-- Sửa -->
-								<a href="${pageContext.request.contextPath}/admin/shops/edit?id=${s.shopId}"
-								   class="text-warning me-2" title="Sửa">
-								   <i class="bi bi-pencil-square fs-5"></i>
-								</a>
-
-								<!-- Xóa -->
-								<a href="javascript:void(0);"
-								   class="text-danger me-2"
-								   data-bs-toggle="modal"
-								   data-bs-target="#confirmDeleteModal"
-								   data-id="${s.shopId}"
-								   data-url="${pageContext.request.contextPath}/admin/shops/delete"
-								   title="Xóa">
-								   <i class="bi bi-trash-fill fs-5"></i>
-								</a>
+								<!-- Sửa --> <a
+								href="${pageContext.request.contextPath}/admin/shops/edit?id=${s.shopId}"
+								class="text-warning me-2" title="Sửa"> <i
+									class="bi bi-pencil-square fs-5"></i>
+							</a> <!-- Xóa --> <a href="javascript:void(0);"
+								class="text-danger me-2" data-bs-toggle="modal"
+								data-bs-target="#confirmDeleteModal" data-id="${s.shopId}"
+								data-url="${pageContext.request.contextPath}/admin/shops/delete"
+								title="Xóa"> <i class="bi bi-trash-fill fs-5"></i>
+							</a>
 
 							</td>
 						</tr>
@@ -120,7 +120,8 @@
 </div>
 
 <!-- Modal xác nhận xóa -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1"
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content shadow-lg border-0 rounded-3">
 			<div class="modal-header bg-danger text-white">
@@ -131,15 +132,18 @@
 					data-bs-dismiss="modal" aria-label="Đóng"></button>
 			</div>
 			<div class="modal-body">
-				<p>Bạn có chắc muốn xóa cửa hàng này không? Hành động này 
-				   <strong>không thể hoàn tác</strong>.
+				<p>
+					Bạn có chắc muốn xóa cửa hàng này không? Hành động này <strong>không
+						thể hoàn tác</strong>.
 				</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-outline-secondary rounded-pill px-4"
+				<button type="button"
+					class="btn btn-outline-secondary rounded-pill px-4"
 					data-bs-dismiss="modal">Hủy</button>
-				<a id="deleteConfirmBtn" href="#" class="btn btn-danger rounded-pill px-4">
-					<i class="bi bi-trash-fill me-1"></i> Xóa
+				<a id="deleteConfirmBtn" href="#"
+					class="btn btn-danger rounded-pill px-4"> <i
+					class="bi bi-trash-fill me-1"></i> Xóa
 				</a>
 			</div>
 		</div>
@@ -148,11 +152,14 @@
 
 <!-- JS DataTables -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
 <!-- JS Xử lý Modal Xóa -->
-<script src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
+<script
+	src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
 
 <script>
 $(document).ready(function() {

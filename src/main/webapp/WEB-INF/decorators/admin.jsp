@@ -55,7 +55,7 @@
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='users' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=users">
-							<i class="bi bi-people-fill me-2"></i> Quản lý Users
+							<i class="bi bi-people-fill me-2"></i> Quản lý Người dùng
 					</a></li>
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='shops' ? 'active' : ''}"

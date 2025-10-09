@@ -134,4 +134,9 @@ public class UserServiceImpl implements IUserService {
 	public List<User> getUsersByRole(String role) {
 		return userDao.getUsersByRole(role);
 	}
+
+	@Override
+	public long countAllUsers() {
+		return userDao.countAllUsers();
+	}
 }

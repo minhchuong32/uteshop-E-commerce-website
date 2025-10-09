@@ -51,4 +51,6 @@ public interface IUserService {
     
     // Tìm user theo role
 	List<User> getUsersByRole(String role);
+	
+	long countAllUsers();
 }

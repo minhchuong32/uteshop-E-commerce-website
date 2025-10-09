@@ -42,4 +42,9 @@ public interface IProductDao {
 	
 
 	long countByShopId(int shopId);
+	List<Object[]> getTopSellingProducts(int shopId, int limit);
+	List<Object[]> getProductCountByCategory(int shopId);
+
+
+	List<Object[]> findBestSellingProducts(int limit);
 }

@@ -55,6 +55,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
@@ -74,6 +75,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-6">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
@@ -98,20 +100,22 @@
                                 <th>Tháng</th>
                                 <th>Tổng đơn</th>
                                 <th>Doanh thu</th>
-                                <th>Lợi nhuận</th>
-                                <th>Hủy (%)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>01</td><td>120</td><td>₫12,000,000</td><td>₫3,000,000</td><td>3%</td></tr>
-                            <tr><td>02</td><td>98</td><td>₫8,500,000</td><td>₫2,200,000</td><td>5%</td></tr>
-                            <tr><td>03</td><td>160</td><td>₫14,500,000</td><td>₫3,600,000</td><td>2%</td></tr>
+                            <c:forEach var="r" items="${revenueByMonth}">
+                                <tr>
+                                    <td><c:out value="${r[0]}" /></td>
+                                    <td><c:out value="${r[1]}" /></td>
+                                    <td>₫<fmt:formatNumber value="${r[1]}" type="number" groupingUsed="true"/></td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
+        
         <!-- Báo cáo top sản phẩm -->
         <div class="col-md-12">
             <div class="card shadow-sm h-100 mt-3">
@@ -123,13 +127,16 @@
                                 <th>Sản phẩm</th>
                                 <th>Số lượng bán</th>
                                 <th>Doanh thu</th>
-                                <th>Đánh giá TB</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td>Tai nghe Bluetooth</td><td>120</td><td>₫1,200,000</td><td>4.7</td></tr>
-                            <tr><td>Giày Sneaker</td><td>95</td><td>₫650,000</td><td>4.5</td></tr>
-                            <tr><td>Áo thun</td><td>80</td><td>₫320,000</td><td>4.3</td></tr>
+                            <c:forEach var="p" items="${topProducts}">
+                                <tr>
+                                    <td><c:out value="${p[0].name}"/></td>
+                                    <td><c:out value="${p[1]}"/></td>
+                                    <td>₫<fmt:formatNumber value="${p[2]}" type="number" groupingUsed="true"/></td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                     </table>
                 </div>
@@ -141,60 +148,124 @@
 <!-- Thư viện Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Doanh thu (Bar)
+    // Doanh thu theo tháng
+    const revenueLabels = [<c:forEach var="r" items="${revenueByMonth}" varStatus="status"> 'Tháng ${r[0]}'<c:if test="${!status.last}">, </c:if> </c:forEach>];
+    const revenueData = [<c:forEach var="r" items="${revenueByMonth}" varStatus="status">${r[1]}<c:if test="${!status.last}">, </c:if> </c:forEach>];
+
     new Chart(document.getElementById('revenueChart'), {
         type: 'bar',
-        data: {
-            labels: ['Th1','Th2','Th3','Th4','Th5'],
-            datasets: [{
-                label: 'Doanh thu (VNĐ)',
-                data: [12000000, 8500000, 14500000, 10000000, 17000000],
-                backgroundColor: 'rgba(54,162,235,0.7)'
-            }]
-        },
+        data: { labels: revenueLabels, datasets: [{ label: 'Doanh thu (VNĐ)', data: revenueData, backgroundColor: 'rgba(54,162,235,0.7)' }]},
         options: { responsive: true, scales: { y: { beginAtZero: true } } }
     });
 
-    // Xu hướng đơn hàng (Line)
-    new Chart(document.getElementById('orderTrendChart'), {
-        type: 'line',
-        data: {
-            labels: ['01/09','05/09','10/09','15/09','20/09','25/09'],
-            datasets: [{
-                label: 'Đơn hàng',
-                data: [12,19,14,25,30,22],
-                borderColor: '#ff6384',
-                backgroundColor: 'rgba(255,99,132,0.2)',
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: { responsive: true }
-    });
+</script>
+<script>
+	const orderTrendLabels = [
+	<c:forEach var="r" items="${orderTrend}" varStatus="loop">
+	'${r[0]}'
+	<c:if test="${!loop.last}">, </c:if>
+	</c:forEach>
+	];
+	
+	const orderTrendData = [
+	<c:forEach var="r" items="${orderTrend}" varStatus="loop">
+	${r[1]}
+	<c:if test="${!loop.last}">, </c:if>
+	</c:forEach>
+	];
+	
+	new Chart(document.getElementById('orderTrendChart'), {
+	    type: 'line',
+	    data: {
+	        labels: orderTrendLabels,
+	        datasets: [{
+	            label: 'Đơn hàng',
+	            data: orderTrendData,
+	            borderColor: '#ff6384',
+	            backgroundColor: 'rgba(255,99,132,0.2)',
+	            fill: true,
+	            tension: 0.4
+	        }]
+	    },
+	    options: { responsive: true }
+	});
+</script>
+<script>
+	// --- Order Status Chart ---
+	const orderStatusLabels = [
+	<c:forEach var="r" items="${orderStatus}" varStatus="loop">
+	'${r[0]}'
+	<c:if test="${!loop.last}">, </c:if>
+	</c:forEach>
+	];
+	
+	const orderStatusData = [
+	<c:forEach var="r" items="${orderStatus}" varStatus="loop">
+	${r[1]}
+	<c:if test="${!loop.last}">, </c:if>
+	</c:forEach>
+	];
 
-    // Trạng thái đơn hàng (Pie)
-    new Chart(document.getElementById('orderStatusChart'), {
-        type: 'pie',
-        data: {
-            labels: ['Đã giao','Đang giao','Hủy'],
-            datasets: [{
-                data: [450,180,60],
-                backgroundColor: ['#28a745','#ffc107','#dc3545']
-            }]
-        },
-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-    });
+	// Màu đa dạng cho order status
+	const orderColors = [
+	    '#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', 
+	    '#edc948', '#b07aa1', '#ff9da7', '#9c755f', '#bab0ab'
+	];
 
-    // Danh mục sản phẩm (Doughnut)
-    new Chart(document.getElementById('categoryChart'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Điện tử','Thời trang','Thực phẩm','Khác'],
-            datasets: [{
-                data: [35,25,20,20],
-                backgroundColor: ['#36a2eb','#ff6384','#ffcd56','#4bc0c0']
-            }]
-        },
-        options: { responsive: true, plugins: { legend: { position: 'right' } } }
-    });
+	new Chart(document.getElementById('orderStatusChart'), {
+	    type: 'pie',
+	    data: {
+	        labels: orderStatusLabels,
+	        datasets: [{
+	            data: orderStatusData,
+	            backgroundColor: orderColors.slice(0, orderStatusLabels.length)
+	        }]
+	    },
+	    options: {
+	        responsive: true,
+	        plugins: {
+	            legend: { position: 'bottom' }
+	        }
+	    }
+	});
+</script>
+
+<script>
+	// --- Category Chart ---
+	const categoryLabels = [
+	<c:forEach var="r" items="${categoryStats}" varStatus="loop">
+	'${r[0]}'
+	<c:if test="${!loop.last}">, </c:if>
+	</c:forEach>
+	];
+	
+	const categoryData = [
+	<c:forEach var="r" items="${categoryStats}" varStatus="loop">
+	${r[1]}
+	<c:if test="${!loop.last}">, </c:if>
+	</c:forEach>
+	];
+
+	// Màu đa dạng cho category
+	const categoryColors = [
+	    '#36a2eb', '#ff6384', '#ffcd56', '#4bc0c0', '#9966ff',
+	    '#c9cbcf', '#ff9f40', '#8dd3c7', '#bebada', '#fb8072'
+	];
+
+	new Chart(document.getElementById('categoryChart'), {
+	    type: 'doughnut',
+	    data: {
+	        labels: categoryLabels,
+	        datasets: [{
+	            data: categoryData,
+	            backgroundColor: categoryColors.slice(0, categoryLabels.length)
+	        }]
+	    },
+	    options: {
+	        responsive: true,
+	        plugins: {
+	            legend: { position: 'right' }
+	        }
+	    }
+	});
 </script>
