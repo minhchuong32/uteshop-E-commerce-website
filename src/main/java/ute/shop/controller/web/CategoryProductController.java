@@ -32,23 +32,27 @@ public class CategoryProductController extends HttpServlet {
 		String categoryName = "Tất cả sản phẩm"; // mặc định
 
 		if (categoryIdParam != null && !categoryIdParam.isEmpty()) {
-			Integer categoryId = Integer.parseInt(categoryIdParam);
-			products = productService.getProductsByCategory(categoryId);
+            try {
+                Integer categoryId = Integer.parseInt(categoryIdParam);
+                products = productService.getProductsByCategory(categoryId);
 
-			// Lấy tên category từ DB
-			Category category = categoryService.findById(categoryId);
-			if (category != null) {
-				categoryName = category.getName();
-			}
+                Category category = categoryService.findById(categoryId);
+                if (category != null) {
+                    categoryName = category.getName();
+                }
 
-			request.setAttribute("selectedCategoryId", categoryId);
-		} else {
-			products = productService.findAll();
-		}
+                request.setAttribute("selectedCategoryId", categoryId);
+            } catch (NumberFormatException e) {
+                products = productService.findAll();
+            }
+        } else {
+            products = productService.findAll();
+        }
 
 		// Truyền xuống JSP
 		request.setAttribute("products", products);
-		request.setAttribute("categoryName", categoryName);
+        request.setAttribute("categoryName", categoryName);
+        request.setAttribute("categories", categoryService.findAll());
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/views/web/category.jsp");
 		dispatcher.forward(request, response);
