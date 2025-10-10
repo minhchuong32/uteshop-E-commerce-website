@@ -16,14 +16,16 @@ public class CartItemServiceImpl implements ICartItemService {
 
     @Override
     public boolean addToCart(User user, ProductVariant variant, int quantity) {
-    	// Kiểm tra xem user đã có item này trong giỏ chưa
+    	if (variant == null || quantity <= 0) return false;
+
         CartItem existing = cartItemDao.findByUserAndVariant(user, variant);
         if (existing != null) {
-            // Cộng dồn số lượng
-            existing.setQuantity(existing.getQuantity() + quantity);
+            int newQty = existing.getQuantity() + quantity;
+            if (newQty > variant.getStock()) newQty = variant.getStock();
+            existing.setQuantity(newQty);
             return cartItemDao.update(existing);
         } else {
-            // Tạo cart item mới với giá hiện tại của variant
+            if (quantity > variant.getStock()) quantity = variant.getStock();
             CartItem newItem = new CartItem();
             newItem.setUser(user);
             newItem.setProductVariant(variant);
@@ -41,6 +43,7 @@ public class CartItemServiceImpl implements ICartItemService {
             if (newQty <= 0) {
                 return cartItemDao.delete(item.getCartItemId());
             } else {
+                if (newQty > variant.getStock()) newQty = variant.getStock();
                 item.setQuantity(newQty);
                 return cartItemDao.update(item);
             }
@@ -50,11 +53,11 @@ public class CartItemServiceImpl implements ICartItemService {
 
     @Override
     public boolean removeFromCart(Integer cartItemId) {
-        return cartItemDao.delete(cartItemId);
+    	return cartItemDao.delete(cartItemId);
     }
 
     @Override
     public List<CartItem> getCartByUser(User user) {
-        return cartItemDao.findByUser(user);
+    	return cartItemDao.findByUser(user);
     }
 }

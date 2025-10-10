@@ -17,13 +17,11 @@ import ute.shop.service.impl.ProductVariantServiceImpl;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(urlPatterns = { "/user/cart", "/user/cart/add", "/user/cart/remove" })
-
+@WebServlet(urlPatterns = {"/user/cart", "/user/cart/add", "/user/cart/remove"})
 public class CartController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private final ICartItemService cartService = new CartItemServiceImpl();
-	private final IProductService productService = new ProductServiceImpl();
 	private final IProductVariantService productVariantService = new ProductVariantServiceImpl();
 
 	@Override
@@ -55,39 +53,48 @@ public class CartController extends HttpServlet {
 
 	    String servletPath = req.getServletPath();
 
-	 // Thêm sản phẩm vào giỏ
+	 // 🟢 Thêm sản phẩm vào giỏ
 	    if ("/user/cart/add".equals(servletPath)) {
 	        try {
-	            int variantId = Integer.parseInt(req.getParameter("variantId")); // Lấy variantId
+	            int variantId = Integer.parseInt(req.getParameter("variantId"));
 	            int quantity = Integer.parseInt(req.getParameter("quantity"));
 
-	            // Tìm variant
 	            ProductVariant variant = productVariantService.findById(variantId);
 	            if (variant != null) {
 	                cartService.addToCart(user, variant, quantity);
-	                session.setAttribute("cartMessage",
-	                        "Đã thêm " + variant.getProduct().getName() + " - " + variant.getOptionName() + " vào giỏ hàng!");
+	                session.setAttribute("cartMessage", "✅ Đã thêm vào giỏ: " 
+	                        + variant.getProduct().getName() + " - " + variant.getOptionValue());
+	                session.setAttribute("cartMessageType", "success");
+	            } else {
+	                session.setAttribute("cartMessage", "❌ Sản phẩm không tồn tại!");
+	                session.setAttribute("cartMessageType", "danger");
 	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
+	            session.setAttribute("cartMessage", "❌ Có lỗi khi thêm vào giỏ hàng!");
+	            session.setAttribute("cartMessageType", "danger");
 	        }
 	        String referer = req.getHeader("Referer");
 	        resp.sendRedirect(referer != null ? referer : req.getContextPath() + "/user/home");
 	        return;
 	    }
 
-
-	    // Xóa sản phẩm
+	    // 🔴 Xóa sản phẩm khỏi giỏ
 	    if ("/user/cart/remove".equals(servletPath)) {
 	        try {
 	            int cartItemId = Integer.parseInt(req.getParameter("cartItemId"));
 	            cartService.removeFromCart(cartItemId);
+	            session.setAttribute("cartMessage", "🗑️ Đã xóa sản phẩm khỏi giỏ hàng!");
+	            session.setAttribute("cartMessageType", "warning");
 	        } catch (Exception e) {
 	            e.printStackTrace();
+	            session.setAttribute("cartMessage", "❌ Có lỗi khi xóa sản phẩm!");
+	            session.setAttribute("cartMessageType", "danger");
 	        }
 	        resp.sendRedirect(req.getContextPath() + "/user/cart");
 	        return;
 	    }
+
 
 //	    // Tăng/Giảm số lượng
 //	    String action = req.getParameter("action");

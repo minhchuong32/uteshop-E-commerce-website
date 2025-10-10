@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/commons/taglib.jsp"%>
+<!-- USER -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -108,22 +109,14 @@
 
 				<!-- Nút hành động -->
 				<div class="d-flex gap-2 mb-3">
-					<c:if test="${not empty sessionScope.cartMessage}">
-						<div class="alert alert-success alert-dismissible fade show"
-							role="alert">
-							${sessionScope.cartMessage}
-							<button type="button" class="btn-close" data-bs-dismiss="alert"
-								aria-label="Close"></button>
-						</div>
-						<c:remove var="cartMessage" scope="session" />
-					</c:if>
 					<!-- Thêm vào giỏ -->
-					<form action="${pageContext.request.contextPath}/user/cart/add"
+					<form id="addToCartForm"
+						action="${pageContext.request.contextPath}/user/cart/add"
 						method="post" class="flex-fill"
 						onsubmit="return validateSelection()">
-						<input type="hidden" name="productId" value="${product.productId}">
+
+						<input type="hidden" name="variantId" id="variantId">
 						<input type="hidden" name="quantity" id="formQty" value="1">
-						<input type="hidden" name="action" value="add">
 						<button type="submit" class="btn btn-primary-custom w-100">
 							<i class="bi bi-cart-plus"></i> Thêm vào giỏ
 						</button>
@@ -248,94 +241,6 @@
 				<td>${product.description}</td>
 			</tr>
 		</table>
-		<!--  
-<script>
-function getSelectedOptions() {
-    const options = {};
-    document.querySelectorAll(".btn-check:checked").forEach(radio => {
-        options[radio.name] = radio.value;
-    });
-    return options;
-}
-
-document.querySelectorAll(".btn-check").forEach(radio => {
-    radio.addEventListener("change", () => {
-        const options = getSelectedOptions();
-        const productId = ${product.productId};
-        options["productId"] = productId;
-
-        console.log("Đã chọn variant:", options);
-
-        fetch("${pageContext.request.contextPath}/api/variant/select", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(options)
-        })
-        .then(res => {
-            if (!res.ok) throw new Error("Không tìm thấy variant phù hợp");
-            return res.json();
-        })
-        .then(data => {
-            console.log("Kết quả variant:", data);
-
-            // 🔹 Phần tag 1 (giá hiển thị phía trên)
-            const currentPrice = document.querySelector("#current-price");
-            const oldPrice = document.querySelector("#old-price");
-            const stockStatus = document.querySelector("#stock-status");
-
-            // 🔹 Phần tag 2 (bảng thông tin)
-            const priceValue = document.querySelector("#price-value");
-            const oldPriceValue = document.querySelector("#oldprice-value");
-            const stockValue = document.querySelector("#stock-value");
-
-            // 🔹 Ảnh chính
-            const mainImg = document.querySelector("#mainImg");
-
-            // =============================
-            // 🟢 Cập nhật giá hiện tại
-            // =============================
-            const formattedPrice = data.price !== undefined
-                ? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(data.price)
-                : "-";
-            if (currentPrice) currentPrice.innerHTML = formattedPrice;
-            if (priceValue) priceValue.textContent = formattedPrice;
-
-            // =============================
-            // 🟢 Cập nhật giá cũ
-            // =============================
-            const formattedOldPrice = data.oldPrice && data.oldPrice > data.price
-                ? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(data.oldPrice)
-                : "-";
-            if (oldPrice) oldPrice.innerHTML = formattedOldPrice;
-            if (oldPriceValue) oldPriceValue.textContent = formattedOldPrice;
-
-           
-            // =============================
-            // 🟢 Cập nhật tồn kho
-			if (stockValue) {
-		    stockValue.innerHTML = data.stock;
-			}
-
-
-            // =============================
-            // 🟢 Cập nhật ảnh chính
-            // =============================
-            if (data.imageUrl && mainImg) {
-                const basePath = "${pageContext.request.contextPath}";
-                const cleanPath = data.imageUrl.startsWith("/")
-                    ? `${basePath}${data.imageUrl}`
-                    : `${basePath}/${data.imageUrl}`;
-                mainImg.src = cleanPath;
-                console.log("Ảnh mới:", cleanPath);
-            }
-        })
-        .catch(err => {
-            console.error("Lỗi khi cập nhật variant:", err);
-        });
-    });
-});
-</script>
--->
 
 
 		<!-- Tabs mô tả & đánh giá -->
@@ -427,31 +332,30 @@ document.querySelectorAll(".btn-check").forEach(radio => {
 				<p>Chưa có đánh giá nào.</p>
 			</c:if>
 		</div>
-
-
 	</div>
+	<div id="tempAlert"
+		class="alert d-none position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg"
+		style="z-index: 1055; min-width: 300px; text-align: center; border-radius: 10px;">
+	</div>
+
+
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- Truyền biến từ JSP sang JS -->
 	<div id="product-detail" data-product-id="${product.productId}"
 		data-context="${pageContext.request.contextPath}"></div>
+	<c:if test="${not empty sessionScope.cartMessage}">
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+				showTempAlert("${fn:escapeXml(sessionScope.cartMessage)}",
+						"${sessionScope.cartMessageType}", 3000);
+			});
+		</script>
+		<c:remove var="cartMessage" scope="session" />
+		<c:remove var="cartMessageType" scope="session" />
+	</c:if>
 
 	<script
 		src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
-	<script>
-		// kiểm tra đã chọn màu với kích cỡ hay chưa 
-		function validateSelection() {
-		    let size = document.querySelector('input[name="size"]:checked');
-		    let color = document.querySelector('input[name="color"]:checked');
-		    let alertBox = document.getElementById("selectionAlert");
-
-		    if (!size || !color) {
-		        alertBox.classList.remove("d-none");
-		        return false; // chặn submit
-		    }
-		    alertBox.classList.add("d-none");
-		    return true;
-		}
-		</script>
 </body>
 </html>

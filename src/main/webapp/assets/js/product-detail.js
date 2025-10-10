@@ -19,9 +19,12 @@ function changeQty(delta) {
 
 // Đồng bộ số lượng từ input qty vào 2 form
 function syncQty() {
-    let qty = document.getElementById("qty").value;
-    document.getElementById("formQty").value = qty;
-    document.getElementById("formQtyNow").value = qty;
+	let qty = document.getElementById("qty").value;
+	const formQty = document.getElementById("formQty");
+	const formQtyNow = document.getElementById("formQtyNow");
+
+	if (formQty) formQty.value = qty;
+	if (formQtyNow) formQtyNow.value = qty;
 }
 
 // Khi DOM load xong mới gắn event
@@ -41,11 +44,46 @@ function getSelectedOptions() {
     return options;
 }
 
+function validateSelection() {
+	const radios = document.querySelectorAll(".btn-check");
+	const groups = [...new Set([...radios].map(r => r.name))];
+	const selected = getSelectedOptions();
+
+	for (let name of groups) {
+		if (!selected[name]) {
+			showTempAlert(`Vui lòng chọn ${name} trước khi thêm vào giỏ.`, "warning");
+			return false;
+		}
+	}
+
+	const variantInput = document.getElementById("variantId");
+	if (!variantInput || !variantInput.value) {
+		showTempAlert("Vui lòng chọn đủ thuộc tính sản phẩm.", "danger");
+		return false;
+	}
+
+	return true;
+}
+
+function showTempAlert(message, type = "success", duration = 3000) {
+	const alertBox = document.getElementById("tempAlert");
+	if (!alertBox) return;
+
+	alertBox.className = `alert alert-${type} position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg`;
+	alertBox.textContent = message;
+	alertBox.classList.remove("d-none");
+
+	clearTimeout(alertBox.hideTimeout);
+	alertBox.hideTimeout = setTimeout(() => {
+		alertBox.classList.add("d-none");
+	}, duration);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 	const productDetail = document.getElementById("product-detail");
 	const appContext = productDetail.dataset.context;
 	const currentProductId = productDetail.dataset.productId;
-
+	
     document.querySelectorAll(".btn-check").forEach(radio => {
         radio.addEventListener("change", () => {
             const options = getSelectedOptions();
@@ -102,6 +140,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     mainImg.src = cleanPath;
                     console.log("Ảnh mới:", cleanPath);
                 }
+				// 🟢 Gán variantId vào form
+				const variantInput = document.getElementById("variantId");
+					if (variantInput && data.variantId) {
+					    variantInput.value = data.variantId;
+					}
             })
             .catch(err => {
                 console.error("Lỗi khi cập nhật variant:", err);
