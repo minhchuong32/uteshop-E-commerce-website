@@ -83,10 +83,17 @@ public class CartItemDaoImpl implements ICartItemDao {
     @Override
     public List<CartItem> findByUser(User user) {
     	EntityManager em = JPAConfig.getEntityManager();
-    	try {
-            return em.createQuery("SELECT c FROM CartItem c WHERE c.user = :user", CartItem.class)
-                     .setParameter("user", user)
-                     .getResultList();
+        try {
+            return em.createQuery("""
+                SELECT c FROM CartItem c
+                JOIN FETCH c.productVariant v
+                JOIN FETCH v.product p
+                JOIN FETCH p.shop s
+                WHERE c.user = :user
+                ORDER BY c.cartItemId DESC
+            """, CartItem.class)
+            .setParameter("user", user)
+            .getResultList();
         } finally {
             em.close();
         }

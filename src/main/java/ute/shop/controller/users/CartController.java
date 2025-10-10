@@ -7,6 +7,7 @@ import ute.shop.entity.CartItem;
 import ute.shop.entity.User;
 import ute.shop.entity.Product;
 import ute.shop.entity.ProductVariant;
+import ute.shop.entity.Shop;
 import ute.shop.service.ICartItemService;
 import ute.shop.service.IProductService;
 import ute.shop.service.IProductVariantService;
@@ -15,7 +16,10 @@ import ute.shop.service.impl.ProductServiceImpl;
 import ute.shop.service.impl.ProductVariantServiceImpl;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @WebServlet(urlPatterns = {"/user/cart", "/user/cart/add", "/user/cart/remove"})
 public class CartController extends HttpServlet {
@@ -27,17 +31,33 @@ public class CartController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
-		User user = (User) session.getAttribute("account");
+	    User user = (User) session.getAttribute("account");
 
-		if (user == null) {
-			resp.sendRedirect(req.getContextPath() + "/login");
-			return;
-		}
+	    if (user == null) {
+	        resp.sendRedirect(req.getContextPath() + "/login");
+	        return;
+	    }
 
-		List<CartItem> cartItems = cartService.getCartByUser(user);
-		req.setAttribute("cartItems", cartItems);
+	    List<CartItem> cartItems = cartService.getCartByUser(user);
 
-		req.getRequestDispatcher("/views/user/order/cart.jsp").forward(req, resp);
+	 // ✅ Gom nhóm theo shop
+	 Map<Shop, List<CartItem>> cartByShop = cartItems.stream()
+	     .collect(Collectors.groupingBy(
+	         item -> item.getProductVariant().getProduct().getShop(),
+	         LinkedHashMap::new,
+	         Collectors.toList()
+	     ));
+
+	 // ✅ Tính tổng số lượng toàn giỏ
+	 int totalQuantity = cartItems.stream()
+	     .mapToInt(CartItem::getQuantity)
+	     .sum();
+
+	 req.setAttribute("cartByShop", cartByShop);
+	 req.setAttribute("totalQuantity", totalQuantity);
+	 req.setAttribute("cartItems", cartItems); 
+	 req.getRequestDispatcher("/views/user/order/cart.jsp").forward(req, resp);
+
 	}
 
 	@Override
