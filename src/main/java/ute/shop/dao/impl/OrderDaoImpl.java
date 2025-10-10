@@ -34,18 +34,18 @@ public class OrderDaoImpl implements IOrderDao {
 
     @Override
     public boolean insert(Order order) {
-    	 EntityManager em = JPAConfig.getEntityManager();
+    	EntityManager em = JPAConfig.getEntityManager();
         EntityTransaction tx = em.getTransaction();
+
         try {
             tx.begin();
-            order.setCreatedAt(new Timestamp(System.currentTimeMillis())); // tương đương GETDATE()
-            em.persist(order);
+            em.persist(order); // lưu order + orderDetails (cascade ALL)
             tx.commit();
-            return true; // thành công
+            return true;
         } catch (Exception e) {
             if (tx.isActive()) tx.rollback();
             e.printStackTrace();
-            return false; // thất bại
+            return false;
         } finally {
             em.close();
         }
@@ -247,6 +247,28 @@ public class OrderDaoImpl implements IOrderDao {
 	    } finally {
 	        em.close();
 	    }
+	}
+
+	@Override
+	public Order findById(Integer id) {
+		EntityManager em = JPAConfig.getEntityManager();
+        try {
+            return em.find(Order.class, id);
+        } finally {
+            em.close();
+        }
+	}
+
+	@Override
+	public List<Order> findByUserId(Integer userId) {
+		EntityManager em = JPAConfig.getEntityManager();
+        try {
+            return em.createQuery("SELECT o FROM Order o WHERE o.user.userId = :uid ORDER BY o.createdAt DESC", Order.class)
+                    .setParameter("uid", userId)
+                    .getResultList();
+        } finally {
+            em.close();
+        }
 	}
 
 

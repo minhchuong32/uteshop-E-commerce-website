@@ -8,6 +8,7 @@ import ute.shop.entity.User;
 import ute.shop.entity.Product;
 import ute.shop.entity.ProductVariant;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CartItemDaoImpl implements ICartItemDao {
@@ -112,6 +113,23 @@ public class CartItemDaoImpl implements ICartItemDao {
         } finally {
             em.close();
         }
+	}
+
+	@Override
+	public List<CartItem> getCartByIds(String[] ids) {
+		EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        List<Integer> idList = Arrays.stream(ids)
+	            .map(Integer::parseInt)
+	            .toList();
+	        return em.createQuery(
+	            "SELECT c FROM CartItem c JOIN FETCH c.productVariant v JOIN FETCH v.product p WHERE c.cartItemId IN :ids",
+	            CartItem.class)
+	            .setParameter("ids", idList)
+	            .getResultList();
+	    } finally {
+	        em.close();
+	    }
 	}
 
 }

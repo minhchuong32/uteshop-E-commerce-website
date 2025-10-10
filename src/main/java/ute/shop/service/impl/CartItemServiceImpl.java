@@ -60,4 +60,9 @@ public class CartItemServiceImpl implements ICartItemService {
     public List<CartItem> getCartByUser(User user) {
     	return cartItemDao.findByUser(user);
     }
+
+	@Override
+	public List<CartItem> getCartByIds(String[] ids) {
+		return cartItemDao.getCartByIds(ids);
+	}
 }

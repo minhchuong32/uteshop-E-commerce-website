@@ -25,7 +25,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public boolean insert(Order order) {
-        return orderDao.insert(order);
+    	return orderDao.insert(order);
     }
 
     @Override
@@ -87,5 +87,15 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public List<Order> findRecentOrders(int limit) {
 		return orderDao.findRecentOrders(limit);
+	}
+
+	@Override
+	public Order findById(Integer id) {
+		return orderDao.findById(id);
+	}
+
+	@Override
+	public List<Order> getOrdersByUser(Integer userId) {
+		return orderDao.findByUserId(userId);
 	}
 }

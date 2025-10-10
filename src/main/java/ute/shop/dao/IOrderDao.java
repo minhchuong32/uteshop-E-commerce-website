@@ -13,7 +13,9 @@ public interface IOrderDao {
     void delete(int id);
 	List<Order> findByUser(User user);
 	boolean hasPurchased(int userId, int productId);
-	
+    Order findById(Integer id);
+    List<Order> findByUserId(Integer userId);
+    
 	//Vendor dashboard
 	long countOrdersByShop(int shopId);
 	long countDistinctCustomersByShop(int shopId);
@@ -24,4 +26,5 @@ public interface IOrderDao {
 	User getOrderShipper(Order order);
 	long countAllOrders();
 	List<Order> findRecentOrders(int limit);
+
 }
