@@ -21,12 +21,37 @@ public class ProductDaoImpl implements IProductDao {
 	@Override
 	public Product findById(Integer id) {
 		EntityManager em = JPAConfig.getEntityManager();
+		Product product = em.find(Product.class, id);
+		if (product != null) {
+	        product.getImages().size();     
+	        product.getVariants().size();   
+	    }
 		try {
-			return em.find(Product.class, id);
+			return product;
 		} finally {
 			em.close();
 		}
 	}
+	@Override
+	public Product findById_fix(Integer id) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        Product p = em.createQuery("""
+	            SELECT DISTINCT p FROM Product p
+	            LEFT JOIN FETCH p.images
+	            WHERE p.productId = :id
+	        """, Product.class)
+	        .setParameter("id", id)
+	        .getSingleResult();
+
+	        p.getVariants().size(); 
+	        return p;
+	    } finally {
+	        em.close();
+	    }
+	}
+
+
 
 	@Override
 	public List<Product> findTopProducts(int limit) {
@@ -115,29 +140,42 @@ public class ProductDaoImpl implements IProductDao {
 		}
 	}
 
+//	@Override
+//	public void delete(int productId) {
+//		EntityManager em = JPAConfig.getEntityManager();
+//	    EntityTransaction tx = em.getTransaction();
+//	    try {
+//	        tx.begin();
+//	        Product p = em.find(Product.class, productId);
+//	        if (p != null) em.remove(p);
+//	        tx.commit();
+//	    } catch (Exception e) {
+//	        if (tx.isActive()) tx.rollback();
+//	        e.printStackTrace();
+//	    } finally {
+//	        em.close();
+//	    }
+//	}
 	@Override
 	public void delete(int productId) {
-		EntityManager em = JPAConfig.getEntityManager();
-		EntityTransaction tx = em.getTransaction();
+	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityTransaction tx = em.getTransaction();
+	    try {
+	        tx.begin();
 
-		try {
-			tx.begin();
-			Product p = em.find(Product.class, productId);
-			if (p != null) {
-				if (!em.contains(p)) {
-					p = em.merge(p);
-				}
-				em.remove(p);
-			}
-			tx.commit();
-		} catch (Exception e) {
-			if (tx.isActive())
-				tx.rollback();
-			e.printStackTrace();
-		} finally {
-			em.close();
-		}
+	        Query query = em.createNativeQuery("DELETE FROM products WHERE product_id = ?");
+	        query.setParameter(1, productId);
+	        query.executeUpdate();
+
+	        tx.commit();
+	    } catch (Exception e) {
+	        if (tx.isActive()) tx.rollback();
+	        e.printStackTrace();
+	    } finally {
+	        em.close();
+	    }
 	}
+
 
 	@Override
 	public List<Product> findByCategory(Integer categoryId) {

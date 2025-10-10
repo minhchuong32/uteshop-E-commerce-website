@@ -47,4 +47,5 @@ public interface IProductDao {
 
 
 	List<Object[]> findBestSellingProducts(int limit);
+	Product findById_fix(Integer id);
 }

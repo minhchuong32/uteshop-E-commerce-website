@@ -136,5 +136,10 @@ public class ProductServiceImpl implements IProductService {
 		return productDao.findBestSellingProducts(limit);
 	}
 
+	@Override
+	public Product findById_fix(Integer id) {
+		return productDao.findById_fix(id);
+	}
+
 
 }
