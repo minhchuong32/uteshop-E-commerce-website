@@ -71,7 +71,7 @@
 						</c:if>
 					</c:if>
 					<c:if test="${empty minVariant}">
-						<span class="text-muted">Chưa có biến thể</span>
+						<span class="text-muted">Chưa có phân loại</span>
 					</c:if>
 				</h4>
 
@@ -111,17 +111,29 @@
 				<!-- Nút hành động -->
 				<div class="d-flex gap-2 mb-3">
 
-					<!-- Thêm vào giỏ -->
-					<form action="${pageContext.request.contextPath}/web/cart"
-						method="post" class="flex-fill"
-						onsubmit="return validateSelection()">
-						<input type="hidden" name="productId" value="${product.productId}">
-						<input type="hidden" name="quantity" id="formQty" value="1">
-						<input type="hidden" name="action" value="add">
-						<button type="submit" class="btn btn-primary-custom w-100">
-							<i class="bi bi-cart-plus"></i> Thêm vào giỏ
-						</button>
-					</form>
+					<!-- Nếu chưa đăng nhập -->
+					<c:if test="${empty sessionScope.account}">
+						<form action="${pageContext.request.contextPath}/login"
+							method="get" onsubmit="return validateSelection()">
+							<input type="hidden" name="redirect"
+								value="${pageContext.request.requestURI}">
+							<button type="submit" class="btn btn-primary-custom w-100">
+								<i class="bi bi-cart-plus"></i> Thêm vào giỏ
+							</button>
+						</form>
+					</c:if>
+
+					<!-- Nếu đã đăng nhập -->
+					<c:if test="${not empty sessionScope.account}">
+						<form action="${pageContext.request.contextPath}/user/cart/add"
+							method="post" onsubmit="return validateSelection()">
+							<input type="hidden" name="variantId" id="variantId"> <input
+								type="hidden" name="quantity" id="formQty" value="1">
+							<button type="submit" class="btn btn-primary-custom w-100">
+								<i class="bi bi-cart-plus"></i> Thêm vào giỏ
+							</button>
+						</form>
+					</c:if>
 
 					<!-- Mua ngay -->
 					<form action="${pageContext.request.contextPath}/web/cart"
@@ -324,14 +336,13 @@
 		</c:if>
 	</div>
 
-
 	</div>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 		<!-- Truyền biến từ JSP sang JS -->
 	<div id="product-detail" data-product-id="${product.productId}"
 		data-context="${pageContext.request.contextPath}"></div>
-		
+	
 	<script
 		src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
 

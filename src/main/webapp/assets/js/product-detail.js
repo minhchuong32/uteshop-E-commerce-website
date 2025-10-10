@@ -45,6 +45,10 @@ function getSelectedOptions() {
 }
 
 function validateSelection() {
+	// Nếu chưa đăng nhập → không cần kiểm tra gì, chỉ cho phép submit
+	const isGuest = document.querySelector('form[action$="/login"]') !== null;
+	if (isGuest) return true;
+		
 	const radios = document.querySelectorAll(".btn-check");
 	const groups = [...new Set([...radios].map(r => r.name))];
 	const selected = getSelectedOptions();
