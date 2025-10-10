@@ -19,40 +19,49 @@
 
                     <div class="card-body">
                         <c:forEach var="item" items="${entry.value}">
-                            <div class="d-flex align-items-center border-bottom py-2">
-                                <!-- ✅ Bỏ checked mặc định -->
+                            <div class="d-flex align-items-center border-bottom py-2 cart-item">
+                                <!-- Checkbox chọn -->
                                 <input type="checkbox" class="form-check-input me-3 cart-checkbox"
                                        name="selectedItems" value="${item.cartItemId}">
 
+                                <!-- Ảnh sản phẩm -->
                                 <img src="${pageContext.request.contextPath}${item.productVariant.imageUrl}"
                                      class="me-3" style="width: 60px; height: 60px; object-fit: cover;">
 
+                                <!-- Thông tin -->
                                 <div class="flex-fill">
                                     <h6 class="mb-0">${item.productVariant.product.name}</h6>
                                     <small class="text-muted">${item.productVariant.optionValue}</small>
                                     <div><small class="text-muted">Số lượng: ${item.quantity}</small></div>
                                 </div>
 
-                                <!-- ✅ Hiển thị tổng tiền từng item -->
-                                <div class="text-end">
+                                <!-- Tổng tiền -->
+                                <div class="text-end me-3">
                                     <p class="mb-0 fw-semibold text-danger item-total"
                                        data-price="${item.productVariant.price}"
                                        data-qty="${item.quantity}">
-                                        <fmt:formatNumber value="${item.productVariant.price * item.quantity}" 
-                                                          type="currency" currencySymbol="₫" />
+                                        <fmt:formatNumber value="${item.productVariant.price * item.quantity}"
+                                                          type="currency" currencySymbol="₫"/>
                                     </p>
                                     <small class="text-muted">
-                                        (Đơn giá: 
-                                        <fmt:formatNumber value="${item.productVariant.price}" type="currency" currencySymbol="₫"/>)
+                                        (Đơn giá:
+                                        <fmt:formatNumber value="${item.productVariant.price}"
+                                                          type="currency" currencySymbol="₫"/>)
                                     </small>
                                 </div>
-                            </div>
+
+								<!-- Nút Xóa (xử lý trong js) -->
+								<button type="button"
+									class="btn btn-outline-danger btn-sm ms-2 btn-remove"
+									data-id="${item.cartItemId}">🗑️ Xóa</button>
+
+							</div>
                         </c:forEach>
                     </div>
                 </div>
             </c:forEach>
 
-            <!-- ✅ Tổng tiền cuối form -->
+            <!-- Tổng tiền -->
             <div class="d-flex justify-content-between align-items-center border-top pt-3">
                 <div><strong>Tổng tiền các sản phẩm đã chọn:</strong></div>
                 <div><span id="total-price" class="text-danger fw-bold">0 ₫</span></div>
@@ -61,26 +70,8 @@
         </form>
     </c:if>
 </div>
-
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const checkboxes = document.querySelectorAll(".cart-checkbox");
-    const totalPriceEl = document.getElementById("total-price");
-
-    function calculateTotal() {
-        let total = 0;
-        checkboxes.forEach(cb => {
-            if (cb.checked) {
-                const itemTotalEl = cb.closest(".d-flex").querySelector(".item-total");
-                const price = parseFloat(itemTotalEl.dataset.price);
-                const qty = parseInt(itemTotalEl.dataset.qty);
-                total += price * qty;
-            }
-        });
-        totalPriceEl.textContent = new Intl.NumberFormat('vi-VN').format(total) + " ₫";
-    }
-
-    checkboxes.forEach(cb => cb.addEventListener("change", calculateTotal));
-    calculateTotal(); // ✅ chạy lần đầu để hiển thị tổng ban đầu = 0
-});
+  window.contextPath = "${pageContext.request.contextPath}";
 </script>
+
+<script src="${pageContext.request.contextPath}/assets/js/user/cart.js"></script>
