@@ -58,6 +58,11 @@
 							<i class="bi bi-people-fill me-2"></i> Quản lý Người dùng
 					</a></li>
 					<li class="nav-item mb-1"><a
+						class="nav-link ${page=='products' ? 'active' : ''}"
+						href="${pageContext.request.contextPath}/admin/home?page=products">
+							<i class="bi bi-box-seam-fill me-2"></i> Quản lý Sản phẩm
+					</a></li>
+					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='shops' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=shops">
 							<i class="bi bi-shop me-2"></i> Quản lý Cửa hàng

@@ -39,6 +39,9 @@ public class HomeController extends HttpServlet {
                 case "users":
                     resp.sendRedirect(req.getContextPath() + "/admin/users");
                     return;
+                case "products":
+                    resp.sendRedirect(req.getContextPath() + "/admin/products");
+                    return;
                 case "shops":
                     resp.sendRedirect(req.getContextPath() + "/admin/shops");
                     return;
