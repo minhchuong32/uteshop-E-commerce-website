@@ -39,7 +39,7 @@ public class OrderDaoImpl implements IOrderDao {
 
         try {
             tx.begin();
-            em.persist(order); // lưu order + orderDetails (cascade ALL)
+            em.merge(order); // lưu order + orderDetails (cascade ALL)
             tx.commit();
             return true;
         } catch (Exception e) {
