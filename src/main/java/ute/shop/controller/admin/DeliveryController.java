@@ -6,7 +6,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import ute.shop.entity.Delivery;
 import ute.shop.service.impl.DeliveryServiceImpl;
-import ute.shop.utils.PDFGenerator;
 
 import java.io.File;
 import java.io.IOException;

@@ -65,7 +65,7 @@
 								<img
 									src="${empty p.imageUrl 
 										? pageContext.request.contextPath.concat('/assets/images/default-product.png') 
-										: pageContext.request.contextPath.concat('/assets/images/products/').concat(p.imageUrl)}"
+										: pageContext.request.contextPath.concat('/assets/').concat(p.imageUrl)}"
 									alt="product" class="rounded"
 									style="width: 80px; height: 80px; object-fit: cover;">
 							</td>

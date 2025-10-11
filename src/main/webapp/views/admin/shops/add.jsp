@@ -11,7 +11,7 @@
 
 				<!-- Chủ sở hữu -->
 				<div class="mb-3">
-					<label for="user_id" class="form-label">Chủ sở hữu (Vendor)</label>
+					<label for="user_id" class="form-label">Chủ sở hữu (User)</label>
 					<select class="form-select" id="user_id" name="user_id" required>
 						<option value="">-- Chọn chủ sở hữu cửa hàng --</option>
 						<c:forEach var="v" items="${vendors}">

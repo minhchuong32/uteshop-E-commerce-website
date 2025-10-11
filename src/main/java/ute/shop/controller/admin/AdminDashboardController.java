@@ -23,34 +23,35 @@ public class AdminDashboardController extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            // ===== 1️⃣ Thống kê nhanh =====
+            // ===== Thống kê nhanh =====
             req.setAttribute("totalUsers", userService.countAllUsers());
             req.setAttribute("totalProducts", productService.countAll());
             req.setAttribute("totalOrders", orderService.countAllOrders());
             req.setAttribute("totalRevenue", revenueService.getTotalRevenueAfterFee(BigDecimal.valueOf(0.10)));
 
-            // ===== 2️⃣ Đơn hàng gần đây =====
+            // ===== Đơn hàng gần đây =====
             req.setAttribute("recentOrders", orderService.findRecentOrders(5));
 
-            // ===== 3️⃣ Top sản phẩm bán chạy =====
+            // ===== Top sản phẩm bán chạy =====
             var rawList = productService.findBestSellingProducts(5);
             List<Map<String, Object>> bestSellers = new ArrayList<>();
 
             for (Object[] row : rawList) {
                 Map<String, Object> item = new HashMap<>();
-                item.put("productId", row[0]);
-                item.put("productName", row[1]);
-                item.put("totalSold", ((Number) row[2]).longValue());
-                item.put("shopId", row[3]);
-                item.put("shopName", row[4]);
-                item.put("minPrice", row[5]);
-                item.put("maxPrice", row[6]);
+                item.put("productImage", row[0]);
+                item.put("productId", row[1]);
+                item.put("productName", row[2]);
+                item.put("totalSold", ((Number) row[3]).longValue());
+                item.put("shopId", row[4]);
+                item.put("shopName", row[5]);
+                item.put("minPrice", row[6]);
+                item.put("maxPrice", row[7]);
                 bestSellers.add(item);
             }
 
             req.setAttribute("bestSellers", bestSellers);
 
-            // ===== 4️⃣ Điều hướng view =====
+            // ===== Điều hướng view =====
             req.setAttribute("page", "dashboard");
             req.setAttribute("view", "/views/admin/dashboard.jsp");
             req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);

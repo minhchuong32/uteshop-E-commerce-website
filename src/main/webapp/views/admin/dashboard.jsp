@@ -130,7 +130,9 @@
 							<c:forEach var="d" items="${o.orderDetails}">
 								<div class="d-flex align-items-center mb-2">
 									<img
-										src="${pageContext.request.contextPath}/uploads/default_logo.png"
+										src="${empty d.productVariant.product.imageUrl
+										? pageContext.request.contextPath.concat('/assets/images/default-product.png') 
+										: pageContext.request.contextPath.concat('/assets/').concat(d.productVariant.product.imageUrl)}"
 									
 										class="rounded me-2" alt="${d.productVariant.product.name}"
 										style="width: 45px; height: 45px; object-fit: cover;">
@@ -167,7 +169,9 @@
 						<div class="d-flex align-items-center pb-2 mb-3">
 							<!-- Nếu có ảnh sản phẩm, hiển thị; nếu không, dùng ảnh mặc định -->
 							<img
-								src="${pageContext.request.contextPath}/uploads/default-product.jpg"
+								src="${empty p.productImage 
+										? pageContext.request.contextPath.concat('/assets/images/default-product.png') 
+										: pageContext.request.contextPath.concat('/assets/').concat(p.productImage)}"
 								class="rounded me-2" alt="${p.productName}"
 								style="width: 50px; height: 50px; object-fit: cover;">
 

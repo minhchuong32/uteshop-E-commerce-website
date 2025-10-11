@@ -45,7 +45,7 @@ public class ShopController extends HttpServlet {
 
         } else if (uri.endsWith("/add")) {
             // Load danh sách vendor để hiển thị trong combobox
-            List<User> vendors = userService.getUsersByRole("Vendor");
+            List<User> vendors = userService.getUsersByRole("User");
             req.setAttribute("vendors", vendors);
             req.setAttribute("page", "shops");
             req.setAttribute("view", "/views/admin/shops/add.jsp");

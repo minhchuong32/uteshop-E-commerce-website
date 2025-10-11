@@ -5,7 +5,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import ute.shop.service.impl.RevenueServiceImpl;
 import ute.shop.service.impl.ShopServiceImpl;
-import ute.shop.entity.Shop;
 
 import java.io.IOException;
 import java.math.BigDecimal;

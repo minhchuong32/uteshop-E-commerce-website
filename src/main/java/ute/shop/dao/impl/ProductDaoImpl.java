@@ -365,6 +365,7 @@ public class ProductDaoImpl implements IProductDao {
 	    try {
 	        String jpql = """
 	            SELECT 
+	        		p.imageUrl,
 	                p.productId,
 	                p.name,
 	                SUM(od.quantity) AS totalSold,
@@ -378,7 +379,7 @@ public class ProductDaoImpl implements IProductDao {
 	            JOIN p.shop s
 	            JOIN od.order o
 	            WHERE o.status = :status
-	            GROUP BY p.productId, p.name, s.shopId, s.name
+	            GROUP BY p.imageUrl, p.productId, p.name, s.shopId, s.name
 	            ORDER BY SUM(od.quantity) DESC
 	        """;
 

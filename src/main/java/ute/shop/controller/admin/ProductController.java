@@ -48,7 +48,7 @@ public class ProductController extends HttpServlet {
                 List<Product> allProducts = productService.findAll();
                 req.setAttribute("products", allProducts);
                 req.setAttribute("page", "products");
-                req.setAttribute("view", "/views/admin/products/dashboard.jsp");
+                req.setAttribute("view", "/views/admin/products/list.jsp");
                 req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 
             } else if (uri.endsWith("/add")) {
@@ -84,26 +84,26 @@ public class ProductController extends HttpServlet {
 
             } else if (uri.endsWith("/delete")) {
             
-            	    System.out.println("🗑️ [ProductController] Request DELETE nhận được: " + uri);
+            	    System.out.println(" [ProductController] Request DELETE nhận được: " + uri);
 
             	    String idStr = req.getParameter("id");
-            	    System.out.println("🧩 ID sản phẩm nhận được từ request: " + idStr);
+            	    System.out.println(" ID sản phẩm nhận được từ request: " + idStr);
 
             	    if (idStr == null || idStr.isEmpty()) {
-            	        System.out.println("⚠️ Không nhận được ID từ request!");
+            	        System.out.println(" Không nhận được ID từ request!");
             	        req.getSession().setAttribute("error", "Không nhận được ID sản phẩm để xóa!");
             	        resp.sendRedirect(req.getContextPath() + "/admin/products");
             	        return;
             	    }
 
             	    int id = Integer.parseInt(idStr);
-            	    System.out.println("➡️ Đang gọi productService.delete(" + id + ")");
+            	    System.out.println(" Đang gọi productService.delete(" + id + ")");
             	    try {
             	        productService.delete(id);
-            	        System.out.println("✅ Đã xóa sản phẩm thành công!");
+            	        System.out.println(" Đã xóa sản phẩm thành công!");
             	        req.getSession().setAttribute("success", "Xóa sản phẩm thành công!");
             	    } catch (Exception e) {
-            	        System.out.println("❌ Lỗi khi xóa sản phẩm: " + e.getMessage());
+            	        System.out.println(" Lỗi khi xóa sản phẩm: " + e.getMessage());
             	        e.printStackTrace();
             	        req.getSession().setAttribute("error", "Lỗi khi xóa sản phẩm!");
             	    }
@@ -115,7 +115,7 @@ public class ProductController extends HttpServlet {
             e.printStackTrace();
             req.setAttribute("error", "Đã xảy ra lỗi: " + e.getMessage());
             req.setAttribute("page", "products");
-            req.setAttribute("view", "/views/admin/products/dashboard.jsp");
+            req.setAttribute("view", "/views/admin/products/list.jsp");
             req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
         }
     }
@@ -197,7 +197,7 @@ public class ProductController extends HttpServlet {
             e.printStackTrace();
             req.setAttribute("error", "Lỗi khi xử lý dữ liệu: " + e.getMessage());
             req.setAttribute("page", "products");
-            req.setAttribute("view", "/views/admin/products/dashboard.jsp");
+            req.setAttribute("view", "/views/admin/products/list.jsp");
             req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
         }
     }
