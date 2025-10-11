@@ -1,12 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/commons/taglib.jsp"%>
-
 <fmt:setLocale value="vi_VN" />
 
 <div class="container my-5">
 	<h2 class="mb-4">Thanh toán</h2>
 
-	<!-- ✅ Hiển thị thông báo -->
+	<!-- Thông báo -->
 	<c:if test="${not empty error}">
 		<div class="alert alert-danger">${error}</div>
 	</c:if>
@@ -19,29 +18,31 @@
 	<form action="${pageContext.request.contextPath}/user/checkout"
 		method="post">
 		<div class="row">
-			<!-- Cột trái -->
 			<div class="col-md-8">
-				<!-- ✅ Sản phẩm được chọn -->
-				<div class="card mb-4 shadow-sm">
-					<div class="card-header bg-white">
-						<h5 class="mb-0">Sản phẩm đã chọn</h5>
-					</div>
-					<div class="card-body">
-						<c:if test="${empty cartItems}">
-							<p class="text-muted">Không có sản phẩm nào được chọn.</p>
-						</c:if>
-						<c:if test="${not empty cartItems}">
+				<!-- ✅ Lặp qua từng shop -->
+				<c:forEach var="entry" items="${itemsByShop}">
+					<c:set var="shopId" value="${entry.key}" />
+					<c:set var="shopItems" value="${entry.value}" />
+					<c:set var="promos" value="${promosByShop[shopId]}" />
+
+					<div class="card mb-4 shadow-sm">
+						<div class="card-header bg-light">
+							<h5 class="mb-0">🏬 Cửa hàng:
+								${shopItems[0].productVariant.product.shop.name}</h5>
+						</div>
+
+						<div class="card-body">
 							<c:set var="subtotal" value="0" />
-							<c:forEach var="item" items="${cartItems}">
-								<div
-									class="d-flex align-items-center border-bottom py-2 cart-item">
-									<!-- Ảnh sản phẩm -->
+
+							<!-- ✅ Hiển thị sản phẩm của shop -->
+							<c:forEach var="item" items="${shopItems}">
+								<div class="d-flex align-items-center border-bottom py-2">
 									<img
 										src="${pageContext.request.contextPath}${item.productVariant.imageUrl}"
-										alt="${item.productVariant.product.name}" class="me-3"
-										style="width: 60px; height: 60px; object-fit: cover;">
+										alt="${item.productVariant.product.name}"
+										style="width: 60px; height: 60px; object-fit: cover;"
+										class="me-3">
 
-									<!-- Thông tin -->
 									<div class="flex-fill">
 										<h6 class="mb-0">${item.productVariant.product.name}</h6>
 										<small class="text-muted">${item.productVariant.optionValue}</small>
@@ -50,57 +51,55 @@
 										</div>
 									</div>
 
-									<!-- Giá -->
 									<div class="text-end">
 										<p class="mb-0 fw-semibold text-danger">
-											<fmt:formatNumber
-												value="${item.productVariant.price * item.quantity}"
+											<fmt:formatNumber value="${item.price * item.quantity}"
 												type="currency" currencySymbol="₫" />
 										</p>
-										<small class="text-muted"> (Đơn giá: <fmt:formatNumber
-												value="${item.productVariant.price}" type="currency"
-												currencySymbol="₫" />)
+										<small class="text-muted">(Đơn giá: <fmt:formatNumber
+												value="${item.price}" type="currency" currencySymbol="₫" />)
 										</small>
 									</div>
 
-									<!-- Truyền id sản phẩm -->
 									<input type="hidden" name="selectedItems"
 										value="${item.cartItemId}">
 								</div>
 								<c:set var="subtotal"
-									value="${subtotal + (item.productVariant.price * item.quantity)}" />
-							</c:forEach>
-						</c:if>
-					</div>
-				</div>
-
-				<!-- ✅ Mã khuyến mãi -->
-				<div class="card mb-4 shadow-sm">
-					<div class="card-header bg-white">
-						<h5 class="mb-0">
-							<i class="bi bi-ticket-perforated"></i> Phiếu giảm giá
-						</h5>
-					</div>
-					<div class="card-body">
-						<select name="promotionId" class="form-select">
-							<option value="">-- Không dùng mã --</option>
-							<c:forEach var="promo" items="${promotions}">
-								<option value="${promo.promotionId}">
-									<c:choose>
-										<c:when test="${promo.discountType eq 'percent'}">
-                ${promo.value}%
-            </c:when>
-										<c:otherwise>
-											<fmt:formatNumber value="${promo.value}" type="number"
-												groupingUsed="true" />₫
-            </c:otherwise>
-									</c:choose>
-								</option>
+									value="${subtotal + (item.price * item.quantity)}" />
 							</c:forEach>
 
-						</select>
+							<!-- ✅ Chọn mã khuyến mãi riêng shop -->
+							<div class="mt-3">
+								<label class="form-label">🎟️ Mã khuyến mãi của shop</label> <select
+									name="promotionId[${shopId}]" class="form-select">
+									<option value="">-- Không dùng mã --</option>
+									<c:forEach var="promo" items="${promos}">
+										<option value="${promo.promotionId}">
+											<c:choose>
+												<c:when test="${promo.discountType eq 'percent'}">
+                                                    Giảm ${promo.value}% (đến ${promo.endDate})
+                                                </c:when>
+												<c:otherwise>
+                                                    Giảm <fmt:formatNumber
+														value="${promo.value}" type="number" groupingUsed="true" />₫ (đến ${promo.endDate})
+                                                </c:otherwise>
+											</c:choose>
+										</option>
+									</c:forEach>
+								</select>
+							</div>
+
+							<!-- ✅ Tổng tiền shop -->
+							<div class="mt-3 border-top pt-2 d-flex justify-content-between">
+								<span>Tạm tính:</span> <strong><fmt:formatNumber
+										value="${subtotal}" type="number" groupingUsed="true" />₫</strong>
+							</div>
+							<div class="d-flex justify-content-between">
+								<span>Phí vận chuyển:</span> <strong>30.000₫</strong>
+							</div>
+						</div>
 					</div>
-				</div>
+				</c:forEach>
 
 				<!-- ✅ Thông tin giao hàng -->
 				<div class="card mb-4 shadow-sm">
@@ -151,32 +150,60 @@
 				</div>
 			</div>
 
-			<!-- Cột phải -->
+			<!-- ✅ Tóm tắt đơn hàng -->
 			<div class="col-md-4">
 				<div class="card shadow-sm">
 					<div class="card-header bg-white">
-						<h5 class="mb-0">Tóm tắt đơn hàng</h5>
+						<h5 class="mb-0">🧾 Tóm tắt thanh toán</h5>
 					</div>
 					<div class="card-body">
-						<p class="d-flex justify-content-between">
-							<span>Tạm tính (${fn:length(cartItems)} sản phẩm)</span> <strong><fmt:formatNumber
-									value="${subtotal}" type="number" groupingUsed="true" />₫</strong>
-						</p>
-						<p class="d-flex justify-content-between">
-							<span>Phí vận chuyển</span> <strong>30.000₫</strong>
-						</p>
-						<hr>
-						<p class="d-flex justify-content-between fs-5">
-							<span>Tổng cộng</span> <strong class="text-danger"><fmt:formatNumber
-									value="${subtotal + 30000}" type="number" groupingUsed="true" />₫</strong>
-						</p>
-						<button type="submit" class="btn btn-success w-100">Đặt
+						<c:set var="grandTotal" value="0" />
+
+						<!-- ✅ Lặp qua từng shop để tính tổng -->
+						<c:forEach var="entry" items="${itemsByShop}">
+							<c:set var="shopId" value="${entry.key}" />
+							<c:set var="shopItems" value="${entry.value}" />
+							<c:set var="shopSubtotal" value="0" />
+
+							<c:forEach var="item" items="${shopItems}">
+								<c:set var="shopSubtotal"
+									value="${shopSubtotal + (item.price * item.quantity)}" />
+							</c:forEach>
+
+							<!-- ✅ Thêm phí ship -->
+							<c:set var="shopTotal" value="${shopSubtotal + 30000}" />
+							<c:set var="grandTotal" value="${grandTotal + shopTotal}" />
+
+							<!-- ✅ Hiển thị tóm tắt theo shop -->
+							<div class="mb-3 pb-2 border-bottom">
+								<strong>🏬
+									${shopItems[0].productVariant.product.shop.name}</strong><br> <small
+									class="text-muted"> ${fn:length(shopItems)} mặt hàng </small><br>
+								<span>Tổng: <strong class="text-danger"> <fmt:formatNumber
+											value="${shopTotal}" type="number" groupingUsed="true" />₫
+								</strong>
+								</span>
+							</div>
+						</c:forEach>
+
+						<!-- ✅ Tổng toàn bộ đơn hàng -->
+						<div class="mt-3 border-top pt-3">
+							<h6 class="d-flex justify-content-between">
+								<span>Tổng cộng:</span> <span class="text-success fw-bold">
+									<fmt:formatNumber value="${grandTotal}" type="number"
+										groupingUsed="true" />₫
+								</span>
+							</h6>
+							<small class="text-muted">Đã bao gồm phí vận chuyển từng
+								shop</small>
+						</div>
+
+						<button type="submit" class="btn btn-success w-100 mt-3">Đặt
 							hàng</button>
-						<small class="text-muted d-block text-center mt-2"> Miễn
-							phí vận chuyển cho đơn hàng từ 1.000.000₫ </small>
 					</div>
 				</div>
 			</div>
+
 		</div>
 	</form>
 </div>

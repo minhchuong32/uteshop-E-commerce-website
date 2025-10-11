@@ -16,4 +16,5 @@ public interface IShopService {
     void delete(int id);
     
     Shop findByUserId(int userId);
+    Shop getReferenceById(int id);
 }
