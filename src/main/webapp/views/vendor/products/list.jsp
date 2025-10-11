@@ -27,7 +27,7 @@
                     <a href="${pageContext.request.contextPath}/vendor/products?category=${c.categoryId}"
                        class="d-block text-decoration-none ${selectedCategory == c.categoryId ? 'fw-bold text-primary' : 'text-dark'}">
                         <div class="py-2">
-                            <img src="${pageContext.request.contextPath}/assets/images/categories/${c.image}" 
+                            <img src="${pageContext.request.contextPath}/assets/${c.image}" 
                                  class="img-fluid rounded mb-1 border"
                                  style="height:60px; width:60px; object-fit:cover;">
                             <div>${c.name}</div>
@@ -59,10 +59,10 @@
                 </c:when>
                 <c:otherwise>
                     <c:forEach var="p" items="${list}">
-                        <div class="col-6 col-md-4 col-lg-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <div class="card h-100 shadow-sm product-card">
                                 <div class="product-img-wrapper position-relative">
-                                    <img src="${pageContext.request.contextPath}/${p.imageUrl}" 
+                                    <img src="${pageContext.request.contextPath}/assets/${p.imageUrl}" 
                                          class="card-img-top" alt="${p.name}"
                                          style="height:180px;object-fit:cover;">
                                 </div>

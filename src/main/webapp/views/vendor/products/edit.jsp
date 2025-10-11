@@ -6,75 +6,168 @@
     <title>Chỉnh sửa sản phẩm | UteShop</title>
 </head>
 <body>
-<div class="container py-4">
-    <h3 class="fw-bold text-primary-custom mb-4">
-        <i class="bi bi-pencil-square"></i> Chỉnh sửa sản phẩm
-    </h3>
+<div class="container mt-4">
+    <h4 class="mb-4">✏️ Chỉnh sửa sản phẩm</h4>
 
-    <form action="${pageContext.request.contextPath}/vendor/products/edit" 
-          method="post" enctype="multipart/form-data" class="row g-3">
+    <form action="${pageContext.request.contextPath}/vendor/products/edit"
+          method="post" enctype="multipart/form-data">
 
         <input type="hidden" name="id" value="${product.productId}"/>
 
-        <!-- Tên sản phẩm -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">Tên sản phẩm</label>
-            <input type="file" name="imageFile" class="form-control" accept="image/*" required>
+        <!-- Thông tin cơ bản -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white fw-bold">Thông tin cơ bản</div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Tên sản phẩm</label>
+                        <input type="text" name="name" value="${product.name}" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Danh mục</label>
+                        <select name="categoryId" class="form-select" required>
+                            <c:forEach var="c" items="${categories}">
+                                <option value="${c.categoryId}"
+                                        <c:if test="${product.category.categoryId == c.categoryId}">selected</c:if>>
+                                    ${c.name}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <label class="form-label">Mô tả</label>
+                    <textarea name="description" class="form-control" rows="3">${product.description}</textarea>
+                </div>
+
+                <div class="row mt-3 align-items-center">
+                    <div class="col-md-6">
+                        <label class="form-label">Giá bán</label>
+                        <input type="number" step="0.01" name="price" value="${product.price}" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Ảnh đại diện hiện tại</label><br>
+                        <img src="${pageContext.request.contextPath}/assets/${product.imageUrl}"
+                             class="border rounded" width="120" alt="Ảnh sản phẩm">
+                        <input type="file" name="imageFile" class="form-control mt-2" accept="image/*">
+                        <small class="text-muted">Chọn ảnh mới nếu muốn thay đổi.</small>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Danh mục -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">Danh mục</label>
-            <select name="categoryId" class="form-select" required>
-                <c:forEach var="c" items="${categories}">
-                    <option value="${c.categoryId}" 
-                        <c:if test="${product.category.categoryId == c.categoryId}">selected</c:if>>
-                        ${c.name}
-                    </option>
+        <!-- Ảnh phụ -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-success text-white fw-bold">Ảnh sản phẩm khác</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <c:forEach var="img" items="${product.images}">
+                        <div class="d-inline-block me-2 mb-2 text-center">
+                            <img src="${pageContext.request.contextPath}/assets/${img.imageUrl}" 
+                                 class="border rounded" width="100" height="100">
+                            <div>
+                                <input type="checkbox" name="deleteExtraImageIds" value="${img.id}"> Xóa
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
+                <label class="form-label">Thêm ảnh phụ mới</label>
+                <input type="file" name="images" multiple accept="image/*" class="form-control">
+                <small class="text-muted">Bạn có thể chọn nhiều ảnh (ảnh chi tiết sản phẩm).</small>
+            </div>
+        </div>
+
+        <!-- Biến thể sản phẩm -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-warning text-dark fw-bold">
+                Biến thể sản phẩm
+                <button type="button" class="btn btn-sm btn-outline-dark float-end" id="addVariantBtn">
+                    + Thêm biến thể
+                </button>
+            </div>
+            <div class="card-body" id="variantContainer">
+                <c:if test="${empty product.variants}">
+                    <p class="text-muted">Chưa có biến thể nào. Bấm “Thêm biến thể”.</p>
+                </c:if>
+
+                <c:forEach var="v" items="${product.variants}" varStatus="loop">
+                    <div class="border p-3 mb-3 rounded variant-block">
+                        <input type="hidden" name="variantId_${loop.index}" value="${v.id}">
+                        <div class="row g-3 align-items-end">
+						    <div class="col-md-3">
+						        <label class="form-label">Tên biến thể</label>
+						        <input type="text" name="variantOptionName_${loop.index}" value="${v.optionName}" class="form-control" required>
+						    </div>
+						
+						    <div class="col-md-3">
+						        <label class="form-label">Giá</label>
+						        <input type="number" name="variantPrice_${loop.index}" value="${v.price}" class="form-control" required>
+						    </div>
+						
+						    <div class="col-md-3">
+						        <label class="form-label">Giá cũ (nếu có)</label>
+						        <input type="number" name="variantOldPrice_${loop.index}" value="${v.oldPrice}" class="form-control">
+						    </div>
+						
+						    <div class="col-md-3">
+						        <label class="form-label">Tồn kho</label>
+						        <input type="number" name="variantStock_${loop.index}" value="${v.stock}" class="form-control" required>
+						    </div>
+						</div>
+                    </div>
                 </c:forEach>
-            </select>
+            </div>
         </div>
 
-        <!-- Giá -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">Giá bán (₫)</label>
-            <input type="number" name="price" value="${product.price}" class="form-control" required>
-        </div>
-
-        <!-- Tồn kho -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">Tồn kho</label>
-            <input type="number" name="stock" value="${product.stock}" class="form-control" required>
-        </div>
-
-        <!-- Ảnh hiện tại -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">Ảnh hiện tại</label><br>
-            <img src="${pageContext.request.contextPath}/${product.imageUrl}" 
-                 class="rounded border" width="120">
-        </div>
-
-        <!-- Ảnh mới -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">Chọn ảnh mới (nếu có)</label>
-            <input type="file" name="imageUrl" class="form-control" accept="image/*">
-        </div>
-
-        <!-- Mô tả -->
-        <div class="col-12">
-            <label class="form-label fw-bold">Mô tả</label>
-            <textarea name="description" class="form-control" rows="5">${product.description}</textarea>
-        </div>
-
-        <div class="col-12 text-end">
+        <div class="text-end">
             <a href="${pageContext.request.contextPath}/vendor/products" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> Quay lại
+                ⬅ Quay lại
             </a>
-            <button type="submit" class="btn btn-primary-custom">
-                <i class="bi bi-save"></i> Cập nhật
+            <button type="submit" class="btn btn-primary">
+                💾 Cập nhật sản phẩm
             </button>
         </div>
     </form>
 </div>
+
+<script>
+    let variantIndex = ${product.variants != null ? product.variants.size() : 0};
+
+    document.getElementById('addVariantBtn').addEventListener('click', function () {
+        const container = document.getElementById('variantContainer');
+        const div = document.createElement('div');
+        div.classList.add('border', 'p-3', 'mb-3', 'rounded');
+        div.innerHTML = `
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">Tên biến thể</label>
+                    <input type="text" name="variantName_${variantIndex}" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Giá</label>
+                    <input type="number" step="0.01" name="variantPrice_${variantIndex}" class="form-control" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Tồn kho</label>
+                    <input type="number" name="variantStock_${variantIndex}" class="form-control" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Ảnh biến thể</label>
+                    <input type="file" name="variantImage_${variantIndex}" class="form-control" accept="image/*">
+                </div>
+                <div class="col-md-1 text-center">
+                    <button type="button" class="btn btn-danger btn-sm remove-variant">X</button>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+        container.querySelector('p')?.remove();
+        variantIndex++;
+
+        div.querySelector('.remove-variant').addEventListener('click', () => div.remove());
+    });
+</script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/commons/taglib.jsp"%>
+<!-- USER -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -14,7 +15,7 @@
 				<c:forEach var="img" items="${images}">
 					<c:if test="${img.main}">
 						<img id="mainImg"
-							src="${pageContext.request.contextPath}/assets/images/products/${img.imageUrl}"
+							src="${pageContext.request.contextPath}/assets/${img.imageUrl}"
 							alt="${product.name}" class="product-detail-img mb-3" />
 					</c:if>
 				</c:forEach>
@@ -23,7 +24,7 @@
 				<div class="d-flex gap-2">
 					<c:forEach var="img" items="${images}">
 						<img
-							src="${pageContext.request.contextPath}/assets/images/products/${img.imageUrl}"
+							src="${pageContext.request.contextPath}/assets/${img.imageUrl}"
 							class="thumb-img ${img.main ? 'active' : ''}"
 							onclick="changeImage(this)" />
 					</c:forEach>
@@ -54,18 +55,24 @@
 
 
 				<h4 class="text-danger fw-bold">
-					<fmt:formatNumber value="${minVariant.price}" type="currency"
-						currencySymbol="₫" />
-					<c:if
-						test="${not empty minVariant.oldPrice && minVariant.oldPrice > minVariant.price}">
-						<small class="text-muted text-decoration-line-through ms-2">
-							<fmt:formatNumber value="${minVariant.oldPrice}" type="currency"
-								currencySymbol="₫" />
-						</small>
-						<span class="badge bg-danger ms-2">Tiết kiệm</span>
+					<c:if test="${not empty minVariant}">
+						<span id="current-price"> <fmt:formatNumber
+								value="${minVariant.price}" type="currency" currencySymbol="₫" />
+						</span>
+						<c:if
+							test="${not empty minVariant.oldPrice && minVariant.oldPrice > minVariant.price}">
+							<small id="old-price"
+								class="text-muted text-decoration-line-through ms-2"> <fmt:formatNumber
+									value="${minVariant.oldPrice}" type="currency"
+									currencySymbol="₫" />
+							</small>
+							<span class="badge bg-danger ms-2">Tiết kiệm</span>
+						</c:if>
+					</c:if>
+					<c:if test="${empty minVariant}">
+						<span class="text-muted">Chưa có biến thể</span>
 					</c:if>
 				</h4>
-
 
 				<p class="mt-3">${product.description}</p>
 
@@ -102,22 +109,14 @@
 
 				<!-- Nút hành động -->
 				<div class="d-flex gap-2 mb-3">
-					<c:if test="${not empty sessionScope.cartMessage}">
-						<div class="alert alert-success alert-dismissible fade show"
-							role="alert">
-							${sessionScope.cartMessage}
-							<button type="button" class="btn-close" data-bs-dismiss="alert"
-								aria-label="Close"></button>
-						</div>
-						<c:remove var="cartMessage" scope="session" />
-					</c:if>
 					<!-- Thêm vào giỏ -->
-					<form action="${pageContext.request.contextPath}/user/cart/add"
+					<form id="addToCartForm"
+						action="${pageContext.request.contextPath}/user/cart/add"
 						method="post" class="flex-fill"
 						onsubmit="return validateSelection()">
-						<input type="hidden" name="productId" value="${product.productId}">
+
+						<input type="hidden" name="variantId" id="variantId">
 						<input type="hidden" name="quantity" id="formQty" value="1">
-						<input type="hidden" name="action" value="add">
 						<button type="submit" class="btn btn-primary-custom w-100">
 							<i class="bi bi-cart-plus"></i> Thêm vào giỏ
 						</button>
@@ -191,55 +190,58 @@
 				</div>
 			</div>
 		</div>
+		<c:set var="variants" value="${product.variants}" />
 
-		<!-- Thông tin sản phẩm -->
-		<div class="mt-5">
-			<h5 class="fw-bold text-uppercase text-primary-custom mb-3">
-				<i class="bi bi-info-circle me-2"></i> Thông tin sản phẩm
-			</h5>
-			<table class="table table-bordered">
-				<tbody>
-					<tr>
-						<th style="width: 200px;">Tên sản phẩm</th>
-						<td>${product.name}</td>
-					</tr>
-					<tr>
-						<th>Danh mục</th>
-						<td>${product.category.name}</td>
-					</tr>
-					<tr>
-						<th>Giá hiện tại</th>
-						<td><fmt:formatNumber value="${minVariant.price}"
-								type="currency" currencySymbol="₫" /></td>
-					</tr>
-					<tr>
-						<th>Giá cũ</th>
-						<td><c:if
-								test="${not empty minVariant.oldPrice && minVariant.oldPrice > minVariant.price}">
+		<!-- BẢNG THÔNG TIN -->
+		<table class="table table-bordered align-middle">
+			<tr>
+				<th>Danh mục</th>
+				<td>${product.category != null ? product.category.name : '-'}</td>
+			</tr>
+
+			<tr>
+				<th>Giá hiện tại</th>
+				<td id="current-price"><span id="price-value"> <c:choose>
+							<c:when test="${not empty minVariant}">
+								<fmt:formatNumber value="${minVariant.price}" type="currency"
+									currencySymbol="₫" />
+							</c:when>
+							<c:otherwise>-</c:otherwise>
+						</c:choose>
+				</span></td>
+			</tr>
+
+			<tr>
+				<th>Giá cũ</th>
+				<td id="old-price"><span id="oldprice-value"> <c:choose>
+							<c:when
+								test="${not empty minVariant.oldPrice and minVariant.oldPrice > minVariant.price}">
 								<fmt:formatNumber value="${minVariant.oldPrice}" type="currency"
 									currencySymbol="₫" />
-							</c:if> <c:if
-								test="${empty minVariant.oldPrice || minVariant.oldPrice <= minVariant.price}">-</c:if>
-						</td>
-					</tr>
+							</c:when>
+							<c:otherwise>-</c:otherwise>
+						</c:choose>
+				</span></td>
+			</tr>
 
-					<tr>
-						<th>Tồn kho</th>
-						<td><c:choose>
-								<c:when test="${minVariant != null && minVariant.stock > 0}">Còn hàng (${minVariant.stock})
-            </c:when>
-								<c:otherwise>
-									<span class="text-danger">Hết hàng</span>
-								</c:otherwise>
-							</c:choose></td>
-					</tr>
-					<tr>
-						<th>Mô tả</th>
-						<td>${product.description}</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+			<tr>
+				<th>Tồn kho</th>
+				<td id="stock-status"><span id="stock-value"> <c:choose>
+							<c:when test="${not empty minVariant and minVariant.stock > 0}">
+                    Còn hàng (${minVariant.stock})
+                </c:when>
+							<c:otherwise>
+								<span class="text-danger">Hết hàng</span>
+							</c:otherwise>
+						</c:choose>
+				</span></td>
+			</tr>
+			<tr>
+				<th>Mô tả</th>
+				<td>${product.description}</td>
+			</tr>
+		</table>
+
 
 		<!-- Tabs mô tả & đánh giá -->
 		<div class="tab-pane " id="reviews">
@@ -330,27 +332,30 @@
 				<p>Chưa có đánh giá nào.</p>
 			</c:if>
 		</div>
-
-
 	</div>
+	<div id="tempAlert"
+		class="alert d-none position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg"
+		style="z-index: 1055; min-width: 300px; text-align: center; border-radius: 10px;">
+	</div>
+
+
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Truyền biến từ JSP sang JS -->
+	<div id="product-detail" data-product-id="${product.productId}"
+		data-context="${pageContext.request.contextPath}"></div>
+	<c:if test="${not empty sessionScope.cartMessage}">
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+				showTempAlert("${fn:escapeXml(sessionScope.cartMessage)}",
+						"${sessionScope.cartMessageType}", 3000);
+			});
+		</script>
+		<c:remove var="cartMessage" scope="session" />
+		<c:remove var="cartMessageType" scope="session" />
+	</c:if>
+
 	<script
 		src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
-	<script>
-		// kiểm tra đã chọn màu với kích cỡ hay chưa 
-		function validateSelection() {
-		    let size = document.querySelector('input[name="size"]:checked');
-		    let color = document.querySelector('input[name="color"]:checked');
-		    let alertBox = document.getElementById("selectionAlert");
-
-		    if (!size || !color) {
-		        alertBox.classList.remove("d-none");
-		        return false; // chặn submit
-		    }
-		    alertBox.classList.add("d-none");
-		    return true;
-		}
-		</script>
 </body>
 </html>

@@ -35,5 +35,6 @@ public interface IProductService {
     
 
 	List<Object[]> findBestSellingProducts(int limit);
+	Product findById_fix(Integer id);
 
 }

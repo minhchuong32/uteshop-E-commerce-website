@@ -25,7 +25,7 @@ public interface IProductDao {
 
 	void delete(int productId);
 
-	List<Product> findByCategoryId(Integer categoryId);
+	List<Product> findByCategory(Integer categoryId);
 
 	List<Product> findTopByCategoryId(Integer categoryId, int limit);
 
@@ -47,4 +47,5 @@ public interface IProductDao {
 
 
 	List<Object[]> findBestSellingProducts(int limit);
+	Product findById_fix(Integer id);
 }

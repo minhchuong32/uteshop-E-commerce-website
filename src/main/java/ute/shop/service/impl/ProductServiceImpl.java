@@ -66,7 +66,7 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public List<Product> getProductsByCategory(Integer categoryId) {
-		return productDao.findByCategoryId(categoryId);
+		return productDao.findByCategory(categoryId);
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class ProductServiceImpl implements IProductService {
 	
 	@Override
     public List<Product> findByCategoryAndShop(int categoryId, int shopId) {
-        return productDao.findByCategoryId(categoryId)
+        return productDao.findByCategory(categoryId)
                          .stream()
                          .filter(p -> p.getShop().getShopId() == shopId)
                          .toList();
@@ -134,6 +134,11 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public List<Object[]> findBestSellingProducts(int limit) {
 		return productDao.findBestSellingProducts(limit);
+	}
+
+	@Override
+	public Product findById_fix(Integer id) {
+		return productDao.findById_fix(id);
 	}
 
 

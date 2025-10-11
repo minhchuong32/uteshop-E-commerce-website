@@ -16,11 +16,12 @@ public class LogoutController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		// Xoa acc khoi Session khi logout
-		HttpSession session = request.getSession();
-		session.removeAttribute("account");
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+		    session.invalidate(); 
+		}
 		response.sendRedirect(request.getContextPath() + "/login");
+
 	}
 
 }

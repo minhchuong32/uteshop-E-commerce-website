@@ -20,17 +20,18 @@ import ute.shop.service.impl.*;
     "/vendor/products/delete"
 })
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-    maxFileSize = 1024 * 1024 * 10,      // 10MB
-    maxRequestSize = 1024 * 1024 * 50    // 50MB
+    fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
+    maxFileSize = 1024 * 1024 * 10,       // 10MB
+    maxRequestSize = 1024 * 1024 * 50     // 50MB
 )
 public class ProductController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private IProductService productService = new ProductServiceImpl();
-    private ICategoryService categoryService = new CategoryServiceImpl();
+    private final IProductService productService = new ProductServiceImpl();
+    private final ICategoryService categoryService = new CategoryServiceImpl();
     private static final int PAGE_SIZE = 6;
 
+    // 🖼️ Đường dẫn tuyệt đối trong project (máy dev)
     private static final String PROJECT_IMAGE_PATH =
             "D:\\Java\\LTWeb\\uteshop-E-commerce-website\\src\\main\\webapp\\assets\\images\\products";
 
@@ -39,93 +40,93 @@ public class ProductController extends HttpServlet {
             throws ServletException, IOException {
 
         String uri = req.getRequestURI();
-
         HttpSession session = req.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("account") : null;
+
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        Shop shop = null;
-        if ("VENDOR".equalsIgnoreCase(user.getRole())) {
+        // ✅ Lấy shop của vendor
+        Shop shop = (Shop) session.getAttribute("currentShop");
+        if (shop == null && "VENDOR".equalsIgnoreCase(user.getRole())) {
             IShopService shopService = new ShopServiceImpl();
             shop = shopService.findByUserId(user.getUserId());
             if (shop != null) {
                 session.setAttribute("currentShop", shop);
             }
-        } else {
-            shop = (Shop) session.getAttribute("currentShop");
         }
 
+        if (shop == null) {
+            resp.sendRedirect(req.getContextPath() + "/vendor/shop/register");
+            return;
+        }
+
+        // ✅ Hiển thị danh sách sản phẩm
         if (uri.endsWith("/products")) {
             String categoryParam = req.getParameter("category");
-            Integer categoryId = null;
-            if (categoryParam != null && !categoryParam.isEmpty()) {
-                categoryId = Integer.parseInt(categoryParam);
-            }
+            Integer categoryId = (categoryParam != null && !categoryParam.isEmpty())
+                    ? Integer.parseInt(categoryParam)
+                    : null;
 
             int currentPage = 1;
             String pageParam = req.getParameter("page");
             if (pageParam != null && !pageParam.isEmpty()) {
-                currentPage = Integer.parseInt(pageParam);
+                try {
+                    currentPage = Integer.parseInt(pageParam);
+                } catch (NumberFormatException ignored) {}
             }
 
-            List<Product> allProducts;
-            if (categoryId != null) {
-                allProducts = productService.findByCategoryAndShop(categoryId, shop.getShopId());
-                req.setAttribute("selectedCategory", categoryId);
-            } else {
-                allProducts = productService.findByShopId(shop.getShopId());
-            }
+            List<Product> allProducts = (categoryId != null)
+                    ? productService.findByCategoryAndShop(categoryId, shop.getShopId())
+                    : productService.findByShopId(shop.getShopId());
 
             int totalProducts = allProducts.size();
             int totalPages = (int) Math.ceil((double) totalProducts / PAGE_SIZE);
-
-            int startIndex = (currentPage - 1) * PAGE_SIZE;
+            int startIndex = Math.max(0, (currentPage - 1) * PAGE_SIZE);
             int endIndex = Math.min(startIndex + PAGE_SIZE, totalProducts);
-
             List<Product> products = allProducts.subList(startIndex, endIndex);
 
             req.setAttribute("categories", categoryService.findAll());
             req.setAttribute("list", products);
+            req.setAttribute("selectedCategory", categoryId);
             req.setAttribute("totalPages", totalPages);
             req.setAttribute("currentPage", currentPage);
-
             req.setAttribute("page", "products");
             req.setAttribute("view", "/views/vendor/products/list.jsp");
             req.getRequestDispatcher("/WEB-INF/decorators/vendor.jsp").forward(req, resp);
+        }
 
-        } else if (uri.endsWith("/add")) {
-            // --- Hiển thị form thêm ---
+        // ✅ Trang thêm sản phẩm
+        else if (uri.endsWith("/add")) {
             req.setAttribute("categories", categoryService.findAll());
-            req.setAttribute("view", "/views/vendor/products/add.jsp");
             req.setAttribute("page", "products");
+            req.setAttribute("view", "/views/vendor/products/add.jsp");
             req.getRequestDispatcher("/WEB-INF/decorators/vendor.jsp").forward(req, resp);
+        }
 
-        } else if (uri.endsWith("/edit")) {
-            // --- Hiển thị form sửa ---
+        // ✅ Trang sửa sản phẩm
+        else if (uri.endsWith("/edit")) {
             String idParam = req.getParameter("id");
             if (idParam != null && !idParam.isEmpty()) {
                 int id = Integer.parseInt(idParam);
+                Product product = productService.findById_fix(id);
 
-                Product product = productService.findById(id);
-
-                if (product != null && product.getShop().getShopId() == shop.getShopId()) {
+                if (product != null && product.getShop().getShopId().equals(shop.getShopId())) {
                     req.setAttribute("product", product);
                     req.setAttribute("categories", categoryService.findAll());
-                    req.setAttribute("view", "/views/vendor/products/edit.jsp");
                     req.setAttribute("page", "products");
+                    req.setAttribute("view", "/views/vendor/products/edit.jsp");
                     req.getRequestDispatcher("/WEB-INF/decorators/vendor.jsp").forward(req, resp);
-                } else {
-                    resp.sendRedirect(req.getContextPath() + "/vendor/products");
+                    return;
                 }
-            } else {
-                resp.sendRedirect(req.getContextPath() + "/vendor/products");
             }
+            resp.sendRedirect(req.getContextPath() + "/vendor/products");
+        }
 
-        } else if (uri.endsWith("/delete")) {
-            // --- Xóa sản phẩm ---
+        // ✅ Xóa sản phẩm
+        else if (uri.endsWith("/delete")) {
             String idParam = req.getParameter("id");
             if (idParam != null && !idParam.isEmpty()) {
                 int id = Integer.parseInt(idParam);
@@ -143,100 +144,95 @@ public class ProductController extends HttpServlet {
             throws ServletException, IOException {
 
         String uri = req.getRequestURI();
-
         HttpSession session = req.getSession(false);
         User user = (session != null) ? (User) session.getAttribute("account") : null;
+
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        Shop shop = (session != null) ? (Shop) session.getAttribute("currentShop") : null;
+        Shop shop = (Shop) session.getAttribute("currentShop");
         if (shop == null) {
             resp.sendRedirect(req.getContextPath() + "/vendor/shop/register");
             return;
         }
 
+        // ✅ Xử lý thêm sản phẩm
         if (uri.endsWith("/add")) {
-            // --- Xử lý thêm ---
-            String name = req.getParameter("name");
-            String description = req.getParameter("description");
-            BigDecimal price = new BigDecimal(req.getParameter("price"));
-            int stock = Integer.parseInt(req.getParameter("stock"));
-            int categoryId = Integer.parseInt(req.getParameter("categoryId"));
-            String imageUrl = null;
-
-            // ✅ Upload ảnh
-            Part filePart = req.getPart("imageFile");
-            if (filePart != null && filePart.getSize() > 0) {
-                String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
-
-                // --- Ghi file ---
-                File projectDir = new File(PROJECT_IMAGE_PATH);
-                if (!projectDir.exists()) projectDir.mkdirs();
-
-                String deployPath = req.getServletContext().getRealPath("/assets/images/products");
-                File deployDir = new File(deployPath);
-                if (!deployDir.exists()) deployDir.mkdirs();
-
-                filePart.write(projectDir + File.separator + fileName);
-                filePart.write(deployDir + File.separator + fileName);
-
-                imageUrl = "assets/images/products/" + fileName;
-            }
-
-            Category category = new Category();
-            category.setCategoryId(categoryId);
-
-            Product p = new Product();
-            p.setName(name);
-            p.setDescription(description);
-            p.setPrice(price);
-            //p.setStock(stock);
-            p.setImageUrl(imageUrl);
-            p.setCategory(category);
-            p.setShop(shop);
-
-            productService.save(p);
-            resp.sendRedirect(req.getContextPath() + "/vendor/products");
-
-        } else if (uri.endsWith("/edit")) {
-            // --- Xử lý cập nhật ---
-            int id = Integer.parseInt(req.getParameter("id"));
-            Product p = productService.findById(id);
-            if (p != null && p.getShop().getShopId() == shop.getShopId()) {
-                p.setName(req.getParameter("name"));
-                p.setDescription(req.getParameter("description"));
-                p.setPrice(new BigDecimal(req.getParameter("price")));
-                //p.setStock(Integer.parseInt(req.getParameter("stock")));
-
-
+            try {
+                String name = req.getParameter("name");
+                String description = req.getParameter("description");
+                BigDecimal price = new BigDecimal(req.getParameter("price"));
                 int categoryId = Integer.parseInt(req.getParameter("categoryId"));
-                Category c = new Category();
-                c.setCategoryId(categoryId);
-                p.setCategory(c);
+                String imageUrl = handleFileUpload(req);
 
-                Part filePart = req.getPart("imageFile");
-                if (filePart != null && filePart.getSize() > 0) {
-                    String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
+                Category category = new Category();
+                category.setCategoryId(categoryId);
 
-                    File projectDir = new File(PROJECT_IMAGE_PATH);
-                    if (!projectDir.exists()) projectDir.mkdirs();
+                Product p = new Product();
+                p.setName(name);
+                p.setDescription(description);
+                p.setPrice(price);
+                p.setImageUrl(imageUrl);
+                p.setCategory(category);
+                p.setShop(shop);
 
-                    String deployPath = req.getServletContext().getRealPath("/assets/images/products");
-                    File deployDir = new File(deployPath);
-                    if (!deployDir.exists()) deployDir.mkdirs();
-
-                    filePart.write(projectDir + File.separator + fileName);
-                    filePart.write(deployDir + File.separator + fileName);
-
-                    p.setImageUrl("assets/images/products/" + fileName);
-                }
-
-                productService.update(p);
-
+                productService.save(p);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             resp.sendRedirect(req.getContextPath() + "/vendor/products");
         }
+
+        // ✅ Xử lý sửa sản phẩm
+        else if (uri.endsWith("/edit")) {
+            try {
+                int id = Integer.parseInt(req.getParameter("id"));
+                Product p = productService.findById_fix(id);
+                if (p != null && p.getShop().getShopId().equals(shop.getShopId())) {
+                    p.setName(req.getParameter("name"));
+                    p.setDescription(req.getParameter("description"));
+                    p.setPrice(new BigDecimal(req.getParameter("price")));
+
+                    int categoryId = Integer.parseInt(req.getParameter("categoryId"));
+                    Category c = new Category();
+                    c.setCategoryId(categoryId);
+                    p.setCategory(c);
+
+                    String newImageUrl = handleFileUpload(req);
+                    if (newImageUrl != null) {
+                        p.setImageUrl(newImageUrl);
+                    }
+
+                    productService.update(p);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            resp.sendRedirect(req.getContextPath() + "/vendor/products");
+        }
+    }
+
+    private String handleFileUpload(HttpServletRequest req) throws IOException, ServletException {
+        Part filePart = req.getPart("imageFile");
+        if (filePart == null || filePart.getSize() <= 0) {
+            return null;
+        }
+
+        String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
+
+        File projectDir = new File(PROJECT_IMAGE_PATH);
+        if (!projectDir.exists()) projectDir.mkdirs();
+
+        String deployPath = req.getServletContext().getRealPath("/images/products");
+        File deployDir = new File(deployPath);
+        if (!deployDir.exists()) deployDir.mkdirs();
+
+        // Ghi ảnh vào cả 2 nơi (local + server)
+        filePart.write(projectDir + File.separator + fileName);
+        filePart.write(deployDir + File.separator + fileName);
+
+        return "/images/products/" + fileName;
     }
 }

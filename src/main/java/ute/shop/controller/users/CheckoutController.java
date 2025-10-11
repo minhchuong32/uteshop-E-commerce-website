@@ -6,8 +6,10 @@ import jakarta.servlet.http.*;
 import ute.shop.entity.*;
 import ute.shop.service.ICartItemService;
 import ute.shop.service.IOrderService;
+import ute.shop.service.IPromotionService;
 import ute.shop.service.impl.CartItemServiceImpl;
 import ute.shop.service.impl.OrderServiceImpl;
+import ute.shop.service.impl.PromotionServiceImpl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -20,65 +22,93 @@ public class CheckoutController extends HttpServlet {
 
     private final IOrderService orderService = new OrderServiceImpl();
     private final ICartItemService cartService = new CartItemServiceImpl();
+    private final IPromotionService promotionService = new PromotionServiceImpl();
+    
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	req.getRequestDispatcher("/views/user/order/checkout.jsp").forward(req, resp);
+    	User user = (User) req.getSession().getAttribute("account");
+        if (user != null) {
+            List<CartItem> cartItems = cartService.getCartByUser(user);
+            req.setAttribute("cartItems", cartItems);
+        }
+        req.getRequestDispatcher("/views/user/order/checkout.jsp").forward(req, resp);
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = (User) req.getSession().getAttribute("account");
+    	// ✅ Kiểm tra đăng nhập
+    	User user = (User) req.getSession().getAttribute("account");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        // Lấy thông tin từ form
-//        String fullname = req.getParameter("fullname");
-//        String phone = req.getParameter("phone");
-//        String address = req.getParameter("address");
         String payment = req.getParameter("payment");
+        String[] selectedIds = req.getParameterValues("selectedItems");
+        String promoIdParam = req.getParameter("promotionId");
 
-        // Lấy giỏ hàng từ DB
-        List<CartItem> cartItems = cartService.getCartByUser(user);
-        if (cartItems == null || cartItems.isEmpty()) {
-            req.setAttribute("error", "Giỏ hàng của bạn đang trống!");
-            req.getRequestDispatcher("/views/user/cart.jsp").forward(req, resp);
+        if (selectedIds == null || selectedIds.length == 0) {
+            req.setAttribute("error", "Vui lòng chọn sản phẩm cần thanh toán!");
+            doGet(req, resp);
             return;
         }
 
-     // Tính tổng tiền
-        BigDecimal totalAmount = BigDecimal.ZERO;
-        for (CartItem item : cartItems) {
-            // Lấy giá từ variant nếu có, không lấy từ product
-            BigDecimal price = (item.getProductVariant() != null) 
-                    ? item.getProductVariant().getPrice() 
-                    : item.getProductVariant().getPrice(); 
+        // ✅ Lấy cart item được chọn
+        List<CartItem> selectedItems = cartService.getCartByIds(selectedIds);
 
-            totalAmount = totalAmount.add(price.multiply(BigDecimal.valueOf(item.getQuantity())));
+        BigDecimal subtotal = BigDecimal.ZERO;
+        for (CartItem item : selectedItems) {
+            BigDecimal price = item.getPrice() != null ? item.getPrice() : BigDecimal.ZERO;
+            subtotal = subtotal.add(price.multiply(BigDecimal.valueOf(item.getQuantity())));
         }
 
+        // ✅ Áp dụng khuyến mãi
+        BigDecimal discount = BigDecimal.ZERO;
+        if (promoIdParam != null && !promoIdParam.isEmpty()) {
+            Promotion promo = promotionService.findById(Integer.parseInt(promoIdParam));
+            if (promo != null) {
+                if ("percent".equalsIgnoreCase(promo.getDiscountType())) {
+                    discount = subtotal.multiply(promo.getValue().divide(BigDecimal.valueOf(100)));
+                } else if ("fixed".equalsIgnoreCase(promo.getDiscountType())) {
+                    discount = promo.getValue();
+                }
+            }
+        }
 
-        // Tạo order
+        BigDecimal total = subtotal.subtract(discount);
+        if (total.compareTo(BigDecimal.ZERO) < 0) total = BigDecimal.ZERO;
+
+        // ✅ Tạo Order
         Order order = new Order();
         order.setUser(user);
-        order.setTotalAmount(totalAmount);
+        order.setTotalAmount(total);
         order.setPaymentMethod(payment);
         order.setStatus("new");
-        order.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        order.setCreatedAt(new java.util.Date());
+        order.setAddress(req.getParameter("address"));
+
+        // ✅ Sinh OrderDetail
+        for (CartItem ci : selectedItems) {
+            OrderDetail od = new OrderDetail();
+            od.setOrder(order);
+            od.setProductVariant(ci.getProductVariant());
+            od.setQuantity(ci.getQuantity());
+            od.setPrice(ci.getPrice());
+            order.getOrderDetails().add(od);
+        }
 
         boolean success = orderService.insert(order);
 
         if (success) {
-            // Xóa giỏ hàng
-            for (CartItem item : cartItems) {
-                cartService.removeFromCart(item.getCartItemId());
+            // Xóa các item được chọn khỏi giỏ
+            for (CartItem ci : selectedItems) {
+                cartService.removeFromCart(ci.getCartItemId());
             }
-
-            resp.sendRedirect(req.getContextPath() + "/user/orders");
+            req.getSession().setAttribute("message", "Đặt hàng thành công!");
+            resp.sendRedirect(req.getContextPath() + "/views/user/order/checkout.jsp");
         } else {
             req.setAttribute("error", "Đặt hàng thất bại, vui lòng thử lại!");
-            req.getRequestDispatcher("/views/user/checkout.jsp").forward(req, resp);
+            doGet(req, resp);
         }
     }
 }
