@@ -36,12 +36,11 @@ public class PromotionDaoImpl implements IPromotionDao {
 	public List<Promotion> findValidByShop(int shopId) {
 		EntityManager em = JPAConfig.getEntityManager();
         try {
-            String jpql = """
-                SELECT p FROM Promotion p
-                WHERE p.shopId = :shopId
-                  AND p.status = true
-                  AND :today BETWEEN p.startDate AND p.endDate
-            """;
+        	String jpql = """
+        		    SELECT p FROM Promotion p
+        		    WHERE p.shop.shopId = :shopId
+        		      AND :today BETWEEN p.startDate AND p.endDate
+        		""";
             TypedQuery<Promotion> query = em.createQuery(jpql, Promotion.class);
             query.setParameter("shopId", shopId);
             query.setParameter("today", LocalDate.now());

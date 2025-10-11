@@ -10,7 +10,7 @@
     </c:if>
 
     <c:if test="${not empty cartByShop}">
-        <form id="cartForm" action="${pageContext.request.contextPath}/user/checkout" method="post">
+        <form id="cartForm" action="${pageContext.request.contextPath}/user/checkout" method="get">
             <c:forEach var="entry" items="${cartByShop}">
                 <div class="card mb-3 shadow-sm">
                     <div class="card-header bg-light fw-bold">

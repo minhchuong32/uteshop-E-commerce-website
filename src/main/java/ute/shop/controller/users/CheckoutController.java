@@ -16,99 +16,131 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
-@WebServlet(urlPatterns = {"/user/checkout"})
+@WebServlet(urlPatterns = { "/user/checkout" })
 public class CheckoutController extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final IOrderService orderService = new OrderServiceImpl();
-    private final ICartItemService cartService = new CartItemServiceImpl();
-    private final IPromotionService promotionService = new PromotionServiceImpl();
-    
+	private final IOrderService orderService = new OrderServiceImpl();
+	private final ICartItemService cartService = new CartItemServiceImpl();
+	private final IPromotionService promotionService = new PromotionServiceImpl();
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	User user = (User) req.getSession().getAttribute("account");
-        if (user != null) {
-            List<CartItem> cartItems = cartService.getCartByUser(user);
-            req.setAttribute("cartItems", cartItems);
-        }
-        req.getRequestDispatcher("/views/user/order/checkout.jsp").forward(req, resp);
-    }
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	// ✅ Kiểm tra đăng nhập
-    	User user = (User) req.getSession().getAttribute("account");
-        if (user == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		User user = (User) req.getSession().getAttribute("account");
+		if (user == null) {
+	        resp.sendRedirect(req.getContextPath() + "/login");
+	        return;
+	    }
 
-        String payment = req.getParameter("payment");
-        String[] selectedIds = req.getParameterValues("selectedItems");
-        String promoIdParam = req.getParameter("promotionId");
+		 // ✅ Lấy danh sách ID được chọn từ form giỏ hàng
+	    String[] selectedIds = req.getParameterValues("selectedItems");
 
-        if (selectedIds == null || selectedIds.length == 0) {
-            req.setAttribute("error", "Vui lòng chọn sản phẩm cần thanh toán!");
-            doGet(req, resp);
-            return;
-        }
+	    List<CartItem> cartItems;
+	    if (selectedIds != null && selectedIds.length > 0) {
+	        // ✅ Chỉ lấy những item được tick
+	        cartItems = cartService.getCartByIds(selectedIds);
+	    } else {
+	        // Nếu không có sản phẩm nào chọn → hiển thị rỗng
+	        cartItems = List.of();
+	    }
 
-        // ✅ Lấy cart item được chọn
-        List<CartItem> selectedItems = cartService.getCartByIds(selectedIds);
+	    req.setAttribute("cartItems", cartItems);
 
-        BigDecimal subtotal = BigDecimal.ZERO;
-        for (CartItem item : selectedItems) {
-            BigDecimal price = item.getPrice() != null ? item.getPrice() : BigDecimal.ZERO;
-            subtotal = subtotal.add(price.multiply(BigDecimal.valueOf(item.getQuantity())));
-        }
+	    // ✅ Nếu có sản phẩm, lấy khuyến mãi của shop đầu tiên
+	    if (!cartItems.isEmpty()) {
+	        int shopId = cartItems.get(0).getProductVariant().getProduct().getShop().getShopId();
+	        List<Promotion> promotions = promotionService.getValidPromotionsByShop(shopId);
+	        req.setAttribute("promotions", promotions);
+	    } else {
+	        req.setAttribute("promotions", List.of());
+	    }
 
-        // ✅ Áp dụng khuyến mãi
-        BigDecimal discount = BigDecimal.ZERO;
-        if (promoIdParam != null && !promoIdParam.isEmpty()) {
-            Promotion promo = promotionService.findById(Integer.parseInt(promoIdParam));
-            if (promo != null) {
-                if ("percent".equalsIgnoreCase(promo.getDiscountType())) {
-                    discount = subtotal.multiply(promo.getValue().divide(BigDecimal.valueOf(100)));
-                } else if ("fixed".equalsIgnoreCase(promo.getDiscountType())) {
-                    discount = promo.getValue();
-                }
-            }
-        }
+	    req.getRequestDispatcher("/views/user/order/checkout.jsp").forward(req, resp);
+	}
 
-        BigDecimal total = subtotal.subtract(discount);
-        if (total.compareTo(BigDecimal.ZERO) < 0) total = BigDecimal.ZERO;
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		User user = (User) req.getSession().getAttribute("account");
+		if (user == null) {
+			resp.sendRedirect(req.getContextPath() + "/login");
+			return;
+		}
 
-        // ✅ Tạo Order
-        Order order = new Order();
-        order.setUser(user);
-        order.setTotalAmount(total);
-        order.setPaymentMethod(payment);
-        order.setStatus("new");
-        order.setCreatedAt(new java.util.Date());
-        order.setAddress(req.getParameter("address"));
+		req.setCharacterEncoding("UTF-8");
 
-        // ✅ Sinh OrderDetail
-        for (CartItem ci : selectedItems) {
-            OrderDetail od = new OrderDetail();
-            od.setOrder(order);
-            od.setProductVariant(ci.getProductVariant());
-            od.setQuantity(ci.getQuantity());
-            od.setPrice(ci.getPrice());
-            order.getOrderDetails().add(od);
-        }
+		String[] selectedIds = req.getParameterValues("selectedItems");
+		String payment = req.getParameter("payment");
+		String address = req.getParameter("address");
+		String promoIdParam = req.getParameter("promotionId");
 
-        boolean success = orderService.insert(order);
+		if (selectedIds == null || selectedIds.length == 0) {
+			req.setAttribute("error", "Vui lòng chọn sản phẩm cần thanh toán!");
+			doGet(req, resp);
+			return;
+		}
 
-        if (success) {
-            // Xóa các item được chọn khỏi giỏ
-            for (CartItem ci : selectedItems) {
-                cartService.removeFromCart(ci.getCartItemId());
-            }
-            req.getSession().setAttribute("message", "Đặt hàng thành công!");
-            resp.sendRedirect(req.getContextPath() + "/views/user/order/checkout.jsp");
-        } else {
-            req.setAttribute("error", "Đặt hàng thất bại, vui lòng thử lại!");
-            doGet(req, resp);
-        }
-    }
+		// Lấy danh sách item được chọn
+		List<CartItem> selectedItems = cartService.getCartByIds(selectedIds);
+		if (selectedItems.isEmpty()) {
+			req.setAttribute("error", "Không tìm thấy sản phẩm được chọn!");
+			doGet(req, resp);
+			return;
+		}
+
+		// Tính tổng tiền
+		BigDecimal subtotal = selectedItems.stream()
+				.map(i -> i.getPrice().multiply(BigDecimal.valueOf(i.getQuantity())))
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		// Áp dụng khuyến mãi
+		BigDecimal discount = BigDecimal.ZERO;
+		if (promoIdParam != null && !promoIdParam.isEmpty()) {
+			try {
+				Promotion promo = promotionService.findById(Integer.parseInt(promoIdParam));
+				if (promo != null) {
+					if ("percent".equalsIgnoreCase(promo.getDiscountType())) {
+						discount = subtotal.multiply(promo.getValue().divide(BigDecimal.valueOf(100)));
+					} else if ("fixed".equalsIgnoreCase(promo.getDiscountType())) {
+						discount = promo.getValue();
+					}
+				}
+			} catch (Exception ignored) {
+			}
+		}
+
+		BigDecimal total = subtotal.subtract(discount);
+		if (total.compareTo(BigDecimal.ZERO) < 0)
+			total = BigDecimal.ZERO;
+
+		// Tạo order
+		Order order = new Order();
+		order.setUser(user);
+		order.setPaymentMethod(payment);
+		order.setStatus("Mới");
+		order.setCreatedAt(new java.util.Date());
+		order.setAddress(address);
+		order.setTotalAmount(total);
+
+		// Thêm chi tiết đơn hàng
+		for (CartItem ci : selectedItems) {
+			OrderDetail od = new OrderDetail();
+			od.setOrder(order);
+			od.setProductVariant(ci.getProductVariant());
+			od.setQuantity(ci.getQuantity());
+			od.setPrice(ci.getPrice());
+			order.getOrderDetails().add(od);
+		}
+
+		boolean success = orderService.insert(order);
+		if (success) {
+			// Xóa sản phẩm đã chọn khỏi giỏ
+			selectedItems.forEach(i -> cartService.removeFromCart(i.getCartItemId()));
+
+			req.getSession().setAttribute("message", "🎉 Đặt hàng thành công!");
+			resp.sendRedirect(req.getContextPath() + "/user/orders");
+		} else {
+			req.setAttribute("error", "❌ Có lỗi khi đặt hàng!");
+			doGet(req, resp);
+		}
+	}
 }

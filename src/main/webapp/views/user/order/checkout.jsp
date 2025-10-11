@@ -21,88 +21,86 @@
 		<div class="row">
 			<!-- Cột trái -->
 			<div class="col-md-8">
-				<!-- ✅ Giỏ hàng -->
+				<!-- ✅ Sản phẩm được chọn -->
 				<div class="card mb-4 shadow-sm">
 					<div class="card-header bg-white">
-						<h5 class="mb-0">Sản phẩm trong giỏ</h5>
+						<h5 class="mb-0">Sản phẩm đã chọn</h5>
 					</div>
 					<div class="card-body">
 						<c:if test="${empty cartItems}">
-							<p class="text-muted">Giỏ hàng của bạn đang trống.</p>
+							<p class="text-muted">Không có sản phẩm nào được chọn.</p>
 						</c:if>
 						<c:if test="${not empty cartItems}">
 							<c:set var="subtotal" value="0" />
 							<c:forEach var="item" items="${cartItems}">
 								<div
-									class="d-flex align-items-center justify-content-between border-bottom py-2">
-									<!-- Hình ảnh -->
-									<div class="d-flex align-items-center gap-3">
-										<img src="${item.product.imageUrl}" alt="${item.product.name}"
-											class="img-thumbnail"
-											style="width: 70px; height: 70px; object-fit: cover;">
+									class="d-flex align-items-center border-bottom py-2 cart-item">
+									<!-- Ảnh sản phẩm -->
+									<img
+										src="${pageContext.request.contextPath}${item.productVariant.imageUrl}"
+										alt="${item.productVariant.product.name}" class="me-3"
+										style="width: 60px; height: 60px; object-fit: cover;">
+
+									<!-- Thông tin -->
+									<div class="flex-fill">
+										<h6 class="mb-0">${item.productVariant.product.name}</h6>
+										<small class="text-muted">${item.productVariant.optionValue}</small>
 										<div>
-											<p class="mb-1 fw-semibold">${item.product.name}</p>
-											<small class="text-muted"> <fmt:formatNumber
-													value="${item.product.price}" type="number"
-													groupingUsed="true" />₫
-											</small>
+											<small class="text-muted">Số lượng: ${item.quantity}</small>
 										</div>
 									</div>
 
-									<!-- Số lượng -->
-									<div class="d-flex align-items-center gap-2">
-										<a
-											href="${pageContext.request.contextPath}/user/cart?action=decrease&productId=${item.product.productId}"
-											class="btn btn-sm btn-outline-secondary">-</a> <span>${item.quantity}</span>
-										<a
-											href="${pageContext.request.contextPath}/user/cart?action=increase&productId=${item.product.productId}"
-											class="btn btn-sm btn-outline-secondary">+</a>
+									<!-- Giá -->
+									<div class="text-end">
+										<p class="mb-0 fw-semibold text-danger">
+											<fmt:formatNumber
+												value="${item.productVariant.price * item.quantity}"
+												type="currency" currencySymbol="₫" />
+										</p>
+										<small class="text-muted"> (Đơn giá: <fmt:formatNumber
+												value="${item.productVariant.price}" type="currency"
+												currencySymbol="₫" />)
+										</small>
 									</div>
 
-									<!-- Thành tiền -->
-									<div class="fw-bold">
-										<fmt:formatNumber
-											value="${item.product.price * item.quantity}" type="number"
-											groupingUsed="true" />
-										₫
-									</div>
-
-									<!-- Xóa -->
-									<a
-										href="${pageContext.request.contextPath}/user/cart?action=remove&cartItemId=${item.cartItemId}"
-										class="text-danger ms-3"> <i class="bi bi-trash"></i>
-									</a>
+									<!-- Truyền id sản phẩm -->
+									<input type="hidden" name="selectedItems"
+										value="${item.cartItemId}">
 								</div>
 								<c:set var="subtotal"
-									value="${subtotal + (item.product.price * item.quantity)}" />
+									value="${subtotal + (item.productVariant.price * item.quantity)}" />
 							</c:forEach>
 						</c:if>
 					</div>
 				</div>
-				<c:forEach var="item" items="${cartItems}">
-					<div
-						class="d-flex align-items-center justify-content-between border-bottom py-2">
-						<div class="form-check">
-							<input class="form-check-input" type="checkbox"
-								name="selectedItems" value="${item.cartItemId}" checked>
-						</div>
-						...
+
+				<!-- ✅ Mã khuyến mãi -->
+				<div class="card mb-4 shadow-sm">
+					<div class="card-header bg-white">
+						<h5 class="mb-0">
+							<i class="bi bi-ticket-perforated"></i> Phiếu giảm giá
+						</h5>
 					</div>
-				</c:forEach>
+					<div class="card-body">
+						<select name="promotionId" class="form-select">
+							<option value="">-- Không dùng mã --</option>
+							<c:forEach var="promo" items="${promotions}">
+								<option value="${promo.promotionId}">
+									<c:choose>
+										<c:when test="${promo.discountType eq 'percent'}">
+                ${promo.value}%
+            </c:when>
+										<c:otherwise>
+											<fmt:formatNumber value="${promo.value}" type="number"
+												groupingUsed="true" />₫
+            </c:otherwise>
+									</c:choose>
+								</option>
+							</c:forEach>
 
-				<!-- Chọn phiếu giảm giá -->
-				<div class="mb-3">
-					<label>Phiếu giảm giá</label> <select name="promotionId"
-						class="form-select">
-						<option value="">-- Không dùng --</option>
-						<c:forEach var="promo" items="${promotions}">
-							<option value="${promo.promotionId}">
-								${promo.discountType eq 'percent' ? promo.value + '%' : fmt:formatNumber(value=promo.value, type='number', groupingUsed='true') + '₫'}
-							</option>
-						</c:forEach>
-					</select>
+						</select>
+					</div>
 				</div>
-
 
 				<!-- ✅ Thông tin giao hàng -->
 				<div class="card mb-4 shadow-sm">
@@ -142,12 +140,12 @@
 						</div>
 						<div class="form-check">
 							<input class="form-check-input" type="radio" name="payment"
-								value="MoMo"> <label class="form-check-label">Ví
+								value="Momo"> <label class="form-check-label">Ví
 								MoMo</label>
 						</div>
 						<div class="form-check">
 							<input class="form-check-input" type="radio" name="payment"
-								value="VNPAY"> <label class="form-check-label">VNPay</label>
+								value="VNPay"> <label class="form-check-label">VNPay</label>
 						</div>
 					</div>
 				</div>
@@ -169,10 +167,10 @@
 						</p>
 						<hr>
 						<p class="d-flex justify-content-between fs-5">
-							<span>Tổng cộng</span> <strong><fmt:formatNumber
+							<span>Tổng cộng</span> <strong class="text-danger"><fmt:formatNumber
 									value="${subtotal + 30000}" type="number" groupingUsed="true" />₫</strong>
 						</p>
-						<button type="submit" class="btn btn-primary-custom w-100">Đặt
+						<button type="submit" class="btn btn-success w-100">Đặt
 							hàng</button>
 						<small class="text-muted d-block text-center mt-2"> Miễn
 							phí vận chuyển cho đơn hàng từ 1.000.000₫ </small>
