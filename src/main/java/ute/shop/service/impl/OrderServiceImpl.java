@@ -90,12 +90,17 @@ public class OrderServiceImpl implements IOrderService {
 	}
 
 	@Override
-	public Order findById(Integer id) {
-		return orderDao.findById(id);
+	public Order getById(Integer id) {
+		return orderDao.getById(id);
 	}
 
 	@Override
 	public List<Order> getOrdersByUser(Integer userId) {
 		return orderDao.findByUserId(userId);
+	}
+
+	@Override
+	public List<Order> getOrdersByUserAndStatus(int userId, String status) {
+		return orderDao.getOrdersByUserAndStatus(userId, status);
 	}
 }
