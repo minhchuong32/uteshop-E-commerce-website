@@ -40,8 +40,8 @@
                     <div class="mt-2">
                         <img id="preview"
                              src="${empty shop.logo 
-                                 ? pageContext.request.contextPath.concat('/assets/images/shops/default-shop-logo.png')
-                                 : pageContext.request.contextPath.concat('/assets/images/shops/').concat(shop.logo)}"
+        ? pageContext.request.contextPath.concat('/assets/images/shops/default-shop-logo.png')
+        : pageContext.request.contextPath.concat('/assets/images/shops/').concat(shop.logo.substring(shop.logo.lastIndexOf('/') + 1))}"
                              alt="Logo hiện tại"
                              style="width:100px; height:100px; object-fit:cover;
                                     border:1px solid #ddd; border-radius:6px;">

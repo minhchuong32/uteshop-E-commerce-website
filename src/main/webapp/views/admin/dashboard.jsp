@@ -3,13 +3,13 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>Quản lý thông báo | Admin - UteShop</title>
-  
-    <!-- CSS riêng -->
-    <link rel="stylesheet"
-          href="${pageContext.request.contextPath}/assets/css/dashboard-admin.css">
-    
+<meta charset="UTF-8">
+<title>Quản lý thông báo | Admin - UteShop</title>
+
+<!-- CSS riêng -->
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/dashboard-admin.css">
+
 </head>
 
 <h3 class="text-primary-custom fw-bold mb-4">
@@ -166,14 +166,21 @@
 									class="text-muted">Shop: ${p.shopName}</small>
 							</div>
 						</div>
-
 						<div class="text-end">
 							<span class="fw-bold text-success"> <fmt:formatNumber
-									value="${p.minPrice}" type="currency" currencySymbol="₫" />
-							</span><br> <span class="text-muted">~ <fmt:formatNumber
-									value="${p.maxPrice}" type="currency" currencySymbol="₫" />
+									value="${p.price}" type="currency" currencySymbol="₫" />
 							</span>
+
+							<c:if test="${p.oldPrice ne null && p.oldPrice > 0}">
+								<br>
+								<span class="text-muted text-decoration-line-through small">
+									<fmt:formatNumber value="${p.oldPrice}" type="currency"
+										currencySymbol="₫" />
+								</span>
+							</c:if>
 						</div>
+
+
 					</div>
 				</c:forEach>
 			</div>

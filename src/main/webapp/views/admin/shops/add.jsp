@@ -11,8 +11,8 @@
 
 				<!-- Chủ sở hữu -->
 				<div class="mb-3">
-					<label for="user_id" class="form-label">Chủ sở hữu (User)</label>
-					<select class="form-select" id="user_id" name="user_id" required>
+					<label for="user_id" class="form-label">Chủ sở hữu (User)</label> <select
+						class="form-select" id="user_id" name="user_id" required>
 						<option value="">-- Chọn chủ sở hữu cửa hàng --</option>
 						<c:forEach var="v" items="${vendors}">
 							<option value="${v.userId}">ID: ${v.userId} - ${empty v.name ? v.username : v.name}
@@ -49,6 +49,20 @@
 							style="width: 100px; height: 100px; object-fit: cover; border: 1px solid #ddd; border-radius: 6px;">
 					</div>
 				</div>
+				<!-- Preview ảnh -->
+				<script>
+					document
+							.getElementById('logo')
+							.addEventListener(
+									'change',
+									function(e) {
+										const file = e.target.files[0];
+										if (file) {
+											document.getElementById('preview').src = URL
+													.createObjectURL(file);
+										}
+									});
+				</script>
 
 				<!-- Buttons -->
 				<button type="submit" class="btn btn-success rounded-pill px-4">Thêm
@@ -60,12 +74,4 @@
 	</div>
 </div>
 
-<!-- Preview ảnh -->
-<script>
-document.getElementById('logo').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        document.getElementById('preview').src = URL.createObjectURL(file);
-    }
-});
-</script>
+

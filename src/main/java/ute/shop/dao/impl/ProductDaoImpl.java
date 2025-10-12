@@ -23,35 +23,32 @@ public class ProductDaoImpl implements IProductDao {
 		EntityManager em = JPAConfig.getEntityManager();
 		Product product = em.find(Product.class, id);
 		if (product != null) {
-	        product.getImages().size();     
-	        product.getVariants().size();   
-	    }
+			product.getImages().size();
+			product.getVariants().size();
+		}
 		try {
 			return product;
 		} finally {
 			em.close();
 		}
 	}
+
 	@Override
 	public Product findById_fix(Integer id) {
-	    EntityManager em = JPAConfig.getEntityManager();
-	    try {
-	        Product p = em.createQuery("""
-	            SELECT DISTINCT p FROM Product p
-	            LEFT JOIN FETCH p.images
-	            WHERE p.productId = :id
-	        """, Product.class)
-	        .setParameter("id", id)
-	        .getSingleResult();
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			Product p = em.createQuery("""
+					    SELECT DISTINCT p FROM Product p
+					    LEFT JOIN FETCH p.images
+					    WHERE p.productId = :id
+					""", Product.class).setParameter("id", id).getSingleResult();
 
-	        p.getVariants().size(); 
-	        return p;
-	    } finally {
-	        em.close();
-	    }
+			p.getVariants().size();
+			return p;
+		} finally {
+			em.close();
+		}
 	}
-
-
 
 	@Override
 	public List<Product> findTopProducts(int limit) {
@@ -158,38 +155,36 @@ public class ProductDaoImpl implements IProductDao {
 //	}
 	@Override
 	public void delete(int productId) {
-	    EntityManager em = JPAConfig.getEntityManager();
-	    EntityTransaction tx = em.getTransaction();
-	    try {
-	        tx.begin();
+		EntityManager em = JPAConfig.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		try {
+			tx.begin();
 
-	        Query query = em.createNativeQuery("DELETE FROM products WHERE product_id = ?");
-	        query.setParameter(1, productId);
-	        query.executeUpdate();
+			Query query = em.createNativeQuery("DELETE FROM products WHERE product_id = ?");
+			query.setParameter(1, productId);
+			query.executeUpdate();
 
-	        tx.commit();
-	    } catch (Exception e) {
-	        if (tx.isActive()) tx.rollback();
-	        e.printStackTrace();
-	    } finally {
-	        em.close();
-	    }
+			tx.commit();
+		} catch (Exception e) {
+			if (tx.isActive())
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			em.close();
+		}
 	}
-
 
 	@Override
 	public List<Product> findByCategory(Integer categoryId) {
 		EntityManager em = JPAConfig.getEntityManager();
-        try {
-            return em.createQuery(
-                    "SELECT DISTINCT p FROM Product p " +
-                    "LEFT JOIN FETCH p.variants v " +
-                    "WHERE p.category.categoryId = :categoryId", Product.class)
-                    .setParameter("categoryId", categoryId)
-                    .getResultList();
-        } finally {
-            em.close();
-        }
+		try {
+			return em
+					.createQuery("SELECT DISTINCT p FROM Product p " + "LEFT JOIN FETCH p.variants v "
+							+ "WHERE p.category.categoryId = :categoryId", Product.class)
+					.setParameter("categoryId", categoryId).getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	@Override
@@ -361,41 +356,37 @@ public class ProductDaoImpl implements IProductDao {
 	// Lấy top sản phẩm bán chạy (theo tổng số lượng trong OrderDetail)
 	@Override
 	public List<Object[]> findBestSellingProducts(int limit) {
-	    EntityManager em = JPAConfig.getEntityManager();
-	    try {
-	        String jpql = """
-	            SELECT 
-	        		p.imageUrl,
-	                p.productId,
-	                p.name,
-	                SUM(od.quantity) AS totalSold,
-	                s.shopId,
-	                s.name,
-	                MIN(pv.price),
-	                MAX(pv.price)
-	            FROM OrderDetail od
-	            JOIN od.productVariant pv
-	            JOIN pv.product p
-	            JOIN p.shop s
-	            JOIN od.order o
-	            WHERE o.status = :status
-	            GROUP BY p.imageUrl, p.productId, p.name, s.shopId, s.name
-	            ORDER BY SUM(od.quantity) DESC
-	        """;
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			String jpql = """
+					    SELECT
+					        p.imageUrl,
+					        p.productId,
+					        p.name,
+					        SUM(od.quantity) AS totalSold,
+					        s.shopId,
+					        s.name,
+					        pv.price,
+					        pv.oldPrice
+					    FROM OrderDetail od
+					    JOIN od.productVariant pv
+					    JOIN pv.product p
+					    JOIN p.shop s
+					    JOIN od.order o
+					    WHERE o.status = :status
+					    GROUP BY p.imageUrl, p.productId, p.name, s.shopId, s.name, pv.price, pv.oldPrice
+					    ORDER BY SUM(od.quantity) DESC
+					""";
 
-	        return em.createQuery(jpql, Object[].class)
-	                 .setParameter("status", "Đã giao")  // ✅ Unicode-safe
-	                 .setMaxResults(limit)
-	                 .getResultList();
+			return em.createQuery(jpql, Object[].class).setParameter("status", "Đã giao").setMaxResults(limit)
+					.getResultList();
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return List.of();
-	    } finally {
-	        em.close();
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			return List.of();
+		} finally {
+			em.close();
+		}
 	}
-
-
 
 }

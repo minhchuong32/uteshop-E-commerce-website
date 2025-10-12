@@ -13,9 +13,9 @@
         <!-- Ảnh đại diện -->
         <div class="text-center mb-4">
             <img id="avatarPreview"
-                 src="${empty user.avatar 
-                    ? pageContext.request.contextPath.concat('/assets/images/default-avatar.png') 
-                    : pageContext.request.contextPath.concat('/assets/images/avatars/').concat(user.avatar)}"
+                src="${empty user.avatar 
+        ? pageContext.request.contextPath.concat('/assets/images/avatars/default.jpg')
+        : pageContext.request.contextPath.concat('/assets/images/avatars/').concat(user.avatar.substring(user.avatar.lastIndexOf('/') + 1))}"
                  class="rounded-circle border mb-2"
                  width="100" height="100"
                  style="object-fit: cover;">

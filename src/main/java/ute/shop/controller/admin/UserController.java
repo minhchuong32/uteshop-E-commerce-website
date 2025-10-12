@@ -92,17 +92,18 @@ public class UserController extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
         }
     }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String uri = req.getRequestURI();
 
         try {
-            String uploadDir = req.getServletContext().getRealPath("/assets/images/avatars");
-            File uploadDirFile = new File(uploadDir);
-            if (!uploadDirFile.exists()) uploadDirFile.mkdirs();
+            // Thư mục upload thực tế
+            String uploadPath = req.getServletContext().getRealPath("/assets/images/avatars");
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) uploadDir.mkdirs();
 
+            // ===== Xử lý thêm người dùng =====
             if (uri.endsWith("/add")) {
                 String username = req.getParameter("username");
                 String email = req.getParameter("email");
@@ -112,14 +113,20 @@ public class UserController extends HttpServlet {
                 String phone = req.getParameter("phone");
                 String address = req.getParameter("address");
 
+                // Upload avatar
                 Part filePart = req.getPart("avatar");
                 String avatarFileName = null;
+
                 if (filePart != null && filePart.getSize() > 0) {
-                	// tránh trùng tên -> randomUUID 
-                    avatarFileName = UUID.randomUUID() + "_" + filePart.getSubmittedFileName();
-                    filePart.write(uploadDir + File.separator + avatarFileName);
+                    String originalFileName = java.nio.file.Path.of(filePart.getSubmittedFileName())
+                            .getFileName().toString();
+                    avatarFileName = UUID.randomUUID() + "_" + originalFileName;
+
+                    // Lưu file vào thư mục thực tế
+                    filePart.write(uploadPath + File.separator + avatarFileName);
                 }
 
+                // Tạo đối tượng User
                 User u = new User();
                 u.setUsername(username);
                 u.setEmail(email);
@@ -129,13 +136,21 @@ public class UserController extends HttpServlet {
                 u.setName(name);
                 u.setPhone(phone);
                 u.setAddress(address);
-                u.setAvatar(avatarFileName);
+
+                // Lưu đường dẫn tương đối đúng format DB
+                if (avatarFileName != null) {
+                    u.setAvatar("/avatars/" + avatarFileName);
+                } else {
+                    u.setAvatar("/avatars/default.jpg"); // ảnh mặc định
+                }
 
                 userService.insert(u);
                 req.getSession().setAttribute("success", "Thêm người dùng thành công!");
                 resp.sendRedirect(req.getContextPath() + "/admin/users");
+            }
 
-            } else if (uri.endsWith("/edit")) {
+            // ===== Xử lý cập nhật người dùng =====
+            else if (uri.endsWith("/edit")) {
                 int id = Integer.parseInt(req.getParameter("id"));
                 String username = req.getParameter("username");
                 String email = req.getParameter("email");
@@ -152,11 +167,18 @@ public class UserController extends HttpServlet {
 
                     Part filePart = req.getPart("avatar");
                     if (filePart != null && filePart.getSize() > 0) {
-                        String newFileName = UUID.randomUUID() + "_" + filePart.getSubmittedFileName();
-                        filePart.write(uploadDir + File.separator + newFileName);
-                        user.setAvatar(newFileName);
+                        String originalFileName = java.nio.file.Path.of(filePart.getSubmittedFileName())
+                                .getFileName().toString();
+                        String newFileName = UUID.randomUUID() + "_" + originalFileName;
+
+                        // Ghi file thật vào thư mục upload
+                        filePart.write(uploadPath + File.separator + newFileName);
+
+                        // Cập nhật đường dẫn tương đối trong DB
+                        user.setAvatar("/avatars/" + newFileName);
                     }
 
+                    // Cập nhật các thông tin khác
                     user.setUsername(username);
                     user.setEmail(email);
                     user.setRole(role);
@@ -165,6 +187,7 @@ public class UserController extends HttpServlet {
                     user.setPhone(phone);
                     user.setAddress(address);
 
+                    // Cập nhật database
                     userService.updatePwd(user, false);
                     req.getSession().setAttribute("success", "Cập nhật người dùng thành công!");
                     resp.sendRedirect(req.getContextPath() + "/admin/users");
@@ -173,6 +196,7 @@ public class UserController extends HttpServlet {
                     req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
                 }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("error", "Lỗi khi xử lý dữ liệu: " + e.getMessage());
@@ -181,4 +205,5 @@ public class UserController extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
         }
     }
+
 }
