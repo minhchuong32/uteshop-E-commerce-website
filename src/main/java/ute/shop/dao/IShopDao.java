@@ -16,4 +16,5 @@ public interface IShopDao {
     void delete(int id);
     
     Shop findByUserId(int userId);
+    Shop getReferenceById(int id);
 }

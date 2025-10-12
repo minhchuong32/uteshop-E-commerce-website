@@ -123,10 +123,14 @@ public class CartItemDaoImpl implements ICartItemDao {
 	            .map(Integer::parseInt)
 	            .toList();
 	        return em.createQuery(
-	            "SELECT c FROM CartItem c JOIN FETCH c.productVariant v JOIN FETCH v.product p WHERE c.cartItemId IN :ids",
-	            CartItem.class)
-	            .setParameter("ids", idList)
-	            .getResultList();
+	        	    "SELECT DISTINCT c FROM CartItem c " +
+	        	    "JOIN FETCH c.productVariant v " +
+	        	    "JOIN FETCH v.product p " +
+	        	    "WHERE c.cartItemId IN :ids",
+	        	    CartItem.class)
+	        	    .setParameter("ids", idList)
+	        	    .getResultList();
+
 	    } finally {
 	        em.close();
 	    }

@@ -40,4 +40,9 @@ public class ShopServiceImpl implements IShopService {
         return shopDAO.findByUserId(id);
     }
 
+	@Override
+	public Shop getReferenceById(int id) {
+		return shopDAO.getReferenceById(id);
+	}
+
 }

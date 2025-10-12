@@ -96,4 +96,10 @@ public class ShopDaoImpl implements IShopDao {
         }
     }
 
+	@Override
+	public Shop getReferenceById(int id) {
+		EntityManager em = emf.createEntityManager();
+		return em.getReference(Shop.class, id);
+	}
+
 }
