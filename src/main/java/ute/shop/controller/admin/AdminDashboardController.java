@@ -44,8 +44,8 @@ public class AdminDashboardController extends HttpServlet {
                 item.put("totalSold", ((Number) row[3]).longValue());
                 item.put("shopId", row[4]);
                 item.put("shopName", row[5]);
-                item.put("minPrice", row[6]);
-                item.put("maxPrice", row[7]);
+                item.put("price", row[6]);
+                item.put("oldPrice", row[7]);
                 bestSellers.add(item);
             }
 

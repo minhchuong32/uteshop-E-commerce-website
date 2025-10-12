@@ -4,6 +4,26 @@
 <div class="container-fluid">
 	<h3 class="mb-4 fw-bold text-primary-custom">Chỉnh sửa sản phẩm</h3>
 
+	<!-- ✅ Hiển thị thông báo thành công hoặc lỗi -->
+	<c:if test="${not empty sessionScope.success}">
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+			<i class="bi bi-check-circle-fill me-2"></i>
+			${sessionScope.success}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		<!-- Xóa thông báo khỏi session sau khi hiển thị -->
+		<c:remove var="success" scope="session" />
+	</c:if>
+
+	<c:if test="${not empty sessionScope.error}">
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<i class="bi bi-exclamation-triangle-fill me-2"></i>
+			${sessionScope.error}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		<c:remove var="error" scope="session" />
+	</c:if>
+
 	<form action="${pageContext.request.contextPath}/admin/products/edit"
 		method="post" enctype="multipart/form-data"
 		class="card shadow-sm p-4 border-0">
@@ -13,8 +33,9 @@
 		<!-- Hình ảnh sản phẩm -->
 		<div class="text-center mb-4">
 			<img id="imagePreview"
-				src="${empty product.imageUrl ? pageContext.request.contextPath.concat('/assets/images/default-product.png') 
-				: pageContext.request.contextPath.concat('/assets/images/products/').concat(product.imageUrl)}"
+				src="${empty product.imageUrl 
+					? pageContext.request.contextPath.concat('/assets/images/default-product.png') 
+					: pageContext.request.contextPath.concat('/assets/').concat(product.imageUrl)}"
 				class="rounded border mb-2" width="200" height="200"
 				style="object-fit: cover;">
 			<div>
@@ -26,7 +47,7 @@
 		<script>
 		function previewImage(event) {
 			const reader = new FileReader();
-			reader.onload = function(){
+			reader.onload = function() {
 				document.getElementById('imagePreview').src = reader.result;
 			};
 			reader.readAsDataURL(event.target.files[0]);

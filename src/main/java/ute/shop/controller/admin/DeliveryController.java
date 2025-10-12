@@ -38,6 +38,7 @@ public class DeliveryController extends HttpServlet {
 
             req.setAttribute("deliveries", deliveries);
             req.setAttribute("stats", stats);
+            req.setAttribute("page", "deliveries");
             req.setAttribute("view", "/views/admin/deliveries.jsp");
             req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
         }
