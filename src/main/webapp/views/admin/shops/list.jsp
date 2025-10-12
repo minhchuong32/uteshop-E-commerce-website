@@ -1,10 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/commons/taglib.jsp"%>
 
-<!-- CSS DataTables -->
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-
 <div class="container-fluid">
 	<h3 class="mb-4 fw-bold text-primary-custom">
 		<i class="bi bi-shop me-2"></i> Quản lý cửa hàng
@@ -13,8 +9,7 @@
 	<!-- Nút thêm mới -->
 	<div class="mb-3">
 		<a href="${pageContext.request.contextPath}/admin/shops/add"
-			class="btn btn-success"> <i class="bi bi-plus"></i> Thêm cửa
-			hàng
+			class="btn btn-success"> <i class="bi bi-plus"></i> Thêm cửa hàng
 		</a>
 	</div>
 
@@ -63,16 +58,17 @@
 
 							<!-- Avatar + tên cửa hàng -->
 							<td>
-								<div class="d-flex align-items-center">
-									<img
-										src="${empty s.logo 
-										? pageContext.request.contextPath.concat('/assets/images//shops/default-shop-logo.png') 
-										: pageContext.request.contextPath.concat('/assets/images/shops/').concat(s.logo)}"
-										class="rounded me-3 border"
-										style="width: 48px; height: 48px; object-fit: cover;"
-										alt="shop-logo">
-
+								<div class="d-flex align-items-center justify-content-center">
+									<div
+										class="rounded-circle border overflow-hidden d-flex align-items-center justify-content-center"
+										style="width: 64px; height: 64px; background-color: #f8f9fa;">
+										<img
+											src="${pageContext.request.contextPath}/assets/images/shops/default-shop-logo.png"
+											alt="shop-logo" class="img-fluid"
+											style="width: 100%; height: 100%; object-fit: cover;">
+									</div>
 								</div>
+
 							</td>
 
 							<!-- Chủ sở hữu -->
@@ -162,28 +158,30 @@
 	src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
 
 <script>
-$(document).ready(function() {
-	$('#shopTable').DataTable({
-		"pageLength": 10,
-		"lengthChange": false,
-		"ordering": true,
-		"searching": true,
-		"language": {
-			"search": "Tìm kiếm:",
-			"paginate": {
-				"first": "Đầu",
-				"last": "Cuối",
-				"next": "›",
-				"previous": "‹"
+	$(document).ready(function() {
+		$('#shopTable').DataTable({
+			"pageLength" : 10,
+			"lengthChange" : false,
+			"ordering" : true,
+			"searching" : true,
+			"language" : {
+				"search" : "Tìm kiếm:",
+				"paginate" : {
+					"first" : "Đầu",
+					"last" : "Cuối",
+					"next" : "›",
+					"previous" : "‹"
+				},
+				"info" : "Hiển thị _START_ - _END_ / _TOTAL_ cửa hàng",
+				"infoEmpty" : "Không có dữ liệu",
+				"zeroRecords" : "Không tìm thấy kết quả phù hợp",
+				"emptyTable" : "Không có dữ liệu"
 			},
-			"info": "Hiển thị _START_ - _END_ / _TOTAL_ cửa hàng",
-			"infoEmpty": "Không có dữ liệu",
-			"zeroRecords": "Không tìm thấy kết quả phù hợp",
-			"emptyTable": "Không có dữ liệu"
-		},
-		"columnDefs": [
-			{ "orderable": false, "targets": [1, 5] } // không sắp xếp cột ảnh và hành động
-		]
+			"columnDefs" : [ {
+				"orderable" : false,
+				"targets" : [ 1, 5 ]
+			} // không sắp xếp cột ảnh và hành động
+			]
+		});
 	});
-});
 </script>

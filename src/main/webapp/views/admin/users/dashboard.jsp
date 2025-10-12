@@ -1,9 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/commons/taglib.jsp"%>
 
-<!-- CSS DataTables -->
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
 
 <div class="container-fluid">
 	<h3 class="text-primary-custom fw-bold mb-4">
@@ -65,9 +62,7 @@
 							<td>
 								<div class="d-flex align-items-center">
 									<img
-										src="${empty u.avatar 
-											? pageContext.request.contextPath.concat('/assets/images/default-avatar.png') 
-											: pageContext.request.contextPath.concat('/assets/images/avatars/').concat(u.avatar)}"
+										src="${pageContext.request.contextPath}/assets/images/default_avatar.png"
 										alt="avatar" class="rounded-circle me-3"
 										style="width: 48px; height: 48px; object-fit: cover;">
 									<div>

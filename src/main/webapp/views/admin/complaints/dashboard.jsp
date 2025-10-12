@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/commons/taglib.jsp"%>
-
 <h3 class="fw-bold text-primary-custom mb-4">
 	<i class="bi bi-chat-dots me-2"></i> Quản lý khiếu nại
 </h3>

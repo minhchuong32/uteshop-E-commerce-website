@@ -27,6 +27,9 @@
 <!-- Bootstrap JS (bundle) -->
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- ===== JS Chart.js để vẽ biểu đồ ===== -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -82,11 +85,7 @@
 						href="${pageContext.request.contextPath}/admin/home?page=revenue">
 							<i class="bi bi-cash-stack me-2"></i></i> Quản lý Doanh thu
 					</a></li>
-					<li class="nav-item mb-1"><a
-						class="nav-link ${page=='stats' ? 'active' : ''}"
-						href="${pageContext.request.contextPath}/admin/home?page=stats">
-							<i class="bi bi-bar-chart-line me-2"></i> Thống kê
-					</a></li>
+					
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='settings' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=settings">

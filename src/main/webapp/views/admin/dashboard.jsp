@@ -1,45 +1,26 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-
-<style>
-/* ====== Hiệu ứng click card ====== */
-.dashboard-card {
-	cursor: pointer;
-	transition: transform 0.2s ease, box-shadow 0.2s ease;
-	text-decoration: none;
-	color: inherit;
-	display: block;
-}
-.dashboard-card:hover {
-	transform: translateY(-4px);
-	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-	text-decoration: none;
-}
-
-/* Bo góc và canh giữa icon + chữ */
-.dashboard-card .card-body {
-	padding: 1.3rem;
-}
-.dashboard-card i {
-	display: block;
-	margin-bottom: 0.4rem;
-}
-</style>
-
-
-
+<%@ include file="/commons/taglib.jsp"%>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý thông báo | Admin - UteShop</title>
+  
+    <!-- CSS riêng -->
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/assets/css/dashboard-admin.css">
+    
+</head>
 <h3 class="text-primary-custom fw-bold mb-4">
 	<i class="bi bi-speedometer2"></i> Thống kê nhanh
 </h3>
-
 <!-- === Thống kê nhanh === -->
 <div class="row g-3 mb-4">
 
 	<!-- Người dùng -->
 	<div class="col-md-3">
-		<a href="${pageContext.request.contextPath}/admin/users" class="dashboard-card">
+		<a href="${pageContext.request.contextPath}/admin/users"
+			class="dashboard-card">
 			<div class="card text-center shadow-sm">
 				<div class="card-body">
 					<i class="bi bi-people-fill fs-2 text-primary"></i>
@@ -52,7 +33,8 @@
 
 	<!-- Sản phẩm -->
 	<div class="col-md-3">
-		<a href="${pageContext.request.contextPath}/admin/products" class="dashboard-card">
+		<a href="${pageContext.request.contextPath}/admin/products"
+			class="dashboard-card">
 			<div class="card text-center shadow-sm">
 				<div class="card-body">
 					<i class="bi bi-box-seam fs-2 text-success"></i>
@@ -65,7 +47,8 @@
 
 	<!-- Đơn hàng -->
 	<div class="col-md-3">
-		<a href="${pageContext.request.contextPath}/admin/deliveries" class="dashboard-card">
+		<a href="${pageContext.request.contextPath}/admin/deliveries"
+			class="dashboard-card">
 			<div class="card text-center shadow-sm">
 				<div class="card-body">
 					<i class="bi bi-cart-check-fill fs-2 text-warning"></i>
@@ -78,13 +61,15 @@
 
 	<!-- Doanh thu -->
 	<div class="col-md-3">
-		<a href="${pageContext.request.contextPath}/admin/revenue" class="dashboard-card">
+		<a href="${pageContext.request.contextPath}/admin/revenue"
+			class="dashboard-card">
 			<div class="card text-center shadow-sm">
 				<div class="card-body">
 					<i class="bi bi-cash-stack fs-2 text-danger"></i>
 					<h6 class="card-title">Doanh thu</h6>
 					<p class="fw-bold mb-0 text-success">
-						<fmt:formatNumber value="${totalRevenue}" type="currency" currencySymbol="₫" />
+						<fmt:formatNumber value="${totalRevenue}" type="currency"
+							currencySymbol="₫" />
 					</p>
 				</div>
 			</div>
@@ -133,7 +118,6 @@
 										src="${empty d.productVariant.product.imageUrl
 										? pageContext.request.contextPath.concat('/assets/images/default-product.png') 
 										: pageContext.request.contextPath.concat('/assets/').concat(d.productVariant.product.imageUrl)}"
-									
 										class="rounded me-2" alt="${d.productVariant.product.name}"
 										style="width: 45px; height: 45px; object-fit: cover;">
 									<div>

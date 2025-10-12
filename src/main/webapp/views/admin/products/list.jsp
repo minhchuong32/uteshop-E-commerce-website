@@ -1,10 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/commons/taglib.jsp"%>
 
-<!-- CSS DataTables -->
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-
 <div class="container-fluid">
 	<h3 class="text-primary-custom fw-bold mb-4">
 		<i class="bi bi-box-seam me-2"></i> Quản lý sản phẩm

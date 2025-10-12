@@ -1,5 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ include file="/commons/taglib.jsp"%>
 
 <div class="container-fluid">
 	<h3 class="mb-4 text-primary-custom fw-bold">
