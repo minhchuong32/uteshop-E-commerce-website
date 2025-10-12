@@ -49,4 +49,9 @@ public class ProductVariantServiceImpl implements IProductVariantService{
 		return variantDao.findByOptions(productId, selectedOptions);
 	}
 
+	@Override
+	public void insertVariant(ProductVariant variant) {
+		variantDao.insertVariant(variant);
+	}
+
 }

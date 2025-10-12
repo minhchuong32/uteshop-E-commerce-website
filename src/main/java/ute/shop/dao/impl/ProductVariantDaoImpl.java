@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 import ute.shop.config.JPAConfig;
@@ -43,5 +44,21 @@ public class ProductVariantDaoImpl implements IProductVariantDao{
 	        em.close();
 	    }
 	}
+	
+	@Override
+    public void insertVariant(ProductVariant variant) {
+        EntityManager em = JPAConfig.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.persist(variant);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
 
 }

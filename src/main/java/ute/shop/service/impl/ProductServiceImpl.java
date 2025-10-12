@@ -3,6 +3,7 @@ package ute.shop.service.impl;
 import ute.shop.dao.IProductDao;
 import ute.shop.dao.impl.ProductDaoImpl;
 import ute.shop.entity.Product;
+import ute.shop.entity.ProductVariant;
 import ute.shop.service.IProductService;
 
 import java.util.List;
@@ -139,6 +140,17 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public Product findById_fix(Integer id) {
 		return productDao.findById_fix(id);
+	}
+
+	@Override
+	public void deleteExtraImage(Long imageId) {
+		productDao.deleteExtraImage(imageId);
+		
+	}
+
+	@Override
+	public ProductVariant findVariantById(Long variantId) {
+		return productDao.findVariantById(variantId);
 	}
 
 

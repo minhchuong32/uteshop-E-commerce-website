@@ -9,4 +9,6 @@ public interface IProductVariantService {
 	ProductVariant findById(Integer variantId);
 	Map<String, List<String>> getOptionMapByProductId(Integer productId);
 	ProductVariant findByOptions(Integer productId, Map<String, Object> selectedOptions);
+	
+	void insertVariant(ProductVariant variant);
 }

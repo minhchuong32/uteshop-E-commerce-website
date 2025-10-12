@@ -88,37 +88,55 @@
                 </button>
             </div>
             <div class="card-body" id="variantContainer">
-                <c:if test="${empty product.variants}">
-                    <p class="text-muted">Chưa có biến thể nào. Bấm “Thêm biến thể”.</p>
-                </c:if>
-
-                <c:forEach var="v" items="${product.variants}" varStatus="loop">
-                    <div class="border p-3 mb-3 rounded variant-block">
-                        <input type="hidden" name="variantId_${loop.index}" value="${v.id}">
-                        <div class="row g-3 align-items-end">
-						    <div class="col-md-3">
-						        <label class="form-label">Tên biến thể</label>
-						        <input type="text" name="variantOptionName_${loop.index}" value="${v.optionName}" class="form-control" required>
-						    </div>
-						
-						    <div class="col-md-3">
-						        <label class="form-label">Giá</label>
-						        <input type="number" name="variantPrice_${loop.index}" value="${v.price}" class="form-control" required>
-						    </div>
-						
-						    <div class="col-md-3">
-						        <label class="form-label">Giá cũ (nếu có)</label>
-						        <input type="number" name="variantOldPrice_${loop.index}" value="${v.oldPrice}" class="form-control">
-						    </div>
-						
-						    <div class="col-md-3">
-						        <label class="form-label">Tồn kho</label>
-						        <input type="number" name="variantStock_${loop.index}" value="${v.stock}" class="form-control" required>
-						    </div>
-						</div>
-                    </div>
-                </c:forEach>
-            </div>
+			    <c:if test="${empty product.variants}">
+			        <p class="text-muted">Chưa có biến thể nào. Bấm “Thêm biến thể”.</p>
+			    </c:if>
+			
+			    <c:forEach var="v" items="${product.variants}" varStatus="loop">
+			        <div class="border p-3 mb-3 rounded variant-block">
+			            <input type="hidden" name="variantId_${loop.index}" value="${v.id}">
+			            <div class="row g-3 align-items-end">
+			                <div class="col-md-3">
+			                    <label class="form-label">Tên tùy chọn</label>
+			                    <input type="text" name="variantOptionName_${loop.index}" value="${v.optionName}" class="form-control" required>
+			                </div>
+			
+			                <div class="col-md-3">
+			                    <label class="form-label">Giá trị tùy chọn</label>
+			                    <input type="text" name="variantOptionValue_${loop.index}" value="${v.optionValue}" class="form-control" required>
+			                </div>
+			
+			                <div class="col-md-2">
+			                    <label class="form-label">Giá</label>
+			                    <input type="number" step="0.01" name="variantPrice_${loop.index}" value="${v.price}" class="form-control" required>
+			                </div>
+			
+			                <div class="col-md-2">
+			                    <label class="form-label">Giá cũ</label>
+			                    <input type="number" step="0.01" name="variantOldPrice_${loop.index}" value="${v.oldPrice}" class="form-control">
+			                </div>
+			
+			                <div class="col-md-2">
+			                    <label class="form-label">Tồn kho</label>
+			                    <input type="number" name="variantStock_${loop.index}" value="${v.stock}" class="form-control" required>
+			                </div>
+			
+			                <div class="col-md-3 mt-3">
+			                    <label class="form-label">Ảnh hiện tại</label><br>
+			                    <c:if test="${not empty v.imageUrl}">
+			                        <img src="${pageContext.request.contextPath}/assets/${v.imageUrl}" class="border rounded mb-2" width="100">
+			                    </c:if>
+			                    <input type="file" name="variantImage_${loop.index}" class="form-control" accept="image/*">
+			                    <small class="text-muted">Chọn ảnh mới nếu muốn thay đổi.</small>
+			                </div>
+			
+			                <div class="col-md-1 mt-4 text-center">
+			                    <input type="checkbox" name="deleteVariantIds" value="${v.id}"> Xóa
+			                </div>
+			            </div>
+			        </div>
+			    </c:forEach>
+			</div>
         </div>
 
         <div class="text-end">

@@ -1,6 +1,8 @@
 package ute.shop.service;
 
 import ute.shop.entity.Product;
+import ute.shop.entity.ProductVariant;
+
 import java.util.List;
 
 public interface IProductService {
@@ -36,5 +38,8 @@ public interface IProductService {
 
 	List<Object[]> findBestSellingProducts(int limit);
 	Product findById_fix(Integer id);
+	
+	void deleteExtraImage(Long imageId);
+	ProductVariant findVariantById(Long variantId);
 
 }
