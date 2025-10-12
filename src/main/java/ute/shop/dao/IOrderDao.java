@@ -13,9 +13,9 @@ public interface IOrderDao {
     void delete(int id);
 	List<Order> findByUser(User user);
 	boolean hasPurchased(int userId, int productId);
-    Order findById(Integer id);
+    Order getById(Integer id);
     List<Order> findByUserId(Integer userId);
-    
+    List<Order> getOrdersByUserAndStatus(int userId, String status);
 	//Vendor dashboard
 	long countOrdersByShop(int shopId);
 	long countDistinctCustomersByShop(int shopId);

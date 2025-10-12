@@ -174,8 +174,22 @@ public class CheckoutController extends HttpServlet {
         }
 
         if (allSuccess) {
-            req.getSession().setAttribute("message", "🎉 Đặt hàng thành công! Hệ thống đã tách đơn theo từng shop.");
-            resp.sendRedirect(req.getContextPath() + "/user/orders");
+        	// 🧭 Chuyển hướng theo phương thức thanh toán
+            if ("COD".equalsIgnoreCase(payment)) {
+                req.getSession().setAttribute("success", "🎉 Đặt hàng thành công! Cảm ơn bạn đã mua sắm tại UTE Shop.");
+                resp.sendRedirect(req.getContextPath() + "/user/orders");
+                return;
+            } else if ("Momo".equalsIgnoreCase(payment)) {
+                resp.sendRedirect(req.getContextPath() + "/user/payment/momo");
+                return;
+            } else if ("VNPay".equalsIgnoreCase(payment)) {
+                resp.sendRedirect(req.getContextPath() + "/user/payment/vnpay");
+                return;
+            } else {
+                req.getSession().setAttribute("error", "Phương thức thanh toán không hợp lệ!");
+                resp.sendRedirect(req.getContextPath() + "/user/checkout");
+                return;
+            }
         } else {
             req.setAttribute("error", "❌ Có lỗi xảy ra khi đặt hàng một số shop, vui lòng thử lại!");
             doGet(req, resp);
