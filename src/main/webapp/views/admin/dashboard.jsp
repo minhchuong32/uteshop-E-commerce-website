@@ -11,6 +11,7 @@
           href="${pageContext.request.contextPath}/assets/css/dashboard-admin.css">
     
 </head>
+
 <h3 class="text-primary-custom fw-bold mb-4">
 	<i class="bi bi-speedometer2"></i> Thống kê nhanh
 </h3>

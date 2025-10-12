@@ -358,3 +358,12 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 5px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--primary-hover); }
 
+
+/* ================== LOADING ================== */
+/* Khi fade-out thì vẫn nhận sự kiện click */
+#preloader.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none; /* ✅ Cho phép click xuyên qua */
+}
+

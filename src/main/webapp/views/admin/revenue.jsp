@@ -11,7 +11,7 @@
 		<h3 class="text-primary-custom fw-bold mb-4">
 			<i class="bi bi-bar-chart"></i> Quản lý doanh thu sàn thương mại
 		</h3>
-		<!-- 🔹 Bộ lọc doanh thu -->
+		<!-- Bộ lọc doanh thu -->
 		<form method="get"
 			action="${pageContext.request.contextPath}/admin/revenue"
 			class="row g-3 mb-4" onsubmit="return validateDateRange();">
