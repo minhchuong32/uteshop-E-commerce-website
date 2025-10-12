@@ -4,7 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <title>UteShop</title>
-
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/common.css">
 <link rel="icon" type="image/png"
       href="${pageContext.request.contextPath}/assets/images/favicon.png">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
@@ -35,10 +36,10 @@ body {
     <div id="preloader">
         <img src="${pageContext.request.contextPath}/assets/images/logo_strong.png"
              alt="UteShop" width="100" class="mb-3">
-        <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
-            <span class="visually-hidden">Đang tải...</span>
+        <div class="spinner-border text-primary-custom mb-3" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden text-primary-custom">Đang tải...</span>
         </div>
-        <h5 class="fw-bold text-primary">Đang khởi động UteShop...</h5>
+        <h5 class="fw-bold text-primary-custom">Đang khởi động UteShop...</h5>
     </div>
 
     <script>

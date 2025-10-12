@@ -33,7 +33,7 @@
 	transition: opacity 0.5s ease;
 }
 #preloader.hidden {
-	opacity: 0;
+	opacity: 0.9;
 	visibility: hidden;
 }
 </style>

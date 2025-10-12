@@ -11,7 +11,7 @@
 
 		<!-- Thông tin cửa hàng -->
 		<div class="card shadow-sm mb-4">
-			<div class="card-header fw-bold bg-light">Thông tin cửa hàng</div>
+			<div class="card-header fw-bold bg-primary-custom">Thông tin cửa hàng</div>
 			<div class="card-body">
 				<div class="mb-3">
 					<label class="form-label">Tên cửa hàng</label> <input type="text"
@@ -34,7 +34,7 @@
 
 		<!-- Cấu hình thanh toán -->
 		<div class="card shadow-sm mb-4">
-			<div class="card-header fw-bold bg-light">Cấu hình thanh toán</div>
+			<div class="card-header fw-bold bg-primary-custom">Cấu hình thanh toán</div>
 			<div class="card-body">
 				<div class="form-check form-switch mb-2">
 					<input class="form-check-input" type="checkbox" name="cod_enabled"
@@ -57,7 +57,7 @@
 
 		<!-- Cấu hình giao diện -->
 		<div class="card shadow-sm mb-4">
-			<div class="card-header fw-bold bg-light">Cấu hình giao diện</div>
+			<div class="card-header fw-bold bg-primary-custom">Cấu hình giao diện</div>
 			<div class="card-body">
 				<div class="mb-3">
 					<label class="form-label">Chọn theme</label> <select
@@ -75,12 +75,12 @@
 					<c:choose>
 						<c:when test="${not empty store.logo}">
 							<img
-								src="${pageContext.request.contextPath}/uploads/${store.logo}"
+								src="${pageContext.request.contextPath}/assets${store.logo}"
 								alt="logo" class="mt-2 mx-auto d-block" style="height: 80px;">
 						</c:when>
 						<c:otherwise>
 							<img
-								src="${pageContext.request.contextPath}/assets/images/logo.png"
+								src="${pageContext.request.contextPath}/assets/images/logo/uteshop-logo.png"
 								alt="default logo" class="mt-2 mx-auto d-block"
 								style="height: 80px;">
 						</c:otherwise>
@@ -91,9 +91,9 @@
 		</div>
 
 		<!-- Thông tin cá nhân -->
-		<h3 class="mb-4 fw-bold">Thông tin cá nhân</h3>
+		<h3 class="mb-4 fw-bold text-primary-custom"><i class="bi bi-person"></i>Thông tin cá nhân</h3>
 		<div class="card shadow-sm mb-4">
-			<div class="card-header fw-bold bg-light">Cập nhật thông tin
+			<div class="card-header fw-bold bg-primary-custom">Cập nhật thông tin
 				Admin</div>
 			<div class="card-body">
 				<div class="mb-3">
@@ -108,14 +108,14 @@
 					<c:choose>
 						<c:when test="${not empty sessionScope.account.avatar}">
 							<img
-								src="${pageContext.request.contextPath}/uploads/${sessionScope.account.avatar}"
+								src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
 								alt="avatar"
 								class="rounded-circle img-thumbnail mx-auto d-block" width="120"
 								height="120" style="object-fit: cover;">
 						</c:when>
 						<c:otherwise>
 							<img
-								src="${pageContext.request.contextPath}/uploads/default_avatar.png"
+								src="${pageContext.request.contextPath}/assets/images/avatars/default.jpg"
 								alt="avatar"
 								class="rounded-circle img-thumbnail mx-auto d-block" width="120"
 								height="120" style="object-fit: cover;">
