@@ -25,7 +25,7 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
 
-                    <!-- 🔔 Thông báo -->
+                    <!-- Thông báo -->
                     <li class="nav-item dropdown position-relative me-3">
                         <a class="nav-link position-relative" href="#" id="notifDropdown"
                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -86,19 +86,20 @@
                         </ul>
                     </li>
 
-                    <!-- 👤 Avatar Admin -->
+                    <!-- Avatar Admin -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center"
                            href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
                             <c:choose>
                                 <c:when test="${not empty sessionScope.account.avatar}">
-                                    <img src="${pageContext.request.contextPath}/uploads/${sessionScope.account.avatar}"
+                                    <img src="${pageContext.request.contextPath}/assets/images/${sessionScope.account.avatar}"
                                          alt="avatar" class="rounded-circle me-2"
                                          width="32" height="32" style="object-fit: cover;">
                                 </c:when>
                                 <c:otherwise>
-                                    <img src="${pageContext.request.contextPath}/assets/images/default_avatar.png"
+                                
+                                    <img src="${pageContext.request.contextPath}/assets/images/avatars/default.jpg"
                                          alt="avatar" class="rounded-circle me-2"
                                          width="32" height="32" style="object-fit: cover;">
                                 </c:otherwise>
@@ -106,6 +107,7 @@
                             <span class="fw-semibold text-dark">
                                 ${sessionScope.account.username}
                             </span>
+                            <i class="bi bi-caret-down-fill text-secondary small"></i>
                         </a>
 
                         <ul class="dropdown-menu shadow dropdown-menu-end"

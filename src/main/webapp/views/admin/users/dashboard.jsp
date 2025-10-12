@@ -10,8 +10,8 @@
 	<!-- Nút thêm mới -->
 	<div class="mb-3">
 		<a href="${pageContext.request.contextPath}/admin/users/add"
-			class="btn btn-success"> <i class="bi bi-plus"></i>
-			Thêm người dùng
+			class="btn btn-success"> <i class="bi bi-plus"></i> Thêm người
+			dùng
 		</a>
 	</div>
 
@@ -62,9 +62,13 @@
 							<td>
 								<div class="d-flex align-items-center">
 									<img
-										src="${pageContext.request.contextPath}/assets/images/default_avatar.png"
-										alt="avatar" class="rounded-circle me-3"
+										src="${empty u.avatar 
+        ? pageContext.request.contextPath.concat('/assets/images/avatars/default.jpg')
+        : pageContext.request.contextPath.concat('/assets/images/avatars/').concat(u.avatar.substring(u.avatar.lastIndexOf('/') + 1))}"
+										alt="avatar" class="rounded-circle border"
 										style="width: 48px; height: 48px; object-fit: cover;">
+
+
 									<div>
 										<div class="fw-bold">${empty u.name ? u.username : u.name}</div>
 										<small class="text-muted">@${u.username}</small>

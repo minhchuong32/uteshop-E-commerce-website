@@ -62,10 +62,13 @@
 									<div
 										class="rounded-circle border overflow-hidden d-flex align-items-center justify-content-center"
 										style="width: 64px; height: 64px; background-color: #f8f9fa;">
-										<img
-											src="${pageContext.request.contextPath}/assets/images/shops/default-shop-logo.png"
-											alt="shop-logo" class="img-fluid"
-											style="width: 100%; height: 100%; object-fit: cover;">
+									<img
+										src="${empty s.logo 
+        ? pageContext.request.contextPath.concat('/assets/images/shops/default-shop-logo.png')
+        : pageContext.request.contextPath.concat('/assets/images/shops/').concat(s.logo.substring(s.logo.lastIndexOf('/') + 1))}"
+										alt="avatar" class="rounded-circle border"
+										style="width: 48px; height: 48px; object-fit: cover;">
+
 									</div>
 								</div>
 

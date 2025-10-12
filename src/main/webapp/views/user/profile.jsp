@@ -24,13 +24,13 @@
 					<c:choose>
 						<c:when test="${not empty sessionScope.account.avatar}">
 							<img
-								src="${pageContext.request.contextPath}/uploads/${sessionScope.account.avatar}"
+								src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
 								alt="Avatar" class="rounded-circle img-thumbnail mb-3"
 								style="width: 180px; height: 180px; object-fit: cover;">
 						</c:when>
 						<c:otherwise>
 							<img
-								src="${pageContext.request.contextPath}/uploads/default_avatar.png"
+								src="${pageContext.request.contextPath}assets/images/avatar/default.jpg"
 								alt="Default Avatar" class="rounded-circle img-thumbnail mb-3"
 								style="width: 180px; height: 180px; object-fit: cover;">
 						</c:otherwise>
