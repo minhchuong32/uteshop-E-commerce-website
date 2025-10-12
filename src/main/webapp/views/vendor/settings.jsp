@@ -60,7 +60,7 @@
 					<c:choose>
 						<c:when test="${not empty sessionScope.account.avatar}">
 							<img
-								src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
+								src="${pageContext.request.contextPath}/assets/images/avatars/${sessionScope.account.avatar}"
 								alt="avatar"
 								class="rounded-circle img-thumbnail mx-auto d-block" width="120"
 								height="120" style="object-fit: cover;">
