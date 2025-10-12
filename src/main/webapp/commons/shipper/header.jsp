@@ -34,7 +34,7 @@
 							data-bs-toggle="dropdown" aria-expanded="false"> <c:choose>
 									<c:when test="${not empty sessionScope.account.avatar}">
 										<img
-											src="${pageContext.request.contextPath}/assets/images/avatars/${sessionScope.account.avatar}"
+											src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
 											alt="avatar" class="rounded-circle me-2" width="32"
 											height="32" style="object-fit: cover;">
 									</c:when>

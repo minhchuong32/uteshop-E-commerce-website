@@ -17,7 +17,8 @@ import ute.shop.service.impl.*;
     "/vendor/products",
     "/vendor/products/add",
     "/vendor/products/edit",
-    "/vendor/products/delete"
+    "/vendor/products/delete",
+    "/vendor/products/detail"
 })
 @MultipartConfig(
     fileSizeThreshold = 1024 * 1024 * 2,  // 2MB
@@ -137,6 +138,46 @@ public class ProductController extends HttpServlet {
             }
             resp.sendRedirect(req.getContextPath() + "/vendor/products");
         }
+        else if (uri.endsWith("/detail")) {
+            String idParam = req.getParameter("id");
+            if (idParam != null && !idParam.isEmpty()) {
+                int id = Integer.parseInt(idParam);
+                Product product = productService.findById_fix(id);
+
+                if (product != null && product.getShop().getShopId().equals(shop.getShopId())) {
+                    IReviewService reviewService = new ReviewServiceImpl();
+                    List<Review> reviews = reviewService.getByProductId(id);
+                    List<ProductVariant> variants = product.getVariants();
+                    BigDecimal minPrice = null;
+                    int totalStock = 0;
+
+                    if (variants != null && !variants.isEmpty()) {
+                        for (ProductVariant v : variants) {
+                            if (minPrice == null || v.getPrice().compareTo(minPrice) < 0) {
+                                minPrice = v.getPrice();
+                            }
+                            totalStock += v.getStock();
+                        }
+                    }
+                    if (minPrice == null && product.getPrice() != null) {
+                        minPrice = product.getPrice();
+                    }
+
+                    req.setAttribute("minPrice", minPrice);
+
+                    req.setAttribute("variants", variants);
+                    req.setAttribute("totalStock", totalStock);
+                    req.setAttribute("product", product);
+                    req.setAttribute("reviews", reviews);
+                    req.setAttribute("page", "products");
+                    req.setAttribute("view", "/views/vendor/products/detail.jsp");
+                    req.getRequestDispatcher("/WEB-INF/decorators/vendor.jsp").forward(req, resp);
+                    return;
+                }
+            }
+            resp.sendRedirect(req.getContextPath() + "/vendor/products");
+        }
+
     }
 
     @Override
