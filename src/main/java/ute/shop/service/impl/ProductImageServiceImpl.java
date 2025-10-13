@@ -10,30 +10,32 @@ import java.util.List;
 
 public class ProductImageServiceImpl implements IProductImageService {
 
-    private final ProductImageDao productImageDAO = new ProductImageDaoImpl();
+	private final ProductImageDao productImageDAO = new ProductImageDaoImpl();
 
-    @Override
-    public List<ProductImage> getImagesByProduct(Long productId) {
-        return productImageDAO.findByProductId(productId);
-    }
+	@Override
+	public List<ProductImage> getImagesByProduct(Long productId) {
+		return productImageDAO.findByProductId(productId);
+	}
 
-    @Override
-    public ProductImage getImageById(Long id) {
-        return productImageDAO.findById(id);
-    }
+	@Override
+	public ProductImage getImageById(Long id) {
+		return productImageDAO.findById(id);
+	}
 
-    @Override
-    public ProductImage addImage(Product product, String imageUrl, boolean isMain) {
-        ProductImage img = ProductImage.builder()
-                .product(product)
-                .imageUrl(imageUrl)
-                .isMain(isMain)
-                .build();
-        return productImageDAO.save(img);
-    }
+	@Override
+	public ProductImage addImage(Product product, String imageUrl, boolean isMain) {
+		ProductImage img = ProductImage.builder().product(product).imageUrl(imageUrl).isMain(isMain).build();
+		return productImageDAO.save(img);
+	}
 
-    @Override
-    public void deleteImage(Long id) {
-        productImageDAO.delete(id);
-    }
+	@Override
+	public void deleteImage(Long id) {
+		productImageDAO.delete(id);
+	}
+
+	@Override
+	public ProductImage update(ProductImage image) {
+		return productImageDAO.update(image);
+	}
+
 }

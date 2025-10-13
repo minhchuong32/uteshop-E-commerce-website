@@ -2,7 +2,6 @@ package ute.shop.dao;
 
 import ute.shop.entity.CartItem;
 import ute.shop.entity.User;
-import ute.shop.entity.Product;
 import ute.shop.entity.ProductVariant;
 
 import java.util.List;

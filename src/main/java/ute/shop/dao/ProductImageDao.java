@@ -8,4 +8,6 @@ public interface ProductImageDao {
     ProductImage findById(Long id);
     ProductImage save(ProductImage image);
     void delete(Long id);
+	ProductImage update(ProductImage image);
+
 }

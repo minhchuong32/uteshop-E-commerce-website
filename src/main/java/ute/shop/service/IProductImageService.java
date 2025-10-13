@@ -10,4 +10,5 @@ public interface IProductImageService {
     ProductImage getImageById(Long id);
     ProductImage addImage(Product product, String imageUrl, boolean isMain);
     void deleteImage(Long id);
+	ProductImage update(ProductImage image);
 }

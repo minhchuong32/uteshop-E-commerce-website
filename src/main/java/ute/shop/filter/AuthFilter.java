@@ -21,13 +21,22 @@ public class AuthFilter implements Filter {
 
         HttpSession session = req.getSession(false);
         String uri = req.getRequestURI();
-
+        
+        // Cho phép AJAX lấy biến thể
+        if (uri.endsWith("/login") 
+                || uri.contains("/assets/") 
+                || uri.endsWith("/variants")) { 
+            chain.doFilter(request, response);
+            return;
+        }
+        
+        
         // Nếu chưa login → chuyển hướng về /login
         if (session == null || session.getAttribute("account") == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-
+                
         // Nếu đã login → kiểm tra quyền truy cập (role)
         User user = (User) session.getAttribute("account");
         String role = user.getRole();
