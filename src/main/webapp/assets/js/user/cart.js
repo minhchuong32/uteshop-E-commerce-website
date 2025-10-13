@@ -1,4 +1,4 @@
-console.log("✅ File cart.js đã load!");
+console.log("✅ File cart.js new đã load!");
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ DOMContentLoaded đã kích hoạt");
@@ -60,19 +60,18 @@ document.addEventListener("DOMContentLoaded", function () {
 		form.addEventListener("submit", (e) => {
 		    e.preventDefault();
 
-		    // ✅ Lấy tất cả checkbox được tick trên toàn trang, không chỉ trong form
 		    const checked = [...document.querySelectorAll(".cart-checkbox:checked")];
 		    if (checked.length === 0) {
 		        alert("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
 		        return;
 		    }
 
-		    const selectedIds = checked.map(cb => cb.value).join(",");
-		    console.log("🧺 Selected IDs gửi đi:", selectedIds);
+		    // ✅ Tạo query string có nhiều param selectedItems
+		    const params = checked.map(cb => `selectedItems=${encodeURIComponent(cb.value)}`).join("&");
+		    const url = `${window.contextPath}/user/checkout?${params}`;
 
-		    const url = `${window.contextPath}/user/checkout?selectedItems=${encodeURIComponent(selectedIds)}`;
+		    console.log("🧺 URL gửi đi:", url);
 		    window.location.href = url;
 		});
 	}
-
 });
