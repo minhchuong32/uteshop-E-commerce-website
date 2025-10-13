@@ -21,38 +21,74 @@ public class ProductVariantController extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.setContentType("application/json;charset=UTF-8");
+    	resp.setContentType("application/json;charset=UTF-8");
         ObjectMapper mapper = new ObjectMapper();
 
-        Map<String, Object> selectedOptions = mapper.readValue(req.getReader(), Map.class);
+        try {
+            // 🟢 Đọc JSON từ body
+            Map<String, Object> selectedOptions = mapper.readValue(req.getReader(), Map.class);
+            if (selectedOptions == null || selectedOptions.isEmpty()) {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().write("{\"error\":\"Thiếu dữ liệu lựa chọn\"}");
+                return;
+            }
 
-        // Lấy productId (có thể là Integer hoặc String)
-        Object pidObj = selectedOptions.remove("productId");
-        int productId = 0;
-        if (pidObj instanceof Number) {
-            productId = ((Number) pidObj).intValue();
-        } else if (pidObj instanceof String) {
-            productId = Integer.parseInt((String) pidObj);
-        }
+            // 🟢 Lấy productId (có thể là Integer hoặc String)
+            Object pidObj = selectedOptions.remove("productId");
+            if (pidObj == null) {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().write("{\"error\":\"Thiếu productId\"}");
+                return;
+            }
 
-        // Tìm variant theo lựa chọn
-        ProductVariant variant = variantService.findByOptions(productId, selectedOptions);
-     // trong ProductVariantController.doPost, ngay sau khi có 'variant':
-        System.out.println("DEBUG variant - id=" + variant.getId() + ", stock=" + variant.getStock()
-            + ", price=" + variant.getPrice() + ", oldPrice=" + variant.getOldPrice()
-            + ", optionName=" + variant.getOptionName() + ", optionValue=" + variant.getOptionValue());
+            int productId;
+            if (pidObj instanceof Number) {
+                productId = ((Number) pidObj).intValue();
+            } else {
+                productId = Integer.parseInt(pidObj.toString());
+            }
 
-        if (variant != null) {
+            // 🟢 Gọi service tìm variant phù hợp
+            ProductVariant variant = variantService.findByOptions(productId, selectedOptions);
+
+            if (variant == null) {
+                resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                resp.getWriter().write("{\"error\":\"Không tìm thấy phân loại phù hợp\"}");
+                return;
+            }
+
+            // 🟢 Ghi log debug
+            System.out.printf("DEBUG variant: id=%d, stock=%d, price=%s, oldPrice=%s, option=%s:%s, imageUrl=%s%n",
+                    variant.getId(),
+                    variant.getStock(),
+                    variant.getPrice(),
+                    variant.getOldPrice(),
+                    variant.getOptionName(),
+                    variant.getOptionValue(),
+                    variant.getImageUrl()
+            );
+
+            // 🟢 Chuẩn bị response JSON
             Map<String, Object> result = new HashMap<>();
             result.put("variantId", variant.getId());
             result.put("price", variant.getPrice());
-            result.put("oldPrice", variant.getOldPrice()); // thêm nếu cần hiển thị giá cũ
+            result.put("oldPrice", variant.getOldPrice());
             result.put("stock", variant.getStock());
-            result.put("imageUrl", variant.getImageUrl());
+
+            // Nếu không có ảnh variant, fallback sang ảnh mặc định
+            String imageUrl = variant.getImageUrl();
+            if (imageUrl == null || imageUrl.isBlank()) {
+            	imageUrl = "/assets";
+                imageUrl = imageUrl + variant.getProduct().getImageUrl(); // hoặc ảnh mặc định của product
+            }
+            result.put("imageUrl", imageUrl);
+
             resp.getWriter().write(mapper.writeValueAsString(result));
-        } else {
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            resp.getWriter().write("{\"error\":\"Không tìm thấy phân loại phù hợp\"}");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"error\":\"Lỗi xử lý dữ liệu variant\"}");
         }
     }
 

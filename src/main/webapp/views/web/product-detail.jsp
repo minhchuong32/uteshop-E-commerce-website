@@ -15,20 +15,37 @@
 				<!-- ảnh chính -->
 				<c:forEach var="img" items="${images}">
 					<c:if test="${img.main}">
-						<img id="mainImg"
-							src="${pageContext.request.contextPath}/assets${img.imageUrl}"
-							alt="${product.name}" class="product-detail-img mb-3" />
-
+						<c:choose>
+							<c:when test="${fn:startsWith(img.imageUrl, '/assets/')}">
+								<img id="mainImg"
+									src="${pageContext.request.contextPath}${img.imageUrl}"
+									alt="${product.name}" class="product-detail-img mb-3" />
+							</c:when>
+							<c:otherwise>
+								<img id="mainImg"
+									src="${pageContext.request.contextPath}/assets${img.imageUrl}"
+									alt="${product.name}" class="product-detail-img mb-3" />
+							</c:otherwise>
+						</c:choose>
 					</c:if>
 				</c:forEach>
 
 				<!-- thumbnails -->
 				<div class="d-flex gap-2">
 					<c:forEach var="img" items="${images}">
-						<img
-							src="${pageContext.request.contextPath}/assets/${img.imageUrl}"
-							class="thumb-img ${img.main ? 'active' : ''}"
-							onclick="changeImage(this)" />
+						<c:choose>
+							<c:when test="${fn:startsWith(img.imageUrl, '/assets/')}">
+								<img src="${pageContext.request.contextPath}${img.imageUrl}"
+									class="thumb-img ${img.main ? 'active' : ''}"
+									onclick="changeImage(this)" />
+							</c:when>
+							<c:otherwise>
+								<img
+									src="${pageContext.request.contextPath}/assets${img.imageUrl}"
+									class="thumb-img ${img.main ? 'active' : ''}"
+									onclick="changeImage(this)" />
+							</c:otherwise>
+						</c:choose>
 					</c:forEach>
 				</div>
 			</div>

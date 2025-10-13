@@ -50,7 +50,14 @@ public class ProductDetailController extends HttpServlet {
 
         // Lấy list ảnh
         List<ProductImage> images = productImageService.getImagesByProduct((long) productId);
-
+        
+        // Nếu sản phẩm không có ảnh chính -> chọn ảnh đầu tiên làm ảnh chính
+        if (images != null && !images.isEmpty()) {
+            boolean hasMain = images.stream().anyMatch(ProductImage::isMain);
+            if (!hasMain) {
+                images.get(0).setMain(true);
+            }
+        }
         // Kiểm tra user đã mua chưa
         User account = (User) req.getSession().getAttribute("account");
         boolean hasPurchased = false;
