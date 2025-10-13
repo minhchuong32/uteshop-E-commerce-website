@@ -58,14 +58,14 @@ public class PromotionController extends HttpServlet {
             req.setAttribute("fixedCount", fixedCount);
             req.setAttribute("avgPercent", avgPercent);
             req.setAttribute("avgFixed", avgFixed);
-            req.setAttribute("pages", "promotions");
+            req.setAttribute("page", "promotions");
             req.setAttribute("view", "/views/admin/promotions/list.jsp");
             req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
         }
 
         else if (uri.endsWith("/add")) {
             req.setAttribute("shops", shopService.getAll());
-            req.setAttribute("pages", "promotions");
+            req.setAttribute("page", "promotions");
             req.setAttribute("view", "/views/admin/promotions/form.jsp");
             req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
         }
@@ -75,7 +75,7 @@ public class PromotionController extends HttpServlet {
             Promotion p = promoService.findById(id);
             req.setAttribute("promotion", p);
             req.setAttribute("shops", shopService.getAll());
-            req.setAttribute("pages", "promotions");
+            req.setAttribute("page", "promotions");
             req.setAttribute("view", "/views/admin/promotions/form.jsp");
             req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
         }

@@ -9,4 +9,5 @@ public interface ICategoryService {
 	void save(Category category);
 	void update(Category category);
 	void delete(int id);
+	long countAll();
 }

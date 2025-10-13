@@ -39,4 +39,9 @@ public class ComplaintServiceImpl implements IComplaintService {
         return dao.findByUserId(userId);
     }
 
+	@Override
+	public long countAll() {
+		return dao.countAll();
+	}
+
 }

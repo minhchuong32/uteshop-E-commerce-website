@@ -16,4 +16,6 @@ public interface IPromotionDao {
 	void update(Promotion p);
 
 	void delete(int id);
+
+	long countAll();
 }

@@ -3,6 +3,7 @@ package ute.shop.controller.admin;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import ute.shop.service.*;
 import ute.shop.service.impl.*;
 
 import java.io.IOException;
@@ -17,6 +18,10 @@ public class AdminDashboardController extends HttpServlet {
     private final OrderServiceImpl orderService = new OrderServiceImpl();
     private final UserServiceImpl userService = new UserServiceImpl();
     private final RevenueServiceImpl revenueService = new RevenueServiceImpl();
+    private final IDeliveryService deliveryService = new DeliveryServiceImpl();
+    private final IComplaintService complaintService = new ComplaintServiceImpl();
+    private final ICategoryService categoryService = new CategoryServiceImpl();
+    private final IPromotionService promotionService = new PromotionServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -28,6 +33,11 @@ public class AdminDashboardController extends HttpServlet {
             req.setAttribute("totalProducts", productService.countAll());
             req.setAttribute("totalOrders", orderService.countAllOrders());
             req.setAttribute("totalRevenue", revenueService.getTotalRevenueAfterFee(BigDecimal.valueOf(0.10)));
+            req.setAttribute("totalDeliveries", deliveryService.countAll());
+            req.setAttribute("totalComplaints", complaintService.countAll());
+            req.setAttribute("totalPromotions", promotionService.countAll());
+            req.setAttribute("totalCategories", categoryService.countAll());
+
 
             // ===== Đơn hàng gần đây =====
             req.setAttribute("recentOrders", orderService.findRecentOrders(5));

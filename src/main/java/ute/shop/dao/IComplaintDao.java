@@ -9,4 +9,5 @@ public interface IComplaintDao {
     void insert(Complaint c);
     void update(Complaint c);
     void delete(int id);
+	long countAll();
 }

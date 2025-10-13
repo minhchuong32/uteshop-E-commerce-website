@@ -104,4 +104,9 @@ public class DeliveryServiceImpl implements IDeliveryService {
 		deliveryDao.assignToShipper(deliveryId, shipperId);
 	}
 
+	@Override
+	public long countAll() {
+		return deliveryDao.countAll();
+	}
+
 }

@@ -103,5 +103,17 @@ public class ComplaintDaoImpl implements IComplaintDao {
 	        em.close();
 	    }
 	}
+	
+	@Override
+	public long countAll() {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = "SELECT COUNT(c) FROM Complaint c";
+	        return em.createQuery(jpql, Long.class).getSingleResult();
+	    } finally {
+	        em.close();
+	    }
+	}
+
 
 }

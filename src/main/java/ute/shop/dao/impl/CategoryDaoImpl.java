@@ -78,6 +78,17 @@ public class CategoryDaoImpl implements ICategoryDao {
             em.close();
         }
     }
+    
+	@Override
+	public long countAll() {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String jpql = "SELECT COUNT(c) FROM Category c";
+	        return em.createQuery(jpql, Long.class).getSingleResult();
+	    } finally {
+	        em.close();
+	    }
+	}
 
 	
 }

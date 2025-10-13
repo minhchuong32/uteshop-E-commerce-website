@@ -21,12 +21,13 @@
 	<!-- Người dùng -->
 	<div class="col-md-3">
 		<a href="${pageContext.request.contextPath}/admin/users"
-			class="dashboard-card">
-			<div class="card text-center shadow-sm">
+			class="dashboard-card text-decoration-none">
+			<div
+				class="card text-center shadow-sm border-0 rounded-4 py-3 hover-card">
 				<div class="card-body">
-					<i class="bi bi-people-fill fs-2 text-primary"></i>
-					<h6 class="card-title">Người dùng</h6>
-					<p class="fw-bold mb-0">${totalUsers}</p>
+					<i class="bi bi-people-fill fs-1 mb-2 text-primary"></i>
+					<h6 class="card-title text-dark fw-semibold">Người dùng</h6>
+					<p class="fw-bold mb-0 fs-5 text-secondary">${totalUsers}</p>
 				</div>
 			</div>
 		</a>
@@ -35,12 +36,13 @@
 	<!-- Sản phẩm -->
 	<div class="col-md-3">
 		<a href="${pageContext.request.contextPath}/admin/products"
-			class="dashboard-card">
-			<div class="card text-center shadow-sm">
+			class="dashboard-card text-decoration-none">
+			<div
+				class="card text-center shadow-sm border-0 rounded-4 py-3 hover-card">
 				<div class="card-body">
-					<i class="bi bi-box-seam fs-2 text-success"></i>
-					<h6 class="card-title">Sản phẩm</h6>
-					<p class="fw-bold mb-0">${totalProducts}</p>
+					<i class="bi bi-box-seam-fill fs-1 mb-2 text-success"></i>
+					<h6 class="card-title text-dark fw-semibold">Sản phẩm</h6>
+					<p class="fw-bold mb-0 fs-5 text-secondary">${totalProducts}</p>
 				</div>
 			</div>
 		</a>
@@ -49,12 +51,13 @@
 	<!-- Đơn hàng -->
 	<div class="col-md-3">
 		<a href="${pageContext.request.contextPath}/admin/deliveries"
-			class="dashboard-card">
-			<div class="card text-center shadow-sm">
+			class="dashboard-card text-decoration-none">
+			<div
+				class="card text-center shadow-sm border-0 rounded-4 py-3 hover-card">
 				<div class="card-body">
-					<i class="bi bi-cart-check-fill fs-2 text-warning"></i>
-					<h6 class="card-title">Đơn hàng</h6>
-					<p class="fw-bold mb-0">${totalOrders}</p>
+					<i class="bi bi-cart-check-fill fs-1 mb-2 text-warning"></i>
+					<h6 class="card-title text-dark fw-semibold">Đơn hàng</h6>
+					<p class="fw-bold mb-0 fs-5 text-secondary">${totalOrders}</p>
 				</div>
 			</div>
 		</a>
@@ -63,12 +66,13 @@
 	<!-- Doanh thu -->
 	<div class="col-md-3">
 		<a href="${pageContext.request.contextPath}/admin/revenue"
-			class="dashboard-card">
-			<div class="card text-center shadow-sm">
+			class="dashboard-card text-decoration-none">
+			<div
+				class="card text-center shadow-sm border-0 rounded-4 py-3 hover-card">
 				<div class="card-body">
-					<i class="bi bi-cash-stack fs-2 text-danger"></i>
-					<h6 class="card-title">Doanh thu</h6>
-					<p class="fw-bold mb-0 text-success">
+					<i class="bi bi-cash-stack fs-1 mb-2 text-danger"></i>
+					<h6 class="card-title text-dark fw-semibold">Doanh thu</h6>
+					<p class="fw-bold mb-0 fs-5 text-success">
 						<fmt:formatNumber value="${totalRevenue}" type="currency"
 							currencySymbol="₫" />
 					</p>
@@ -76,7 +80,69 @@
 			</div>
 		</a>
 	</div>
+
+	<!-- Vận chuyển -->
+	<div class="col-md-3">
+		<a href="${pageContext.request.contextPath}/admin/deliveries"
+			class="dashboard-card text-decoration-none">
+			<div
+				class="card text-center shadow-sm border-0 rounded-4 py-3 hover-card">
+				<div class="card-body">
+					<i class="bi bi-truck fs-1 mb-2 text-secondary"></i>
+					<h6 class="card-title text-dark fw-semibold">Vận chuyển</h6>
+					<p class="fw-bold mb-0 fs-5 text-secondary">${totalDeliveries}</p>
+				</div>
+			</div>
+		</a>
+	</div>
+
+	<!-- Khiếu nại -->
+	<div class="col-md-3">
+		<a href="${pageContext.request.contextPath}/admin/complaints"
+			class="dashboard-card text-decoration-none">
+			<div
+				class="card text-center shadow-sm border-0 rounded-4 py-3 hover-card">
+				<div class="card-body">
+					<i class="bi bi-chat-dots-fill fs-1 mb-2 text-info"></i>
+					<h6 class="card-title text-dark fw-semibold">Khiếu nại</h6>
+					<p class="fw-bold mb-0 fs-5 text-secondary">${totalComplaints}</p>
+				</div>
+			</div>
+		</a>
+	</div>
+
+	<!-- Khuyến mại -->
+	<div class="col-md-3">
+		<a href="${pageContext.request.contextPath}/admin/promotions"
+			class="dashboard-card text-decoration-none">
+			<div
+				class="card text-center shadow-sm border-0 rounded-4 py-3 hover-card">
+				<div class="card-body">
+					<i class="bi bi-currency-dollar fs-1 mb-2 text-success"></i>
+					<h6 class="card-title text-dark fw-semibold">Khuyến mại</h6>
+					<p class="fw-bold mb-0 fs-5 text-secondary">${totalPromotions}</p>
+				</div>
+			</div>
+		</a>
+	</div>
+
+	<!-- Danh mục -->
+	<div class="col-md-3">
+		<a href="${pageContext.request.contextPath}/admin/categories"
+			class="dashboard-card text-decoration-none">
+			<div
+				class="card text-center shadow-sm border-0 rounded-4 py-3 hover-card">
+				<div class="card-body">
+					<i class="bi bi-tags-fill fs-1 mb-2 text-warning"></i>
+					<h6 class="card-title text-dark fw-semibold">Danh mục</h6>
+					<p class="fw-bold mb-0 fs-5 text-secondary">${totalCategories}</p>
+				</div>
+			</div>
+		</a>
+	</div>
+
 </div>
+
 
 
 <!-- === Đơn hàng gần đây & Sản phẩm bán chạy === -->

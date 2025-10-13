@@ -16,4 +16,6 @@ public interface IPromotionService {
 	void update(Promotion p);
 
 	void delete(int id);
+	
+	long countAll();
 }

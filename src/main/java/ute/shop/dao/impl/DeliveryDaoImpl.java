@@ -246,5 +246,18 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 	        em.close();
 	    }
 	}
+	
+	@Override
+	public long countAll() {
+	    EntityManager em = emf.createEntityManager();
+	    try {
+	        String jpql = "SELECT COUNT(d) FROM Delivery d";
+	        Query query = em.createQuery(jpql);
+	        return (Long) query.getSingleResult();
+	    } finally {
+	        em.close();
+	    }
+	}
+
 
 }

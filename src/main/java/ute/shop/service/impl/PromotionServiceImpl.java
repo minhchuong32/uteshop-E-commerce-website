@@ -40,4 +40,9 @@ public class PromotionServiceImpl implements IPromotionService {
 		return promoDao.findAll();
 	}
 
+	@Override
+	public long countAll() {
+		return promoDao.countAll();
+	}
+
 }

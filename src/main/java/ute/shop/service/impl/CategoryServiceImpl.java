@@ -35,4 +35,9 @@ public class CategoryServiceImpl implements ICategoryService {
     public void delete(int id) {
     	categoryDao.delete(id);
     }
+
+	@Override
+	public long countAll() {
+		return categoryDao.countAll();
+	}
 }

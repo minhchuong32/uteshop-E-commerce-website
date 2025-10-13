@@ -10,4 +10,5 @@ public interface IComplaintService {
     void update(Complaint c);
     void delete(int id);
     List<Complaint> findByUserId(int userId);
+	long countAll();
 }

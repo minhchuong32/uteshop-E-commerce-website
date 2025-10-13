@@ -95,5 +95,16 @@ public class PromotionDaoImpl implements IPromotionDao {
 	            em.close();
 	        }
 	    }
+	    
+		@Override
+		public long countAll() {
+		    EntityManager em = JPAConfig.getEntityManager();
+		    try {
+		        String jpql = "SELECT COUNT(c) FROM Promotion c";
+		        return em.createQuery(jpql, Long.class).getSingleResult();
+		    } finally {
+		        em.close();
+		    }
+		}
 
 }
