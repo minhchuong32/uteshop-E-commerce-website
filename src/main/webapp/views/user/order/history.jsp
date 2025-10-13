@@ -124,6 +124,7 @@
 								<h6 class="fw-bold mb-2">Thông tin giao hàng</h6>
 								<p class="mb-0">${o.user.username}</p>
 								<p class="mb-0">${o.user.email}</p>
+								<p class="mb-0">${o.user.phone}</p>
 								<p class="mb-0">${o.address}</p>
 							</div>
 						</div>
