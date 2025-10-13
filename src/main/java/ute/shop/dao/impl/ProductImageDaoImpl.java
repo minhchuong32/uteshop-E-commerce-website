@@ -10,6 +10,24 @@ import ute.shop.config.JPAConfig;
 import java.util.List;
 
 public class ProductImageDaoImpl implements ProductImageDao {
+	
+	@Override
+	public ProductImage update(ProductImage image) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityTransaction tx = em.getTransaction();
+	    try {
+	        tx.begin();
+	        ProductImage updated = em.merge(image);
+	        tx.commit();
+	        return updated;
+	    } catch (Exception e) {
+	        if (tx.isActive()) tx.rollback();
+	        e.printStackTrace();
+	        throw e;
+	    } finally {
+	        em.close();
+	    }
+	}
 
     @Override
     public List<ProductImage> findByProductId(Long productId) {
@@ -55,21 +73,27 @@ public class ProductImageDaoImpl implements ProductImageDao {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long productId) {
         EntityManager em = JPAConfig.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            ProductImage img = em.find(ProductImage.class, id);
-            if (img != null) {
-                em.remove(img);
-            }
+
+            //  Xóa tất cả ảnh có product_id = :pid
+            int deletedCount = em.createQuery(
+                    "DELETE FROM ProductImage p WHERE p.product.id = :pid")
+                    .setParameter("pid", productId)
+                    .executeUpdate();
+
             tx.commit();
+            System.out.println("Đã xóa " + deletedCount + " ảnh của productId = " + productId);
         } catch (Exception e) {
             if (tx.isActive()) tx.rollback();
+            e.printStackTrace();
             throw e;
         } finally {
             em.close();
         }
     }
+
 }

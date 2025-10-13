@@ -18,7 +18,7 @@
 <!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
+	
 <!-- DataTables -->
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
@@ -30,6 +30,7 @@
 <style>
 /* Hiệu ứng fade-in/fade-out */
 #preloader {
+
 	transition: opacity 0.5s ease;
 }
 #preloader.hidden {
@@ -85,6 +86,11 @@
 						class="nav-link ${page=='products' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=products">
 							<i class="bi bi-box-seam-fill me-2"></i> Quản lý Sản phẩm
+					</a></li>
+					<li class="nav-item mb-1"><a
+						class="nav-link ${page=='categories' ? 'active' : ''}"
+						href="${pageContext.request.contextPath}/admin/home?page=categories">
+							<i class="bi bi-tags-fill"></i> Quản lý Danh mục 
 					</a></li>
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='shops' ? 'active' : ''}"

@@ -265,7 +265,7 @@ public class ProductController extends HttpServlet {
                         }
                         
                         v.setImageUrl(variantImageUrl);
-                        variantDao.insertVariant(v);
+                        variantDao.save(v);
                         
                         System.out.println("🧩 Variant inserted: " + v.getOptionName() + "=" + v.getOptionValue() + 
                                          " | Image: " + v.getImageUrl());
@@ -329,7 +329,6 @@ public class ProductController extends HttpServlet {
                         ObjectMapper mapper = new ObjectMapper();
                         List<Map<String, Object>> variantList = mapper.readValue(variantsJson, List.class);
                         
-                        // Lấy tất cả parts để xử lý file upload
                         List<Part> allParts = new ArrayList<>();
                         req.getParts().forEach(allParts::add);
                         

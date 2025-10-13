@@ -20,4 +20,19 @@ public class CategoryServiceImpl implements ICategoryService {
     public Category findById(Integer id) {
         return categoryDao.findById(id);
     }
+    
+    @Override
+    public void save(Category category) {
+    	categoryDao.save(category);
+    }
+
+    @Override
+    public void update(Category category) {
+    	categoryDao.update(category);
+    }
+
+    @Override
+    public void delete(int id) {
+    	categoryDao.delete(id);
+    }
 }
