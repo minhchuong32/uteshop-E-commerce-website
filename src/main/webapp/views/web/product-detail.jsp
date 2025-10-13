@@ -16,8 +16,9 @@
 				<c:forEach var="img" items="${images}">
 					<c:if test="${img.main}">
 						<img id="mainImg"
-							src="${pageContext.request.contextPath}/assets/${img.imageUrl}"
+							src="${pageContext.request.contextPath}/assets${img.imageUrl}"
 							alt="${product.name}" class="product-detail-img mb-3" />
+
 					</c:if>
 				</c:forEach>
 

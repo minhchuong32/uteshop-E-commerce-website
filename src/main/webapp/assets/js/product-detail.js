@@ -1,5 +1,5 @@
 
-
+console.log("product-detail.js new");
 
 function changeImage(el) {
     document.getElementById("mainImg").src = el.src;
@@ -137,13 +137,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 // 🟢 Cập nhật ảnh chính
-                if (data.imageUrl && mainImg) {
-                    const cleanPath = data.imageUrl.startsWith("/")
-                        ? `${appContext}${data.imageUrl}`
-                        : `${appContext}/${data.imageUrl}`;
-                    mainImg.src = cleanPath;
-                    console.log("Ảnh mới:", cleanPath);
-                }
+				if (data.imageUrl && mainImg) {
+				    // Nếu imageUrl đã bắt đầu bằng "/images/" → tự thêm "/assets" vào trước
+				    let cleanPath = data.imageUrl;
+				    if (cleanPath.startsWith("/images/")) {
+				        cleanPath = "/assets" + cleanPath;
+				    } else if (!cleanPath.startsWith("/assets/")) {
+				        // nếu dữ liệu không có "/" ở đầu
+				        cleanPath = "/assets/" + cleanPath;
+				    }
+
+				    // Gắn context path cho đầy đủ
+				    mainImg.src = `${appContext}${cleanPath}`;
+				    console.log("Ảnh mới:", mainImg.src);
+				}
+
 				// 🟢 Gán variantId vào form
 				const variantInput = document.getElementById("variantId");
 					if (variantInput && data.variantId) {
