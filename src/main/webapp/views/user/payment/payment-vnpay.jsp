@@ -10,7 +10,6 @@
     </h2>
     <p>Quét mã QR dưới đây hoặc nhấn “Thanh toán ngay”:</p>
     <img src="${pageContext.request.contextPath}/assets/images/qr/vnpay-demo.png" alt="VNPay QR" width="250" height="250">
-    <div class="mt-3">
-        <a href="#" class="btn btn-primary">Thanh toán ngay</a>
-    </div>
+    <p class="mt-3">Sau khi thanh toán, vui lòng chờ xác nhận đơn hàng!</p>
+    <a href="${pageContext.request.contextPath}/user/orders" class="btn btn-success mt-3">Xem đơn hàng</a>
 </div>
