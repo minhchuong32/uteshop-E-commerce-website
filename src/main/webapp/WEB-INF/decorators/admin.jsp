@@ -113,6 +113,11 @@
 							<i class="bi bi-cash-stack me-2"></i> Quản lý Doanh thu
 					</a></li>
 					<li class="nav-item mb-1"><a
+						class="nav-link ${page=='promotions' ? 'active' : ''}"
+						href="${pageContext.request.contextPath}/admin/home?page=promotions">
+							<i class="bi bi-currency-dollar me-2"></i></i> Quản lý Khuyến mại
+					</a></li>
+					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='settings' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=settings">
 							<i class="bi bi-gear-fill me-2"></i> Cài đặt

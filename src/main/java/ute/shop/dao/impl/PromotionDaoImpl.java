@@ -49,5 +49,51 @@ public class PromotionDaoImpl implements IPromotionDao {
             em.close();
         }
 	}
+	
+	 @Override
+	    public void insert(Promotion p) {
+	        EntityManager em = JPAConfig.getEntityManager();
+	        try {
+	            em.getTransaction().begin();
+	            em.persist(p);
+	            em.getTransaction().commit();
+	        } catch (Exception e) {
+	            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+	            e.printStackTrace();
+	        } finally {
+	            em.close();
+	        }
+	    }
+
+	    @Override
+	    public void update(Promotion p) {
+	        EntityManager em = JPAConfig.getEntityManager();
+	        try {
+	            em.getTransaction().begin();
+	            em.merge(p);
+	            em.getTransaction().commit();
+	        } catch (Exception e) {
+	            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+	            e.printStackTrace();
+	        } finally {
+	            em.close();
+	        }
+	    }
+
+	    @Override
+	    public void delete(int id) {
+	        EntityManager em = JPAConfig.getEntityManager();
+	        try {
+	            em.getTransaction().begin();
+	            Promotion p = em.find(Promotion.class, id);
+	            if (p != null) em.remove(p);
+	            em.getTransaction().commit();
+	        } catch (Exception e) {
+	            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+	            e.printStackTrace();
+	        } finally {
+	            em.close();
+	        }
+	    }
 
 }

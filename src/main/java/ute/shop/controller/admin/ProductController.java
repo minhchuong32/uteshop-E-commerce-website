@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,7 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import ute.shop.entity.Product;
-import ute.shop.entity.ProductImage;
 import ute.shop.entity.ProductVariant;
 import ute.shop.service.impl.CategoryServiceImpl;
 import ute.shop.service.impl.ProductImageServiceImpl;
@@ -49,6 +47,7 @@ public class ProductController extends HttpServlet {
 			if (uri.endsWith("/products")) {
 				List<Product> allProducts = productService.findAll();
 				req.setAttribute("products", allProducts);
+				req.setAttribute("page", "products");
 				req.setAttribute("view", "/views/admin/products/list.jsp");
 				req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 			}
@@ -56,6 +55,7 @@ public class ProductController extends HttpServlet {
 			else if (uri.endsWith("/add")) {
 				req.setAttribute("categories", categoryService.findAll());
 				req.setAttribute("shops", shopService.getAll());
+				req.setAttribute("page", "products");
 				req.setAttribute("view", "/views/admin/products/add.jsp");
 				req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 			}
@@ -68,6 +68,7 @@ public class ProductController extends HttpServlet {
 				req.setAttribute("images", imageService.getImagesByProduct((long) id));
 				req.setAttribute("categories", categoryService.findAll());
 				req.setAttribute("shops", shopService.getAll());
+				req.setAttribute("page", "products");
 				req.setAttribute("view", "/views/admin/products/edit.jsp");
 				req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 			}
@@ -86,7 +87,7 @@ public class ProductController extends HttpServlet {
 					item.put("price", v.getPrice().toPlainString());
 					item.put("oldPrice", v.getOldPrice() != null ? v.getOldPrice().toPlainString() : "");
 					item.put("stock", v.getStock());
-					
+
 					// Lấy ảnh của variant, nếu không có thì dùng ảnh mặc định
 					String variantImg = v.getImageUrl();
 					if (variantImg == null || variantImg.isEmpty()) {
@@ -136,7 +137,8 @@ public class ProductController extends HttpServlet {
 
 		// Tạo 2 thư mục nếu chưa có
 		File uploadDir = new File(uploadPath);
-		if (!uploadDir.exists()) uploadDir.mkdirs();
+		if (!uploadDir.exists())
+			uploadDir.mkdirs();
 
 		try {
 			// =============== ADD PRODUCT ===============
@@ -184,18 +186,18 @@ public class ProductController extends HttpServlet {
 						// Lưu ảnh riêng cho từng variant
 						String variantImgName = "default-product.jpg";
 						if (variantFiles.size() > i && variantFiles.get(i).getSize() > 0) {
-						    Part variantPart = variantFiles.get(i);
+							Part variantPart = variantFiles.get(i);
 
-						    // Tạo tên file ngẫu nhiên để tránh trùng
-						    variantImgName = variantPart.getSubmittedFileName();
+							// Tạo tên file ngẫu nhiên để tránh trùng
+							variantImgName = variantPart.getSubmittedFileName();
 
-						    // Ghi đúng đường dẫn có dấu "/"
-						    variantPart.write(uploadPath + File.separator + variantImgName);
+							// Ghi đúng đường dẫn có dấu "/"
+							variantPart.write(uploadPath + File.separator + variantImgName);
 
-						    // Ghi vào cột imageUrl trong DB
-						    v.setImageUrl("/images/products/" + variantImgName);
+							// Ghi vào cột imageUrl trong DB
+							v.setImageUrl("/images/products/" + variantImgName);
 						} else {
-						    v.setImageUrl("/images/products/default-product.jpg");
+							v.setImageUrl("/images/products/default-product.jpg");
 						}
 
 						// Lưu DB ( ảnh phụ )
@@ -256,18 +258,18 @@ public class ProductController extends HttpServlet {
 						// Lưu ảnh riêng cho từng variant
 						String variantImgName = "default-product.jpg";
 						if (variantFiles.size() > i && variantFiles.get(i).getSize() > 0) {
-						    Part variantPart = variantFiles.get(i);
+							Part variantPart = variantFiles.get(i);
 
-						    // Tạo tên file ngẫu nhiên để tránh trùng
-						    variantImgName =  variantPart.getSubmittedFileName();
+							// Tạo tên file ngẫu nhiên để tránh trùng
+							variantImgName = variantPart.getSubmittedFileName();
 
-						    // Ghi đúng đường dẫn có dấu "/"
-						    variantPart.write(uploadPath + File.separator + variantImgName);
+							// Ghi đúng đường dẫn có dấu "/"
+							variantPart.write(uploadPath + File.separator + variantImgName);
 
-						    // Ghi vào cột imageUrl trong DB
-						    v.setImageUrl("/images/products/" + variantImgName);
+							// Ghi vào cột imageUrl trong DB
+							v.setImageUrl("/images/products/" + variantImgName);
 						} else {
-						    v.setImageUrl("/images/products/default-product.jpg");
+							v.setImageUrl("/images/products/default-product.jpg");
 						}
 
 						// Lưu DB ( ảnh phụ )
