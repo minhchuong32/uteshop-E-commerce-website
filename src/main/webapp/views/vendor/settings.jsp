@@ -13,14 +13,19 @@
 			<div class="card-body">
 				<!-- Logo -->
 				<div class="mb-3 text-center">
-					<label class="form-label d-block">Logo cửa hàng</label> <img
-						src="${empty shop.logo 
-        ? pageContext.request.contextPath.concat('/assets/images/shops/default-shop-logo.png')
-        : pageContext.request.contextPath.concat('/assets/images/shops/').concat(shop.logo.substring(shop.logo.lastIndexOf('/') + 1))}"
-						alt="avatar" class="rounded-circle border"
-						style="width: 48px; height: 48px; object-fit: cover;"> <input
-						type="file" class="form-control mt-3" name="logoFile"
-						accept="image/*">
+					<label class="form-label d-block">Logo cửa hàng</label>
+						<c:choose>
+						    <c:when test="${empty shop.logo}">
+						        <img src="${pageContext.request.contextPath}/assets/images/shops/default-shop-logo.png"
+						             alt="logo" class="rounded-circle border"
+						             style="width: 48px; height: 48px; object-fit: cover;">
+						    </c:when>
+						    <c:otherwise>
+						        <img src="${pageContext.request.contextPath}/assets${shop.logo}"
+						             alt="logo" class="rounded-circle border"
+						             style="width: 48px; height: 48px; object-fit: cover;">
+						    </c:otherwise>
+						</c:choose>
 				</div>
 
 				<!-- Tên cửa hàng -->
@@ -60,7 +65,7 @@
 					<c:choose>
 						<c:when test="${not empty sessionScope.account.avatar}">
 							<img
-								src="${pageContext.request.contextPath}/assets/images/avatars/${sessionScope.account.avatar}"
+								src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
 								alt="avatar"
 								class="rounded-circle img-thumbnail mx-auto d-block" width="120"
 								height="120" style="object-fit: cover;">

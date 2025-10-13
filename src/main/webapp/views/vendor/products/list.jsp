@@ -72,15 +72,24 @@
                                     <p class="fw-bold text-danger mb-2">
                                         <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="₫"/>
                                     </p>
-                                    <div class="d-flex justify-content-between">
-                                        <a href="${pageContext.request.contextPath}/vendor/products/edit?id=${p.productId}" 
-   											class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
-                                        <a href="${pageContext.request.contextPath}/vendor/products/delete?id=${p.productId}" 
-										   class="btn btn-sm btn-danger"
-										   onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
-										   <i class="bi bi-trash"></i>
-										</a>
-                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+									    <div class="btn-group">
+									        <a href="${pageContext.request.contextPath}/vendor/products/edit?id=${p.productId}" 
+									           class="btn btn-sm btn-warning">
+									           <i class="bi bi-pencil"></i> Sửa
+									        </a>
+									        <a href="${pageContext.request.contextPath}/vendor/products/detail?id=${p.productId}"
+									           class="btn btn-sm btn-info text-white">
+									           <i class="bi bi-info-circle"></i> Xem
+									        </a>
+									    </div>
+									
+									    <a href="${pageContext.request.contextPath}/vendor/products/delete?id=${p.productId}" 
+									       class="btn btn-sm btn-danger"
+									       onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+									       <i class="bi bi-trash"></i> Xóa
+									    </a>
+									</div>
                                 </div>
                             </div>
                         </div>

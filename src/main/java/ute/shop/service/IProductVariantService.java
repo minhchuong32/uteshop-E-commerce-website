@@ -21,4 +21,6 @@ public interface IProductVariantService {
     void deleteByProductId(Integer productId);
 
     List<ProductVariant> findByProductId(Integer productId);
+
+
 }

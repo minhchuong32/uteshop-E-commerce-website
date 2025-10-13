@@ -25,40 +25,85 @@
 			<div class="collapse navbar-collapse" id="navbarContent">
 				<ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
 
-					<!-- Nút thông báo -->
-					<li class="nav-item dropdown me-3"><a
-						class="nav-link position-relative" href="#" id="notifDropdown"
-						role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<!-- Chuông màu xanh --> <i class="bi bi-bell fs-5 text-black"></i>
-							<!-- Badge xanh --> <span
-							class="position-absolute top-0 start-100 translate-middle 
-                 badge rounded-pill bg-danger">
-								3 </span>
-					</a> <!-- Danh sách thông báo -->
-						<ul class="dropdown-menu dropdown-menu-end shadow"
-							aria-labelledby="notifDropdown"
-							style="width: 300px; max-height: 400px; overflow: auto;">
-							<li class="dropdown-header fw-semibold">Thông báo</li>
-							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item small" href="#">🛒 Đơn hàng
-									#1024 vừa được tạo</a></li>
-							<li><a class="dropdown-item small" href="#">👤 Người
-									dùng mới: Nguyễn Văn A</a></li>
-							<li><a class="dropdown-item small" href="#">⚠️ Máy chủ
-									báo dung lượng cao</a></li>
-							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item text-center text-primary"
-								href="#">Xem tất cả</a></li>
-						</ul></li>
-
-
+					<!-- 🔔 Thông báo -->
+					<li class="nav-item dropdown me-3">
+					    <a class="nav-link position-relative" href="#" id="notifDropdown"
+					       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					        <i class="bi bi-bell fs-5 text-black"></i>
+					
+					        <!-- Badge đỏ hiển thị số thông báo chưa đọc -->
+					        <c:if test="${not empty notifications}">
+					            <c:set var="unreadCount" value="0" />
+					            <c:forEach var="n" items="${notifications}">
+					                <c:if test="${!n.read}">
+					                    <c:set var="unreadCount" value="${unreadCount + 1}" />
+					                </c:if>
+					            </c:forEach>
+					            <c:if test="${unreadCount > 0}">
+					                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+					                      style="font-size: 0.7rem; padding: 3px 6px;">
+					                    ${unreadCount}
+					                </span>
+					            </c:if>
+					        </c:if>
+					    </a>
+					
+					    <!-- Danh sách thông báo -->
+					    <ul class="dropdown-menu dropdown-menu-end shadow"
+					        aria-labelledby="notifDropdown"
+					        style="width: 320px; max-height: 400px; overflow-y: auto;">
+					
+					        <li class="dropdown-header fw-semibold">Thông báo</li>
+					        <li><hr class="dropdown-divider"></li>
+					
+					        <c:choose>
+					            <c:when test="${not empty notifications}">
+					                <c:forEach var="n" items="${notifications}" varStatus="loop">
+					                    <c:if test="${loop.index < 5}">
+					                        <li>
+					                            <a class="dropdown-item small text-wrap"
+					                               href="${pageContext.request.contextPath}/vendor/notifications/view?id=${n.id}">
+					                                <div class="d-flex align-items-start">
+					                                    <i class="bi ${n.relatedOrder != null ? 'bi-box-seam' : (n.relatedComplaint != null ? 'bi-chat-dots-fill' : 'bi-info-circle')} 
+					                                       ${n.read ? 'text-muted' : 'text-warning'} me-2 fs-5"></i>
+					                                    <div>
+					                                        <span class="${n.read ? 'text-muted' : 'fw-semibold text-dark'}">${n.message}</span><br>
+					                                        <small class="text-muted">
+					                                            <fmt:formatDate value="${n.createdAt}" pattern="dd/MM/yyyy HH:mm" />
+					                                        </small>
+					                                    </div>
+					                                </div>
+					                            </a>
+					                        </li>
+					                    </c:if>
+					                </c:forEach>
+					            </c:when>
+					            <c:otherwise>
+					                <li>
+					                    <p class="dropdown-item text-muted small mb-0">
+					                        Không có thông báo mới.
+					                    </p>
+					                </li>
+					            </c:otherwise>
+					        </c:choose>
+					
+					        <li><hr class="dropdown-divider"></li>
+					        <li>
+					            <a class="dropdown-item text-center text-primary fw-semibold"
+					               href="${pageContext.request.contextPath}/vendor/notifications">
+					                Xem tất cả
+					            </a>
+					        </li>
+					    </ul>
+					</li>
+					
 					<!-- Avatar Admin -->
 					<li class="nav-item dropdown"><a
 							class="nav-link dropdown-toggle d-flex align-items-center"
 							href="#" id="userDropdown" role="button"
 							data-bs-toggle="dropdown" aria-expanded="false"> <c:choose>
 									<c:when test="${not empty sessionScope.account.avatar}">
-										  <img src="${pageContext.request.contextPath}/assets/images/avatars/${sessionScope.account.avatar}"
+										  <img src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
 											alt="avatar" class="rounded-circle me-2" width="32"
 											height="32" style="object-fit: cover;">
 									</c:when>

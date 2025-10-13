@@ -19,4 +19,5 @@ public interface IProductVariantDao {
 	void deleteByProductId(Integer productId);
 
 	List<ProductVariant> findByProductId(Integer productId);
+
 }

@@ -86,14 +86,20 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Order> findByUser(User user) {
-		 EntityManager em = JPAConfig.getEntityManager();
-	    try {
-	        return em.createQuery("SELECT o FROM Order o WHERE o.user = :user ORDER BY o.createdAt DESC", Order.class)
-	                 .setParameter("user", user)
-	                 .getResultList();
-	    } finally {
-	        em.close();
-	    }
+		EntityManager em = JPAConfig.getEntityManager();
+        try {
+            String jpql = "SELECT o FROM Order o "
+                        + "LEFT JOIN FETCH o.orderDetails d "
+                        + "LEFT JOIN FETCH d.productVariant pv "
+                        + "LEFT JOIN FETCH pv.product p "
+                        + "WHERE o.user = :user "
+                        + "ORDER BY o.createdAt DESC";
+            TypedQuery<Order> query = em.createQuery(jpql, Order.class);
+            query.setParameter("user", user);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
 	}
 
 	@Override
@@ -250,16 +256,6 @@ public class OrderDaoImpl implements IOrderDao {
 	}
 
 	@Override
-	public Order findById(Integer id) {
-		EntityManager em = JPAConfig.getEntityManager();
-        try {
-            return em.find(Order.class, id);
-        } finally {
-            em.close();
-        }
-	}
-
-	@Override
 	public List<Order> findByUserId(Integer userId) {
 		EntityManager em = JPAConfig.getEntityManager();
         try {
@@ -271,7 +267,47 @@ public class OrderDaoImpl implements IOrderDao {
         }
 	}
 
+	@Override
+	public Order getById(Integer id) {
+		EntityManager em = JPAConfig.getEntityManager();
+        try {
+            String jpql = "SELECT o FROM Order o "
+                        + "LEFT JOIN FETCH o.orderDetails d "
+                        + "LEFT JOIN FETCH d.productVariant pv "
+                        + "LEFT JOIN FETCH pv.product p "
+                        + "WHERE o.orderId = :id";
+            TypedQuery<Order> query = em.createQuery(jpql, Order.class);
+            query.setParameter("id", id);
+            return query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        } finally {
+            em.close();
+        }
+	}
 
-	
+	@Override
+	public List<Order> getOrdersByUserAndStatus(int userId, String status) {
+		EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        // Truy vấn đơn hàng + orderDetails
+	        List<Order> orders = em.createQuery(
+	            "SELECT DISTINCT o FROM Order o " +
+	            "LEFT JOIN FETCH o.orderDetails d " +
+	            "WHERE o.user.userId = :userId AND o.status = :status " +
+	            "ORDER BY o.createdAt DESC", Order.class)
+	            .setParameter("userId", userId)
+	            .setParameter("status", status)
+	            .getResultList();
 
+	        // Sau đó fetch deliveries riêng (Hibernate sẽ tự cache)
+	        for (Order o : orders) {
+	            o.getDeliveries().size(); // Lazy load
+	        }
+
+	        return orders;
+	    } finally {
+	        em.close();
+	    }
+	}
 }

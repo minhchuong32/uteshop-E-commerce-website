@@ -78,4 +78,5 @@ public class ProductVariantServiceImpl implements IProductVariantService {
     public List<ProductVariant> findByProductId(Integer productId) {
         return variantDao.findByProductId(productId);
     }
+
 }

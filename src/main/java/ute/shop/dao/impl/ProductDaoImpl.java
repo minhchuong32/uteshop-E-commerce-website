@@ -3,6 +3,8 @@ package ute.shop.dao.impl;
 import jakarta.persistence.*;
 import ute.shop.dao.IProductDao;
 import ute.shop.entity.Product;
+import ute.shop.entity.ProductImage;
+import ute.shop.entity.ProductVariant;
 import ute.shop.config.JPAConfig;
 import java.util.List;
 
@@ -112,7 +114,9 @@ public class ProductDaoImpl implements IProductDao {
 		try {
 			tx.begin();
 			em.persist(product);
+			em.flush();
 			tx.commit();
+
 		} catch (Exception e) {
 			tx.rollback();
 			e.printStackTrace();
@@ -155,24 +159,41 @@ public class ProductDaoImpl implements IProductDao {
 //	}
 	@Override
 	public void delete(int productId) {
-		EntityManager em = JPAConfig.getEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		try {
-			tx.begin();
+	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityTransaction tx = em.getTransaction();
 
-			Query query = em.createNativeQuery("DELETE FROM products WHERE product_id = ?");
-			query.setParameter(1, productId);
-			query.executeUpdate();
+	    try {
+	        tx.begin();
 
-			tx.commit();
-		} catch (Exception e) {
-			if (tx.isActive())
-				tx.rollback();
-			e.printStackTrace();
-		} finally {
-			em.close();
-		}
+	        // Xóa review liên quan
+	        em.createQuery("DELETE FROM Review r WHERE r.product.productId = :pid")
+	          .setParameter("pid", productId)
+	          .executeUpdate();
+
+	        // Xóa ảnh phụ
+	        em.createQuery("DELETE FROM ProductImage i WHERE i.product.productId = :pid")
+	          .setParameter("pid", productId)
+	          .executeUpdate();
+
+	        // Xóa biến thể
+	        em.createQuery("DELETE FROM ProductVariant v WHERE v.product.productId = :pid")
+	          .setParameter("pid", productId)
+	          .executeUpdate();
+
+	        // Cuối cùng xóa sản phẩm chính
+	        em.createQuery("DELETE FROM Product p WHERE p.productId = :pid")
+	          .setParameter("pid", productId)
+	          .executeUpdate();
+
+	        tx.commit();
+	    } catch (Exception e) {
+	        if (tx.isActive()) tx.rollback();
+	        e.printStackTrace();
+	    } finally {
+	        em.close();
+	    }
 	}
+
 
 	@Override
 	public List<Product> findByCategory(Integer categoryId) {
@@ -388,5 +409,34 @@ public class ProductDaoImpl implements IProductDao {
 			em.close();
 		}
 	}
+	
+	@Override
+    public void deleteExtraImage(Long imageId) {
+		EntityManager em = JPAConfig.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            ProductImage img = em.find(ProductImage.class, imageId);
+            if (img != null) {
+                em.remove(img);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (tx.isActive()) tx.rollback();
+        }
+    }
+
+    @Override
+    public ProductVariant findVariantById(Long variantId) {
+    	EntityManager em = JPAConfig.getEntityManager();
+        try {
+            return em.find(ProductVariant.class, variantId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 }

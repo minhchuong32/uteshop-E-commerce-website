@@ -29,6 +29,7 @@ public class ProductVariantDaoImpl implements IProductVariantDao {
         try {
             StringBuilder jpql = new StringBuilder("SELECT v FROM ProductVariant v WHERE v.product.productId = :pid");
 
+            // Xây dựng query động dựa trên số lượng options
             for (String key : selectedOptions.keySet()) {
                 jpql.append(" AND v.optionName = :optName AND v.optionValue = :optValue");
             }
@@ -36,6 +37,7 @@ public class ProductVariantDaoImpl implements IProductVariantDao {
             TypedQuery<ProductVariant> query = em.createQuery(jpql.toString(), ProductVariant.class);
             query.setParameter("pid", productId);
 
+            // Set parameters cho từng option
             for (Entry<String, Object> e : selectedOptions.entrySet()) {
                 query.setParameter("optName", e.getKey());
                 query.setParameter("optValue", e.getValue());
@@ -131,4 +133,5 @@ public class ProductVariantDaoImpl implements IProductVariantDao {
             em.close();
         }
     }
+
 }
