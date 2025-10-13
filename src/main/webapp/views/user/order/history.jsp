@@ -107,7 +107,7 @@
 								<c:forEach var="d" items="${o.orderDetails}">
 									<div class="d-flex mb-2">
 										<img
-											src="${pageContext.request.contextPath}/uploads/${d.productVariant.product.imageUrl}"
+											src="${pageContext.request.contextPath}/assets/${d.productVariant.imageUrl}"
 											class="me-2 rounded" width="50" height="50" />
 										<div>
 											<p class="mb-0">${d.productVariant.product.name}</p>

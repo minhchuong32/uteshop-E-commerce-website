@@ -12,7 +12,8 @@
 		<div class="row g-4">
 			<!-- Hình ảnh sản phẩm -->
 			<div class="col-md-6">
-				<!-- ảnh chính -->
+
+				<!-- Ảnh chính -->
 				<c:forEach var="img" items="${images}">
 					<c:if test="${img.main}">
 						<c:choose>
@@ -23,14 +24,14 @@
 							</c:when>
 							<c:otherwise>
 								<img id="mainImg"
-									src="${pageContext.request.contextPath}/assets${img.imageUrl}"
+									src="${pageContext.request.contextPath}/assets${img.imageUrl.startsWith('/') ? img.imageUrl : '/' + img.imageUrl}"
 									alt="${product.name}" class="product-detail-img mb-3" />
 							</c:otherwise>
 						</c:choose>
 					</c:if>
 				</c:forEach>
 
-				<!-- thumbnails -->
+				<!-- Thumbnails -->
 				<div class="d-flex gap-2">
 					<c:forEach var="img" items="${images}">
 						<c:choose>
@@ -41,13 +42,14 @@
 							</c:when>
 							<c:otherwise>
 								<img
-									src="${pageContext.request.contextPath}/assets${img.imageUrl}"
+									src="${pageContext.request.contextPath}/assets${img.imageUrl.startsWith('/') ? img.imageUrl : '/' + img.imageUrl}"
 									class="thumb-img ${img.main ? 'active' : ''}"
 									onclick="changeImage(this)" />
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
 				</div>
+
 			</div>
 
 
@@ -357,10 +359,10 @@
 	</div>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-		<!-- Truyền biến từ JSP sang JS -->
+	<!-- Truyền biến từ JSP sang JS -->
 	<div id="product-detail" data-product-id="${product.productId}"
 		data-context="${pageContext.request.contextPath}"></div>
-	
+
 	<script
 		src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
 

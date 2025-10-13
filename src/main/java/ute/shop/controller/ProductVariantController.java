@@ -15,17 +15,16 @@ import ute.shop.service.IProductVariantService;
 import ute.shop.service.impl.ProductVariantServiceImpl;
 
 @WebServlet("/api/variant/select")
-public class ProductVariantController extends HttpServlet{
-	private static final long serialVersionUID = 1L;
+public class ProductVariantController extends HttpServlet {
+    private static final long serialVersionUID = 1L;
     private final IProductVariantService variantService = new ProductVariantServiceImpl();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    	resp.setContentType("application/json;charset=UTF-8");
+        resp.setContentType("application/json;charset=UTF-8");
         ObjectMapper mapper = new ObjectMapper();
 
         try {
-            // 🟢 Đọc JSON từ body
             Map<String, Object> selectedOptions = mapper.readValue(req.getReader(), Map.class);
             if (selectedOptions == null || selectedOptions.isEmpty()) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -33,7 +32,6 @@ public class ProductVariantController extends HttpServlet{
                 return;
             }
 
-            // 🟢 Lấy productId (có thể là Integer hoặc String)
             Object pidObj = selectedOptions.remove("productId");
             if (pidObj == null) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -41,48 +39,54 @@ public class ProductVariantController extends HttpServlet{
                 return;
             }
 
-            int productId;
-            if (pidObj instanceof Number) {
-                productId = ((Number) pidObj).intValue();
-            } else {
-                productId = Integer.parseInt(pidObj.toString());
-            }
+            int productId = (pidObj instanceof Number)
+                    ? ((Number) pidObj).intValue()
+                    : Integer.parseInt(pidObj.toString());
 
-            // 🟢 Gọi service tìm variant phù hợp
             ProductVariant variant = variantService.findByOptions(productId, selectedOptions);
-
             if (variant == null) {
                 resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 resp.getWriter().write("{\"error\":\"Không tìm thấy phân loại phù hợp\"}");
                 return;
             }
 
-            // 🟢 Ghi log debug
-            System.out.printf("DEBUG variant: id=%d, stock=%d, price=%s, oldPrice=%s, option=%s:%s, imageUrl=%s%n",
-                    variant.getId(),
-                    variant.getStock(),
-                    variant.getPrice(),
-                    variant.getOldPrice(),
-                    variant.getOptionName(),
-                    variant.getOptionValue(),
-                    variant.getImageUrl()
-            );
+            // Log debug
+            System.out.printf("DEBUG variant: id=%d, stock=%d, price=%s, oldPrice=%s, imageUrl=%s%n",
+                    variant.getId(), variant.getStock(), variant.getPrice(),
+                    variant.getOldPrice(), variant.getImageUrl());
 
-            // 🟢 Chuẩn bị response JSON
+            // Chuẩn bị response JSON
             Map<String, Object> result = new HashMap<>();
             result.put("variantId", variant.getId());
             result.put("price", variant.getPrice());
             result.put("oldPrice", variant.getOldPrice());
             result.put("stock", variant.getStock());
 
-            // Nếu không có ảnh variant, fallback sang ảnh mặc định
             String imageUrl = variant.getImageUrl();
             if (imageUrl == null || imageUrl.isBlank()) {
-            	imageUrl = "/assets";
-                imageUrl = imageUrl + variant.getProduct().getImageUrl(); // hoặc ảnh mặc định của product
+                imageUrl = variant.getProduct().getImageUrl();
+            }
+
+            // Chuẩn hóa đường dẫn (đảm bảo có /assets prefix)
+            if (imageUrl != null && !imageUrl.isBlank()) {
+                imageUrl = imageUrl.trim();
+
+                if (!imageUrl.startsWith("/assets/")) {
+                    if (imageUrl.startsWith("/images/")) {
+                        imageUrl = "/assets" + imageUrl;
+                    } else if (imageUrl.startsWith("images/")) {
+                        imageUrl = "/assets/" + imageUrl;
+                    } else if (!imageUrl.startsWith("/")) {
+                        imageUrl = "/assets/" + imageUrl;
+                    } else {
+                        imageUrl = "/assets" + imageUrl;
+                    }
+                }
             }
             result.put("imageUrl", imageUrl);
 
+
+            resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(mapper.writeValueAsString(result));
 
         } catch (Exception e) {
@@ -91,5 +95,4 @@ public class ProductVariantController extends HttpServlet{
             resp.getWriter().write("{\"error\":\"Lỗi xử lý dữ liệu variant\"}");
         }
     }
-
 }

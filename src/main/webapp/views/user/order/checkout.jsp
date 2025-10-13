@@ -94,7 +94,7 @@
 							<c:forEach var="item" items="${shopItems}">
 								<div class="d-flex align-items-center border-bottom py-2">
 									<img
-										src="${pageContext.request.contextPath}${item.productVariant.imageUrl}"
+										src="${pageContext.request.contextPath}/assets${item.productVariant.imageUrl}"
 										alt="${item.productVariant.product.name}"
 										style="width: 60px; height: 60px; object-fit: cover;"
 										class="me-3">
