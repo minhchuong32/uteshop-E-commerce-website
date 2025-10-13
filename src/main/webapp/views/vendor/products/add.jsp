@@ -79,58 +79,102 @@
 
     document.getElementById('addVariantBtn').addEventListener('click', function () {
         const container = document.getElementById('variantContainer');
+        
         const div = document.createElement('div');
         div.classList.add('border', 'p-3', 'mb-3', 'rounded', 'bg-light');
+        div.setAttribute('data-variant-index', variantIndex);
 
-        div.innerHTML = `
-            <div class="row g-3 align-items-end">
-                <div class="col-md-3">
-                    <label class="form-label">Tên tùy chọn</label>
-                    <input type="text" name="variantOptionName_${variantIndex}" class="form-control" placeholder="VD: Màu sắc" required>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Giá trị tùy chọn</label>
-                    <input type="text" name="variantOptionValue_${variantIndex}" class="form-control" placeholder="VD: Đỏ, Xanh" required>
-                </div>
-
-                <div class="col-md-2">
-                    <label class="form-label">Giá</label>
-                    <input type="number" step="0.01" name="variantPrice_${variantIndex}" class="form-control" required>
-                </div>
-
-                <div class="col-md-2">
-                    <label class="form-label">Giá cũ</label>
-                    <input type="number" step="0.01" name="variantOldPrice_${variantIndex}" class="form-control">
-                </div>
-
-                <div class="col-md-2">
-                    <label class="form-label">Tồn kho</label>
-                    <input type="number" name="variantStock_${variantIndex}" class="form-control" required>
-                </div>
-
-                <div class="col-md-3 mt-3">
-                    <label class="form-label">Ảnh biến thể</label>
-                    <input type="file" name="variantImage_${variantIndex}" class="form-control" accept="image/*">
-                </div>
-
-                <div class="col-md-1 mt-4 text-center">
-                    <button type="button" class="btn btn-danger btn-sm remove-variant">X</button>
-                </div>
-            </div>
-        `;
+        // Sử dụng string concatenation thay vì template literal
+        div.innerHTML = 
+            '<div class="row g-3 align-items-end">' +
+                '<div class="col-md-2">' +
+                    '<label class="form-label">Tên tùy chọn</label>' +
+                    '<input type="text" class="form-control variant-option-name" placeholder="VD: Màu sắc" required>' +
+                '</div>' +
+                '<div class="col-md-2">' +
+                    '<label class="form-label">Giá trị tùy chọn</label>' +
+                    '<input type="text" class="form-control variant-option-value" placeholder="VD: Đỏ, Xanh" required>' +
+                '</div>' +
+                '<div class="col-md-2">' +
+                    '<label class="form-label">Giá</label>' +
+                    '<input type="number" step="0.01" class="form-control variant-price" required>' +
+                '</div>' +
+                '<div class="col-md-2">' +
+                    '<label class="form-label">Giá cũ</label>' +
+                    '<input type="number" step="0.01" class="form-control variant-old-price">' +
+                '</div>' +
+                '<div class="col-md-1">' +
+                    '<label class="form-label">Tồn kho</label>' +
+                    '<input type="number" class="form-control variant-stock" required>' +
+                '</div>' +
+                '<div class="col-md-2">' +
+                    '<label class="form-label">Ảnh biến thể</label>' +
+                    '<input type="file" class="form-control variant-image" name="variantImage_' + variantIndex + '" accept="image/*">' +
+                '</div>' +
+                '<div class="col-md-1">' +
+                    '<label class="form-label">&nbsp;</label>' +
+                    '<button type="button" class="btn btn-danger btn-sm remove-variant w-100">X</button>' +
+                '</div>' +
+            '</div>';
 
         container.appendChild(div);
-        container.querySelector('p')?.remove();
-        variantIndex++;
+        if (container.querySelector('p')) {
+            container.querySelector('p').remove();
+        }
 
         // Xóa biến thể
-        div.querySelector('.remove-variant').addEventListener('click', () => {
+        div.querySelector('.remove-variant').addEventListener('click', function() {
             div.remove();
             if (container.children.length === 0) {
-                container.innerHTML = `<p class="text-muted">Chưa có biến thể nào. Bấm “Thêm biến thể”.</p>`;
+                container.innerHTML = '<p class="text-muted">Chưa có biến thể nào. Bấm "Thêm biến thể".</p>';
             }
         });
+
+        variantIndex++;
+        console.log('Added variant with index:', variantIndex, 'and file input name: variantImage_' + (variantIndex - 1));
+    });
+
+    // Trước khi submit, thu thập dữ liệu variant
+    document.querySelector('form').addEventListener('submit', function(e) {
+        console.log('=== FORM SUBMIT DEBUG ===');
+        const variantData = [];
+        const variantElements = document.querySelectorAll('[data-variant-index]');
+        
+        console.log('Found variant elements:', variantElements.length);
+        
+        variantElements.forEach((element) => {
+            const index = element.getAttribute('data-variant-index');
+            const optionName = element.querySelector('.variant-option-name').value;
+            const optionValue = element.querySelector('.variant-option-value').value;
+            const price = element.querySelector('.variant-price').value;
+            const oldPrice = element.querySelector('.variant-old-price').value;
+            const stock = element.querySelector('.variant-stock').value;
+            
+            const fileInput = element.querySelector('.variant-image');
+            console.log(`Variant ${index} file input:`, {
+                name: fileInput.name,
+                files: fileInput.files.length,
+                fileName: fileInput.files[0] ? fileInput.files[0].name : 'No file'
+            });
+            
+            variantData.push({
+                optionName: optionName,
+                optionValue: optionValue,
+                price: price,
+                oldPrice: oldPrice,
+                stock: stock
+            });
+        });
+
+        // Thêm hidden input chứa JSON data
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'variantsJson';
+        hiddenInput.value = JSON.stringify(variantData);
+        this.appendChild(hiddenInput);
+        
+        console.log('Sending variants JSON:', hiddenInput.value);
+        console.log('=== END FORM DEBUG ===');
     });
 </script>
 </html>

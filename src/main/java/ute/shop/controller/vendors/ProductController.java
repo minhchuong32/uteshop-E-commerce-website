@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import ute.shop.dao.impl.ProductVariantDaoImpl;
 import ute.shop.entity.*;
 import ute.shop.service.*;
 import ute.shop.service.impl.*;
@@ -32,6 +34,7 @@ public class ProductController extends HttpServlet {
 
     private final IProductService productService = new ProductServiceImpl();
     private final ICategoryService categoryService = new CategoryServiceImpl();
+    private final IProductVariantService variantDao = new ProductVariantServiceImpl();
     private static final int PAGE_SIZE = 6;
 
     private static final String PROJECT_IMAGE_PATH =
@@ -193,6 +196,7 @@ public class ProductController extends HttpServlet {
                 p.setCategory(category);
                 p.setShop(shop);
 
+                // Xử lý ảnh phụ
                 for (Part part : req.getParts()) {
                     if ("extraImages".equals(part.getName()) && part.getSize() > 0) {
                         String imgUrl = saveFile(part, "products");
@@ -201,68 +205,84 @@ public class ProductController extends HttpServlet {
                         img.setImageUrl(imgUrl);
                         img.setMain(false);
                         p.getImages().add(img);
-                        System.out.println("🖼️  [Extra Image] " + imgUrl);
                     }
                 }
-                
                 productService.save(p);
-
-                ProductVariantDaoImpl variantDao = new ProductVariantDaoImpl();
-                int variantCount = 0;
-
-                int index = 0;
-                while (true) {
-                    String optionName = req.getParameter("variantOptionName_" + index);
-                    if (optionName == null) break;
-
-                    String optionValue = req.getParameter("variantOptionValue_" + index);
-                    String priceStr = req.getParameter("variantPrice_" + index);
-                    String oldPriceStr = req.getParameter("variantOldPrice_" + index);
-                    String stockStr = req.getParameter("variantStock_" + index);
-
-                    BigDecimal variantPrice = (priceStr != null && !priceStr.isEmpty())
-                            ? new BigDecimal(priceStr)
-                            : BigDecimal.ZERO;
-                    BigDecimal oldPrice = (oldPriceStr != null && !oldPriceStr.isEmpty())
-                            ? new BigDecimal(oldPriceStr)
-                            : null;
-                    int stock = (stockStr != null && !stockStr.isEmpty())
-                            ? Integer.parseInt(stockStr)
-                            : 0;
-
-                    Part variantPart = req.getPart("variantImage_" + index);
-                    String variantImg = null;
-                    if (variantPart != null && variantPart.getSize() > 0) {
-                        variantImg = saveFile(variantPart, "variants");
+                
+                // Xử lý biến thể từ JSON TRƯỚC KHI save product
+                String variantsJson = req.getParameter("variantsJson");
+                if (variantsJson != null && !variantsJson.isEmpty()) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    List<Map<String, Object>> variantList = mapper.readValue(variantsJson, List.class);
+                    
+                    System.out.println("=== DEBUG ALL PARTS ===");
+                    List<Part> allParts = new ArrayList<>();
+                    for (Part part : req.getParts()) {
+                        allParts.add(part);
+                        if (part.getName().contains("variantImage")) {
+                            System.out.println("📁 VARIANT IMAGE PART: " + part.getName() + 
+                                             " | Size: " + part.getSize() + 
+                                             " | SubmittedFileName: " + part.getSubmittedFileName());
+                        }
                     }
+                    System.out.println("Total parts: " + allParts.size());
+                    System.out.println("=== END DEBUG ===");
+                    
+                    
+                    for (int i = 0; i < variantList.size(); i++) {
+                    	Map<String, Object> variantData = variantList.get(i);
+                        System.out.println("🎯 Processing variant " + i + ": " + variantData);
+                        
+                        // Xử lý ảnh biến thể
+                     // Xử lý ảnh biến thể - Tìm part đầu tiên có variantImage
+                        String variantImageUrl = null;
+                        List<Part> variantImageParts = new ArrayList<>();
 
-                    ProductVariant v = new ProductVariant();
-                    v.setProduct(p);
-                    v.setOptionName(optionName);
-                    v.setOptionValue(optionValue);
-                    v.setPrice(variantPrice);
-                    v.setOldPrice(oldPrice);
-                    v.setStock(stock);
-                    v.setImageUrl(variantImg);
+                        for (Part part : allParts) {
+                            if (part.getName().startsWith("variantImage") && part.getSize() > 0) {
+                                variantImageParts.add(part);
+                            }
+                        }
 
-                    variantDao.insertVariant(v);
-                    variantCount++;
-
-                    System.out.printf("🧩 Variant inserted [%d] %s=%s | %s VND | Stock=%d%n",
-                            variantCount, optionName, optionValue, variantPrice, stock);
-
-                    index++;
+                        // Lấy ảnh theo thứ tự
+                        if (i < variantImageParts.size()) {
+                            Part imagePart = variantImageParts.get(i);
+                            System.out.println("✅ Using variant image: " + imagePart.getName() + " | File: " + imagePart.getSubmittedFileName());
+                            variantImageUrl = saveFile(imagePart, "variants");
+                        }
+                        
+                        ProductVariant v = new ProductVariant();
+                        v.setProduct(p);
+                        v.setOptionName((String) variantData.get("optionName"));
+                        v.setOptionValue((String) variantData.get("optionValue"));
+                        v.setPrice(new BigDecimal(variantData.get("price").toString()));
+                        v.setStock(Integer.parseInt(variantData.get("stock").toString()));
+                        
+                        // Xử lý oldPrice (có thể null)
+                        Object oldPriceObj = variantData.get("oldPrice");
+                        if (oldPriceObj != null && !oldPriceObj.toString().isEmpty()) {
+                            v.setOldPrice(new BigDecimal(oldPriceObj.toString()));
+                        }
+                        
+                        v.setImageUrl(variantImageUrl);
+                        variantDao.insertVariant(v);
+                        
+                        System.out.println("🧩 Variant inserted: " + v.getOptionName() + "=" + v.getOptionValue() + 
+                                         " | Image: " + v.getImageUrl());
+                    }
+                } else {
+                    System.out.println("⚠️ No variants JSON found");
                 }
 
-                
                 resp.sendRedirect(req.getContextPath() + "/vendor/products");
+
             } catch (Exception e) {
                 e.printStackTrace();
                 resp.sendRedirect(req.getContextPath() + "/vendor/products?error=1");
             }
         }
 
-        // ✅ EDIT PRODUCT
+     // ✅ EDIT PRODUCT
         else if (uri.endsWith("/edit")) {
             try {
                 int id = Integer.parseInt(req.getParameter("id"));
@@ -287,7 +307,6 @@ public class ProductController extends HttpServlet {
                     if (delImgs != null) {
                         for (String s : delImgs) {
                             productService.deleteExtraImage(Long.parseLong(s));
-                            System.out.println("🗑️ [Deleted extra image ID] " + s);
                         }
                     }
 
@@ -300,63 +319,72 @@ public class ProductController extends HttpServlet {
                             img.setImageUrl(imgUrl);
                             img.setMain(false);
                             p.getImages().add(img);
-                            System.out.println("🖼️ [New extra image added] " + imgUrl);
                         }
                     }
 
-                    // ✅ Cập nhật biến thể
-                    List<Part> parts = new ArrayList<>(req.getParts());
-                    List<ProductVariant> newVariants = new ArrayList<>();
-                    int index = 0;
-                    while (true) {
-                        String optName = req.getParameter("variantOptionName_" + index);
-                        if (optName == null) break;
-
-                        String optValue = req.getParameter("variantOptionValue_" + index);
-                        String priceStr = req.getParameter("variantPrice_" + index);
-                        String oldStr = req.getParameter("variantOldPrice_" + index);
-                        String stockStr = req.getParameter("variantStock_" + index);
-
-                        BigDecimal price = new BigDecimal(priceStr);
-                        BigDecimal oldPrice = (oldStr != null && !oldStr.isEmpty())
-                                ? new BigDecimal(oldStr) : null;
-                        int stock = Integer.parseInt(stockStr);
-
-                        // Lấy part ảnh biến thể
-                        String fieldName = "variantImage_" + index;
-                        Part variantPart = parts.stream()
-                                .filter(pp -> fieldName.equals(pp.getName()) && pp.getSize() > 0)
-                                .findFirst()
-                                .orElse(null);
-
-                        String variantImg = null;
-                        if (variantPart != null) {
-                            variantImg = saveFile(variantPart, "variants");
+                    // ✅ Xử lý biến thể từ JSON (giống add)
+                    String variantsJson = req.getParameter("variantsJson");
+                    
+                    if (variantsJson != null && !variantsJson.isEmpty()) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        List<Map<String, Object>> variantList = mapper.readValue(variantsJson, List.class);
+                        
+                        // Lấy tất cả parts để xử lý file upload
+                        List<Part> allParts = new ArrayList<>();
+                        req.getParts().forEach(allParts::add);
+                        
+                        List<ProductVariant> newVariants = new ArrayList<>();
+                        
+                        for (int i = 0; i < variantList.size(); i++) {
+                            Map<String, Object> variantData = variantList.get(i);
+                            
+                            // Xử lý ảnh biến thể
+                            String variantImageUrl = null;
+                            String imageFieldName = "variantImage_" + i;
+                            for (Part part : allParts) {
+                                if (imageFieldName.equals(part.getName()) && part.getSize() > 0) {
+                                    variantImageUrl = saveFile(part, "variants");
+                                    break;
+                                }
+                            }
+                            
+                            ProductVariant v;
+                            String variantId = (String) variantData.get("id");
+                            
+                            if (variantId != null && !variantId.isEmpty()) {
+                                // Update existing variant
+                                v = productService.findVariantById(Long.parseLong(variantId));
+                                // Giữ ảnh cũ nếu không có ảnh mới
+                                if (variantImageUrl == null) {
+                                    variantImageUrl = v.getImageUrl();
+                                }
+                            } else {
+                                // Create new variant
+                                v = new ProductVariant();
+                            }
+                            
+                            v.setProduct(p);
+                            v.setOptionName((String) variantData.get("optionName"));
+                            v.setOptionValue((String) variantData.get("optionValue"));
+                            v.setPrice(new BigDecimal(variantData.get("price").toString()));
+                            v.setStock(Integer.parseInt(variantData.get("stock").toString()));
+                            
+                            // Xử lý oldPrice (có thể null)
+                            Object oldPriceObj = variantData.get("oldPrice");
+                            if (oldPriceObj != null && !oldPriceObj.toString().isEmpty()) {
+                                v.setOldPrice(new BigDecimal(oldPriceObj.toString()));
+                            } else {
+                                v.setOldPrice(null);
+                            }
+                            
+                            v.setImageUrl(variantImageUrl);
+                            newVariants.add(v);
                         }
-
-                        String idParam = req.getParameter("variantId_" + index);
-                        ProductVariant v = (idParam != null && !idParam.isEmpty())
-                                ? productService.findVariantById(Long.parseLong(idParam))
-                                : new ProductVariant();
-
-                        v.setProduct(p);
-                        v.setOptionName(optName);
-                        v.setOptionValue(optValue);
-                        v.setPrice(price);
-                        v.setOldPrice(oldPrice);
-                        v.setStock(stock);
-                        if (variantImg != null) v.setImageUrl(variantImg);
-
-                        newVariants.add(v);
-
-                        System.out.printf("🧩 [Edit Variant %d] %s=%s | Price=%s | Stock=%d | Img=%s%n",
-                                index, optName, optValue, price, stock, variantImg);
-                        index++;
+                        
+                        p.setVariants(newVariants);
                     }
 
-                    p.setVariants(newVariants);
                     productService.update(p);
-                    System.out.println("✅ Product updated successfully. Variants=" + newVariants.size());
                 }
                 resp.sendRedirect(req.getContextPath() + "/vendor/products");
             } catch (Exception e) {
@@ -389,6 +417,6 @@ public class ProductController extends HttpServlet {
         filePart.write(deployDir + File.separator + fileName);
 
         // Trả về đường dẫn đúng để JSP load
-        return "images/" + folder + "/" + fileName;
+        return "/images/" + folder + "/" + fileName;
     }
 }

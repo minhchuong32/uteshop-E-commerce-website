@@ -1,4 +1,4 @@
-package ute.shop.controller.vendors;
+package ute.shop.controller.shipper;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,8 +9,8 @@ import ute.shop.service.impl.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/vendor/notifications")
-public class VendorNotificationController extends HttpServlet {
+@WebServlet("/shipper/notifications")
+public class ShipperNotificationController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private final NotificationServiceImpl notiService = new NotificationServiceImpl();
@@ -20,19 +20,14 @@ public class VendorNotificationController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = req.getSession();
-        User vendor = (User) session.getAttribute("account");
+        User shipper = (User) session.getAttribute("account");
 
-        if (vendor == null || !"VENDOR".equalsIgnoreCase(vendor.getRole())) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
-
-        List<Notification> notifications = notiService.getAllByUserId(vendor.getUserId());
+        List<Notification> notifications = notiService.getAllByUserId(shipper.getUserId());
         req.setAttribute("notifications", notifications);
         
         req.setAttribute("page", "notifications");
-        req.setAttribute("view", "/views/vendor/notifications.jsp");
+        req.setAttribute("view", "/views/shipper/notifications.jsp");
 
-        req.getRequestDispatcher("/WEB-INF/decorators/vendor.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/decorators/shipper.jsp").forward(req, resp);
     }
 }

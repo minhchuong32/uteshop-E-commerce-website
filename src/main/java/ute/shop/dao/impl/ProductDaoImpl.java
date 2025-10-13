@@ -114,7 +114,9 @@ public class ProductDaoImpl implements IProductDao {
 		try {
 			tx.begin();
 			em.persist(product);
+			em.flush();
 			tx.commit();
+
 		} catch (Exception e) {
 			tx.rollback();
 			e.printStackTrace();
