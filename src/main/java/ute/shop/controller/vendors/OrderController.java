@@ -13,11 +13,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import ute.shop.entity.Delivery;
+import ute.shop.entity.Notification;
 import ute.shop.entity.Order;
 import ute.shop.entity.Shop;
 import ute.shop.entity.User;
 import ute.shop.service.IDeliveryService;
 import ute.shop.service.impl.DeliveryServiceImpl;
+import ute.shop.service.impl.NotificationServiceImpl;
 import ute.shop.service.impl.OrderServiceImpl;
 
 @WebServlet(urlPatterns = {
@@ -32,6 +34,7 @@ public class OrderController extends HttpServlet {
 
     private OrderServiceImpl orderService = new OrderServiceImpl();
     private IDeliveryService deliveryService = new DeliveryServiceImpl();
+    private NotificationServiceImpl notificationService = new NotificationServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -53,14 +56,13 @@ public class OrderController extends HttpServlet {
         int shopId = shop.getShopId();
 
         if (uri.endsWith("/orders")) {
-            // 1. Đơn mới
+
             List<Order> newOrders = orderService.getOrdersByShopAndStatuses(shopId, List.of("Mới"));
 
-            // 2. Đơn đã xác nhận / đang giao
             List<Order> confirmedOrders = orderService.getOrdersByShopAndStatuses(shopId, List.of("Đã xác nhận", "Đang giao"));
-            // 3. Đơn đã giao
+
             List<Order> deliveredOrders = orderService.getOrdersByShopAndStatuses(shopId, List.of("Đã giao"));
-            // 4. Đơn đã hủy
+
             List<Order> canceledOrders = orderService.getOrdersByShopAndStatuses(shopId, List.of("Đã hủy"));
 
             Map<Integer, User> shippersMap = new HashMap<>();
@@ -144,7 +146,7 @@ public class OrderController extends HttpServlet {
             order.setStatus(status);
             order.setPaymentMethod(paymentMethod);
 
-            orderService.insert(order);  // Hibernate sẽ map user_id = userId
+            orderService.insert(order); 
             resp.sendRedirect(req.getContextPath() + "/vendor/orders");
 
         } else if (uri.endsWith("/detail")) {
@@ -178,6 +180,13 @@ public class OrderController extends HttpServlet {
                             order.setStatus("Đã xác nhận");
                             orderService.update(order);
                             // TODO: gửi notification đến user
+                            Notification n1 = Notification.builder()
+                                    .user(order.getUser())
+                                    .title("Đơn hàng #" + order.getOrderId() + " đã được xác nhận")
+                                    .message("Cửa hàng đã xác nhận đơn hàng của bạn. Đơn đang được chuẩn bị để giao.")
+                                    .build();
+                            notificationService.insert(n1);
+                            
                             if (order.getDeliveries() != null) {
                                 for (Delivery d : order.getDeliveries()) {
                                     deliveryService.updateStatus(d.getDeliveryId(), "Tìm Shipper");
@@ -185,9 +194,22 @@ public class OrderController extends HttpServlet {
                             }
                             break;
                         case "cancel":
+                        	String reason = req.getParameter("reason");
                             order.setStatus("Đã hủy");
                             orderService.update(order);
                             // TODO: gửi notification đến user
+                            String cancelMsg = "Đơn hàng của bạn đã bị hủy bởi cửa hàng.";
+                            if (reason != null && !reason.trim().isEmpty()) {
+                                cancelMsg += " Lý do: " + reason.trim();
+                            }
+
+                            Notification cancelNoti = Notification.builder()
+                                    .user(order.getUser())
+                                    .title("Đơn hàng #" + order.getOrderId() + " đã bị hủy")
+                                    .message(cancelMsg)
+                                    .build();
+                            notificationService.insert(cancelNoti);
+                            
                             if (order.getDeliveries() != null) {
                                 for (Delivery d : order.getDeliveries()) {
                                     deliveryService.updateStatus(d.getDeliveryId(), "Đã hủy");

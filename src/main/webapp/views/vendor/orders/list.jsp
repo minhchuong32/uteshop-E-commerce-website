@@ -28,6 +28,13 @@
                     <td>
                         <button class="btn btn-sm btn-success" onclick="confirmOrder(${o.orderId})">Xác nhận</button>
                         <button class="btn btn-sm btn-danger" onclick="cancelOrder(${o.orderId})">Hủy</button>
+                        
+                        <!-- Khung nhập lý do hủy (ẩn mặc định) -->
+					    <div id="cancel-box-${o.orderId}" class="mt-2" style="display:none;">
+					        <textarea id="reason-${o.orderId}" class="form-control mb-2" rows="2" placeholder="Nhập lý do hủy..."></textarea>
+					        <button class="btn btn-sm btn-outline-danger" onclick="submitCancel(${o.orderId})">Gửi</button>
+					        <button class="btn btn-sm btn-secondary" onclick="toggleCancelBox(${o.orderId})">Đóng</button>
+					    </div>
                     </td>
                 </tr>
             </c:forEach>
@@ -178,3 +185,30 @@ function deleteOrder(orderId) {
     }
 }
 </script>
+<script>
+function toggleCancelBox(orderId) {
+    const box = document.getElementById('cancel-box-' + orderId);
+    box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'block' : 'none';
+}
+
+function submitCancel(orderId) {
+    const reason = document.getElementById('reason-' + orderId).value.trim();
+    if (reason === '') {
+        alert('Vui lòng nhập lý do hủy đơn hàng.');
+        return;
+    }
+
+    if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')) {
+        fetch('${pageContext.request.contextPath}/vendor/orders/action', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'cancel',
+                id: orderId,
+                reason: reason
+            })
+        }).then(() => location.reload());
+    }
+}
+</script>
+

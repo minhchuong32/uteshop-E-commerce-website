@@ -97,20 +97,19 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 	            // ✅ Đồng bộ trạng thái với Order tương ứng
 	            if (d.getOrder() != null) {
 	                switch (status) {
-	                    case "Đang giao":
+		                case "Đang giao":
 	                        d.getOrder().setStatus("Đang giao");
 	                        break;
 	                    case "Đã giao":
 	                        d.getOrder().setStatus("Đã giao");
 	                        break;
 	                    case "Trả lại":
-	                        d.getOrder().setStatus("Trả lại");
+	                        d.getOrder().setStatus("Trả hàng - hoàn tiền");
 	                        break;
 	                    case "Hủy":
+	                    case "Đã hủy":
 	                        d.getOrder().setStatus("Đã hủy");
 	                        break;
-	                    default:
-	                        d.getOrder().setStatus(status);
 	                }
 	            }
 

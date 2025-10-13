@@ -99,24 +99,35 @@
         </div>
 
         <!-- PHÂN TRANG -->
-        <c:if test="${totalPages > 1}">
-            <nav aria-label="Page navigation" class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                       <a class="page-link" href="${pageContext.request.contextPath}/vendor/products?page=${currentPage - 1}">Trước</a>
-                    </li>
-
-                    <c:forEach var="i" begin="1" end="${totalPages}">
-                        <li class="page-item ${i == currentPage ? 'active' : ''}">
-                            <a class="page-link" href="${pageContext.request.contextPath}/vendor/products?page=${i}">${i}</a>
-                        </li>
-                    </c:forEach>
-
-                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                        <a class="page-link" href="${pageContext.request.contextPath}/vendor/products?page=${currentPage + 1}">Sau</a>
-                    </li>
-                </ul>
-            </nav>
-        </c:if>
+		<c:set var="categoryParam" value="${not empty selectedCategory ? '&category=' + selectedCategory : ''}" />
+		
+		<c:if test="${totalPages > 1}">
+		    <nav aria-label="Page navigation">
+		        <ul class="pagination justify-content-center mt-4">
+		
+		            <!-- Trang trước -->
+		            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+		                <a class="page-link" href="${pageContext.request.contextPath}/vendor/products?page=${currentPage - 1}${categoryParam}" aria-label="Previous">
+		                    <span aria-hidden="true">&laquo; Trước</span>
+		                </a>
+		            </li>
+		
+		            <!-- Các số trang -->
+		            <c:forEach var="i" begin="1" end="${totalPages}">
+		                <li class="page-item ${i == currentPage ? 'active' : ''}">
+		                    <a class="page-link" href="${pageContext.request.contextPath}/vendor/products?page=${i}${categoryParam}">${i}</a>
+		                </li>
+		            </c:forEach>
+		
+		            <!-- Trang sau -->
+		            <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+		                <a class="page-link" href="${pageContext.request.contextPath}/vendor/products?page=${currentPage + 1}${categoryParam}" aria-label="Next">
+		                    <span aria-hidden="true">Sau &raquo;</span>
+		                </a>
+		            </li>
+		
+		        </ul>
+		    </nav>
+		</c:if>
     </div>
 </div>
