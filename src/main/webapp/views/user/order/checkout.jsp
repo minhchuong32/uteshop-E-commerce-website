@@ -51,19 +51,20 @@
 					<div class="form-check">
 						<input class="form-check-input" type="radio" name="paymentMethod"
 							id="cod" value="COD" checked> <label
-							class="form-check-label" for="cod"> Thanh toán khi nhận
-							hàng (COD) </label>
+							class="form-check-label" for="cod">Thanh toán khi nhận
+							hàng (COD)</label>
 					</div>
 					<div class="form-check">
 						<input class="form-check-input" type="radio" name="paymentMethod"
 							id="vnpay" value="VNPAY"> <label class="form-check-label"
-							for="vnpay"> Thanh toán qua VNPAY </label>
+							for="vnpay">Thanh toán qua VNPAY</label>
 					</div>
 					<div class="form-check">
 						<input class="form-check-input" type="radio" name="paymentMethod"
-							id="Momo" value="Momo"> <label class="form-check-label"
-							for="Momo"> Thanh toán qua Momo </label>
+							id="momo" value="MOMO"> <label class="form-check-label"
+							for="momo">Thanh toán qua MoMo</label>
 					</div>
+
 				</div>
 			</div>
 
