@@ -87,7 +87,7 @@ public class CheckoutController extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
         String[] selectedIds = req.getParameterValues("selectedItems");
-        String payment = req.getParameter("payment");
+        String payment = req.getParameter("paymentMethod");
         String address = req.getParameter("address");
 
         if (selectedIds == null || selectedIds.length == 0) {

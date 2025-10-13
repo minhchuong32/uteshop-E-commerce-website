@@ -18,23 +18,78 @@
 	<form action="${pageContext.request.contextPath}/user/checkout"
 		method="post">
 		<div class="row">
+			<!-- 🔹 Thông tin giao hàng -->
+			<div class="mb-4">
+				<h5>📦 Thông tin giao hàng</h5>
+				<div class="card p-3">
+					<div class="mb-3">
+						<label for="fullname" class="form-label">Họ và tên</label> <input
+							type="text" id="fullname" name="fullname"
+							value="${sessionScope.user.fullName}" class="form-control"
+							required>
+					</div>
+
+					<div class="mb-3">
+						<label for="phone" class="form-label">Số điện thoại</label> <input
+							type="text" id="phone" name="phone"
+							value="${sessionScope.user.phone}" class="form-control" required>
+					</div>
+
+					<div class="mb-3">
+						<label for="address" class="form-label">Địa chỉ giao hàng</label>
+						<textarea id="address" name="address" rows="2"
+							class="form-control"
+							placeholder="Nhập địa chỉ nhận hàng chi tiết" required>${sessionScope.user.address}</textarea>
+					</div>
+				</div>
+			</div>
+
+			<!-- 🔹 Phương thức thanh toán -->
+			<div class="mb-4">
+				<h5>💳 Phương thức thanh toán</h5>
+				<div class="card p-3">
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="paymentMethod"
+							id="cod" value="COD" checked> <label
+							class="form-check-label" for="cod"> Thanh toán khi nhận
+							hàng (COD) </label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="paymentMethod"
+							id="vnpay" value="VNPAY"> <label class="form-check-label"
+							for="vnpay"> Thanh toán qua VNPAY </label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="paymentMethod"
+							id="Momo" value="Momo"> <label class="form-check-label"
+							for="Momo"> Thanh toán qua Momo </label>
+					</div>
+				</div>
+			</div>
+
 			<div class="col-md-8">
 				<!-- ✅ Lặp qua từng shop -->
+				<c:set var="grandTotal" value="0" />
+				<c:set var="totalItems" value="0" />
+				<c:set var="shopCount" value="0" />
+
 				<c:forEach var="entry" items="${itemsByShop}">
 					<c:set var="shopId" value="${entry.key}" />
 					<c:set var="shopItems" value="${entry.value}" />
 					<c:set var="promos" value="${promosByShop[shopId]}" />
 
-					<div class="card mb-4 shadow-sm">
+					<c:set var="subtotal" value="0" />
+					<c:set var="shopCount" value="${shopCount + 1}" />
+
+					<!-- 🔸 từng shop -->
+					<div class="card mb-3">
 						<div class="card-header bg-light">
 							<h5 class="mb-0">🏬 Cửa hàng:
 								${shopItems[0].productVariant.product.shop.name}</h5>
 						</div>
 
-						<div class="card-body">
-							<c:set var="subtotal" value="0" />
-
-							<!-- ✅ Hiển thị sản phẩm của shop -->
+						<div class="card-body" data-subtotal="${subtotal}">
+							<!-- ✅ Hiển thị sản phẩm -->
 							<c:forEach var="item" items="${shopItems}">
 								<div class="d-flex align-items-center border-bottom py-2">
 									<img
@@ -64,25 +119,30 @@
 									<input type="hidden" name="selectedItems"
 										value="${item.cartItemId}">
 								</div>
+
 								<c:set var="subtotal"
 									value="${subtotal + (item.price * item.quantity)}" />
+								<c:set var="totalItems" value="${totalItems + item.quantity}" />
 							</c:forEach>
 
-							<!-- ✅ Chọn mã khuyến mãi riêng shop -->
+							<!-- ✅ Mã khuyến mãi -->
 							<div class="mt-3">
 								<label class="form-label">🎟️ Mã khuyến mãi của shop</label> <select
-									name="promotionId[${shopId}]" class="form-select">
-									<option value="">-- Không dùng mã --</option>
+									name="promotionId[${shopId}]"
+									class="form-select promotion-select" data-shop-id="${shopId}">
+									<option value="" data-type="none" data-value="0">--
+										Không dùng mã --</option>
 									<c:forEach var="promo" items="${promos}">
-										<option value="${promo.promotionId}">
+										<option value="${promo.promotionId}"
+											data-type="${promo.discountType}" data-value="${promo.value}">
 											<c:choose>
 												<c:when test="${promo.discountType eq 'percent'}">
-                                                    Giảm ${promo.value}% (đến ${promo.endDate})
-                                                </c:when>
+								Giảm ${promo.value}% (đến ${promo.endDate})
+							</c:when>
 												<c:otherwise>
-                                                    Giảm <fmt:formatNumber
-														value="${promo.value}" type="number" groupingUsed="true" />₫ (đến ${promo.endDate})
-                                                </c:otherwise>
+								Giảm <fmt:formatNumber value="${promo.value}" type="number"
+														groupingUsed="true" />₫ (đến ${promo.endDate})
+							</c:otherwise>
 											</c:choose>
 										</option>
 									</c:forEach>
@@ -91,115 +151,107 @@
 
 							<!-- ✅ Tổng tiền shop -->
 							<div class="mt-3 border-top pt-2 d-flex justify-content-between">
-								<span>Tạm tính:</span> <strong><fmt:formatNumber
-										value="${subtotal}" type="number" groupingUsed="true" />₫</strong>
+								<span>Tạm tính:</span> <strong class="shop-subtotal"
+									data-shop-id="${shopId}" data-subtotal="${subtotal}">
+									<fmt:formatNumber value="${subtotal}" type="number"
+										groupingUsed="true" />₫
+								</strong>
 							</div>
 							<div class="d-flex justify-content-between">
 								<span>Phí vận chuyển:</span> <strong>30.000₫</strong>
 							</div>
+
+							<c:set var="shopTotal" value="${subtotal + 30000}" />
+
+							<div class="d-flex justify-content-between mt-2">
+								<span>Sau giảm giá:</span> <strong
+									class="shop-total text-danger" id="shop-total-${shopId}"
+									data-shop-id="${shopId}"> <fmt:formatNumber
+										value="${shopTotal}" type="number" groupingUsed="true" />₫
+								</strong>
+							</div>
+
+							<c:set var="grandTotal" value="${grandTotal + shopTotal}" />
 						</div>
 					</div>
+
 				</c:forEach>
-
-				<!-- ✅ Thông tin giao hàng -->
-				<div class="card mb-4 shadow-sm">
-					<div class="card-header bg-white">
-						<h5 class="mb-0">
-							<i class="bi bi-truck"></i> Thông tin giao hàng
-						</h5>
-					</div>
-					<div class="card-body">
-						<div class="mb-3">
-							<label class="form-label">Họ và tên</label> <input type="text"
-								name="fullname" class="form-control" required>
-						</div>
-						<div class="mb-3">
-							<label class="form-label">Số điện thoại</label> <input
-								type="text" name="phone" class="form-control" required>
-						</div>
-						<div class="mb-3">
-							<label class="form-label">Địa chỉ giao hàng</label>
-							<textarea name="address" class="form-control" rows="3" required></textarea>
-						</div>
-					</div>
-				</div>
-
-				<!-- ✅ Phương thức thanh toán -->
-				<div class="card shadow-sm">
-					<div class="card-header bg-white">
-						<h5 class="mb-0">
-							<i class="bi bi-credit-card"></i> Phương thức thanh toán
-						</h5>
-					</div>
-					<div class="card-body">
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="payment"
-								value="COD" checked> <label class="form-check-label">Thanh
-								toán khi nhận hàng (COD)</label>
-						</div>
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="payment"
-								value="Momo"> <label class="form-check-label">Ví
-								MoMo</label>
-						</div>
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="payment"
-								value="VNPay"> <label class="form-check-label">VNPay</label>
-						</div>
-					</div>
-				</div>
 			</div>
 
-			<!-- ✅ Tóm tắt đơn hàng -->
+			<!-- ✅ Cột tóm tắt thanh toán -->
 			<div class="col-md-4">
 				<div class="card shadow-sm">
 					<div class="card-header bg-white">
 						<h5 class="mb-0">🧾 Tóm tắt thanh toán</h5>
 					</div>
 					<div class="card-body">
-						<c:set var="grandTotal" value="0" />
 
-						<!-- ✅ Lặp qua từng shop để tính tổng -->
+						<!-- 🔸 Lặp qua từng shop -->
+						<c:set var="grandTotal" value="0" />
 						<c:forEach var="entry" items="${itemsByShop}">
 							<c:set var="shopId" value="${entry.key}" />
 							<c:set var="shopItems" value="${entry.value}" />
-							<c:set var="shopSubtotal" value="0" />
 
+							<!-- Tính tổng và số lượng -->
+							<c:set var="shopSubtotal" value="0" />
+							<c:set var="itemCount" value="0" />
 							<c:forEach var="item" items="${shopItems}">
 								<c:set var="shopSubtotal"
 									value="${shopSubtotal + (item.price * item.quantity)}" />
+								<c:set var="itemCount" value="${itemCount + item.quantity}" />
 							</c:forEach>
 
-							<!-- ✅ Thêm phí ship -->
+							<!-- Tổng có ship -->
 							<c:set var="shopTotal" value="${shopSubtotal + 30000}" />
 							<c:set var="grandTotal" value="${grandTotal + shopTotal}" />
 
-							<!-- ✅ Hiển thị tóm tắt theo shop -->
-							<div class="mb-3 pb-2 border-bottom">
-								<strong>🏬
-									${shopItems[0].productVariant.product.shop.name}</strong><br> <small
-									class="text-muted"> ${fn:length(shopItems)} mặt hàng </small><br>
-								<span>Tổng: <strong class="text-danger"> <fmt:formatNumber
+							<!-- 🏪 Hiển thị từng shop -->
+							<div class="mb-3 border-bottom pb-2">
+								<strong>🏪
+									${shopItems[0].productVariant.product.shop.name}</strong><br> <span>${itemCount}
+									sản phẩm</span><br>
+
+								<div class="d-flex justify-content-between">
+									<span>Tạm tính:</span> <span class="shop-summary-subtotal"
+										data-shop-id="${shopId}"> <fmt:formatNumber
+											value="${shopSubtotal}" type="number" groupingUsed="true" />₫
+									</span>
+								</div>
+
+								<div class="d-flex justify-content-between">
+									<span>Giảm giá:</span> <span
+										class="text-danger shop-summary-discount"
+										data-shop-id="${shopId}">- 0₫</span>
+								</div>
+
+								<div class="d-flex justify-content-between">
+									<span>Phí vận chuyển:</span> <span
+										class="shop-summary-shipping" data-shop-id="${shopId}">30.000₫</span>
+								</div>
+
+								<div class="d-flex justify-content-between fw-bold mt-1">
+									<span>Tổng:</span> <span class="text-danger shop-summary-total"
+										id="shop-summary-total-${shopId}" data-shop-id="${shopId}"
+										data-value="${shopTotal}"> <fmt:formatNumber
 											value="${shopTotal}" type="number" groupingUsed="true" />₫
-								</strong>
-								</span>
+									</span>
+								</div>
+
 							</div>
 						</c:forEach>
 
-						<!-- ✅ Tổng toàn bộ đơn hàng -->
-						<div class="mt-3 border-top pt-3">
-							<h6 class="d-flex justify-content-between">
-								<span>Tổng cộng:</span> <span class="text-success fw-bold">
-									<fmt:formatNumber value="${grandTotal}" type="number"
-										groupingUsed="true" />₫
-								</span>
-							</h6>
-							<small class="text-muted">Đã bao gồm phí vận chuyển từng
-								shop</small>
-						</div>
+						<hr>
+						<h5 class="d-flex justify-content-between">
+							<span>Tổng cộng:</span> <span class="text-success fw-bold"
+								id="grand-total"> <fmt:formatNumber value="${grandTotal}"
+									type="number" groupingUsed="true" />₫
+							</span>
+						</h5>
+						<small class="text-muted">Đã bao gồm phí vận chuyển từng
+							shop</small>
 
-						<button type="submit" class="btn btn-success w-100 mt-3">Đặt
-							hàng</button>
+						<button type="submit" class="btn btn-success w-100 mt-3">
+							Đặt hàng</button>
 					</div>
 				</div>
 			</div>
@@ -207,3 +259,6 @@
 		</div>
 	</form>
 </div>
+
+<script
+	src="${pageContext.request.contextPath}/assets/js/user/checkout.js"></script>
