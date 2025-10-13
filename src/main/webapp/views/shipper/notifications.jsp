@@ -37,15 +37,6 @@
 
                     <!-- Collapse chi tiết -->
                     <div class="collapse mt-3 border-top pt-3" id="collapse${n.id}">
-                        <c:if test="${n.relatedOrder != null}">
-                            <p><strong>Liên quan đơn hàng:</strong> #${n.relatedOrder.orderId}</p>
-                            <p><strong>Trạng thái:</strong> ${n.relatedOrder.status}</p>
-                            <p><strong>Địa chỉ giao hàng:</strong> ${n.relatedOrder.shippingAddress}</p>
-                            <a href="${pageContext.request.contextPath}/shipper/orders/detail?id=${n.relatedOrder.orderId}"
-                               class="btn btn-sm btn-primary">
-                               <i class="bi bi-box-seam"></i> Xem chi tiết đơn hàng
-                            </a>
-                        </c:if>
 
                         <c:if test="${n.relatedComplaint != null}">
                             <div class="mt-3">
@@ -58,12 +49,6 @@
                             </div>
                         </c:if>
 
-                        <c:if test="${n.relatedOrder == null && n.relatedComplaint == null}">
-                            <div class="alert alert-warning mb-0">
-                                <i class="bi bi-exclamation-triangle-fill"></i>
-                                Thông báo này không còn liên kết với dữ liệu nào.
-                            </div>
-                        </c:if>
                     </div>
                 </div>
             </div>

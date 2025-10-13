@@ -107,7 +107,7 @@
 								<c:forEach var="d" items="${o.orderDetails}">
 									<div class="d-flex mb-2">
 										<img
-											src="${pageContext.request.contextPath}/uploads/${d.productVariant.product.imageUrl}"
+											src="${pageContext.request.contextPath}/assets/${d.productVariant.imageUrl}"
 											class="me-2 rounded" width="50" height="50" />
 										<div>
 											<p class="mb-0">${d.productVariant.product.name}</p>
@@ -124,6 +124,7 @@
 								<h6 class="fw-bold mb-2">Thông tin giao hàng</h6>
 								<p class="mb-0">${o.user.username}</p>
 								<p class="mb-0">${o.user.email}</p>
+								<p class="mb-0">${o.user.phone}</p>
 								<p class="mb-0">${o.address}</p>
 							</div>
 						</div>

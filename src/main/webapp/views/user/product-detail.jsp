@@ -14,19 +14,37 @@
 				<!-- ảnh chính -->
 				<c:forEach var="img" items="${images}">
 					<c:if test="${img.main}">
-						<img id="mainImg"
-							src="${pageContext.request.contextPath}/assets/${img.imageUrl}"
-							alt="${product.name}" class="product-detail-img mb-3" />
+						<c:choose>
+							<c:when test="${fn:startsWith(img.imageUrl, '/assets/')}">
+								<img id="mainImg"
+									src="${pageContext.request.contextPath}${img.imageUrl}"
+									alt="${product.name}" class="product-detail-img mb-3" />
+							</c:when>
+							<c:otherwise>
+								<img id="mainImg"
+									src="${pageContext.request.contextPath}/assets${img.imageUrl}"
+									alt="${product.name}" class="product-detail-img mb-3" />
+							</c:otherwise>
+						</c:choose>
 					</c:if>
 				</c:forEach>
 
 				<!-- thumbnails -->
 				<div class="d-flex gap-2">
 					<c:forEach var="img" items="${images}">
-						<img
-							src="${pageContext.request.contextPath}/assets/${img.imageUrl}"
-							class="thumb-img ${img.main ? 'active' : ''}"
-							onclick="changeImage(this)" />
+						<c:choose>
+							<c:when test="${fn:startsWith(img.imageUrl, '/assets/')}">
+								<img src="${pageContext.request.contextPath}${img.imageUrl}"
+									class="thumb-img ${img.main ? 'active' : ''}"
+									onclick="changeImage(this)" />
+							</c:when>
+							<c:otherwise>
+								<img
+									src="${pageContext.request.contextPath}/assets${img.imageUrl}"
+									class="thumb-img ${img.main ? 'active' : ''}"
+									onclick="changeImage(this)" />
+							</c:otherwise>
+						</c:choose>
 					</c:forEach>
 				</div>
 			</div>
@@ -76,7 +94,7 @@
 
 				<p class="mt-3">${product.description}</p>
 
-					<!-- Thuộc tính sản phẩm -->
+				<!-- Thuộc tính sản phẩm -->
 				<c:if test="${not empty optionMap}">
 					<c:forEach var="entry" items="${optionMap}">
 						<div class="mb-3">
@@ -115,8 +133,8 @@
 						method="post" class="flex-fill"
 						onsubmit="return validateSelection()">
 
-						<input type="hidden" name="variantId" id="variantId">
-						<input type="hidden" name="quantity" id="formQty" value="1">
+						<input type="hidden" name="variantId" id="variantId"> <input
+							type="hidden" name="quantity" id="formQty" value="1">
 						<button type="submit" class="btn btn-primary-custom w-100">
 							<i class="bi bi-cart-plus"></i> Thêm vào giỏ
 						</button>

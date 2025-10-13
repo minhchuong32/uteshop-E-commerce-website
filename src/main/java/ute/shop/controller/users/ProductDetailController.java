@@ -46,8 +46,47 @@ public class ProductDetailController extends HttpServlet {
         // Lấy product kèm variants
         Product product = productService.findByIdWithVariants(productId);
 
-        // Lấy list ảnh
-        List<ProductImage> images = productImageService.getImagesByProduct((long) productId);
+     // Lấy ảnh từ bảng ProductImage
+     		List<ProductImage> images = productImageService.getImagesByProduct((long) productId);
+     		if (images == null) {
+     			images = new java.util.ArrayList<>();
+     		}
+
+     		// Lấy ảnh từ variant (nếu có)
+     		List<ProductVariant> variants = product.getVariants();
+     		if (variants != null) {
+     			for (ProductVariant v : variants) {
+     				if (v.getImageUrl() != null && !v.getImageUrl().isBlank()) {
+     					String variantImg = v.getImageUrl().trim();
+
+     					// Tránh trùng ảnh (nếu variant.imageUrl đã có trong ProductImage)
+     					boolean exists = images.stream().anyMatch(img -> variantImg.equalsIgnoreCase(img.getImageUrl()));
+
+     					if (!exists) {
+     						ProductImage img = new ProductImage();
+     						img.setImageUrl(variantImg);
+     						img.setMain(false);
+     						images.add(img);
+     					}
+     				}
+     			}
+     		}
+
+     		// Nếu không có ảnh nào, fallback sang ảnh chính của Product
+     		if (images.isEmpty() && product.getImageUrl() != null && !product.getImageUrl().isBlank()) {
+     			ProductImage mainImg = new ProductImage();
+     			mainImg.setImageUrl(product.getImageUrl());
+     			mainImg.setMain(true);
+     			images.add(mainImg);
+     		}
+
+     		// Đảm bảo có ít nhất một ảnh main
+     		boolean hasMain = images.stream().anyMatch(ProductImage::isMain);
+     		if (!hasMain && !images.isEmpty()) {
+     			images.get(0).setMain(true);
+     		}
+
+     		req.setAttribute("images", images);
 
         // Lấy reviews
         List<Review> reviews = reviewService.getByProductId(productId);
@@ -60,7 +99,7 @@ public class ProductDetailController extends HttpServlet {
         }
 
         // Lấy variant có giá thấp nhất để hiển thị giá
-        List<ProductVariant> variants = product.getVariants();
+//        List<ProductVariant> variants = product.getVariants();
         ProductVariant minVariant = null;
         if (variants != null && !variants.isEmpty()) {
             minVariant = variants.stream()
@@ -80,7 +119,7 @@ public class ProductDetailController extends HttpServlet {
 
         // Set attributes cho JSP
         req.setAttribute("product", product);
-        req.setAttribute("images", images);
+//        req.setAttribute("images", images);
         req.setAttribute("reviews", reviews);
         req.setAttribute("hasPurchased", hasPurchased);
         req.setAttribute("minVariant", minVariant);

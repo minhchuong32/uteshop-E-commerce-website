@@ -64,8 +64,6 @@
 					                            <a class="dropdown-item small text-wrap"
 					                               href="${pageContext.request.contextPath}/vendor/notifications/view?id=${n.id}">
 					                                <div class="d-flex align-items-start">
-					                                    <i class="bi ${n.relatedOrder != null ? 'bi-box-seam' : (n.relatedComplaint != null ? 'bi-chat-dots-fill' : 'bi-info-circle')} 
-					                                       ${n.read ? 'text-muted' : 'text-warning'} me-2 fs-5"></i>
 					                                    <div>
 					                                        <span class="${n.read ? 'text-muted' : 'fw-semibold text-dark'}">${n.message}</span><br>
 					                                        <small class="text-muted">

@@ -160,6 +160,13 @@
             </c:otherwise>
         </c:choose>
     </div>
+    
+    <!-- Nút quay lại danh sách sản phẩm -->
+    <div class="mb-3 text-end">
+        <a href="${pageContext.request.contextPath}/vendor/products" class="btn btn-outline-secondary">
+            ⬅ Quay lại
+        </a>
+    </div>
 </div>
 
 <script>

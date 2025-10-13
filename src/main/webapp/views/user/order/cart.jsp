@@ -25,7 +25,7 @@
                                        name="selectedItems" value="${item.cartItemId}">
 
                                 <!-- Ảnh sản phẩm -->
-                                <img src="${pageContext.request.contextPath}${item.productVariant.imageUrl}"
+                                <img src="${pageContext.request.contextPath}/assets${item.productVariant.imageUrl}"
                                      class="me-3" style="width: 60px; height: 60px; object-fit: cover;">
 
                                 <!-- Thông tin -->
