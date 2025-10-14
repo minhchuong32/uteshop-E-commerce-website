@@ -59,5 +59,77 @@ SET optionName = N'Nhà sản xuất'
 WHERE optionName LIKE '%Nhà s?n xu?t';
 
 
+-- Thêm bảng carriers
+INSERT INTO carriers (carrier_name, carrier_fee, carrier_description)
+VALUES
+(N'Giao Hàng Nhanh (GHN)', 25000, N'Dịch vụ giao hàng nhanh trong nước, tốc độ 1-2 ngày.'),
+(N'Giao Hàng Tiết Kiệm (GHTK)', 20000, N'Dịch vụ tiết kiệm, thời gian 2-4 ngày, toàn quốc.'),
+(N'VNPost', 15000, N'Dịch vụ chuyển phát nhanh của bưu điện Việt Nam.'),
+(N'J&T Express', 22000, N'Đơn vị vận chuyển phổ biến, hỗ trợ thu hộ COD.'),
+(N'Shopee Express', 18000, N'Dịch vụ giao hàng nội vùng dành riêng cho sàn TMĐT.'),
+(N'Ninja Van', 23000, N'Giao hàng tiêu chuẩn, phủ sóng toàn quốc.'),
+(N'Best Express', 21000, N'Dịch vụ vận chuyển nhanh, hỗ trợ giao tận tay.'),
+(N'FedEx Vietnam', 60000, N'Vận chuyển quốc tế, tốc độ cao.'),
+(N'DHL Express', 70000, N'Vận chuyển quốc tế uy tín, giao tận nơi.'),
+(N'UPS Vietnam', 65000, N'Dịch vụ giao nhận quốc tế chuyên nghiệp.');
+
+
+-- -----Thêm dữ liệu cho cột mới carrier_id trong bảng deliveries liên kết đến carriers
+UPDATE deliveries
+SET carrier_id = 1  -- GHN
+WHERE delivery_id IN (1, 2);
+
+-- Gán GHTK cho các đơn đang giao
+UPDATE deliveries
+SET carrier_id = 2  -- GHTK
+WHERE delivery_id IN (3, 7);
+
+-- Gán VNPost cho các đơn đã nhận đơn
+UPDATE deliveries
+SET carrier_id = 3  -- VNPost
+WHERE delivery_id IN (4);
+
+-- Gán J&T Express cho các đơn giao nhanh
+UPDATE deliveries
+SET carrier_id = 4  -- J&T Express
+WHERE delivery_id IN (5, 6, 8, 9);
+
+
+---- Cập nhật cột product_id trong promotion (khuyến mại cho mỗi sản phẩm cố định)
+UPDATE promotions SET product_id = 1 WHERE promotion_id = 1;
+UPDATE promotions SET product_id = 2 WHERE promotion_id = 2;
+UPDATE promotions SET product_id = 3 WHERE promotion_id = 3;
+UPDATE promotions SET product_id = 4 WHERE promotion_id = 4;
+UPDATE promotions SET product_id = 5 WHERE promotion_id = 5;
+UPDATE promotions SET product_id = 6 WHERE promotion_id = 6;
+UPDATE promotions SET product_id = 7 WHERE promotion_id = 7;
+UPDATE promotions SET product_id = 8 WHERE promotion_id = 8;
+UPDATE promotions SET product_id = 9 WHERE promotion_id = 9;
+UPDATE promotions SET product_id = 10 WHERE promotion_id = 10;
+UPDATE promotions SET product_id = 11 WHERE promotion_id = 11;
+UPDATE promotions SET product_id = 12 WHERE promotion_id = 12;
+UPDATE promotions SET product_id = 13 WHERE promotion_id = 13;
+UPDATE promotions SET product_id = 14 WHERE promotion_id = 14;
+
+
+
+--Tạo trigger tự động tạo thông tin giao hàng sau hành động order của user -> admin gán id shipper và nhà vận chuyển (default = 1) 
+CREATE TRIGGER trg_create_delivery
+ON orders
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO deliveries (order_id, carrier_id, status, created_at)
+    SELECT order_id, 1, N'Chờ xử lý', GETDATE()
+    FROM inserted;
+END;
+
+
+
+
+
+
 
 

@@ -90,7 +90,7 @@
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='categories' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=categories">
-							<i class="bi bi-tags-fill"></i> Quản lý Danh mục 
+							<i class="bi bi-tags-fill me-2"></i> Quản lý Danh mục 
 					</a></li>
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='shops' ? 'active' : ''}"
@@ -98,9 +98,14 @@
 							<i class="bi bi-shop me-2"></i> Quản lý Cửa hàng
 					</a></li>
 					<li class="nav-item mb-1"><a
+						class="nav-link ${page=='carriers' ? 'active' : ''}"
+						href="${pageContext.request.contextPath}/admin/home?page=carriers">
+							<i class="bi bi-truck me-2"></i> Quản lý Vận chuyển
+					</a></li>
+					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='deliveries' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=deliveries">
-							<i class="bi bi-truck me-2"></i> Quản lý Vận chuyển
+							<i class="bi bi-cart me-2"></i> Quản lý Đơn hàng
 					</a></li>
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='complaints' ? 'active' : ''}"

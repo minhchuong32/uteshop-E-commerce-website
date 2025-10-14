@@ -83,7 +83,7 @@
 
 	<!-- Vận chuyển -->
 	<div class="col-md-3">
-		<a href="${pageContext.request.contextPath}/admin/deliveries"
+		<a href="${pageContext.request.contextPath}/admin/carriers"
 			class="dashboard-card text-decoration-none">
 			<div
 				class="card text-center shadow-sm border-0 rounded-4 py-3 hover-card">

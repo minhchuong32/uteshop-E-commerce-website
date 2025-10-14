@@ -623,6 +623,20 @@ INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
 (N'/images/products/airpods-pro-2.jpg', 1, 20),
 (N'/images/products/airpods-pro2-usbc.jpg', 0, 20);
 GO
+
+-- ==================== BẢNG CARIERS ====================
+INSERT INTO carriers (name, shippingFee, description)
+VALUES
+(N'Giao Hàng Nhanh (GHN)', 25000, N'Dịch vụ giao hàng nhanh trong nước, tốc độ 1-2 ngày.'),
+(N'Giao Hàng Tiết Kiệm (GHTK)', 20000, N'Dịch vụ tiết kiệm, thời gian 2-4 ngày, toàn quốc.'),
+(N'VNPost', 15000, N'Dịch vụ chuyển phát nhanh của bưu điện Việt Nam.'),
+(N'J&T Express', 22000, N'Đơn vị vận chuyển phổ biến, hỗ trợ thu hộ COD.'),
+(N'Shopee Express', 18000, N'Dịch vụ giao hàng nội vùng dành riêng cho sàn TMĐT.'),
+(N'Ninja Van', 23000, N'Giao hàng tiêu chuẩn, phủ sóng toàn quốc.'),
+(N'Best Express', 21000, N'Dịch vụ vận chuyển nhanh, hỗ trợ giao tận tay.'),
+(N'FedEx Vietnam', 60000, N'Vận chuyển quốc tế, tốc độ cao.'),
+(N'DHL Express', 70000, N'Vận chuyển quốc tế uy tín, giao tận nơi.'),
+(N'UPS Vietnam', 65000, N'Dịch vụ giao nhận quốc tế chuyên nghiệp.');
 -- ==================== KẾT THÚC ====================
 -- Script đã hoàn tất với đầy đủ dữ liệu cho tất cả các bảng
 -- Tổng số records: 

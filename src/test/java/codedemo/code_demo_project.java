@@ -279,7 +279,7 @@
 //package ute.shop.controller;
 //import jakarta.servlet.*; import jakarta.servlet.annotation.WebServlet; import jakarta.servlet.http.*; import java.io.IOException; import java.util.*; import ute.shop.model.*; import ute.shop.service.IOrderService; import ute.shop.service.impl.OrderServiceImpl; import ute.shop.service.impl.ProductServiceImpl;
 //@WebServlet(urlPatterns={"/checkout","/orders"})
-//public class OrderController extends HttpServlet {
+//public class DeliveryController extends HttpServlet {
 //    private final IOrderService orderService = new OrderServiceImpl();
 //    @SuppressWarnings("unchecked")
 //    @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -15,6 +15,7 @@
 <form method="post" action="${pageContext.request.contextPath}/admin/promotions/add" class="card p-4 shadow-sm">
   <input type="hidden" name="promotionId" value="${promotion.promotionId}" />
 
+  <!-- SHOP -->
   <div class="mb-3">
     <label class="form-label fw-semibold">Shop áp dụng</label>
     <select name="shopId" class="form-select" required>
@@ -27,28 +28,40 @@
     </select>
   </div>
 
+  <!-- SẢN PHẨM -->
+  <div class="mb-3">
+    <label class="form-label fw-semibold">Sản phẩm áp dụng (tuỳ chọn)</label>
+    <select name="productId" class="form-select">
+      <option value="">-- Không chọn (áp dụng toàn shop) --</option>
+      <c:forEach var="pr" items="${products}">
+        <option value="${pr.productId}"
+          <c:if test="${promotion.product != null && promotion.product.productId == pr.productId}">selected</c:if>>
+          ${pr.name}
+        </option>
+      </c:forEach>
+    </select>
+  </div>
+
+  <!-- Loại giảm & Giá trị -->
   <div class="row">
     <div class="col-md-6">
       <label class="form-label fw-semibold">Loại giảm</label>
       <select name="discountType" class="form-select" required>
-        <option value="percent" 
-          <c:if test="${promotion.discountType eq 'percent'}">selected</c:if>>Giảm theo %</option>
-        <option value="fixed" 
-          <c:if test="${promotion.discountType eq 'fixed'}">selected</c:if>>Giảm cố định (VNĐ)</option>
+        <option value="percent" <c:if test="${promotion.discountType eq 'percent'}">selected</c:if>>Giảm theo %</option>
+        <option value="fixed" <c:if test="${promotion.discountType eq 'fixed'}">selected</c:if>>Giảm cố định (VNĐ)</option>
       </select>
     </div>
-
     <div class="col-md-6">
       <label class="form-label fw-semibold">Giá trị giảm</label>
-      <input type="number" step="0.01" name="value" class="form-control" 
-             value="${promotion.value}" required>
+      <input type="number" step="0.01" name="value" class="form-control" value="${promotion.value}" required>
     </div>
   </div>
 
+  <!-- Ngày -->
   <div class="row mt-3">
     <div class="col-md-6">
       <label class="form-label fw-semibold">Ngày bắt đầu</label>
-      <input type="date" name="startDate" class="form-control" 
+      <input type="date" name="startDate" class="form-control"
              value="<fmt:formatDate value='${promotion.startDate}' pattern='yyyy-MM-dd'/>" required>
     </div>
     <div class="col-md-6">

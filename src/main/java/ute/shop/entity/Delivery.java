@@ -1,5 +1,6 @@
 package ute.shop.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import jakarta.persistence.*;
@@ -25,6 +26,11 @@ public class Delivery {
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+    
+    // Liên kết tới nhà vận chuyển
+    @ManyToOne		
+    @JoinColumn(name = "carrier_id")
+    private Carrier carrier;
 
     // Trạng thái giao hàng: NVARCHAR(20) (assigned, delivering, delivered, canceled, returned)
     @Column(name = "status", length = 20, columnDefinition = "NVARCHAR(20) DEFAULT N'Đã gán'")
@@ -33,12 +39,8 @@ public class Delivery {
     @Column(name = "note_text", length = 500, columnDefinition = "NVARCHAR(500)")
     private String noteText; // ghi chú nội dung phiếu
     
-    @Column(name = "delivery_note", length = 500, columnDefinition = "NVARCHAR(500)")
-    private String deliveryNote; // Ghi chú hoặc đường dẫn file phiếu giao hàng
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private Date createdAt = new Date();  
-    
-
+  
 }
