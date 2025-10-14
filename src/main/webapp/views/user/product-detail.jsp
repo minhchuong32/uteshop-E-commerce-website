@@ -289,12 +289,12 @@
 				<div class="mb-4 d-flex align-items-start">
 					<!-- Avatar -->
 					<img
-						src="${pageContext.request.contextPath}/uploads/${sessionScope.account.avatar}"
+						src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
 						alt="Avatar" class="rounded-circle me-3"
 						style="width: 50px; height: 50px; object-fit: cover;">
 
 					<div class="flex-grow-1">
-						<form action="${pageContext.request.contextPath}/review/add"
+						<form action="${pageContext.request.contextPath}/user/review/add"
 							method="post">
 							<input type="hidden" name="productId"
 								value="${product.productId}" />

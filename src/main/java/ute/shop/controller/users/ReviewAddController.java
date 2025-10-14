@@ -15,7 +15,7 @@ import ute.shop.service.IReviewService;
 import ute.shop.service.impl.ProductServiceImpl;
 import ute.shop.service.impl.ReviewServiceImpl;
 
-@WebServlet("/review/add")
+@WebServlet("/user/review/add")
 public class ReviewAddController extends HttpServlet {
 
 	/**

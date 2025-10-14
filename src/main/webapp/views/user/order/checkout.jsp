@@ -18,7 +18,7 @@
 	<form action="${pageContext.request.contextPath}/user/checkout"
 		method="post">
 		<div class="row">
-			<!-- 🔹 Thông tin giao hàng -->
+			<!-- Thông tin giao hàng -->
 			<div class="mb-4">
 				<h5>📦 Thông tin giao hàng</h5>
 				<div class="card p-3">
@@ -44,7 +44,7 @@
 				</div>
 			</div>
 
-			<!-- 🔹 Phương thức thanh toán -->
+			<!-- Phương thức thanh toán -->
 			<div class="mb-4">
 				<h5>💳 Phương thức thanh toán</h5>
 				<div class="card p-3">
@@ -69,7 +69,7 @@
 			</div>
 
 			<div class="col-md-8">
-				<!-- ✅ Lặp qua từng shop -->
+				<!--  Lặp qua từng shop -->
 				<c:set var="grandTotal" value="0" />
 				<c:set var="totalItems" value="0" />
 				<c:set var="shopCount" value="0" />
@@ -82,7 +82,7 @@
 					<c:set var="subtotal" value="0" />
 					<c:set var="shopCount" value="${shopCount + 1}" />
 
-					<!-- 🔸 từng shop -->
+					<!--  từng shop -->
 					<div class="card mb-3">
 						<div class="card-header bg-light">
 							<h5 class="mb-0">🏬 Cửa hàng:
@@ -90,7 +90,7 @@
 						</div>
 
 						<div class="card-body" data-subtotal="${subtotal}">
-							<!-- ✅ Hiển thị sản phẩm -->
+							<!--  Hiển thị sản phẩm -->
 							<c:forEach var="item" items="${shopItems}">
 								<div class="d-flex align-items-center border-bottom py-2">
 									<img
@@ -126,7 +126,7 @@
 								<c:set var="totalItems" value="${totalItems + item.quantity}" />
 							</c:forEach>
 
-							<!-- ✅ Mã khuyến mãi -->
+							<!--  Mã khuyến mãi -->
 							<div class="mt-3">
 								<label class="form-label">🎟️ Mã khuyến mãi của shop</label> <select
 									name="promotionId[${shopId}]"
@@ -150,7 +150,7 @@
 								</select>
 							</div>
 
-							<!-- ✅ Tổng tiền shop -->
+							<!--  Tổng tiền shop -->
 							<div class="mt-3 border-top pt-2 d-flex justify-content-between">
 								<span>Tạm tính:</span> <strong class="shop-subtotal"
 									data-shop-id="${shopId}" data-subtotal="${subtotal}">
@@ -179,7 +179,7 @@
 				</c:forEach>
 			</div>
 
-			<!-- ✅ Cột tóm tắt thanh toán -->
+			<!--  Cột tóm tắt thanh toán -->
 			<div class="col-md-4">
 				<div class="card shadow-sm">
 					<div class="card-header bg-white">
@@ -206,7 +206,7 @@
 							<c:set var="shopTotal" value="${shopSubtotal + 30000}" />
 							<c:set var="grandTotal" value="${grandTotal + shopTotal}" />
 
-							<!-- 🏪 Hiển thị từng shop -->
+							<!--  Hiển thị từng shop -->
 							<div class="mb-3 border-bottom pb-2">
 								<strong>🏪
 									${shopItems[0].productVariant.product.shop.name}</strong><br> <span>${itemCount}

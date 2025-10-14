@@ -114,7 +114,7 @@ public class OrderDaoImpl implements IOrderDao {
 	            "AND o.status = :status", Long.class)
 	            .setParameter("uid", userId)
 	            .setParameter("pid", productId)
-	            .setParameter("status", "Hoàn tất") // hoặc OrderStatus.COMPLETED
+	            .setParameter("status", "Đã giao") 
 	            .getSingleResult();
 
 	        return count != null && count > 0;

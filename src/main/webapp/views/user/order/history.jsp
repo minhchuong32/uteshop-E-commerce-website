@@ -21,10 +21,11 @@
 			name="status" id="status" class="form-select w-auto"
 			onchange="this.form.submit()">
 			<option value="">Tất cả</option>
-			<option value="Mới"
-				${param.status eq 'Mới' ? 'selected' : ''}>Đang xử lý</option>
+			<option value="Mới" ${param.status eq 'Mới' ? 'selected' : ''}>Đang
+				xử lý</option>
 			<option value="Đã xác nhận"
-				${param.status eq 'Đã xác nhận' ? 'selected' : ''}>Đã xác nhận</option>
+				${param.status eq 'Đã xác nhận' ? 'selected' : ''}>Đã xác
+				nhận</option>
 			<option value="Đang giao"
 				${param.status eq 'Đang giao' ? 'selected' : ''}>Đang giao</option>
 			<option value="Đã giao"
@@ -105,17 +106,21 @@
 							<div class="col-md-6">
 								<h6 class="fw-bold mb-2">Sản phẩm</h6>
 								<c:forEach var="d" items="${o.orderDetails}">
-									<div class="d-flex mb-2">
-										<img
-											src="${pageContext.request.contextPath}/assets/${d.productVariant.imageUrl}"
-											class="me-2 rounded" width="50" height="50" />
-										<div>
-											<p class="mb-0">${d.productVariant.product.name}</p>
-											<small>Số lượng: ${d.quantity} × <fmt:formatNumber
-													value="${d.price}" type="currency" currencySymbol="₫" />
-											</small>
+									<a
+										href="${pageContext.request.contextPath}/user/product/detail?id=${d.productVariant.product.productId}"
+										class="text-decoration-none text-dark d-block h-100">
+										<div class="d-flex mb-2">
+											<img
+												src="${pageContext.request.contextPath}/assets/${d.productVariant.imageUrl}"
+												class="me-2 rounded" width="50" height="50" />
+											<div>
+												<p class="mb-0">${d.productVariant.product.name}</p>
+												<small>Số lượng: ${d.quantity} × <fmt:formatNumber
+														value="${d.price}" type="currency" currencySymbol="₫" />
+												</small>
+											</div>
 										</div>
-									</div>
+									</a>
 								</c:forEach>
 							</div>
 
