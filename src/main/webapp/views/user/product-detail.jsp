@@ -178,7 +178,7 @@
 			<div class="d-flex align-items-center border rounded p-3 bg-light">
 				<!-- Logo shop (dùng ảnh mặc định nếu chưa có) -->
 				<img
-					src="${pageContext.request.contextPath}/assets/images/shops/default-shop-logo.png"
+					src="${pageContext.request.contextPath}/assets${product.shop.logo}"
 					alt="${product.shop.name}" class="rounded me-3"
 					style="width: 80px; height: 80px; object-fit: cover;">
 
@@ -330,7 +330,7 @@
 			<c:forEach var="r" items="${reviews}">
 				<div class="border-bottom pb-2 mb-3 d-flex">
 					<img
-						src="${pageContext.request.contextPath}/uploads/${r.user.avatar}"
+						src="${pageContext.request.contextPath}/assets/images${r.user.avatar}"
 						class="rounded-circle me-3"
 						style="width: 40px; height: 40px; object-fit: cover;">
 					<div>

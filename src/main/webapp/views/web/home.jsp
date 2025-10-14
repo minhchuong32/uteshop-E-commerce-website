@@ -43,8 +43,7 @@
 	<div id="category" class="container">
 
 		<!-- Categories -->
-		<div 
-			class="bg-white shadow-sm p-0 mb-4 position-relative">
+		<div class="bg-white shadow-sm p-0 mb-4 position-relative">
 			<div class="p-3">
 				<h5 class="fw-bold text-uppercase text-primary-custom">
 					<i class="bi bi-grid me-2"></i> Danh mục
@@ -57,7 +56,8 @@
 					<c:forEach var="c" items="${categories}" varStatus="status">
 						<c:if test="${status.index < 12}">
 							<div class="col-2 category-card border rounded">
-								<a href="${pageContext.request.contextPath}/web/products?categoryId=${c.categoryId}"
+								<a
+									href="${pageContext.request.contextPath}/web/products?categoryId=${c.categoryId}"
 									class="text-decoration-none text-dark d-block">
 									<div class="category-img">
 										<img
