@@ -286,39 +286,7 @@
 
 
 			<c:if test="${hasPurchased}">
-				<div class="mb-4 d-flex align-items-start">
-					<!-- Avatar -->
-					<img
-						src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
-						alt="Avatar" class="rounded-circle me-3"
-						style="width: 50px; height: 50px; object-fit: cover;">
-
-					<div class="flex-grow-1">
-						<form action="${pageContext.request.contextPath}/user/review/add"
-							method="post">
-							<input type="hidden" name="productId"
-								value="${product.productId}" />
-
-							<!-- Người dùng chọn rating -->
-							<div class="mb-2 text-warning">
-								<c:forEach var="i" begin="1" end="5">
-									<input type="radio" class="btn-check" name="rating"
-										id="star${i}" value="${i}">
-									<label class="bi bi-star-fill btn btn-outline-warning"
-										for="star${i}"></label>
-								</c:forEach>
-							</div>
-
-							<!-- Comment -->
-							<textarea name="comment" rows="3" class="form-control mb-2"
-								placeholder="Chia sẻ cảm nhận của bạn..."></textarea>
-
-							<!-- Nút gửi -->
-							<button type="submit" class="btn btn-primary-custom">Gửi
-								đánh giá</button>
-						</form>
-					</div>
-				</div>
+				<p class="text-muted">Vui lòng vào Đơn hàng/Đánh giá để chia sẻ trải nghiệm của bạn</p>		
 			</c:if>
 
 			<c:if test="${not hasPurchased}">
