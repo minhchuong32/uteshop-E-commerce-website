@@ -49,6 +49,7 @@
 	<!-- Nếu có đơn hàng -->
 	<c:if test="${not empty orders}">
 		<c:forEach var="o" items="${orders}">
+
 			<div class="card shadow-sm mb-3">
 				<div
 					class="card-body d-flex justify-content-between align-items-center">
@@ -105,22 +106,49 @@
 							<!-- Sản phẩm -->
 							<div class="col-md-6">
 								<h6 class="fw-bold mb-2">Sản phẩm</h6>
+
 								<c:forEach var="d" items="${o.orderDetails}">
-									<a
-										href="${pageContext.request.contextPath}/user/product/detail?id=${d.productVariant.product.productId}"
-										class="text-decoration-none text-dark d-block h-100">
-										<div class="d-flex mb-2">
+									<c:set var="product" value="${d.productVariant.product}" />
+
+									<div
+										class="d-flex justify-content-between align-items-center mb-3">
+										<!-- Thông tin sản phẩm -->
+										<a
+											href="${pageContext.request.contextPath}/user/product/detail?id=${product.productId}"
+											class="text-decoration-none text-dark d-flex align-items-center">
 											<img
-												src="${pageContext.request.contextPath}/assets/${d.productVariant.imageUrl}"
-												class="me-2 rounded" width="50" height="50" />
+											src="${pageContext.request.contextPath}/assets/${d.productVariant.imageUrl}"
+											class="me-2 rounded" width="60" height="60" />
 											<div>
-												<p class="mb-0">${d.productVariant.product.name}</p>
-												<small>Số lượng: ${d.quantity} × <fmt:formatNumber
-														value="${d.price}" type="currency" currencySymbol="₫" />
+												<p class="mb-0 fw-semibold">${product.name}</p>
+												<small class="text-muted">Số lượng: ${d.quantity} ×
+													<fmt:formatNumber value="${d.price}" type="currency"
+														currencySymbol="₫" />
 												</small>
 											</div>
+										</a>
+
+										<!-- ✅ Nút đánh giá -->
+										<div class="text-end">
+											<c:if test="${o.status eq 'Đã giao'}">
+												<c:choose>
+											
+													<c:when test="${not product.reviewed}">
+														<a
+															href="${pageContext.request.contextPath}/user/review/add?productId=${product.productId}"
+															class="btn btn-outline-primary btn-sm">Đánh giá</a>
+													</c:when>
+
+									
+													<c:otherwise>
+														<a
+															href="${pageContext.request.contextPath}/user/review/edit?productId=${product.productId}"
+															class="btn btn-success btn-sm">Đã đánh giá</a>
+													</c:otherwise>
+												</c:choose>
+											</c:if>
 										</div>
-									</a>
+									</div>
 								</c:forEach>
 							</div>
 
@@ -152,15 +180,15 @@
 												<span class="fw-bold text-warning">●</span>
 												<span class="text-warning">${deli.status}</span>
 											</c:otherwise>
-										</c:choose> <small class="text-muted"> (<fmt:formatDate
+										</c:choose> <small class="text-muted">(<fmt:formatDate
 												value="${deli.createdAt}" pattern="dd/MM/yyyy HH:mm" />)
 									</small></li>
 								</c:forEach>
 							</ul>
 						</div>
-
 					</div>
 				</div>
+
 			</div>
 		</c:forEach>
 	</c:if>

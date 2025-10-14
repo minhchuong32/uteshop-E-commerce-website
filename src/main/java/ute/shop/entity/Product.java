@@ -49,6 +49,15 @@ public class Product {
 
     @Transient
     private BigDecimal price;
+    @Transient
+    private boolean reviewed; 
+    public boolean isReviewed() {
+        return reviewed;
+    }
+
+    public void setReviewed(boolean reviewed) {
+        this.reviewed = reviewed;
+    }
 
 
 //    // Liên kết với chi tiết đơn hàng (nếu chưa tách theo variant)
