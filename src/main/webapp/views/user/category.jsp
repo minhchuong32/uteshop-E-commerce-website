@@ -114,7 +114,7 @@
 									<div class="card product-card h-100">
 										<div class="product-img-wrapper">
 											<img
-												src="${pageContext.request.contextPath}/assets/${p.imageUrl}"
+												src="${pageContext.request.contextPath}/assets${p.imageUrl}"
 												class="card-img-top" alt="${p.name}">
 										</div>
 										<div
@@ -172,7 +172,7 @@
 
 								<div class="d-flex align-items-center">
 									<img
-										src="${pageContext.request.contextPath}/assets/${p.imageUrl}"
+										src="${pageContext.request.contextPath}/assets${p.imageUrl}"
 										alt="${p.name}" class="img-thumbnail me-3"
 										style="width: 80px; height: 80px; object-fit: cover;">
 									<div>
