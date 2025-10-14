@@ -3,7 +3,6 @@ package ute.shop.controller.admin;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -13,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import ute.shop.entity.Category;
+import ute.shop.service.ICategoryService;
 import ute.shop.service.impl.CategoryServiceImpl;
 
 @WebServlet(urlPatterns = {
@@ -26,7 +26,7 @@ import ute.shop.service.impl.CategoryServiceImpl;
         maxRequestSize = 1024 * 1024 * 10)
 public class CategoryController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private final CategoryServiceImpl categoryService = new CategoryServiceImpl();
+    private final ICategoryService categoryService = new CategoryServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -82,13 +82,13 @@ public class CategoryController extends HttpServlet {
                 Part filePart = req.getPart("image");
                 String fileName = null;
                 if (filePart != null && filePart.getSize() > 0) {
-                    fileName = UUID.randomUUID() + "_" + filePart.getSubmittedFileName();
+                    fileName = filePart.getSubmittedFileName();
                     filePart.write(uploadDir + File.separator + fileName);
                 }
 
                 Category c = new Category();
                 c.setName(name);
-                c.setImage(fileName != null ? "/images/categories/" + fileName : "/images/categories/default-category.png");
+                c.setImage(fileName != null ? "/images/categories/" + fileName : "/images/categories/default-category.jpg");
 
                 categoryService.save(c);
                 req.getSession().setAttribute("success", "Thêm danh mục thành công!");
@@ -104,7 +104,7 @@ public class CategoryController extends HttpServlet {
                 if (c != null) {
                     Part filePart = req.getPart("image");
                     if (filePart != null && filePart.getSize() > 0) {
-                        String fileName = UUID.randomUUID() + "_" + filePart.getSubmittedFileName();
+                        String fileName = filePart.getSubmittedFileName();
                         filePart.write(uploadDir + File.separator + fileName);
                         c.setImage("/images/categories/" + fileName);
                     }

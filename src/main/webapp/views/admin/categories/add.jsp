@@ -20,7 +20,7 @@
 			<input type="file" name="image" class="form-control w-auto mx-auto" accept="image/*" onchange="previewImage(event)">
 			<div class="mt-3">
 				<img id="imagePreview"
-					 src="${pageContext.request.contextPath}/assets/images/categories/default-category.png"
+					 src="${pageContext.request.contextPath}/assets/images/categories/default-category.jpg"
 					 class="rounded border" width="200" height="200" style="object-fit: cover;">
 			</div>
 		</div>

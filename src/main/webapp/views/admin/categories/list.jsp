@@ -51,7 +51,7 @@
 							<td class="text-center">${loop.index + 1}</td>
 							<td class="text-center">
 								<img src="${empty c.image 
-										? pageContext.request.contextPath.concat('/assets/images/categories/default.png') 
+										? pageContext.request.contextPath.concat('/assets/images/categories/default-category.jpg') 
 										: pageContext.request.contextPath.concat('/assets').concat(c.image)}"
 									class="rounded border"
 									style="width: 80px; height: 80px; object-fit: cover;" />

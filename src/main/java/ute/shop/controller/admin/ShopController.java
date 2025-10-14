@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import ute.shop.entity.Shop;
 import ute.shop.entity.User;
+import ute.shop.service.IShopService;
+import ute.shop.service.IUserService;
 import ute.shop.service.impl.ShopServiceImpl;
 import ute.shop.service.impl.UserServiceImpl;
 
@@ -26,8 +28,8 @@ import ute.shop.service.impl.UserServiceImpl;
 public class ShopController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private ShopServiceImpl shopService = new ShopServiceImpl();
-    private UserServiceImpl userService = new UserServiceImpl();
+    private IShopService shopService = new ShopServiceImpl();
+    private IUserService userService = new UserServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

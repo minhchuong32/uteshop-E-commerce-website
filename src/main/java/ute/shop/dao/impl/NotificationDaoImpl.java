@@ -2,10 +2,11 @@ package ute.shop.dao.impl;
 
 import jakarta.persistence.*;
 import ute.shop.config.JPAConfig;
+import ute.shop.dao.INotificationDao;
 import ute.shop.entity.Notification;
 import java.util.List;
 
-public class NotificationDaoImpl {
+public class NotificationDaoImpl implements INotificationDao {
 	
 	public List<Notification> getAllByUserId(int userId) {
 		EntityManager em = JPAConfig.getEntityManager();

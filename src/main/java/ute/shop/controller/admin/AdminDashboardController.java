@@ -14,10 +14,10 @@ import java.util.*;
 public class AdminDashboardController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private final ProductServiceImpl productService = new ProductServiceImpl();
-    private final OrderServiceImpl orderService = new OrderServiceImpl();
-    private final UserServiceImpl userService = new UserServiceImpl();
-    private final RevenueServiceImpl revenueService = new RevenueServiceImpl();
+    private final IProductService productService = new ProductServiceImpl();
+    private final IOrderService orderService = new OrderServiceImpl();
+    private final IUserService userService = new UserServiceImpl();
+    private final IRevenueService revenueService = new RevenueServiceImpl();
     private final IDeliveryService deliveryService = new DeliveryServiceImpl();
     private final IComplaintService complaintService = new ComplaintServiceImpl();
     private final ICategoryService categoryService = new CategoryServiceImpl();

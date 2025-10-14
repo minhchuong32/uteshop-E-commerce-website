@@ -2,11 +2,12 @@ package ute.shop.dao.impl;
 
 import jakarta.persistence.*;
 import ute.shop.config.JPAConfig;
+import ute.shop.dao.IComplaintMessageDao;
 import ute.shop.entity.ComplaintMessage;
 
 import java.util.List;
 
-public class ComplaintMessageDaoImpl {
+public class ComplaintMessageDaoImpl implements IComplaintMessageDao {
 	
 
 

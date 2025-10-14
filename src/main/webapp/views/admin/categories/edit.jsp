@@ -14,7 +14,7 @@
 		<div class="text-center mb-4">
 			<img id="imagePreview"
 				 src="${empty category.image 
-					 ? pageContext.request.contextPath.concat('/assets/images/categories/default.png') 
+					 ? pageContext.request.contextPath.concat('/assets/images/categories/default-category.jpg') 
 					 : pageContext.request.contextPath.concat('/assets').concat(category.image)}"
 				 class="rounded border mb-2" width="200" height="200" style="object-fit: cover;">
 			<div>

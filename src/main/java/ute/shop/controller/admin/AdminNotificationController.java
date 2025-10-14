@@ -6,13 +6,14 @@ import jakarta.servlet.http.*;
 import ute.shop.entity.Notification;
 import ute.shop.entity.User;
 import ute.shop.service.impl.NotificationServiceImpl;
+import ute.shop.service.INotificationService;
 
 import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/admin/notifications", "/admin/notifications/view"})
 public class AdminNotificationController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private final NotificationServiceImpl notiService = new NotificationServiceImpl();
+    private final INotificationService notiService = new NotificationServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

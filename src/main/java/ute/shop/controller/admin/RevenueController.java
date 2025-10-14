@@ -3,8 +3,8 @@ package ute.shop.controller.admin;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import ute.shop.service.impl.RevenueServiceImpl;
-import ute.shop.service.impl.ShopServiceImpl;
+import ute.shop.service.impl.*;
+import ute.shop.service.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -15,8 +15,8 @@ import java.util.*;
 public class RevenueController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private final RevenueServiceImpl revenueService = new RevenueServiceImpl();
-    private final ShopServiceImpl shopService = new ShopServiceImpl();
+    private final IRevenueService revenueService = new RevenueServiceImpl();
+    private final IShopService shopService = new ShopServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

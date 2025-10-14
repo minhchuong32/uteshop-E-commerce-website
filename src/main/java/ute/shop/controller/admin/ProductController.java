@@ -18,11 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import ute.shop.entity.Product;
 import ute.shop.entity.ProductVariant;
-import ute.shop.service.impl.CategoryServiceImpl;
-import ute.shop.service.impl.ProductImageServiceImpl;
-import ute.shop.service.impl.ProductServiceImpl;
-import ute.shop.service.impl.ProductVariantServiceImpl;
-import ute.shop.service.impl.ShopServiceImpl;
+import ute.shop.service.impl.*;
+import ute.shop.service.*;
 
 @WebServlet(urlPatterns = { "/admin/products", "/admin/products/add", "/admin/products/edit", "/admin/products/delete",
 		"/admin/products/variants" })
@@ -33,11 +30,11 @@ import ute.shop.service.impl.ShopServiceImpl;
 public class ProductController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private final ProductServiceImpl productService = new ProductServiceImpl();
-	private final ProductVariantServiceImpl variantService = new ProductVariantServiceImpl();
-	private final ProductImageServiceImpl imageService = new ProductImageServiceImpl();
-	private final CategoryServiceImpl categoryService = new CategoryServiceImpl();
-	private final ShopServiceImpl shopService = new ShopServiceImpl();
+	private final IProductService productService = new ProductServiceImpl();
+	private final IProductVariantService variantService = new ProductVariantServiceImpl();
+	private final IProductImageService imageService = new ProductImageServiceImpl();
+	private final ICategoryService categoryService = new CategoryServiceImpl();
+	private final IShopService shopService = new ShopServiceImpl();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

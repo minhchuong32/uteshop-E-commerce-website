@@ -45,7 +45,7 @@
 			</div>
 		</form>
 
-		<!-- 🔸 Thông báo lỗi (ẩn mặc định) -->
+		<!--  Thông báo lỗi (ẩn mặc định) -->
 		<div id="alertBox"
 			class="alert alert-warning alert-dismissible fade show d-none"
 			role="alert">
