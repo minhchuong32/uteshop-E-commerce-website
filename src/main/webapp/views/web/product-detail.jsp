@@ -180,7 +180,7 @@
 			<div class="d-flex align-items-center border rounded p-3 bg-light">
 				<!-- Logo shop (dùng ảnh mặc định nếu chưa có) -->
 				<img
-					src="${pageContext.request.contextPath}/assets/images/shops/default-shop-logo.png"
+					src="${pageContext.request.contextPath}/assets${product.shop.logo}"
 					alt="${product.shop.name}" class="rounded me-3"
 					style="width: 80px; height: 80px; object-fit: cover;">
 
@@ -213,8 +213,8 @@
 
 		<c:set var="variants" value="${product.variants}" />
 
-		<!-- BẢNG THÔNG TIN -->
-		<table class="table table-bordered align-middle">
+		<!-- BẢNG THÔNG TIN SẢN PHẨM -->
+		<table class="table table-bordered align-middle mt-4">
 			<tr>
 				<th>Danh mục</th>
 				<td>${product.category != null ? product.category.name : '-'}</td>
@@ -249,111 +249,112 @@
 				<th>Tồn kho</th>
 				<td id="stock-status"><span id="stock-value"> <c:choose>
 							<c:when test="${not empty minVariant and minVariant.stock > 0}">
-                    Còn hàng (${minVariant.stock})
-                </c:when>
+						Còn hàng (${minVariant.stock})
+					</c:when>
 							<c:otherwise>
 								<span class="text-danger">Hết hàng</span>
 							</c:otherwise>
 						</c:choose>
 				</span></td>
 			</tr>
+
+
+			<tr>
+				<th>Mô tả</th>
+				<td>${product.description}</td>
+			</tr>
 		</table>
 
-		<tr>
-			<th>Mô tả</th>
-			<td>${product.description}</td>
-		</tr>
 
-		</table>
-	</div>
+		<!-- Tabs mô tả & đánh giá -->
+		<div class="tab-pane " id="reviews">
 
-	<!-- Tabs mô tả & đánh giá -->
-	<div class="tab-pane " id="reviews">
-
-		<div class="p-3">
-			<h5 class="fw-bold text-uppercase text-primary-custom">
-				<i class="bi bi-grid me-2"></i> Đánh giá sản phẩm
-			</h5>
-		</div>
-		<!-- Tổng quan đánh giá -->
-		<div class="mb-3">
-			<div class="text-warning">
-				<c:forEach var="i" begin="1" end="5">
-					<i
-						class="bi ${i <= product.averageRating ? 'bi-star-fill' : 'bi-star'}"></i>
-				</c:forEach>
-				<span class="text-muted"> (<fmt:formatNumber
-						value="${product.averageRating}" maxFractionDigits="1" />/5 từ
-					${product.reviewsCount} đánh giá)
-				</span>
-
+			<div class="p-3">
+				<h5 class="fw-bold text-uppercase text-primary-custom">
+					<i class="bi bi-grid me-2"></i> Đánh giá sản phẩm
+				</h5>
 			</div>
-		</div>
+			<!-- Tổng quan đánh giá -->
+			<div class="mb-3">
+				<div class="text-warning">
+					<c:forEach var="i" begin="1" end="5">
+						<i
+							class="bi ${i <= product.averageRating ? 'bi-star-fill' : 'bi-star'}"></i>
+					</c:forEach>
+					<span class="text-muted"> (<fmt:formatNumber
+							value="${product.averageRating}" maxFractionDigits="1" />/5 từ
+						${product.reviewsCount} đánh giá)
+					</span>
+
+				</div>
+			</div>
 
 
-		<c:if test="${hasPurchased}">
-			<div class="mb-4 d-flex align-items-start">
-				<!-- Avatar -->
-				<img
-					src="${pageContext.request.contextPath}/uploads/${sessionScope.account.avatar}"
-					alt="Avatar" class="rounded-circle me-3"
-					style="width: 50px; height: 50px; object-fit: cover;">
+			<c:if test="${hasPurchased}">
+				<div class="mb-4 d-flex align-items-start">
+					<!-- Avatar -->
+					<img
+						src="${pageContext.request.contextPath}/uploads/${sessionScope.account.avatar}"
+						alt="Avatar" class="rounded-circle me-3"
+						style="width: 50px; height: 50px; object-fit: cover;">
 
-				<div class="flex-grow-1">
-					<form action="${pageContext.request.contextPath}/review/add"
-						method="post">
-						<input type="hidden" name="productId" value="${product.productId}" />
+					<div class="flex-grow-1">
+						<form action="${pageContext.request.contextPath}/review/add"
+							method="post">
+							<input type="hidden" name="productId"
+								value="${product.productId}" />
 
-						<!-- Người dùng chọn rating -->
-						<div class="mb-2 text-warning">
+							<!-- Người dùng chọn rating -->
+							<div class="mb-2 text-warning">
+								<c:forEach var="i" begin="1" end="5">
+									<input type="radio" class="btn-check" name="rating"
+										id="star${i}" value="${i}">
+									<label class="bi bi-star-fill btn btn-outline-warning"
+										for="star${i}"></label>
+								</c:forEach>
+							</div>
+
+							<!-- Comment -->
+							<textarea name="comment" rows="3" class="form-control mb-2"
+								placeholder="Chia sẻ cảm nhận của bạn..."></textarea>
+
+							<!-- Nút gửi -->
+							<button type="submit" class="btn btn-primary-custom">Gửi
+								đánh giá</button>
+						</form>
+					</div>
+				</div>
+			</c:if>
+
+			<c:if test="${not hasPurchased}">
+				<p class="text-muted">Bạn cần mua sản phẩm này để viết đánh giá.</p>
+			</c:if>
+
+
+			<!-- Danh sách các review -->
+			<c:forEach var="r" items="${reviews}">
+				<div class="border-bottom pb-2 mb-3 d-flex">
+					<img
+						src="${pageContext.request.contextPath}/assets/images${r.user.avatar}"
+						class="rounded-circle me-3"
+						style="width: 40px; height: 40px; object-fit: cover;">
+					<div>
+						<strong>${r.user.username}</strong>
+						<div class="text-warning small">
 							<c:forEach var="i" begin="1" end="5">
-								<input type="radio" class="btn-check" name="rating"
-									id="star${i}" value="${i}">
-								<label class="bi bi-star-fill btn btn-outline-warning"
-									for="star${i}"></label>
+								<i class="bi ${i <= r.rating ? 'bi-star-fill' : 'bi-star'}"></i>
 							</c:forEach>
 						</div>
-
-						<!-- Comment -->
-						<textarea name="comment" rows="3" class="form-control mb-2"
-							placeholder="Chia sẻ cảm nhận của bạn..."></textarea>
-
-						<!-- Nút gửi -->
-						<button type="submit" class="btn btn-primary-custom">Gửi
-							đánh giá</button>
-					</form>
-				</div>
-			</div>
-		</c:if>
-
-		<c:if test="${not hasPurchased}">
-			<p class="text-muted">Bạn cần mua sản phẩm này để viết đánh giá.</p>
-		</c:if>
-
-
-		<!-- Danh sách các review -->
-		<c:forEach var="r" items="${reviews}">
-			<div class="border-bottom pb-2 mb-3 d-flex">
-				<img
-					src="${pageContext.request.contextPath}/uploads/${r.user.avatar}"
-					class="rounded-circle me-3"
-					style="width: 40px; height: 40px; object-fit: cover;">
-				<div>
-					<strong>${r.user.username}</strong>
-					<div class="text-warning small">
-						<c:forEach var="i" begin="1" end="5">
-							<i class="bi ${i <= r.rating ? 'bi-star-fill' : 'bi-star'}"></i>
-						</c:forEach>
+						<p class="mb-0">${r.comment}</p>
 					</div>
-					<p class="mb-0">${r.comment}</p>
 				</div>
-			</div>
-		</c:forEach>
+			</c:forEach>
 
-		<!-- Nếu chưa có review nào -->
-		<c:if test="${empty reviews}">
-			<p>Chưa có đánh giá nào.</p>
-		</c:if>
+			<!-- Nếu chưa có review nào -->
+			<c:if test="${empty reviews}">
+				<p>Chưa có đánh giá nào.</p>
+			</c:if>
+		</div>
 	</div>
 
 	</div>
