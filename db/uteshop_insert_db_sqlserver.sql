@@ -62,79 +62,79 @@ INSERT INTO products (shop_id, category_id, name, description, image_url) VALUES
 -- ==================== BẢNG PRODUCT_VARIANTS ====================
 -- MacBook Pro 14 M3 Pro variants
 INSERT INTO product_variants (product_id, optionName, optionValue, stock, price, oldPrice, imageUrl) VALUES
-(1, N'Màu sắc', N'Space Black', 15, 52990000, 54990000, N'/images/variants/mbp14-black.jpg'),
-(1, N'Màu sắc', N'Silver', 20, 52990000, 54990000, N'/images/variants/mbp14-silver.jpg'),
+(1, N'Màu sắc', N'Space Black', 15, 52990000, 54990000, N'/images/products/mbp14-black.jpg'),
+(1, N'Màu sắc', N'Silver', 20, 52990000, 54990000, N'/images/products/mbp14-silver.jpg'),
 
 -- Dell XPS 15 variants
-(2, N'Cấu hình', N'i7/32GB/1TB', 12, 48990000, 51990000, N'/images/variants/dell-xps15.jpg'),
-(2, N'Cấu hình', N'i9/64GB/2TB', 8, 69990000, 74990000, N'/images/variants/dell-xps15-max.jpg'),
+(2, N'Cấu hình', N'i7/32GB/1TB', 12, 48990000, 51990000, N'/images/products/dell-xps15.jpg'),
+(2, N'Cấu hình', N'i9/64GB/2TB', 8, 69990000, 74990000, N'/images/products/dell-xps15-max.jpg'),
 
 -- ASUS ROG G14 variants
-(3, N'Màu sắc', N'Moonlight White', 18, 42990000, 45990000, N'/images/variants/rog-g14-white.jpg'),
-(3, N'Màu sắc', N'Eclipse Gray', 15, 42990000, 45990000, N'/images/variants/rog-g14-gray.jpg'),
+(3, N'Màu sắc', N'Moonlight White', 18, 42990000, 45990000, N'/images/products/rog-g14-white.jpg'),
+(3, N'Màu sắc', N'Eclipse Gray', 15, 42990000, 45990000, N'/images/products/rog-g14-gray.jpg'),
 
 -- ThinkPad X1 Carbon variants
-(4, N'Cấu hình', N'i7/16GB/512GB', 20, 38990000, 41990000, N'/images/variants/thinkpad-x1.jpg'),
+(4, N'Cấu hình', N'i7/16GB/512GB', 20, 38990000, 41990000, N'/images/products/thinkpad-x1.jpg'),
 
 -- iMac 24 variants
-(5, N'Màu sắc', N'Blue', 10, 36990000, 38990000, N'/images/variants/imac24-blue.jpg'),
-(5, N'Màu sắc', N'Silver', 12, 36990000, 38990000, N'/images/variants/imac24-silver.jpg'),
-(5, N'Màu sắc', N'Pink', 8, 36990000, 38990000, N'/images/variants/imac24-pink.jpg'),
+(5, N'Màu sắc', N'Blue', 10, 36990000, 38990000, N'/images/products/imac24-blue.jpg'),
+(5, N'Màu sắc', N'Silver', 12, 36990000, 38990000, N'/images/products/imac24-silver.jpg'),
+(5, N'Màu sắc', N'Pink', 8, 36990000, 38990000, N'/images/products/imac24-pink.jpg'),
 
 -- LG Monitor variant
-(6, N'Kích thước', N'27 inch', 25, 18990000, 21990000, N'/images/variants/lg-monitor-27.jpg'),
+(6, N'Kích thước', N'27 inch', 25, 18990000, 21990000, N'/images/products/lg-monitor-27.jpg'),
 
 -- Logitech Mouse variants
-(7, N'Màu sắc', N'Black', 50, 3290000, 3690000, N'/images/variants/gpro-black.jpg'),
-(7, N'Màu sắc', N'White', 35, 3290000, 3690000, N'/images/variants/gpro-white.jpg'),
+(7, N'Màu sắc', N'Black', 50, 3290000, 3690000, N'/images/products/gpro-black.jpg'),
+(7, N'Màu sắc', N'White', 35, 3290000, 3690000, N'/images/products/gpro-white.jpg'),
 
 -- Razer Keyboard variant
-(8, N'Switch', N'Green Switch', 30, 5990000, 6490000, N'/images/variants/razer-bw-v4.jpg'),
+(8, N'Switch', N'Green Switch', 30, 5990000, 6490000, N'/images/products/razer-bw-v4.jpg'),
 
 -- RTX 4080 variant
-(9, N'Nhà sản xuất', N'ASUS TUF Gaming', 15, 28990000, 32990000, N'/images/variants/rtx4080-asus.jpg'),
+(9, N'Nhà sản xuất', N'ASUS TUF Gaming', 15, 28990000, 32990000, N'/images/products/rtx4080-asus.jpg'),
 
 -- Ryzen 9 variant
-(10, N'Phiên bản', N'Box', 20, 13990000, 15990000, N'/images/variants/ryzen9-box.jpg'),
+(10, N'Phiên bản', N'Box', 20, 13990000, 15990000, N'/images/products/ryzen9-box.jpg'),
 
 -- iPhone 15 Pro Max variants
-(11, N'Dung lượng', N'256GB - Natural Titanium', 25, 33990000, 34990000, N'/images/variants/iphone15pm-natural.jpg'),
-(11, N'Dung lượng', N'512GB - Blue Titanium', 18, 38990000, 39990000, N'/images/variants/iphone15pm-blue.jpg'),
-(11, N'Dung lượng', N'1TB - Black Titanium', 10, 45990000, 46990000, N'/images/variants/iphone15pm-black.jpg'),
+(11, N'Dung lượng', N'256GB - Natural Titanium', 25, 33990000, 34990000, N'/images/products/iphone15pm-natural.jpg'),
+(11, N'Dung lượng', N'512GB - Blue Titanium', 18, 38990000, 39990000, N'/images/products/iphone15pm-blue.jpg'),
+(11, N'Dung lượng', N'1TB - Black Titanium', 10, 45990000, 46990000, N'/images/products/iphone15pm-black.jpg'),
 
 -- Samsung S24 Ultra variants
-(12, N'Dung lượng', N'256GB - Titanium Gray', 30, 29990000, 31990000, N'/images/variants/s24u-gray.jpg'),
-(12, N'Dung lượng', N'512GB - Titanium Black', 20, 33990000, 35990000, N'/images/variants/s24u-black.jpg'),
+(12, N'Dung lượng', N'256GB - Titanium Gray', 30, 29990000, 31990000, N'/images/products/s24u-gray.jpg'),
+(12, N'Dung lượng', N'512GB - Titanium Black', 20, 33990000, 35990000, N'/images/products/s24u-black.jpg'),
 
 -- Xiaomi 14 Pro variants
-(13, N'Màu sắc', N'Black', 35, 21990000, 23990000, N'/images/variants/xiaomi14-black.jpg'),
-(13, N'Màu sắc', N'White', 25, 21990000, 23990000, N'/images/variants/xiaomi14-white.jpg'),
+(13, N'Màu sắc', N'Black', 35, 21990000, 23990000, N'/images/products/xiaomi14-black.jpg'),
+(13, N'Màu sắc', N'White', 25, 21990000, 23990000, N'/images/products/xiaomi14-white.jpg'),
 
 -- Pixel 8 Pro variants
-(14, N'Dung lượng', N'128GB - Bay', 20, 24990000, 26990000, N'/images/variants/pixel8-bay.jpg'),
-(14, N'Dung lượng', N'256GB - Obsidian', 15, 27990000, 29990000, N'/images/variants/pixel8-obsidian.jpg'),
+(14, N'Dung lượng', N'128GB - Bay', 20, 24990000, 26990000, N'/images/products/pixel8-bay.jpg'),
+(14, N'Dung lượng', N'256GB - Obsidian', 15, 27990000, 29990000, N'/images/products/pixel8-obsidian.jpg'),
 
 -- iPad Pro variants
-(15, N'Kết nối', N'WiFi 256GB - Space Gray', 18, 28990000, 30990000, N'/images/variants/ipad-pro-gray.jpg'),
-(15, N'Kết nối', N'5G 512GB - Silver', 12, 36990000, 38990000, N'/images/variants/ipad-pro-silver.jpg'),
+(15, N'Kết nối', N'WiFi 256GB - Space Gray', 18, 28990000, 30990000, N'/images/products/ipad-pro-gray.jpg'),
+(15, N'Kết nối', N'5G 512GB - Silver', 12, 36990000, 38990000, N'/images/products/ipad-pro-silver.jpg'),
 
 -- Tab S9 Ultra variant
-(16, N'Dung lượng', N'256GB - Graphite', 15, 26990000, 28990000, N'/images/variants/tabs9u-graphite.jpg'),
+(16, N'Dung lượng', N'256GB - Graphite', 15, 26990000, 28990000, N'/images/products/tabs9u-graphite.jpg'),
 
 -- Apple Watch Ultra 2 variants
-(17, N'Dây đeo', N'Alpine Loop', 20, 21990000, 22990000, N'/images/variants/awu2-alpine.jpg'),
-(17, N'Dây đeo', N'Ocean Band', 15, 21990000, 22990000, N'/images/variants/awu2-ocean.jpg'),
+(17, N'Dây đeo', N'Alpine Loop', 20, 21990000, 22990000, N'/images/products/awu2-alpine.jpg'),
+(17, N'Dây đeo', N'Ocean Band', 15, 21990000, 22990000, N'/images/products/awu2-ocean.jpg'),
 
 -- Galaxy Watch 6 Classic variants
-(18, N'Kích thước', N'43mm - Black', 25, 8990000, 9990000, N'/images/variants/gw6c-43-black.jpg'),
-(18, N'Kích thước', N'47mm - Silver', 20, 9990000, 10990000, N'/images/variants/gw6c-47-silver.jpg'),
+(18, N'Kích thước', N'43mm - Black', 25, 8990000, 9990000, N'/images/products/gw6c-43-black.jpg'),
+(18, N'Kích thước', N'47mm - Silver', 20, 9990000, 10990000, N'/images/products/gw6c-47-silver.jpg'),
 
 -- Sony WH-1000XM5 variants
-(19, N'Màu sắc', N'Black', 40, 8990000, 9990000, N'/images/variants/sony-xm5-black.jpg'),
-(19, N'Màu sắc', N'Silver', 30, 8990000, 9990000, N'/images/variants/sony-xm5-silver.jpg'),
+(19, N'Màu sắc', N'Black', 40, 8990000, 9990000, N'/images/products/sony-xm5-black.jpg'),
+(19, N'Màu sắc', N'Silver', 30, 8990000, 9990000, N'/images/products/sony-xm5-silver.jpg'),
 
 -- AirPods Pro 2 variant
-(20, N'Phiên bản', N'USB-C', 50, 6490000, 6990000, N'/images/variants/airpods-pro2-usbc.jpg');
+(20, N'Phiên bản', N'USB-C', 50, 6490000, 6990000, N'/images/products/airpods-pro2-usbc.jpg');
 
 -- ==================== BẢNG ORDERS ====================
 INSERT INTO orders (user_id, total_amount, status, payment_method, created_at, address) VALUES 
@@ -312,42 +312,317 @@ INSERT INTO store_settings (store_name, email, hotline, address, logo, theme, co
 (N'UteShop Vietnam', N'contact@uteshop.vn', N'+84 028 3896 8641', N'01 Đ. Võ Văn Ngân, Linh Chiểu, Thủ Đức, Hồ Chí Minh', N'/images/logo/techshop-logo.png', N'modern', 1, 1, 1, DATEADD(day, -365, GETDATE()), GETDATE());
 
 -- ==================== BẢNG PRODUCT_IMAGE ====================
-INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+
+-- ===========================
 -- MacBook Pro 14 M3 Pro
-(N'/images/products/mbp14-1.jpg', 1, 1),
-(N'/images/products/mbp14-2.jpg', 0, 1),
-(N'/images/products/mbp14-3.jpg', 0, 1),
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/macbook-pro-14-m3.jpg', 1, 1),
+(N'/images/products/mbp14-black.jpg', 0, 1),
+(N'/images/products/mbp14-silver.jpg', 0, 1);
 
--- Dell XPS 15
-(N'/images/products/dell-xps15-1.jpg', 1, 2),
-(N'/images/products/dell-xps15-2.jpg', 0, 2),
-(N'/images/products/dell-xps15-3.jpg', 0, 2),
+-- ===========================
+-- Dell XPS 15 9530
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/dell-xps-15.jpg', 1, 2),
+(N'/images/products/dell-xps15.jpg', 0, 2),
+(N'/images/products/dell-xps15-max.jpg', 0, 2);
 
--- ROG G14
-(N'/images/products/rog-g14-1.jpg', 1, 3),
-(N'/images/products/rog-g14-2.jpg', 0, 3),
-(N'/images/products/rog-g14-3.jpg', 0, 3),
+-- ===========================
+-- ASUS ROG Zephyrus G14
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/asus-rog-g14.jpg', 1, 3),
+(N'/images/products/rog-g14-white.jpg', 0, 3),
+(N'/images/products/rog-g14-gray.jpg', 0, 3);
 
+-- ===========================
+-- Lenovo ThinkPad X1 Carbon Gen 11
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/thinkpad-x1-carbon.jpg', 1, 4),
+(N'/images/products/thinkpad-x1.jpg', 0, 4);
+
+-- ===========================
+-- iMac 24 inch M3
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/imac-24-m3.jpg', 1, 5),
+(N'/images/products/imac24-blue.jpg', 0, 5),
+(N'/images/products/imac24-silver.jpg', 0, 5),
+(N'/images/products/imac24-pink.jpg', 0, 5);
+
+-- ===========================
+-- LG UltraGear 27GN950
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/lg-ultragear-27.jpg', 1, 6),
+(N'/images/products/lg-monitor-27.jpg', 0, 6);
+
+-- ===========================
+-- Logitech G Pro X Superlight
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/logitech-gpro-x.jpg', 1, 7),
+(N'/images/products/gpro-black.jpg', 0, 7),
+(N'/images/products/gpro-white.jpg', 0, 7);
+
+-- ===========================
+-- Razer BlackWidow V4 Pro
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/razer-blackwidow-v4.jpg', 1, 8),
+(N'/images/products/razer-bw-v4.jpg', 0, 8);
+
+-- ===========================
+-- NVIDIA GeForce RTX 4080
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/rtx-4080.jpg', 1, 9),
+(N'/images/products/rtx4080-asus.jpg', 0, 9);
+
+-- ===========================
+-- AMD Ryzen 9 7950X
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/ryzen-9-7950x.jpg', 1, 10),
+(N'/images/products/ryzen9-box.jpg', 0, 10);
+
+-- ===========================
 -- iPhone 15 Pro Max
-(N'/images/products/ip15pm-1.jpg', 1, 11),
-(N'/images/products/ip15pm-2.jpg', 0, 11),
-(N'/images/products/ip15pm-3.jpg', 0, 11),
-(N'/images/products/ip15pm-4.jpg', 0, 11),
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/iphone-15-pro-max.jpg', 1, 11),
+(N'/images/products/iphone15pm-natural.jpg', 0, 11),
+(N'/images/products/iphone15pm-blue.jpg', 0, 11),
+(N'/images/products/iphone15pm-black.jpg', 0, 11);
 
--- Samsung S24 Ultra
-(N'/images/products/s24u-1.jpg', 1, 12),
-(N'/images/products/s24u-2.jpg', 0, 12),
-(N'/images/products/s24u-3.jpg', 0, 12),
+-- ===========================
+-- Samsung Galaxy S24 Ultra
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/samsung-s24-ultra.jpg', 1, 12),
+(N'/images/products/s24u-gray.jpg', 0, 12),
+(N'/images/products/s24u-black.jpg', 0, 12);
 
+-- ===========================
+-- Xiaomi 14 Pro
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/xiaomi-14-pro.jpg', 1, 13),
+(N'/images/products/xiaomi14-black.jpg', 0, 13),
+(N'/images/products/xiaomi14-white.jpg', 0, 13);
+
+-- ===========================
+-- Google Pixel 8 Pro
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/pixel-8-pro.jpg', 1, 14),
+(N'/images/products/pixel8-bay.jpg', 0, 14),
+(N'/images/products/pixel8-obsidian.jpg', 0, 14);
+
+-- ===========================
+-- iPad Pro 12.9 M2
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/ipad-pro-129.jpg', 1, 15),
+(N'/images/products/ipad-pro-gray.jpg', 0, 15),
+(N'/images/products/ipad-pro-silver.jpg', 0, 15);
+
+-- ===========================
+-- Samsung Galaxy Tab S9 Ultra
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/tab-s9-ultra.jpg', 1, 16),
+(N'/images/products/tabs9u-graphite.jpg', 0, 16);
+
+-- ===========================
+-- Apple Watch Ultra 2
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/apple-watch-ultra2.jpg', 1, 17),
+(N'/images/products/awu2-alpine.jpg', 0, 17),
+(N'/images/products/awu2-ocean.jpg', 0, 17);
+
+-- ===========================
+-- Samsung Galaxy Watch 6 Classic
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/galaxy-watch6-classic.jpg', 1, 18),
+(N'/images/products/gw6c-43-black.jpg', 0, 18),
+(N'/images/products/gw6c-47-silver.jpg', 0, 18);
+
+-- ===========================
 -- Sony WH-1000XM5
-(N'/images/products/sony-xm5-1.jpg', 1, 19),
-(N'/images/products/sony-xm5-2.jpg', 0, 19),
-(N'/images/products/sony-xm5-3.jpg', 0, 19),
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/sony-wh1000xm5.jpg', 1, 19),
+(N'/images/products/sony-xm5-black.jpg', 0, 19),
+(N'/images/products/sony-xm5-silver.jpg', 0, 19);
 
--- AirPods Pro 2
-(N'/images/products/airpods-pro2-1.jpg', 1, 20),
-(N'/images/products/airpods-pro2-2.jpg', 0, 20);
+-- ===========================
+-- AirPods Pro Gen 2
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/airpods-pro-2.jpg', 1, 20),
+(N'/images/products/airpods-pro2-usbc.jpg', 0, 20);
+GO
+-- ===========================
+-- MacBook Pro 14 M3 Pro
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/macbook-pro-14-m3.jpg', 1, 1),
+(N'/images/products/mbp14-black.jpg', 0, 1),
+(N'/images/products/mbp14-silver.jpg', 0, 1);
 
+-- ===========================
+-- Dell XPS 15 9530
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/dell-xps-15.jpg', 1, 2),
+(N'/images/products/dell-xps15.jpg', 0, 2),
+(N'/images/products/dell-xps15-max.jpg', 0, 2);
+
+-- ===========================
+-- ASUS ROG Zephyrus G14
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/asus-rog-g14.jpg', 1, 3),
+(N'/images/products/rog-g14-white.jpg', 0, 3),
+(N'/images/products/rog-g14-gray.jpg', 0, 3);
+
+-- ===========================
+-- Lenovo ThinkPad X1 Carbon Gen 11
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/thinkpad-x1-carbon.jpg', 1, 4),
+(N'/images/products/thinkpad-x1.jpg', 0, 4);
+
+-- ===========================
+-- iMac 24 inch M3
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/imac-24-m3.jpg', 1, 5),
+(N'/images/products/imac24-blue.jpg', 0, 5),
+(N'/images/products/imac24-silver.jpg', 0, 5),
+(N'/images/products/imac24-pink.jpg', 0, 5);
+
+-- ===========================
+-- LG UltraGear 27GN950
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/lg-ultragear-27.jpg', 1, 6),
+(N'/images/products/lg-monitor-27.jpg', 0, 6);
+
+-- ===========================
+-- Logitech G Pro X Superlight
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/logitech-gpro-x.jpg', 1, 7),
+(N'/images/products/gpro-black.jpg', 0, 7),
+(N'/images/products/gpro-white.jpg', 0, 7);
+
+-- ===========================
+-- Razer BlackWidow V4 Pro
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/razer-blackwidow-v4.jpg', 1, 8),
+(N'/images/products/razer-bw-v4.jpg', 0, 8);
+
+-- ===========================
+-- NVIDIA GeForce RTX 4080
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/rtx-4080.jpg', 1, 9),
+(N'/images/products/rtx4080-asus.jpg', 0, 9);
+
+-- ===========================
+-- AMD Ryzen 9 7950X
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/ryzen-9-7950x.jpg', 1, 10),
+(N'/images/products/ryzen9-box.jpg', 0, 10);
+
+-- ===========================
+-- iPhone 15 Pro Max
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/iphone-15-pro-max.jpg', 1, 11),
+(N'/images/products/iphone15pm-natural.jpg', 0, 11),
+(N'/images/products/iphone15pm-blue.jpg', 0, 11),
+(N'/images/products/iphone15pm-black.jpg', 0, 11);
+
+-- ===========================
+-- Samsung Galaxy S24 Ultra
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/samsung-s24-ultra.jpg', 1, 12),
+(N'/images/products/s24u-gray.jpg', 0, 12),
+(N'/images/products/s24u-black.jpg', 0, 12);
+
+-- ===========================
+-- Xiaomi 14 Pro
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/xiaomi-14-pro.jpg', 1, 13),
+(N'/images/products/xiaomi14-black.jpg', 0, 13),
+(N'/images/products/xiaomi14-white.jpg', 0, 13);
+
+-- ===========================
+-- Google Pixel 8 Pro
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/pixel-8-pro.jpg', 1, 14),
+(N'/images/products/pixel8-bay.jpg', 0, 14),
+(N'/images/products/pixel8-obsidian.jpg', 0, 14);
+
+-- ===========================
+-- iPad Pro 12.9 M2
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/ipad-pro-129.jpg', 1, 15),
+(N'/images/products/ipad-pro-gray.jpg', 0, 15),
+(N'/images/products/ipad-pro-silver.jpg', 0, 15);
+
+-- ===========================
+-- Samsung Galaxy Tab S9 Ultra
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/tab-s9-ultra.jpg', 1, 16),
+(N'/images/products/tabs9u-graphite.jpg', 0, 16);
+
+-- ===========================
+-- Apple Watch Ultra 2
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/apple-watch-ultra2.jpg', 1, 17),
+(N'/images/products/awu2-alpine.jpg', 0, 17),
+(N'/images/products/awu2-ocean.jpg', 0, 17);
+
+-- ===========================
+-- Samsung Galaxy Watch 6 Classic
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/galaxy-watch6-classic.jpg', 1, 18),
+(N'/images/products/gw6c-43-black.jpg', 0, 18),
+(N'/images/products/gw6c-47-silver.jpg', 0, 18);
+
+-- ===========================
+-- Sony WH-1000XM5
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/sony-wh1000xm5.jpg', 1, 19),
+(N'/images/products/sony-xm5-black.jpg', 0, 19),
+(N'/images/products/sony-xm5-silver.jpg', 0, 19);
+
+-- ===========================
+-- AirPods Pro Gen 2
+-- ===========================
+INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
+(N'/images/products/airpods-pro-2.jpg', 1, 20),
+(N'/images/products/airpods-pro2-usbc.jpg', 0, 20);
+GO
 -- ==================== KẾT THÚC ====================
 -- Script đã hoàn tất với đầy đủ dữ liệu cho tất cả các bảng
 -- Tổng số records: 
