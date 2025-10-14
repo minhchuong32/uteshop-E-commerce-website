@@ -355,7 +355,34 @@
 		class="alert d-none position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg"
 		style="z-index: 1055; min-width: 300px; text-align: center; border-radius: 10px;">
 	</div>
+	<style>
+/* ẢNH CHÍNH SẢN PHẨM */
+.product-detail-img {
+	width: 100%; /* Ảnh full chiều ngang container */
+	height: auto; /* Tự động điều chỉnh chiều cao đúng tỉ lệ */
+	max-height: 500px; /* Giới hạn chiều cao để không quá to */
+	object-fit: contain; /* Giữ nguyên tỉ lệ, không bị méo */
+	background-color: #f9f9f9; /* Màu nền nếu ảnh không lấp đầy */
+	border-radius: 10px;
+	display: block;
+	margin: 0 auto;
+}
 
+/* ẢNH THUMBNAIL DƯỚI */
+.thumb-img {
+	width: 80px;
+	height: 80px;
+	object-fit: cover; /* Thumbnail nên đồng kích thước, không bị dư */
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.thumb-img.active, .thumb-img:hover {
+	border: 2px solid #0d6efd;
+	transform: scale(1.05);
+}
+</style>
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

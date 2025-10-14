@@ -356,6 +356,35 @@
 			</c:if>
 		</div>
 	</div>
+	<style>
+/* ẢNH CHÍNH SẢN PHẨM */
+.product-detail-img {
+	width: 100%; /* Ảnh full chiều ngang container */
+	height: auto; /* Tự động điều chỉnh chiều cao đúng tỉ lệ */
+	max-height: 500px; /* Giới hạn chiều cao để không quá to */
+	object-fit: contain; /* Giữ nguyên tỉ lệ, không bị méo */
+	background-color: #f9f9f9; /* Màu nền nếu ảnh không lấp đầy */
+	border-radius: 10px;
+	display: block;
+	margin: 0 auto;
+}
+
+/* ẢNH THUMBNAIL DƯỚI */
+.thumb-img {
+	width: 80px;
+	height: 80px;
+	object-fit: cover; /* Thumbnail nên đồng kích thước, không bị dư */
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.thumb-img.active, .thumb-img:hover {
+	border: 2px solid #0d6efd;
+	transform: scale(1.05);
+}
+</style>
+
 
 	</div>
 	<script

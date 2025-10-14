@@ -1,5 +1,6 @@
 /* Detail Product  */
 
+
 /* Radio button được chọn thì đổi style label */
 .btn-check:checked + .btn-outline-primary {
     background-color: var(--primary-color) !important;
