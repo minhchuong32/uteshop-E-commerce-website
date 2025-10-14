@@ -79,6 +79,13 @@
 				</button>
 			</div>
 		</div>
+		<!-- Bộ lọc + Sản phẩm -->
+		<div id="product" class="bg-white rounded shadow-sm p-3 mb-4">
+			<div class="mb-3">
+				<h5 class="fw-bold text-uppercase text-primary-custom">
+					<i class="bi bi-box-seam me-2"></i> Sản phẩm
+				</h5>
+			</div>
 		<!-- Bộ lọc -->
 		<form action="${pageContext.request.contextPath}/web/home"
 			method="get" class="row g-3 align-items-end mb-4">
