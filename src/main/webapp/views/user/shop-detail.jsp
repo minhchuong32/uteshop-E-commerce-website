@@ -167,7 +167,7 @@
                        onmouseout="this.style.borderColor='#dee2e6'">
 
                         <div class="d-flex align-items-center">
-                            <img src="${pageContext.request.contextPath}/assets/${p.imageUrl}"
+                            <img src="${pageContext.request.contextPath}/assets${p.imageUrl}"
                                  alt="${p.name}" class="img-thumbnail me-3"
                                  style="width:80px; height:80px; object-fit:cover;">
                             <div>

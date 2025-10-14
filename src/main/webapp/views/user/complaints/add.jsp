@@ -2,7 +2,7 @@
 <%@ include file="/commons/taglib.jsp" %>
 
 <div class="container py-5" style="max-width: 700px;">
-    <h3 class="mb-4 fw-semibold text-center text-primary">Gửi Khiếu Nại</h3>
+    <h3 class="mb-4 fw-semibold text-center text-primary-custom">Gửi Khiếu Nại</h3>
 
     <div class="card shadow-sm border-0 rounded-4 p-4">
         <form action="${pageContext.request.contextPath}/user/complaints/add" method="post" enctype="multipart/form-data">
@@ -31,7 +31,7 @@
             </div>
 
             <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary rounded-pill px-4">
+                <button type="submit" class="btn btn-primary-custom rounded-pill px-4">
                     <i class="bi bi-send-fill me-2"></i> Gửi Khiếu Nại
                 </button>
                 <a href="${pageContext.request.contextPath}/user/orders"

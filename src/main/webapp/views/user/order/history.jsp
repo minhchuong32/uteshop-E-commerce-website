@@ -87,7 +87,7 @@
 							Xem chi tiết </a>
 
 						<!-- Nút khiếu nại chỉ hiển thị nếu đơn hàng đã giao -->
-						<c:if test="${o.status eq 'Hoàn tất'}">
+						<c:if test="${o.status eq 'Đã giao'}">
 							<a
 								href="${pageContext.request.contextPath}/user/complaints/add?orderId=${o.orderId}"
 								class="btn btn-outline-danger btn-sm mt-1"> <i
