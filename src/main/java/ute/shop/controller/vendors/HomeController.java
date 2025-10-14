@@ -50,7 +50,7 @@ public class HomeController extends HttpServlet {
         }
 
         if (shop == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
+            resp.sendRedirect(req.getContextPath() + "/vendor/register-shop");
             return;
         }
 
