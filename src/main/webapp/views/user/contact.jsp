@@ -187,7 +187,7 @@
 </div>
 <!-- Google Map -->
 
-<div class="row mt-5">
+<div class="row mt-5 mb-5">
 	<div class="col-12">
 		<div class="ratio ratio-16x9">
 			<iframe src="${mapEmbedUrl}" width="100%" height="450"

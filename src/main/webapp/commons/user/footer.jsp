@@ -5,7 +5,12 @@
 
       <!-- Company Info -->
       <div class="col-md-3 mb-4">
-        <img src="${pageContext.request.contextPath}/assets/images/logo_footer_strong.png" 
+		<!--       logo  -->
+		 <a class="navbar-brand d-flex align-items-center"
+               href="${pageContext.request.contextPath}/admin/home">
+                 <img src="${pageContext.request.contextPath}/assets/images/logo_footer_strong.png"> 
+            </a>
+       
          alt="UTESHOP Logo" 
          style="height:60px; width:auto; margin-right:8px; margin-left: -12px;">
         <p class="small text-light">

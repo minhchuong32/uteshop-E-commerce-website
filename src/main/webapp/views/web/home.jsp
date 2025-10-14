@@ -61,7 +61,7 @@
 									class="text-decoration-none text-dark d-block">
 									<div class="category-img">
 										<img
-											src="${pageContext.request.contextPath}/assets/${c.image}"
+											src="${pageContext.request.contextPath}/assets${c.image}"
 											alt="${c.name}" class="img-fluid">
 									</div>
 									<div class="category-title fw-medium py-2">${c.name}</div>
@@ -156,7 +156,7 @@
 							<div class="card product-card h-100">
 								<div class="product-img-wrapper">
 									<img
-										src="${pageContext.request.contextPath}/assets/${p.imageUrl}"
+										src="${pageContext.request.contextPath}/assets${p.imageUrl}"
 										class="card-img-top" alt="${p.name}">
 								</div>
 								<div
