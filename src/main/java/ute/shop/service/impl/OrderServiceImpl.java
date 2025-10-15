@@ -103,4 +103,9 @@ public class OrderServiceImpl implements IOrderService {
 	public List<Order> getOrdersByUserAndStatus(int userId, String status) {
 		return orderDao.getOrdersByUserAndStatus(userId, status);
 	}
+
+	@Override
+	public List<Order> findAllForAdmin() {
+		return orderDao.findAllForAdmin();
+	}
 }

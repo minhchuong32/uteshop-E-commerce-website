@@ -161,6 +161,7 @@
 	src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
 
 <script>
+
 	$(document).ready(function() {
 		$('#shopTable').DataTable({
 			"pageLength" : 10,

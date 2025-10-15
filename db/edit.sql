@@ -126,7 +126,17 @@ BEGIN
     FROM inserted;
 END;
 
+-- Cho phép shipper_id null khi tạo delivery: 
+ALTER TABLE deliveries 
+ALTER COLUMN shipper_id INT NULL;
 
+
+-- Thêm thông tin deliveries: 
+INSERT INTO deliveries (shipper_id, order_id, status, note_text, created_at, carrier_id) VALUES
+(NULL, 10, N'Chờ xử lý', NULL, DATEADD(day, -11, GETDATE()), NULL),
+(NULL, 11, N'Chờ xử lý', NULL, DATEADD(day, -15, GETDATE()),NULL),
+(NULL, 11, N'Chờ xử lý', NULL, DATEADD(day, -5, GETDATE()),NULL),
+(NULL, 5, N'Chờ xử lý', NULL, DATEADD(day, -2, GETDATE()),NULL);
 
 
 

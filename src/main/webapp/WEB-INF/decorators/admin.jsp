@@ -103,8 +103,8 @@
 							<i class="bi bi-truck me-2"></i> Quản lý Vận chuyển
 					</a></li>
 					<li class="nav-item mb-1"><a
-						class="nav-link ${page=='deliveries' ? 'active' : ''}"
-						href="${pageContext.request.contextPath}/admin/home?page=deliveries">
+						class="nav-link ${page=='orders' ? 'active' : ''}"
+						href="${pageContext.request.contextPath}/admin/home?page=orders">
 							<i class="bi bi-cart me-2"></i> Quản lý Đơn hàng
 					</a></li>
 					<li class="nav-item mb-1"><a
