@@ -43,6 +43,17 @@
 					</div>
 				</div>
 			</div>
+			<div class="mt-2 mb-2">
+				<label class="form-label">🚚 Đơn vị vận chuyển</label> <select
+					name="carrierId" class="form-select">
+					<c:forEach var="c" items="${carriers}">
+						<option value="${c.carrierId}">${c.carrierName}(+
+							<fmt:formatNumber value="${c.carrierFee}" type="number"
+								groupingUsed="true" />₫)
+						</option>
+					</c:forEach>
+				</select>
+			</div>
 
 			<!-- Phương thức thanh toán -->
 			<div class="mb-4">
@@ -105,10 +116,38 @@
 										<div>
 											<small class="text-muted">Số lượng: ${item.quantity}</small>
 										</div>
+
+										<!-- 🎟️ Mã khuyến mãi theo sản phẩm -->
+										<div class="mt-2">
+											<label class="form-label">🎟️ Mã khuyến mãi</label> <select
+												name="promotionId_product[${item.productVariant.product.productId}]"
+												class="form-select promotion-select"
+												data-product-id="${item.productVariant.product.productId}">
+												<option value="" data-type="none" data-value="0">--
+													Không dùng mã --</option>
+												<c:forEach var="promo"
+													items="${promosByProduct[item.productVariant.product.productId]}">
+													<option value="${promo.promotionId}"
+														data-type="${promo.discountType}"
+														data-value="${promo.value}">
+														<c:choose>
+															<c:when test="${promo.discountType eq 'percent'}">
+									Giảm ${promo.value}% (đến ${promo.endDate})
+								</c:when>
+															<c:otherwise>
+									Giảm <fmt:formatNumber value="${promo.value}" type="number"
+																	groupingUsed="true" />₫ (đến ${promo.endDate})
+								</c:otherwise>
+														</c:choose>
+													</option>
+												</c:forEach>
+											</select>
+										</div>
 									</div>
 
 									<div class="text-end">
-										<p class="mb-0 fw-semibold text-danger">
+										<p class="mb-0 fw-semibold text-danger"
+											data-product-id="${item.productVariant.product.productId}">
 											<fmt:formatNumber value="${item.price * item.quantity}"
 												type="currency" currencySymbol="₫" />
 										</p>
@@ -125,30 +164,6 @@
 									value="${subtotal + (item.price * item.quantity)}" />
 								<c:set var="totalItems" value="${totalItems + item.quantity}" />
 							</c:forEach>
-
-							<!--  Mã khuyến mãi -->
-							<div class="mt-3">
-								<label class="form-label">🎟️ Mã khuyến mãi của shop</label> <select
-									name="promotionId[${shopId}]"
-									class="form-select promotion-select" data-shop-id="${shopId}">
-									<option value="" data-type="none" data-value="0">--
-										Không dùng mã --</option>
-									<c:forEach var="promo" items="${promos}">
-										<option value="${promo.promotionId}"
-											data-type="${promo.discountType}" data-value="${promo.value}">
-											<c:choose>
-												<c:when test="${promo.discountType eq 'percent'}">
-								Giảm ${promo.value}% (đến ${promo.endDate})
-							</c:when>
-												<c:otherwise>
-								Giảm <fmt:formatNumber value="${promo.value}" type="number"
-														groupingUsed="true" />₫ (đến ${promo.endDate})
-							</c:otherwise>
-											</c:choose>
-										</option>
-									</c:forEach>
-								</select>
-							</div>
 
 							<!--  Tổng tiền shop -->
 							<div class="mt-3 border-top pt-2 d-flex justify-content-between">

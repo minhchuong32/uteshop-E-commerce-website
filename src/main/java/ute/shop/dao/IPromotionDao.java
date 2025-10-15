@@ -10,6 +10,11 @@ public interface IPromotionDao {
 	List<Promotion> findAll();
 
 	List<Promotion> findValidByShop(int shopId);
+	// Lấy khuyến mãi hợp lệ theo sản phẩm (nếu sản phẩm có khuyến mãi riêng)
+    List<Promotion> findValidByProduct(int productId);
+
+    // Lấy tất cả khuyến mãi hợp lệ (nếu cần)
+    List<Promotion> findAllValid();
 
 	void insert(Promotion p);
 
