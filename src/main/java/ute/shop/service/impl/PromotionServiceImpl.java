@@ -45,4 +45,9 @@ public class PromotionServiceImpl implements IPromotionService {
 		return promoDao.countAll();
 	}
 
+	@Override
+	public List<Promotion> getValidPromotionsByProduct(int productId) {
+		return promoDao.findValidByProduct(productId);
+	}
+
 }

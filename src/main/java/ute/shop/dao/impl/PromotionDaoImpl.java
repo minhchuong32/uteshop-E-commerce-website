@@ -14,97 +14,136 @@ public class PromotionDaoImpl implements IPromotionDao {
 	@Override
 	public Promotion findById(int id) {
 		EntityManager em = JPAConfig.getEntityManager();
-        try {
-            return em.find(Promotion.class, id);
-        } finally {
-            em.close();
-        }
+		try {
+			return em.find(Promotion.class, id);
+		} finally {
+			em.close();
+		}
 	}
 
 	@Override
 	public List<Promotion> findAll() {
 		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			TypedQuery<Promotion> query = em.createQuery("SELECT p FROM Promotion p", Promotion.class);
+			return query.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public List<Promotion> findValidByShop(int shopId) {
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			String jpql = """
+					    SELECT p FROM Promotion p
+					    WHERE p.shop.shopId = :shopId
+					      AND :today BETWEEN p.startDate AND p.endDate
+					    ORDER BY p.product.productId NULLS FIRST
+					""";
+			TypedQuery<Promotion> q = em.createQuery(jpql, Promotion.class);
+			q.setParameter("shopId", shopId);
+			q.setParameter("today", java.sql.Date.valueOf(LocalDate.now()));
+			return q.getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public void insert(Promotion p) {
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			em.getTransaction().begin();
+			em.persist(p);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
+			e.printStackTrace();
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public void update(Promotion p) {
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			em.getTransaction().begin();
+			em.merge(p);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
+			e.printStackTrace();
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public void delete(int id) {
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			em.getTransaction().begin();
+			Promotion p = em.find(Promotion.class, id);
+			if (p != null)
+				em.remove(p);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
+			e.printStackTrace();
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public long countAll() {
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			String jpql = "SELECT COUNT(c) FROM Promotion c";
+			return em.createQuery(jpql, Long.class).getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public List<Promotion> findValidByProduct(int productId) {
+		EntityManager em = JPAConfig.getEntityManager();
         try {
-            TypedQuery<Promotion> query = em.createQuery("SELECT p FROM Promotion p", Promotion.class);
-            return query.getResultList();
+            String jpql = """
+                SELECT p FROM Promotion p
+                WHERE p.product.productId = :productId
+                  AND :today BETWEEN p.startDate AND p.endDate
+            """;
+            TypedQuery<Promotion> q = em.createQuery(jpql, Promotion.class);
+            q.setParameter("productId", productId);
+            q.setParameter("today", java.sql.Date.valueOf(LocalDate.now()));
+            return q.getResultList();
         } finally {
             em.close();
         }
 	}
 
 	@Override
-	public List<Promotion> findValidByShop(int shopId) {
+	public List<Promotion> findAllValid() {
 		EntityManager em = JPAConfig.getEntityManager();
         try {
-        	String jpql = """
-        		    SELECT p FROM Promotion p
-        		    WHERE p.shop.shopId = :shopId
-        		      AND :today BETWEEN p.startDate AND p.endDate
-        		""";
-            TypedQuery<Promotion> query = em.createQuery(jpql, Promotion.class);
-            query.setParameter("shopId", shopId);
-            query.setParameter("today", LocalDate.now());
-            return query.getResultList();
+            String jpql = """
+                SELECT p FROM Promotion p
+                WHERE :today BETWEEN p.startDate AND p.endDate
+            """;
+            TypedQuery<Promotion> q = em.createQuery(jpql, Promotion.class);
+            q.setParameter("today", java.sql.Date.valueOf(LocalDate.now()));
+            return q.getResultList();
         } finally {
             em.close();
         }
 	}
-	
-	 @Override
-	    public void insert(Promotion p) {
-	        EntityManager em = JPAConfig.getEntityManager();
-	        try {
-	            em.getTransaction().begin();
-	            em.persist(p);
-	            em.getTransaction().commit();
-	        } catch (Exception e) {
-	            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-	            e.printStackTrace();
-	        } finally {
-	            em.close();
-	        }
-	    }
-
-	    @Override
-	    public void update(Promotion p) {
-	        EntityManager em = JPAConfig.getEntityManager();
-	        try {
-	            em.getTransaction().begin();
-	            em.merge(p);
-	            em.getTransaction().commit();
-	        } catch (Exception e) {
-	            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-	            e.printStackTrace();
-	        } finally {
-	            em.close();
-	        }
-	    }
-
-	    @Override
-	    public void delete(int id) {
-	        EntityManager em = JPAConfig.getEntityManager();
-	        try {
-	            em.getTransaction().begin();
-	            Promotion p = em.find(Promotion.class, id);
-	            if (p != null) em.remove(p);
-	            em.getTransaction().commit();
-	        } catch (Exception e) {
-	            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-	            e.printStackTrace();
-	        } finally {
-	            em.close();
-	        }
-	    }
-	    
-		@Override
-		public long countAll() {
-		    EntityManager em = JPAConfig.getEntityManager();
-		    try {
-		        String jpql = "SELECT COUNT(c) FROM Promotion c";
-		        return em.createQuery(jpql, Long.class).getSingleResult();
-		    } finally {
-		        em.close();
-		    }
-		}
 
 }
