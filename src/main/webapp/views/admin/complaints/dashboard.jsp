@@ -4,7 +4,7 @@
 	<i class="bi bi-chat-dots me-2"></i> Quản lý khiếu nại
 </h3>
 <div class="table-responsive">
-	<table class="table table-bordered align-middle">
+	<table id="complaintTable" class="table table-striped align-middle">
 		<thead class="table-light">
 			<tr>
 				<th class="text-center">ID</th>
@@ -147,6 +147,13 @@
 		</table>
 	</div>
 </div>
+<!-- ====== SCRIPT ====== -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script
+	src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -199,9 +206,21 @@ new Chart(ctx2, {
     },
     options: { scales: { y: { beginAtZero: true } } }
 });
-</script>
-<script>
-	document.addEventListener("DOMContentLoaded", function() {
+
+// DataTable
+$('#complaintTable').DataTable({
+  pageLength: 5,
+  lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
+  language: {
+    lengthMenu: "Hiển thị _MENU_ dòng",
+    search: "Tìm kiếm:",
+    paginate: { previous: "Trước", next: "Sau" },
+    info: "Hiển thị _START_–_END_ / _TOTAL_ Khiếu nại",
+    emptyTable: "Không có dữ liệu"
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function() {
 		const deleteModal = document
 				.getElementById('confirmDeleteComplaintModal');
 		const confirmBtn = document.getElementById('deleteComplaintBtn');
