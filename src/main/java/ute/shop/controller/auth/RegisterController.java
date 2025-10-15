@@ -8,11 +8,10 @@ import ute.shop.utils.Constant;
 import ute.shop.utils.SendMail;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+
 
 @WebServlet(urlPatterns = { "/register" })
 public class RegisterController extends HttpServlet {
@@ -21,28 +20,7 @@ public class RegisterController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession session = req.getSession(false);
-
-		// Nếu đã login thì redirect sang /admin
-		if (session != null && session.getAttribute("email") != null) {
-			resp.sendRedirect(req.getContextPath() + "/admin/home");
-			return;
-		}
-
-		// Check cookie "email"
-		Cookie[] cookies = req.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals("email")) {
-					session = req.getSession(true);
-					session.setAttribute("username", cookie.getValue());
-					resp.sendRedirect(req.getContextPath() + "/admin/home");
-					return;
-				}
-			}
-		}
-
-		// Forward tới trang register.jsp
+	
 		req.getRequestDispatcher(Constant.REGISTER).forward(req, resp);
 	}
 
@@ -60,13 +38,13 @@ public class RegisterController extends HttpServlet {
 
 		IUserService service = new UserServiceImpl();
 		String alertMsg = "";
-		
-		// Kiểm tra pass khác nhau 
+
+		// Kiểm tra pass khác nhau
 		if (!password.equals(confirmPassword)) {
-		    alertMsg = "Mật khẩu xác nhận không khớp!";
-		    req.setAttribute("alert", alertMsg);
-		    req.getRequestDispatcher(Constant.REGISTER).forward(req, resp);
-		    return;
+			alertMsg = "Mật khẩu xác nhận không khớp!";
+			req.setAttribute("alert", alertMsg);
+			req.getRequestDispatcher(Constant.REGISTER).forward(req, resp);
+			return;
 		}
 
 		// Kiểm tra email tồn tại
