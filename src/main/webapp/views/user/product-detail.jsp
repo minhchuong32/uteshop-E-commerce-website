@@ -142,16 +142,14 @@
 								</button>
 							</form>
 
-							<form action="${pageContext.request.contextPath}/user/checkout"
-								method="post" class="flex-fill"
-								onsubmit="return validateSelection()">
-								<input type="hidden" name="productId"
-									value="${product.productId}"> <input type="hidden"
-									name="quantity" id="formQtyNow" value="1"> <input
-									type="hidden" name="action" value="buyNow">
-								<button type="submit" class="btn btn-dark w-100">Mua
+							<form id="buyNowForm" method="post">
+								<input type="hidden" id="variantId" name="variantId"> <input
+									type="hidden" id="formQtyNow" name="quantity" value="1">
+								<button type="submit" class="btn btn-danger w-100">Mua
 									ngay</button>
 							</form>
+
+
 						</c:when>
 
 						<c:otherwise>
