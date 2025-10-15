@@ -130,40 +130,40 @@
 
 				<!-- Nút hành động -->
 				<div class="d-flex gap-2 mb-3">
+					<c:choose>
+						<c:when test="${not empty minVariant and minVariant.stock > 0}">
+							<!-- Nếu chưa đăng nhập -->
+							<c:if test="${empty sessionScope.account}">
+								<form action="${pageContext.request.contextPath}/login"
+									method="get" onsubmit="return validateSelection()">
+									<input type="hidden" name="redirect"
+										value="${pageContext.request.requestURI}">
+									<button type="submit" class="btn btn-primary-custom w-100">
+										<i class="bi bi-cart-plus"></i> Thêm vào giỏ
+									</button>
+								</form>
+							</c:if>
+							<c:if test="${empty sessionScope.account}">
+								<form action="${pageContext.request.contextPath}/login"
+									method="get" onsubmit="return validateSelection()">
+									<input type="hidden" name="redirect"
+										value="${pageContext.request.requestURI}">
+										<input type="hidden"
+										name="quantity" id="formQtyNow" value="1"> <input
+										type="hidden" name="action" value="buyNow">
+									<button type="submit" class="btn btn-dark w-100">Mua
+										ngay</button>
+								</form>
+							</c:if>
 
-					<!-- Nếu chưa đăng nhập -->
-					<c:if test="${empty sessionScope.account}">
-						<form action="${pageContext.request.contextPath}/login"
-							method="get" onsubmit="return validateSelection()">
-							<input type="hidden" name="redirect"
-								value="${pageContext.request.requestURI}">
-							<button type="submit" class="btn btn-primary-custom w-100">
-								<i class="bi bi-cart-plus"></i> Thêm vào giỏ
+						</c:when>
+
+						<c:otherwise>
+							<button class="btn btn-secondary w-100 flex-fill" disabled>
+								<i class="bi bi-x-circle"></i> Hết hàng
 							</button>
-						</form>
-					</c:if>
-
-					<!-- Nếu đã đăng nhập -->
-					<c:if test="${not empty sessionScope.account}">
-						<form action="${pageContext.request.contextPath}/user/cart/add"
-							method="post" onsubmit="return validateSelection()">
-							<input type="hidden" name="variantId" id="variantId"> <input
-								type="hidden" name="quantity" id="formQty" value="1">
-							<button type="submit" class="btn btn-primary-custom w-100">
-								<i class="bi bi-cart-plus"></i> Thêm vào giỏ
-							</button>
-						</form>
-					</c:if>
-
-					<!-- Mua ngay -->
-					<form action="${pageContext.request.contextPath}/web/cart"
-						method="post" class="flex-fill"
-						onsubmit="return validateSelection()">
-						<input type="hidden" name="productId" value="${product.productId}">
-						<input type="hidden" name="quantity" id="formQtyNow" value="1">
-						<input type="hidden" name="action" value="buyNow">
-						<button type="submit" class="btn btn-dark w-100">Mua ngay</button>
-					</form>
+						</c:otherwise>
+					</c:choose>
 
 					<button class="btn btn-outline-secondary">
 						<i class="bi bi-heart"></i>

@@ -16,12 +16,13 @@ import ute.shop.service.impl.ProductServiceImpl;
 import ute.shop.service.impl.ProductVariantServiceImpl;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@WebServlet(urlPatterns = {"/user/cart", "/user/cart/add", "/user/cart/remove"})
+@WebServlet(urlPatterns = {"/user/cart", "/user/cart/add", "/user/cart/remove", "/user/cart/add-now"})
 public class CartController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -116,20 +117,54 @@ public class CartController extends HttpServlet {
 	    }
 
 
-//	    // Tăng/Giảm số lượng
-//	    String action = req.getParameter("action");
-//	    if (action != null) {
-//	        int productId = Integer.parseInt(req.getParameter("productId"));
-//	        Product product = productService.findById(productId);
-//	        switch (action) {
-//	            case "increase":
-//	                cartService.updateQuantity(user, product, 1);
-//	                break;
-//	            case "decrease":
-//	                cartService.updateQuantity(user, product, -1);
-//	                break;
-//	        }
-//	    }
+	    if ("/user/cart/add-now".equals(servletPath)) {
+	        resp.setContentType("application/json;charset=UTF-8");
+	        PrintWriter out = resp.getWriter();
+
+	        try {
+	            int variantId = Integer.parseInt(req.getParameter("variantId"));
+	            int quantity = Integer.parseInt(req.getParameter("quantity"));
+
+	            ProductVariant variant = productVariantService.findById(variantId);
+	            if (variant == null) {
+	                out.print("{\"success\":false,\"message\":\"Sản phẩm không tồn tại.\"}");
+	                return;
+	            }
+
+	            // 🟢 Gọi addToCart (trả về boolean)
+	            boolean added = cartService.addToCart(user, variant, quantity);
+	            if (!added) {
+	                out.print("{\"success\":false,\"message\":\"Không thể thêm sản phẩm vào giỏ.\"}");
+	                return;
+	            }
+
+	            // 🔍 Sau khi thêm, tìm lại cartItem vừa thêm
+	            List<CartItem> userCart = cartService.getCartByUser(user);
+	            int cartItemId = 0;
+
+	            for (CartItem item : userCart) {
+	                if (item.getProductVariant().getId() == variantId) {
+	                    cartItemId = item.getCartItemId();
+	                    break;
+	                }
+	            }
+
+	            if (cartItemId == 0) {
+	                out.print("{\"success\":true,\"cartItemId\":null}");
+	            } else {
+	                out.print("{\"success\":true,\"cartItemId\":" + cartItemId + "}");
+	            }
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            out.print("{\"success\":false,\"message\":\"Lỗi server.\"}");
+	        } finally {
+	            out.flush();
+	        }
+	        return;
+	    }
+
+
 
 	    resp.sendRedirect(req.getContextPath() + "/user/cart");
 	}

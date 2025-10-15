@@ -127,33 +127,44 @@
 
 				<!-- Nút hành động -->
 				<div class="d-flex gap-2 mb-3">
-					<!-- Thêm vào giỏ -->
-					<form id="addToCartForm"
-						action="${pageContext.request.contextPath}/user/cart/add"
-						method="post" class="flex-fill"
-						onsubmit="return validateSelection()">
+					<c:choose>
+						<c:when test="${not empty minVariant and minVariant.stock > 0}">
+							<!-- Thêm vào giỏ -->
+							<form id="addToCartForm"
+								action="${pageContext.request.contextPath}/user/cart/add"
+								method="post" class="flex-fill"
+								onsubmit="return validateSelection()">
 
-						<input type="hidden" name="variantId" id="variantId"> <input
-							type="hidden" name="quantity" id="formQty" value="1">
-						<button type="submit" class="btn btn-primary-custom w-100">
-							<i class="bi bi-cart-plus"></i> Thêm vào giỏ
-						</button>
-					</form>
+								<input type="hidden" name="variantId" id="variantId"> <input
+									type="hidden" name="quantity" id="formQty" value="1">
+								<button type="submit" class="btn btn-primary-custom w-100">
+									<i class="bi bi-cart-plus"></i> Thêm vào giỏ
+								</button>
+							</form>
 
-					<!-- Mua ngay -->
-					<form action="${pageContext.request.contextPath}/user/cart"
-						method="post" class="flex-fill"
-						onsubmit="return validateSelection()">
-						<input type="hidden" name="productId" value="${product.productId}">
-						<input type="hidden" name="quantity" id="formQtyNow" value="1">
-						<input type="hidden" name="action" value="buyNow">
-						<button type="submit" class="btn btn-dark w-100">Mua ngay</button>
-					</form>
+							<form id="buyNowForm" method="post">
+								<input type="hidden" id="variantId" name="variantId"> <input
+									type="hidden" id="formQtyNow" name="quantity" value="1">
+								<button type="submit" class="btn btn-danger w-100">Mua
+									ngay</button>
+							</form>
 
+
+						</c:when>
+
+						<c:otherwise>
+							<button class="btn btn-secondary w-100 flex-fill" disabled>
+								<i class="bi bi-x-circle"></i> Hết hàng
+							</button>
+						</c:otherwise>
+					</c:choose>
+
+					<!-- Yêu thích -->
 					<button class="btn btn-outline-secondary">
 						<i class="bi bi-heart"></i>
 					</button>
 				</div>
+
 
 				<script>
 					// Đồng bộ số lượng từ input qty vào 2 form
@@ -286,7 +297,8 @@
 
 
 			<c:if test="${hasPurchased}">
-				<p class="text-muted">Vui lòng vào Đơn hàng/Đánh giá để chia sẻ trải nghiệm của bạn</p>		
+				<p class="text-muted">Vui lòng vào Đơn hàng/Đánh giá để chia sẻ
+					trải nghiệm của bạn</p>
 			</c:if>
 
 			<c:if test="${not hasPurchased}">
