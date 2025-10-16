@@ -1,221 +1,251 @@
-console.log("product-detail.js buy");
+console.log("product-detail.js optimized");
 
 // ==========================
-// Đổi ảnh chính khi click thumbnail
+// DOM Elements Cache
+// ==========================
+const getEl = id => document.getElementById(id);
+const getEls = selector => document.querySelectorAll(selector);
+
+// ==========================
+// Utility Functions
+// ==========================
+const showAlert = (message, type = "success", duration = 3000) => {
+	const alert = getEl("tempAlert");
+	if (!alert) return;
+	
+	alert.className = `alert alert-${type} position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg`;
+	alert.textContent = message;
+	alert.classList.remove("d-none");
+	
+	clearTimeout(alert.hideTimeout);
+	alert.hideTimeout = setTimeout(() => alert.classList.add("d-none"), duration);
+};
+
+const formatCurrency = amount => 
+	new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount);
+
+// ==========================
+// Image Gallery with Zoom
 // ==========================
 function changeImage(el) {
-	const mainImg = document.getElementById("mainImg");
-	if (!mainImg) return;
-	mainImg.src = el.src;
-	document.querySelectorAll(".thumb-img").forEach(img => img.classList.remove("active"));
-	el.classList.add("active");
+    const mainImg = document.getElementById("mainImg");
+    if (!mainImg) return;
+    mainImg.src = el.src;
+    document.querySelectorAll(".thumb-img").forEach(img => img.classList.remove("active"));
+    el.classList.add("active");
 }
 
-// ==========================
-// Tăng/giảm số lượng
-// ==========================
-function changeQty(delta) {
-	const qty = document.getElementById("qty");
-	if (!qty) return;
-	let val = parseInt(qty.value) + delta;
-	if (val < 1) val = 1;
-	qty.value = val;
-	syncQty();
-}
+// Zoom functionality
+const setupImageZoom = () => {
+	const container = getEl("imageContainer");
+	const mainImg = getEl("mainImg");
+	const modal = document.getElementById("imageZoomModal");
+	const zoomedImg = getEl("zoomedImg");
+	
+	if (!container || !mainImg) return;
+	
+	// Click to open modal
+	container.addEventListener("click", () => {
+		if (zoomedImg) zoomedImg.src = mainImg.src;
+		if (modal) new bootstrap.Modal(modal).show();
+	});
+	
+	// Hover zoom effect
+	container.addEventListener("mouseenter", () => {
+		container.style.cursor = "zoom-in";
+	});
+	
+	container.addEventListener("mousemove", e => {
+		const rect = container.getBoundingClientRect();
+		const x = ((e.clientX - rect.left) / rect.width) * 100;
+		const y = ((e.clientY - rect.top) / rect.height) * 100;
+		mainImg.style.transformOrigin = `${x}% ${y}%`;
+		mainImg.style.transform = "scale(1.5)";
+	});
+	
+	container.addEventListener("mouseleave", () => {
+		mainImg.style.transform = "scale(1)";
+		mainImg.style.transformOrigin = "center";
+	});
+};
 
 // ==========================
-// Đồng bộ số lượng vào form
+// Quantity Control
 // ==========================
-function syncQty() {
-	const qtyEl = document.getElementById("qty");
+const syncQty = () => {
+	const qty = getEl("qty")?.value || 1;
+	["formQty", "formQtyNow"].forEach(id => {
+		const el = getEl(id);
+		if (el) el.value = qty;
+	});
+};
+
+window.changeQty = delta => {
+	const qtyEl = getEl("qty");
 	if (!qtyEl) return;
-	const qty = qtyEl.value;
-
-	const formQty = document.getElementById("formQty");
-	const formQtyNow = document.getElementById("formQtyNow");
-
-	if (formQty) formQty.value = qty;
-	if (formQtyNow) formQtyNow.value = qty;
-}
+	
+	qtyEl.value = Math.max(1, parseInt(qtyEl.value) + delta);
+	syncQty();
+};
 
 // ==========================
-// Khi DOM load xong
+// Variant Selection
 // ==========================
-document.addEventListener("DOMContentLoaded", function() {
-	const qtyInput = document.getElementById("qty");
-	if (qtyInput) qtyInput.addEventListener("input", syncQty);
-
-	// ==========================
-	// Xử lý nút "Mua ngay"
-	// ==========================
-	const buyNowForm = document.getElementById("buyNowForm");
-	if (buyNowForm) {
-		buyNowForm.addEventListener("submit", async function(e) {
-			e.preventDefault();
-
-			if (!validateSelection()) return;
-
-			const variantInput = document.getElementById("variantId");
-			const qtyInput = document.getElementById("qty");
-			const productDetail = document.getElementById("product-detail");
-			const appContext = productDetail?.dataset.context || "";
-
-			if (!variantInput?.value) {
-				showTempAlert("Vui lòng chọn đầy đủ thuộc tính sản phẩm.", "warning");
-				return;
-			}
-
-			const variantId = variantInput.value;
-			const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
-
-			try {
-				// ✅ Gửi dữ liệu kiểu form (application/x-www-form-urlencoded)
-				const formData = new URLSearchParams();
-				formData.append("variantId", variantId);
-				formData.append("quantity", quantity);
-
-				const res = await fetch(`${appContext}/user/cart/add-now`, {
-					method: "POST",
-					headers: { "Content-Type": "application/x-www-form-urlencoded" },
-					body: formData
-				});
-
-				if (!res.ok) throw new Error("Không thể thêm sản phẩm vào giỏ hàng.");
-
-				// ✅ Đọc JSON trả về từ servlet
-				const data = await res.json();
-				console.log("🛒 Kết quả thêm giỏ hàng:", data);
-
-				if (!data.success) {
-					showTempAlert(data.message || "Không thể thêm sản phẩm.", "danger");
-					return;
-				}
-
-				// ✅ Điều hướng đến trang thanh toán
-				const checkoutUrl = `${appContext}/user/checkout?selectedItems=${encodeURIComponent(data.cartItemId)}`;
-				console.log("➡️ Chuyển hướng đến:", checkoutUrl);
-				window.location.href = checkoutUrl;
-
-			} catch (err) {
-				console.error("Lỗi khi mua ngay:", err);
-				showTempAlert("Không thể thêm sản phẩm vào giỏ để thanh toán.", "danger");
-			}
-		});
-	}
-});
-
-
-// ==========================
-// Xử lý chọn variant
-// ==========================
-function getSelectedOptions() {
+const getSelectedOptions = () => {
 	const options = {};
-	document.querySelectorAll(".btn-check:checked").forEach(radio => {
+	getEls(".btn-check:checked").forEach(radio => {
 		options[radio.name] = radio.value;
 	});
 	return options;
-}
+};
 
-function validateSelection() {
-	const isGuest = document.querySelector('form[action$="/login"]') !== null;
+window.validateSelection = () => {
+	const isGuest = document.querySelector('form[action$="/login"]');
 	if (isGuest) return true;
-
-	const radios = document.querySelectorAll(".btn-check");
+	
+	const radios = getEls(".btn-check");
 	const groups = [...new Set([...radios].map(r => r.name))];
 	const selected = getSelectedOptions();
-
-	for (let name of groups) {
+	
+	for (const name of groups) {
 		if (!selected[name]) {
-			showTempAlert(`Vui lòng chọn ${name} trước khi thêm vào giỏ.`, "warning");
+			showAlert(`Vui lòng chọn ${name} trước khi thêm vào giỏ.`, "warning");
 			return false;
 		}
 	}
-
-	const variantInput = document.getElementById("variantId");
-	if (!variantInput || !variantInput.value) {
-		showTempAlert("Vui lòng chọn đủ thuộc tính sản phẩm.", "danger");
+	
+	const variantInput = getEl("variantId");
+	if (!variantInput?.value) {
+		showAlert("Vui lòng chọn đủ thuộc tính sản phẩm.", "danger");
 		return false;
 	}
-
+	
 	return true;
-}
+};
 
 // ==========================
-// Alert tạm thời (toast nhẹ)
+// Update Variant Info
 // ==========================
-function showTempAlert(message, type = "success", duration = 3000) {
-	const alertBox = document.getElementById("tempAlert");
-	if (!alertBox) return;
-
-	alertBox.className = `alert alert-${type} position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg`;
-	alertBox.textContent = message;
-	alertBox.classList.remove("d-none");
-
-	clearTimeout(alertBox.hideTimeout);
-	alertBox.hideTimeout = setTimeout(() => {
-		alertBox.classList.add("d-none");
-	}, duration);
-}
+const updateVariantInfo = data => {
+	const updates = {
+		"#current-price": data.price ? formatCurrency(data.price) : "-",
+		"#old-price": data.oldPrice && data.oldPrice > data.price ? formatCurrency(data.oldPrice) : "-",
+		"#stock-value": data.stock ?? "-"
+	};
+	
+	Object.entries(updates).forEach(([selector, value]) => {
+		const el = document.querySelector(selector);
+		if (el) el.innerHTML = value;
+	});
+	
+	const mainImg = getEl("mainImg");
+	const productDetail = getEl("product-detail");
+	const appContext = productDetail?.dataset.context || "";
+	
+	if (data.imageUrl && mainImg) {
+		mainImg.src = `${appContext}${data.imageUrl}`;
+	}
+	
+	const variantInput = getEl("variantId");
+	if (variantInput && data.variantId) {
+		variantInput.value = data.variantId;
+	}
+};
 
 // ==========================
-// Fetch API khi chọn variant
+// Fetch Variant on Selection
 // ==========================
-document.addEventListener("DOMContentLoaded", function() {
-	const productDetail = document.getElementById("product-detail");
+const setupVariantListener = () => {
+	const productDetail = getEl("product-detail");
 	if (!productDetail) return;
-
+	
 	const appContext = productDetail.dataset.context || "";
-	const currentProductId = productDetail.dataset.productId;
-
-	document.querySelectorAll(".btn-check").forEach(radio => {
-		radio.addEventListener("change", () => {
-			const options = getSelectedOptions();
-			options["productId"] = currentProductId;
-
-			fetch(`${appContext}/api/variant/select`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(options)
-			})
-				.then(res => {
-					if (!res.ok) throw new Error("Không tìm thấy variant phù hợp");
-					return res.json();
-				})
-				.then(data => {
-					const currentPrice = document.querySelector("#current-price");
-					const oldPrice = document.querySelector("#old-price");
-					const stockValue = document.querySelector("#stock-value");
-					const mainImg = document.querySelector("#mainImg");
-					const variantInput = document.querySelector("#variantId");
-
-					// Giá hiện tại
-					if (currentPrice)
-						currentPrice.innerHTML = data.price
-							? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(data.price)
-							: "-";
-
-					// Giá cũ
-					if (oldPrice)
-						oldPrice.innerHTML = data.oldPrice && data.oldPrice > data.price
-							? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(data.oldPrice)
-							: "-";
-
-					// Tồn kho
-					if (stockValue)
-						stockValue.textContent =
-							data.stock !== undefined && data.stock !== null ? data.stock : "-";
-
-					// Ảnh
-					if (data.imageUrl && mainImg) {
-						mainImg.src = `${appContext}${data.imageUrl}`;
-					}
-
-					// Gán variantId
-					if (variantInput && data.variantId) {
-						variantInput.value = data.variantId;
-					}
-				})
-				.catch(err => console.error("Lỗi khi cập nhật variant:", err));
+	const productId = productDetail.dataset.productId;
+	
+	getEls(".btn-check").forEach(radio => {
+		radio.addEventListener("change", async () => {
+			const options = { ...getSelectedOptions(), productId };
+			
+			try {
+				const res = await fetch(`${appContext}/api/variant/select`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(options)
+				});
+				
+				if (!res.ok) throw new Error("Không tìm thấy variant");
+				
+				const data = await res.json();
+				updateVariantInfo(data);
+			} catch (err) {
+				console.error("Lỗi khi cập nhật variant:", err);
+			}
 		});
 	});
+};
+
+// ==========================
+// Buy Now Handler
+// ==========================
+const setupBuyNow = () => {
+	const form = getEl("buyNowForm");
+	if (!form) return;
+	
+	form.addEventListener("submit", async e => {
+		e.preventDefault();
+		
+		if (!validateSelection()) return;
+		
+		const variantInput = getEl("variantId");
+		const qtyInput = getEl("qty");
+		const productDetail = getEl("product-detail");
+		const appContext = productDetail?.dataset.context || "";
+		
+		if (!variantInput?.value) {
+			showAlert("Vui lòng chọn đầy đủ thuộc tính sản phẩm.", "warning");
+			return;
+		}
+		
+		const formData = new URLSearchParams({
+			variantId: variantInput.value,
+			quantity: qtyInput ? parseInt(qtyInput.value) : 1
+		});
+		
+		try {
+			const res = await fetch(`${appContext}/user/cart/add-now`, {
+				method: "POST",
+				headers: { "Content-Type": "application/x-www-form-urlencoded" },
+				body: formData
+			});
+			
+			if (!res.ok) throw new Error("Không thể thêm sản phẩm");
+			
+			const data = await res.json();
+			console.log("🛒 Kết quả:", data);
+			
+			if (!data.success) {
+				showAlert(data.message || "Không thể thêm sản phẩm.", "danger");
+				return;
+			}
+			
+			const checkoutUrl = `${appContext}/user/checkout?selectedItems=${encodeURIComponent(data.cartItemId)}`;
+			window.location.href = checkoutUrl;
+			
+		} catch (err) {
+			console.error("Lỗi:", err);
+			showAlert("Không thể thêm sản phẩm vào giỏ để thanh toán.", "danger");
+		}
+	});
+};
+
+// ==========================
+// Initialize
+// ==========================
+document.addEventListener("DOMContentLoaded", () => {
+	const qtyInput = getEl("qty");
+	if (qtyInput) qtyInput.addEventListener("input", syncQty);
+	
+	setupImageZoom();
+	setupBuyNow();
+	setupVariantListener();
 });
