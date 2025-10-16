@@ -67,22 +67,28 @@ public class ReviewEditController extends HttpServlet {
 
         int rating = Integer.parseInt(req.getParameter("rating"));
         String comment = req.getParameter("comment");
-        String oldMediaUrl = req.getParameter("mediaUrl");
+
         Part filePart = req.getPart("mediaFile");
+        String oldMediaUrl = req.getParameter("oldMediaUrl");
         String newMediaUrl = oldMediaUrl;
 
         if (filePart != null && filePart.getSize() > 0) {
             String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
-
             String uploadDir = req.getServletContext().getRealPath("/assets/images/reviews");
             File dir = new File(uploadDir);
             if (!dir.exists()) dir.mkdirs();
 
-            // Lưu file lên server
+            // Ghi file lên server
             filePart.write(uploadDir + File.separator + fileName);
 
-            // Cập nhật đường dẫn tương đối
+            // Cập nhật đường dẫn mới
             newMediaUrl = "/assets/images/reviews/" + fileName;
+
+            // ✅ (Tuỳ chọn) Xóa file cũ nếu tồn tại
+            if (oldMediaUrl != null && !oldMediaUrl.isEmpty()) {
+                File oldFile = new File(req.getServletContext().getRealPath(oldMediaUrl));
+                if (oldFile.exists()) oldFile.delete();
+            }
         }
         review.setRating(rating);
         review.setComment(comment);

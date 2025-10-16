@@ -113,6 +113,10 @@
 								</c:choose>
 							</c:if>
 						</div>
+						<c:if test="${isEdit && not empty review.mediaUrl}">
+							<input type="hidden" name="oldMediaUrl"
+								value="${review.mediaUrl}" />
+						</c:if>
 
 						<!-- Buttons -->
 						<div class="d-flex gap-2">
