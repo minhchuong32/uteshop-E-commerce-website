@@ -41,5 +41,12 @@ public interface IProductService {
 	
 	void deleteExtraImage(Long imageId);
 	ProductVariant findVariantById(Long variantId);
+	
+	List<Product> searchByKeywordAndShop(String keyword, int shopId, int page, int size);
+	long countByKeywordAndShop(String keyword, int shopId);
+
+	List<Product> filterProductsByShop(int shopId, Integer categoryId, Double minPrice, Double maxPrice, String sortBy, int page, int size);
+	long countFilterProductsByShop(int shopId, Integer categoryId, Double minPrice, Double maxPrice);
+
 
 }

@@ -87,7 +87,7 @@
 				</h5>
 			</div>
 		<!-- Bộ lọc -->
-		<form action="${pageContext.request.contextPath}/web/home"
+		<form action="${pageContext.request.contextPath}/user/home"
 			method="get" class="row g-3 align-items-end mb-4">
 			<!-- Giữ page hiện tại -->
 			<input type="hidden" name="page" value="${currentPage}" />
@@ -134,7 +134,7 @@
 				<button type="submit" class="btn btn-primary-custom w-50">
 					<i class="bi bi-filter"></i> Lọc
 				</button>
-				<a href="${pageContext.request.contextPath}/web/home"
+				<a href="${pageContext.request.contextPath}/user/home"
 					class="btn btn-outline-secondary w-50">Xóa lọc</a>
 			</div>
 		</form>

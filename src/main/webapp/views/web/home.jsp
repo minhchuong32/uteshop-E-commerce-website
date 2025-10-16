@@ -49,7 +49,6 @@
 					<i class="bi bi-grid me-2"></i> Danh mục
 				</h5>
 			</div>
-
 			<div class="position-relative">
 				<div id="categorySlider"
 					class="row flex-nowrap overflow-auto text-center g-0 p-0">
@@ -60,8 +59,7 @@
 									href="${pageContext.request.contextPath}/web/products?categoryId=${c.categoryId}"
 									class="text-decoration-none text-dark d-block">
 									<div class="category-img">
-										<img
-											src="${pageContext.request.contextPath}/assets${c.image}"
+										<img src="${pageContext.request.contextPath}/assets${c.image}"
 											alt="${c.name}" class="img-fluid">
 									</div>
 									<div class="category-title fw-medium py-2">${c.name}</div>
@@ -70,9 +68,19 @@
 						</c:if>
 					</c:forEach>
 				</div>
+				<!-- Nút điều hướng -->
+				<button id="prevCategory"
+					class="btn btn-light shadow position-absolute top-50 translate-middle-y"
+					style="left: -25px;">
+					<i class="bi bi-chevron-left"></i>
+				</button>
+				<button id="nextCategory"
+					class="btn btn-light shadow position-absolute top-50 translate-middle-y"
+					style="right: -25px;">
+					<i class="bi bi-chevron-right"></i>
+				</button>
 			</div>
 		</div>
-
 		<!-- Bộ lọc + Sản phẩm -->
 		<div id="product" class="bg-white rounded shadow-sm p-3 mb-4">
 			<div class="mb-3">

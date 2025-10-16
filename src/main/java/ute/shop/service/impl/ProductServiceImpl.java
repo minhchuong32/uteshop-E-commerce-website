@@ -153,5 +153,26 @@ public class ProductServiceImpl implements IProductService {
 		return productDao.findVariantById(variantId);
 	}
 
+	@Override
+	public List<Product> searchByKeywordAndShop(String keyword, int shopId, int page, int size) {
+		return productDao.searchByKeyword(keyword, page, size);
+	}
+
+	@Override
+	public long countByKeywordAndShop(String keyword, int shopId) {
+		return productDao.countByKeywordAndShop(keyword, shopId);
+	}
+
+	@Override
+	public List<Product> filterProductsByShop(int shopId, Integer categoryId, Double minPrice, Double maxPrice,
+			String sortBy, int page, int size) {
+		return productDao.filterProductsByShop(shopId, categoryId, minPrice, maxPrice, sortBy, page, size);
+	}
+
+	@Override
+	public long countFilterProductsByShop(int shopId, Integer categoryId, Double minPrice, Double maxPrice) {
+		return productDao.countFilterProductsByShop(shopId, categoryId, minPrice, maxPrice);
+	}
+
 
 }

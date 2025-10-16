@@ -40,16 +40,25 @@ public interface IProductDao {
 			int size);
 
 	Product findByIdWithVariants(int productId);
-	
 
 	long countByShopId(int shopId);
+
 	List<Object[]> getTopSellingProducts(int shopId, int limit);
+
 	List<Object[]> getProductCountByCategory(int shopId);
 
-
 	List<Object[]> findBestSellingProducts(int limit);
+
 	Product findById_fix(Integer id);
-	
+
 	void deleteExtraImage(Long imageId);
+
 	ProductVariant findVariantById(Long variantId);
+
+	List<Product> searchByKeywordAndShop(String keyword, int shopId, int page, int size);
+	long countByKeywordAndShop(String keyword, int shopId);
+
+	List<Product> filterProductsByShop(int shopId, Integer categoryId, Double minPrice, Double maxPrice, String sortBy, int page, int size);
+	long countFilterProductsByShop(int shopId, Integer categoryId, Double minPrice, Double maxPrice);
+
 }

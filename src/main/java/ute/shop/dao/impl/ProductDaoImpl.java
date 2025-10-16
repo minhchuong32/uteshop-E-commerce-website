@@ -159,41 +159,37 @@ public class ProductDaoImpl implements IProductDao {
 //	}
 	@Override
 	public void delete(int productId) {
-	    EntityManager em = JPAConfig.getEntityManager();
-	    EntityTransaction tx = em.getTransaction();
+		EntityManager em = JPAConfig.getEntityManager();
+		EntityTransaction tx = em.getTransaction();
 
-	    try {
-	        tx.begin();
+		try {
+			tx.begin();
 
-	        // Xóa review liên quan
-	        em.createQuery("DELETE FROM Review r WHERE r.product.productId = :pid")
-	          .setParameter("pid", productId)
-	          .executeUpdate();
+			// Xóa review liên quan
+			em.createQuery("DELETE FROM Review r WHERE r.product.productId = :pid").setParameter("pid", productId)
+					.executeUpdate();
 
-	        // Xóa ảnh phụ
-	        em.createQuery("DELETE FROM ProductImage i WHERE i.product.productId = :pid")
-	          .setParameter("pid", productId)
-	          .executeUpdate();
+			// Xóa ảnh phụ
+			em.createQuery("DELETE FROM ProductImage i WHERE i.product.productId = :pid").setParameter("pid", productId)
+					.executeUpdate();
 
-	        // Xóa biến thể
-	        em.createQuery("DELETE FROM ProductVariant v WHERE v.product.productId = :pid")
-	          .setParameter("pid", productId)
-	          .executeUpdate();
+			// Xóa biến thể
+			em.createQuery("DELETE FROM ProductVariant v WHERE v.product.productId = :pid")
+					.setParameter("pid", productId).executeUpdate();
 
-	        // Cuối cùng xóa sản phẩm chính
-	        em.createQuery("DELETE FROM Product p WHERE p.productId = :pid")
-	          .setParameter("pid", productId)
-	          .executeUpdate();
+			// Cuối cùng xóa sản phẩm chính
+			em.createQuery("DELETE FROM Product p WHERE p.productId = :pid").setParameter("pid", productId)
+					.executeUpdate();
 
-	        tx.commit();
-	    } catch (Exception e) {
-	        if (tx.isActive()) tx.rollback();
-	        e.printStackTrace();
-	    } finally {
-	        em.close();
-	    }
+			tx.commit();
+		} catch (Exception e) {
+			if (tx.isActive())
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			em.close();
+		}
 	}
-
 
 	@Override
 	public List<Product> findByCategory(Integer categoryId) {
@@ -409,34 +405,172 @@ public class ProductDaoImpl implements IProductDao {
 			em.close();
 		}
 	}
-	
+
 	@Override
-    public void deleteExtraImage(Long imageId) {
+	public void deleteExtraImage(Long imageId) {
 		EntityManager em = JPAConfig.getEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        try {
-            tx.begin();
-            ProductImage img = em.find(ProductImage.class, imageId);
-            if (img != null) {
-                em.remove(img);
-            }
-            tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (tx.isActive()) tx.rollback();
-        }
-    }
+		EntityTransaction tx = em.getTransaction();
+		try {
+			tx.begin();
+			ProductImage img = em.find(ProductImage.class, imageId);
+			if (img != null) {
+				em.remove(img);
+			}
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (tx.isActive())
+				tx.rollback();
+		}
+	}
 
-    @Override
-    public ProductVariant findVariantById(Long variantId) {
-    	EntityManager em = JPAConfig.getEntityManager();
-        try {
-            return em.find(ProductVariant.class, variantId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+	@Override
+	public ProductVariant findVariantById(Long variantId) {
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			return em.find(ProductVariant.class, variantId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
+	@Override
+	public List<Product> searchByKeywordAndShop(String keyword, int shopId, int page, int size) {
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			String jpql = """
+					    SELECT DISTINCT p FROM Product p
+					    WHERE p.shop.shopId = :sid
+					      AND (LOWER(p.name) LIKE :kw OR LOWER(p.description) LIKE :kw)
+					    ORDER BY p.productId DESC
+					""";
+			return em.createQuery(jpql, Product.class).setParameter("sid", shopId)
+					.setParameter("kw", "%" + keyword.toLowerCase() + "%").setFirstResult((page - 1) * size)
+					.setMaxResults(size).getResultList();
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+
+	public long countByKeywordAndShop(String keyword, int shopId) {
+
+		EntityManager em = JPAConfig.getEntityManager();
+
+		try {
+
+			String jpql = """
+
+					SELECT COUNT(p) FROM Product p
+
+					WHERE p.shop.shopId = :sid
+
+					AND (LOWER(p.name) LIKE :kw OR LOWER(p.description) LIKE :kw)
+
+					""";
+
+			return em.createQuery(jpql, Long.class)
+
+					.setParameter("sid", shopId)
+
+					.setParameter("kw", "%" + keyword.toLowerCase() + "%")
+
+					.getSingleResult();
+
+		} finally {
+
+			em.close();
+
+		}
+
+	}
+
+	@Override
+	public List<Product> filterProductsByShop(int shopId, Integer categoryId, Double minPrice, Double maxPrice,
+			String sortBy, int page, int size) {
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			StringBuilder jpql = new StringBuilder("""
+					    SELECT p FROM ProductVariant v
+					    JOIN v.product p
+					    WHERE p.shop.shopId = :sid
+					""");
+
+			if (categoryId != null)
+				jpql.append(" AND p.category.categoryId = :cid");
+			if (minPrice != null)
+				jpql.append(" AND v.price >= :minPrice");
+			if (maxPrice != null)
+				jpql.append(" AND v.price <= :maxPrice");
+
+			jpql.append(" GROUP BY p.productId, p.name, p.description, p.imageUrl, p.category, p.shop");
+
+			if ("priceAsc".equals(sortBy)) {
+				jpql.append(" ORDER BY MIN(v.price) ASC");
+			} else if ("priceDesc".equals(sortBy)) {
+				jpql.append(" ORDER BY MIN(v.price) DESC");
+			} else {
+				jpql.append(" ORDER BY p.productId DESC");
+			}
+
+			TypedQuery<Product> query = em.createQuery(jpql.toString(), Product.class);
+			query.setParameter("sid", shopId);
+
+			if (categoryId != null)
+				query.setParameter("cid", categoryId);
+			if (minPrice != null)
+				query.setParameter("minPrice", minPrice);
+			if (maxPrice != null)
+				query.setParameter("maxPrice", maxPrice);
+
+			List<Product> result = query.setFirstResult((page - 1) * size).setMaxResults(size).getResultList();
+
+			// Debug log
+			System.out.println("=== Danh sách sản phẩm của shop ID: " + shopId + " ===");
+			for (Product p : result) {
+				System.out.println("ID: " + p.getProductId() + " | Tên: " + p.getName() + " | Giá: " + p.getPrice()
+						+ " | ShopID: " + p.getShop().getShopId() + " | Mô tả: " + p.getDescription());
+			}
+			System.out.println("=== Tổng sản phẩm: " + result.size() + " ===");
+
+			return result;
+		} finally {
+			em.close();
+		}
+	}
+
+	@Override
+	public long countFilterProductsByShop(int shopId, Integer categoryId, Double minPrice, Double maxPrice) {
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			StringBuilder jpql = new StringBuilder("""
+					    SELECT COUNT(DISTINCT p) FROM ProductVariant v
+					    JOIN v.product p
+					    WHERE p.shop.shopId = :sid
+					""");
+
+			if (categoryId != null)
+				jpql.append(" AND p.category.categoryId = :cid");
+			if (minPrice != null)
+				jpql.append(" AND v.price >= :minPrice");
+			if (maxPrice != null)
+				jpql.append(" AND v.price <= :maxPrice");
+
+			TypedQuery<Long> query = em.createQuery(jpql.toString(), Long.class).setParameter("sid", shopId);
+
+			if (categoryId != null)
+				query.setParameter("cid", categoryId);
+			if (minPrice != null)
+				query.setParameter("minPrice", minPrice);
+			if (maxPrice != null)
+				query.setParameter("maxPrice", maxPrice);
+
+			return query.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
 
 }
