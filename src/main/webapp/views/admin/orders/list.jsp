@@ -31,9 +31,9 @@
 	<c:remove var="error" scope="session" />
 </c:if>
 
-<!-- ====================== DANH SÁCH VẬN CHUYỂN ====================== -->
+<!-- ====================== DANH SÁCH ĐƠN HÀNG ====================== -->
 <h3 class="fw-bold text-primary-custom mb-3">
-	<i class="bi bi-truck"></i> Quản lý vận chuyển
+	<i class="bi bi-cart"></i> Quản lý đơn hàng
 </h3>
 
 <div class="card shadow-sm border-0">
