@@ -18,7 +18,7 @@
 	<form action="${pageContext.request.contextPath}/user/checkout"
 		method="post">
 		<div class="row">
-			<!-- 🔹 Thông tin giao hàng -->
+			<!-- Thông tin giao hàng -->
 			<div class="mb-4">
 				<h5>📦 Thông tin giao hàng</h5>
 				<div class="card p-3">
@@ -43,8 +43,19 @@
 					</div>
 				</div>
 			</div>
+			<div class="mt-2 mb-2">
+				<label class="form-label">🚚 Đơn vị vận chuyển</label> <select
+					name="carrierId" class="form-select">
+					<c:forEach var="c" items="${carriers}">
+						<option value="${c.carrierId}">${c.carrierName}(+
+							<fmt:formatNumber value="${c.carrierFee}" type="number"
+								groupingUsed="true" />₫)
+						</option>
+					</c:forEach>
+				</select>
+			</div>
 
-			<!-- 🔹 Phương thức thanh toán -->
+			<!-- Phương thức thanh toán -->
 			<div class="mb-4">
 				<h5>💳 Phương thức thanh toán</h5>
 				<div class="card p-3">
@@ -69,7 +80,7 @@
 			</div>
 
 			<div class="col-md-8">
-				<!-- ✅ Lặp qua từng shop -->
+				<!--  Lặp qua từng shop -->
 				<c:set var="grandTotal" value="0" />
 				<c:set var="totalItems" value="0" />
 				<c:set var="shopCount" value="0" />
@@ -82,7 +93,7 @@
 					<c:set var="subtotal" value="0" />
 					<c:set var="shopCount" value="${shopCount + 1}" />
 
-					<!-- 🔸 từng shop -->
+					<!--  từng shop -->
 					<div class="card mb-3">
 						<div class="card-header bg-light">
 							<h5 class="mb-0">🏬 Cửa hàng:
@@ -90,7 +101,7 @@
 						</div>
 
 						<div class="card-body" data-subtotal="${subtotal}">
-							<!-- ✅ Hiển thị sản phẩm -->
+							<!--  Hiển thị sản phẩm -->
 							<c:forEach var="item" items="${shopItems}">
 								<div class="d-flex align-items-center border-bottom py-2">
 									<img
@@ -105,10 +116,38 @@
 										<div>
 											<small class="text-muted">Số lượng: ${item.quantity}</small>
 										</div>
+
+										<!-- 🎟️ Mã khuyến mãi theo sản phẩm -->
+										<div class="mt-2">
+											<label class="form-label">🎟️ Mã khuyến mãi</label> <select
+												name="promotionId_product[${item.productVariant.product.productId}]"
+												class="form-select promotion-select"
+												data-product-id="${item.productVariant.product.productId}">
+												<option value="" data-type="none" data-value="0">--
+													Không dùng mã --</option>
+												<c:forEach var="promo"
+													items="${promosByProduct[item.productVariant.product.productId]}">
+													<option value="${promo.promotionId}"
+														data-type="${promo.discountType}"
+														data-value="${promo.value}">
+														<c:choose>
+															<c:when test="${promo.discountType eq 'percent'}">
+									Giảm ${promo.value}% (đến ${promo.endDate})
+								</c:when>
+															<c:otherwise>
+									Giảm <fmt:formatNumber value="${promo.value}" type="number"
+																	groupingUsed="true" />₫ (đến ${promo.endDate})
+								</c:otherwise>
+														</c:choose>
+													</option>
+												</c:forEach>
+											</select>
+										</div>
 									</div>
 
 									<div class="text-end">
-										<p class="mb-0 fw-semibold text-danger">
+										<p class="mb-0 fw-semibold text-danger"
+											data-product-id="${item.productVariant.product.productId}">
 											<fmt:formatNumber value="${item.price * item.quantity}"
 												type="currency" currencySymbol="₫" />
 										</p>
@@ -126,31 +165,7 @@
 								<c:set var="totalItems" value="${totalItems + item.quantity}" />
 							</c:forEach>
 
-							<!-- ✅ Mã khuyến mãi -->
-							<div class="mt-3">
-								<label class="form-label">🎟️ Mã khuyến mãi của shop</label> <select
-									name="promotionId[${shopId}]"
-									class="form-select promotion-select" data-shop-id="${shopId}">
-									<option value="" data-type="none" data-value="0">--
-										Không dùng mã --</option>
-									<c:forEach var="promo" items="${promos}">
-										<option value="${promo.promotionId}"
-											data-type="${promo.discountType}" data-value="${promo.value}">
-											<c:choose>
-												<c:when test="${promo.discountType eq 'percent'}">
-								Giảm ${promo.value}% (đến ${promo.endDate})
-							</c:when>
-												<c:otherwise>
-								Giảm <fmt:formatNumber value="${promo.value}" type="number"
-														groupingUsed="true" />₫ (đến ${promo.endDate})
-							</c:otherwise>
-											</c:choose>
-										</option>
-									</c:forEach>
-								</select>
-							</div>
-
-							<!-- ✅ Tổng tiền shop -->
+							<!--  Tổng tiền shop -->
 							<div class="mt-3 border-top pt-2 d-flex justify-content-between">
 								<span>Tạm tính:</span> <strong class="shop-subtotal"
 									data-shop-id="${shopId}" data-subtotal="${subtotal}">
@@ -179,7 +194,7 @@
 				</c:forEach>
 			</div>
 
-			<!-- ✅ Cột tóm tắt thanh toán -->
+			<!--  Cột tóm tắt thanh toán -->
 			<div class="col-md-4">
 				<div class="card shadow-sm">
 					<div class="card-header bg-white">
@@ -206,7 +221,7 @@
 							<c:set var="shopTotal" value="${shopSubtotal + 30000}" />
 							<c:set var="grandTotal" value="${grandTotal + shopTotal}" />
 
-							<!-- 🏪 Hiển thị từng shop -->
+							<!--  Hiển thị từng shop -->
 							<div class="mb-3 border-bottom pb-2">
 								<strong>🏪
 									${shopItems[0].productVariant.product.shop.name}</strong><br> <span>${itemCount}

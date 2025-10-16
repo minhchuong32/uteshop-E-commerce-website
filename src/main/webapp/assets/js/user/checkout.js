@@ -1,12 +1,13 @@
-console.log("checkout.js fixed ✅");
-document.addEventListener("DOMContentLoaded", function () {
-	const shippingFee = 30000;
+console.log("✅ checkout.js (with dynamic shipping + product discount)");
 
-	// ✅ Định dạng tiền tệ
+document.addEventListener("DOMContentLoaded", function () {
+	let shippingFee = 30000; // mặc định
+
+	// 🪙 Định dạng tiền VND
 	const formatCurrency = (num) =>
 		num.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 
-	// ✅ Cập nhật tổng toàn đơn (chỉ lấy từ phần tóm tắt)
+	// 🧮 Cập nhật tổng toàn đơn
 	function updateGrandTotal() {
 		let total = 0;
 		document.querySelectorAll(".shop-summary-total").forEach((el) => {
@@ -15,75 +16,109 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 		const grandEl = document.getElementById("grand-total");
 		if (grandEl) grandEl.textContent = formatCurrency(total);
-		
-
 	}
 
-	// ✅ Khi người dùng chọn mã giảm giá
+	// 🚚 Khi thay đổi đơn vị vận chuyển
+	const carrierSelect = document.querySelector('select[name="carrierId"]');
+	if (carrierSelect) {
+		carrierSelect.addEventListener("change", function () {
+			const selected = this.selectedOptions[0];
+			if (!selected) return;
+			const text = selected.textContent;
+			const feeMatch = text.match(/([\d.,]+)/); // lấy số trong "(+30.000₫)"
+			if (feeMatch) {
+				shippingFee = parseFloat(feeMatch[1].replace(/[^\d]/g, "")) || 0;
+			}
+
+			// ✅ Cập nhật hiển thị phí vận chuyển
+			document.querySelectorAll(".shop-summary-shipping").forEach((el) => {
+				el.textContent = formatCurrency(shippingFee);
+			});
+			document.querySelectorAll(".card-body .d-flex span + strong").forEach((el) => {
+				if (el.textContent.includes("₫")) el.textContent = formatCurrency(shippingFee);
+			});
+
+			// ✅ Cập nhật lại tổng từng shop và toàn đơn
+			document.querySelectorAll(".card-body").forEach((shopCard) => {
+				updateShopTotals(shopCard.querySelector(".d-flex"));
+			});
+		});
+	}
+
+	// 🧾 Khi chọn mã giảm giá theo sản phẩm
 	document.querySelectorAll(".promotion-select").forEach((select) => {
 		select.addEventListener("change", function () {
-			const shopId = this.dataset.shopId;
-			const subtotalEl = document.querySelector(
-				`.shop-subtotal[data-shop-id="${shopId}"]`
-			);
-			const totalEl = document.querySelector(
-				`.shop-total[data-shop-id="${shopId}"]`
-			); // chỉ phần bên trái
-			if (!subtotalEl || !totalEl) return;
-
-			// Lấy subtotal gốc
-			const subtotal = parseFloat(subtotalEl.dataset.subtotal || "0");
+			const productRow = this.closest(".d-flex");
+			const priceEl = productRow.querySelector(".text-end p");
+			const basePrice = parseFloat(priceEl.textContent.replace(/[^\d]/g, ""));
 			const type = this.selectedOptions[0].dataset.type;
 			const value = parseFloat(this.selectedOptions[0].dataset.value || "0");
 
 			let discount = 0;
-			if (type === "percent") {
-				discount = subtotal * (value / 100);
-			} else if (type === "fixed") {
-				discount = value;
-			}
+			if (type === "percent") discount = basePrice * (value / 100);
+			else if (type === "fixed") discount = value;
+			if (discount > basePrice) discount = basePrice;
 
-			// ✅ Tính lại tổng
-			let newTotal = subtotal + shippingFee - discount;
-			if (newTotal < 0) newTotal = 0;
+			const newPrice = Math.max(basePrice - discount, 0);
 
-			// ✅ Cập nhật phần hiển thị ở cột trái (shop chính)
-			totalEl.textContent = formatCurrency(newTotal);
-			totalEl.dataset.value = newTotal.toFixed(0);
+			priceEl.textContent = formatCurrency(newPrice);
+			priceEl.dataset.discount = discount.toFixed(0);
+			priceEl.title = discount > 0 ? `Đã giảm ${formatCurrency(discount)}` : "";
 
-			if (discount > 0) {
-				totalEl.classList.add("text-success");
-				totalEl.title = `Đã giảm ${formatCurrency(discount)}`;
-			} else {
-				totalEl.classList.remove("text-success");
-				totalEl.removeAttribute("title");
-			}
-
-			// ✅ Cập nhật phần tóm tắt bên phải
-			const summarySubtotal = document.querySelector(
-				`.shop-summary-subtotal[data-shop-id="${shopId}"]`
-			);
-			const summaryDiscount = document.querySelector(
-				`.shop-summary-discount[data-shop-id="${shopId}"]`
-			);
-			const summaryTotal = document.querySelector(
-			    `#shop-summary-total-${shopId}`
-			);
-
-			if (summarySubtotal)
-				summarySubtotal.textContent = formatCurrency(subtotal);
-			if (summaryDiscount)
-				summaryDiscount.textContent = `- ${formatCurrency(discount)}`;
-			if (summaryTotal) {
-				summaryTotal.textContent = formatCurrency(newTotal);
-				summaryTotal.dataset.value = newTotal.toFixed(0);
-			}
-
-			// ✅ Cập nhật tổng toàn đơn (chỉ phần tóm tắt)
-			updateGrandTotal();
+			updateShopTotals(productRow);
 		});
 	});
 
-	// ✅ Gọi ban đầu khi trang load
+	// 🏪 Cập nhật tổng từng shop
+	function updateShopTotals(productRow) {
+		const shopCard = productRow.closest(".card-body");
+		const shopId = shopCard.querySelector(".shop-subtotal").dataset.shopId;
+		let subtotal = 0;
+		let discountTotal = 0;
+
+		shopCard.querySelectorAll(".text-end p").forEach((el) => {
+			const price = parseFloat(el.textContent.replace(/[^\d]/g, "")) || 0;
+			const discount = parseFloat(el.dataset.discount || "0");
+			subtotal += price + discount;
+			discountTotal += discount;
+		});
+
+		const newTotal = Math.max(subtotal + shippingFee - discountTotal, 0);
+
+		const subtotalEl = shopCard.querySelector(".shop-subtotal");
+		const totalEl = shopCard.querySelector(".shop-total");
+		if (subtotalEl) subtotalEl.textContent = formatCurrency(subtotal);
+		if (totalEl) {
+			totalEl.textContent = formatCurrency(newTotal);
+			totalEl.dataset.value = newTotal.toFixed(0);
+		}
+
+		const summarySubtotal = document.querySelector(
+			`.shop-summary-subtotal[data-shop-id="${shopId}"]`
+		);
+		const summaryDiscount = document.querySelector(
+			`.shop-summary-discount[data-shop-id="${shopId}"]`
+		);
+		const summaryShipping = document.querySelector(
+			`.shop-summary-shipping[data-shop-id="${shopId}"]`
+		);
+		const summaryTotal = document.querySelector(
+			`#shop-summary-total-${shopId}`
+		);
+
+		if (summarySubtotal)
+			summarySubtotal.textContent = formatCurrency(subtotal);
+		if (summaryDiscount)
+			summaryDiscount.textContent = `- ${formatCurrency(discountTotal)}`;
+		if (summaryShipping)
+			summaryShipping.textContent = formatCurrency(shippingFee);
+		if (summaryTotal) {
+			summaryTotal.textContent = formatCurrency(newTotal);
+			summaryTotal.dataset.value = newTotal.toFixed(0);
+		}
+
+		updateGrandTotal();
+	}
+
 	updateGrandTotal();
 });

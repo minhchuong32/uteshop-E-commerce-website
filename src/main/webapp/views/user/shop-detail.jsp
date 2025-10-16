@@ -10,7 +10,7 @@
 <body>
 <div class="container py-4">
 
-    <!-- 🏪 Thông tin shop -->
+    <!--  Thông tin shop -->
     <div class="card mb-4 shadow-sm">
         <div class="card-body d-flex align-items-center">
             <img src="${pageContext.request.contextPath}/assets${shop.logo}"

@@ -1,4 +1,4 @@
-console.log("product-detail.js new2");
+console.log("product-detail.js buy");
 
 // ==========================
 // Đổi ảnh chính khi click thumbnail
@@ -7,7 +7,6 @@ function changeImage(el) {
 	const mainImg = document.getElementById("mainImg");
 	if (!mainImg) return;
 	mainImg.src = el.src;
-
 	document.querySelectorAll(".thumb-img").forEach(img => img.classList.remove("active"));
 	el.classList.add("active");
 }
@@ -21,11 +20,11 @@ function changeQty(delta) {
 	let val = parseInt(qty.value) + delta;
 	if (val < 1) val = 1;
 	qty.value = val;
-	syncQty(); // đồng bộ khi nhấn +/- luôn
+	syncQty();
 }
 
 // ==========================
-// Đồng bộ số lượng vào 2 form
+// Đồng bộ số lượng vào form
 // ==========================
 function syncQty() {
 	const qtyEl = document.getElementById("qty");
@@ -45,7 +44,66 @@ function syncQty() {
 document.addEventListener("DOMContentLoaded", function() {
 	const qtyInput = document.getElementById("qty");
 	if (qtyInput) qtyInput.addEventListener("input", syncQty);
+
+	// ==========================
+	// Xử lý nút "Mua ngay"
+	// ==========================
+	const buyNowForm = document.getElementById("buyNowForm");
+	if (buyNowForm) {
+		buyNowForm.addEventListener("submit", async function(e) {
+			e.preventDefault();
+
+			if (!validateSelection()) return;
+
+			const variantInput = document.getElementById("variantId");
+			const qtyInput = document.getElementById("qty");
+			const productDetail = document.getElementById("product-detail");
+			const appContext = productDetail?.dataset.context || "";
+
+			if (!variantInput?.value) {
+				showTempAlert("Vui lòng chọn đầy đủ thuộc tính sản phẩm.", "warning");
+				return;
+			}
+
+			const variantId = variantInput.value;
+			const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+
+			try {
+				// ✅ Gửi dữ liệu kiểu form (application/x-www-form-urlencoded)
+				const formData = new URLSearchParams();
+				formData.append("variantId", variantId);
+				formData.append("quantity", quantity);
+
+				const res = await fetch(`${appContext}/user/cart/add-now`, {
+					method: "POST",
+					headers: { "Content-Type": "application/x-www-form-urlencoded" },
+					body: formData
+				});
+
+				if (!res.ok) throw new Error("Không thể thêm sản phẩm vào giỏ hàng.");
+
+				// ✅ Đọc JSON trả về từ servlet
+				const data = await res.json();
+				console.log("🛒 Kết quả thêm giỏ hàng:", data);
+
+				if (!data.success) {
+					showTempAlert(data.message || "Không thể thêm sản phẩm.", "danger");
+					return;
+				}
+
+				// ✅ Điều hướng đến trang thanh toán
+				const checkoutUrl = `${appContext}/user/checkout?selectedItems=${encodeURIComponent(data.cartItemId)}`;
+				console.log("➡️ Chuyển hướng đến:", checkoutUrl);
+				window.location.href = checkoutUrl;
+
+			} catch (err) {
+				console.error("Lỗi khi mua ngay:", err);
+				showTempAlert("Không thể thêm sản phẩm vào giỏ để thanh toán.", "danger");
+			}
+		});
+	}
 });
+
 
 // ==========================
 // Xử lý chọn variant
@@ -114,8 +172,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			const options = getSelectedOptions();
 			options["productId"] = currentProductId;
 
-			console.log("Đã chọn variant:", options);
-
 			fetch(`${appContext}/api/variant/select`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
@@ -126,45 +182,40 @@ document.addEventListener("DOMContentLoaded", function() {
 					return res.json();
 				})
 				.then(data => {
-					console.log("Kết quả variant:", data);
-
-					// Các phần tử cần cập nhật
 					const currentPrice = document.querySelector("#current-price");
 					const oldPrice = document.querySelector("#old-price");
 					const stockValue = document.querySelector("#stock-value");
 					const mainImg = document.querySelector("#mainImg");
 					const variantInput = document.querySelector("#variantId");
 
-					// Cập nhật giá hiện tại
-					const formattedPrice = data.price !== undefined
-						? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(data.price)
-						: "-";
-					if (currentPrice) currentPrice.innerHTML = formattedPrice;
+					// Giá hiện tại
+					if (currentPrice)
+						currentPrice.innerHTML = data.price
+							? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(data.price)
+							: "-";
 
-					// Cập nhật giá cũ
-					const formattedOldPrice = data.oldPrice && data.oldPrice > data.price
-						? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(data.oldPrice)
-						: "-";
-					if (oldPrice) oldPrice.innerHTML = formattedOldPrice;
+					// Giá cũ
+					if (oldPrice)
+						oldPrice.innerHTML = data.oldPrice && data.oldPrice > data.price
+							? new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(data.oldPrice)
+							: "-";
 
-					if (stockValue) stockValue.textContent = (data.stock !== undefined && data.stock !== null) ? data.stock : "-";
+					// Tồn kho
+					if (stockValue)
+						stockValue.textContent =
+							data.stock !== undefined && data.stock !== null ? data.stock : "-";
 
-					//Cập nhật ảnh
+					// Ảnh
 					if (data.imageUrl && mainImg) {
 						mainImg.src = `${appContext}${data.imageUrl}`;
-						console.log("Ảnh mới:", mainImg.src);
 					}
 
-
-
-					// Gán variantId vào form
+					// Gán variantId
 					if (variantInput && data.variantId) {
 						variantInput.value = data.variantId;
 					}
 				})
-				.catch(err => {
-					console.error("Lỗi khi cập nhật variant:", err);
-				});
+				.catch(err => console.error("Lỗi khi cập nhật variant:", err));
 		});
 	});
 });

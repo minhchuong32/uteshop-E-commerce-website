@@ -198,16 +198,19 @@ INSERT INTO reviews (product_id, user_id, rating, comment, media_url) VALUES
 (7, 10, 5, N'Chuột Logitech G Pro X Superlight nhẹ như không, sensor chính xác, pin lâu. Top choice cho pro gamer!', NULL);
 
 -- ==================== BẢNG DELIVERIES ====================
-INSERT INTO deliveries (shipper_id, order_id, status, note_text, delivery_note, created_at) VALUES
-(4, 1, N'Đã giao', N'Giao hàng thành công, khách hài lòng', N'Đã ký nhận, thanh toán đầy đủ', DATEADD(day, -14, GETDATE())),
-(5, 2, N'Đã giao', N'Giao đúng hẹn, khách kiểm tra kỹ', N'Đã nhận hàng và thanh toán', DATEADD(day, -11, GETDATE())),
-(4, 3, N'Đang giao', N'Đang trên đường giao cho khách', N'Dự kiến giao trong 2h tới', DATEADD(day, -2, GETDATE())),
-(5, 4, N'Đã gán', N'Đã nhận đơn, chuẩn bị giao hàng', N'Sẽ liên hệ khách trong 1h', DATEADD(hour, -23, GETDATE())),
-(4, 6, N'Đã giao', N'Giao hàng nhanh, khách hài lòng', N'Đã ký nhận', DATEADD(day, -19, GETDATE())),
-(5, 7, N'Đã giao', N'Giao thành công, kiểm tra hàng kỹ', N'Đã thanh toán và nhận hàng', DATEADD(day, -17, GETDATE())),
-(4, 8, N'Đã hủy', N'Khách hủy đơn, không nhận hàng nữa', N'Đã hoàn hàng về kho', DATEADD(day, -9, GETDATE())),
-(5, 9, N'Đang giao', N'Đang trên đường tới địa chỉ khách', N'Khách đã xác nhận nhận hàng hôm nay', DATEADD(day, -1, GETDATE())),
-(4, 12, N'Đã giao', N'Giao hàng thành công, khách đánh giá tốt', N'Đã ký nhận và thanh toán VNPay', DATEADD(day, -24, GETDATE()));
+INSERT INTO deliveries (shipper_id, order_id, status, note_text, created_at, carrier_id) VALUES
+(4, 1, N'Đã giao', N'Giao hàng thành công, khách hài lòng',  DATEADD(day, -14, GETDATE()), 1),
+(5, 2, N'Đã giao', N'Giao đúng hẹn, khách kiểm tra kỹ',  DATEADD(day, -11, GETDATE()), 2),
+(4, 3, N'Đang giao', N'Đang trên đường giao cho khách', DATEADD(day, -2, GETDATE()), 3),
+(5, 4, N'Đã gán', N'Đã nhận đơn, chuẩn bị giao hàng',  DATEADD(hour, -23, GETDATE()), 4),
+(4, 6, N'Đã giao', N'Giao hàng nhanh, khách hài lòng', DATEADD(day, -19, GETDATE()), 4),
+(5, 7, N'Đã giao', N'Giao thành công, kiểm tra hàng kỹ',  DATEADD(day, -17, GETDATE()), 2),
+(4, 8, N'Đã hủy', N'Khách hủy đơn, không nhận hàng nữa',  DATEADD(day, -9, GETDATE()), 5),
+(5, 9, N'Đang giao', N'Đang trên đường tới địa chỉ khách', DATEADD(day, -12, GETDATE()), 6),
+(NULL, 10, N'Chờ xử lý', NULL, DATEADD(day, -11, GETDATE()), NULL),
+(NULL, 11, N'Chờ xử lý', NULL, DATEADD(day, -15, GETDATE()), NULL),
+(NULL, 11, N'Chờ xử lý', NULL, DATEADD(day, -1, GETDATE()), NULL),
+(4, 12, N'Đã giao', N'Giao hàng thành công, khách đánh giá tốt', DATEADD(day, -24, GETDATE()), 3);
 
 -- ==================== BẢNG PROMOTIONS ====================
 INSERT INTO promotions (shop_id, discount_type, value, start_date, end_date) VALUES
@@ -623,6 +626,20 @@ INSERT INTO ProductImage (image_url, is_main, product_id) VALUES
 (N'/images/products/airpods-pro-2.jpg', 1, 20),
 (N'/images/products/airpods-pro2-usbc.jpg', 0, 20);
 GO
+
+-- ==================== BẢNG CARIERS ====================
+INSERT INTO carriers (name, shippingFee, description)
+VALUES
+(N'Giao Hàng Nhanh (GHN)', 25000, N'Dịch vụ giao hàng nhanh trong nước, tốc độ 1-2 ngày.'),
+(N'Giao Hàng Tiết Kiệm (GHTK)', 20000, N'Dịch vụ tiết kiệm, thời gian 2-4 ngày, toàn quốc.'),
+(N'VNPost', 15000, N'Dịch vụ chuyển phát nhanh của bưu điện Việt Nam.'),
+(N'J&T Express', 22000, N'Đơn vị vận chuyển phổ biến, hỗ trợ thu hộ COD.'),
+(N'Shopee Express', 18000, N'Dịch vụ giao hàng nội vùng dành riêng cho sàn TMĐT.'),
+(N'Ninja Van', 23000, N'Giao hàng tiêu chuẩn, phủ sóng toàn quốc.'),
+(N'Best Express', 21000, N'Dịch vụ vận chuyển nhanh, hỗ trợ giao tận tay.'),
+(N'FedEx Vietnam', 60000, N'Vận chuyển quốc tế, tốc độ cao.'),
+(N'DHL Express', 70000, N'Vận chuyển quốc tế uy tín, giao tận nơi.'),
+(N'UPS Vietnam', 65000, N'Dịch vụ giao nhận quốc tế chuyên nghiệp.');
 -- ==================== KẾT THÚC ====================
 -- Script đã hoàn tất với đầy đủ dữ liệu cho tất cả các bảng
 -- Tổng số records: 

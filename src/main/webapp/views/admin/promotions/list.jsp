@@ -59,46 +59,50 @@
 	<div class="card-body">
 		<table id="promotionTable" class="table table-striped align-middle">
 			<thead class="table-light">
-				<tr>
-					<th>ID</th>
-					<th>Shop</th>
-					<th>Loại giảm</th>
-					<th>Giá trị</th>
-					<th>Bắt đầu</th>
-					<th>Kết thúc</th>
-					<th class="text-center">Hành động</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="p" items="${promotions}">
-					<tr>
-						<td>${p.promotionId}</td>
-						<td>${p.shop.name}</td>
-						<td><span
-							class="badge ${p.discountType eq 'percent' ? 'bg-info' : 'bg-success'}">
-								${p.discountType eq 'percent' ? 'Giảm %' : 'Giảm cố định'} </span></td>
-						<td><strong> <c:choose>
-									<c:when test="${p.discountType eq 'percent'}">${p.value}%</c:when>
-									<c:otherwise>
-										<fmt:formatNumber value="${p.value}" type="currency"
-											currencySymbol="₫" />
-									</c:otherwise>
-								</c:choose>
-						</strong></td>
-						<td><fmt:formatDate value="${p.startDate}"
-								pattern="dd/MM/yyyy" /></td>
-						<td><fmt:formatDate value="${p.endDate}" pattern="dd/MM/yyyy" /></td>
-						<td class="text-center"><a
-							href="${pageContext.request.contextPath}/admin/promotions/edit?id=${p.promotionId}"
-							class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
-							<button type="button" class="btn btn-sm btn-danger"
-								data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-								data-delete-url="${pageContext.request.contextPath}/admin/promotions/delete?id=${p.promotionId}">
-								<i class="bi bi-trash"></i>
-							</button></td>
-					</tr>
-				</c:forEach>
-			</tbody>
+  <tr>
+    <th>ID</th>
+    <th>Shop</th>
+    <th>Sản phẩm</th> 
+    <th>Loại giảm</th>
+    <th>Giá trị</th>
+    <th>Bắt đầu</th>
+    <th>Kết thúc</th>
+    <th class="text-center">Hành động</th>
+  </tr>
+</thead>
+<tbody>
+  <c:forEach var="p" items="${promotions}">
+    <tr>
+      <td>${p.promotionId}</td>
+      <td>${p.shop.name}</td>
+      <td>${p.product != null ? p.product.name : '<i>Toàn shop</i>'}</td> <!-- ✅ -->
+      <td><span class="badge ${p.discountType eq 'percent' ? 'bg-info' : 'bg-success'}">
+        ${p.discountType eq 'percent' ? 'Giảm %' : 'Giảm cố định'}
+      </span></td>
+      <td>
+        <strong>
+          <c:choose>
+            <c:when test="${p.discountType eq 'percent'}">${p.value}%</c:when>
+            <c:otherwise><fmt:formatNumber value="${p.value}" type="currency" currencySymbol="₫" /></c:otherwise>
+          </c:choose>
+        </strong>
+      </td>
+      <td><fmt:formatDate value="${p.startDate}" pattern="dd/MM/yyyy" /></td>
+      <td><fmt:formatDate value="${p.endDate}" pattern="dd/MM/yyyy" /></td>
+      <td class="text-center">
+        <a href="${pageContext.request.contextPath}/admin/promotions/edit?id=${p.promotionId}" class="btn btn-sm btn-warning">
+          <i class="bi bi-pencil"></i>
+        </a>
+        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+          data-bs-target="#confirmDeleteModal"
+          data-delete-url="${pageContext.request.contextPath}/admin/promotions/delete?id=${p.promotionId}">
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </c:forEach>
+</tbody>
+
 		</table>
 	</div>
 </div>
@@ -225,7 +229,8 @@ new Chart(ctxAvg, {
 
   // DataTable
   $('#promotionTable').DataTable({
-    pageLength: 10,
+    pageLength: 5,
+    lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
     language: {
       lengthMenu: "Hiển thị _MENU_ dòng",
       search: "Tìm kiếm:",

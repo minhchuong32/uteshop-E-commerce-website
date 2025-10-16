@@ -2,7 +2,6 @@ package ute.shop.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,20 +21,21 @@ public class Promotion {
     @JoinColumn(name = "shop_id", nullable = false)
     private Shop shop;
 
-    // Loại khuyến mãi: percent | fixed
+    // Mỗi khuyến mãi có thể áp dụng cho 1 sản phẩm (tùy chọn)
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = true)
+    private Product product;
+
     @Column(name = "discount_type", length = 20, columnDefinition = "NVARCHAR(20)", nullable = false)
     private String discountType;
 
-    // Giá trị giảm: DECIMAL(18,2)
     @Column(name = "value", precision = 18, scale = 2, nullable = false)
     private BigDecimal value;
 
-    // Ngày bắt đầu
     @Temporal(TemporalType.DATE)
     @Column(name = "start_date", nullable = false)
     private Date startDate;
 
-    // Ngày kết thúc
     @Temporal(TemporalType.DATE)
     @Column(name = "end_date", nullable = false)
     private Date endDate;

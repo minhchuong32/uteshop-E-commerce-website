@@ -46,7 +46,7 @@ public class ProductDetailController extends HttpServlet {
         // Lấy product kèm variants
         Product product = productService.findByIdWithVariants(productId);
 
-     // Lấy ảnh từ bảng ProductImage
+        	// Lấy ảnh từ bảng ProductImage
      		List<ProductImage> images = productImageService.getImagesByProduct((long) productId);
      		if (images == null) {
      			images = new java.util.ArrayList<>();
@@ -99,7 +99,7 @@ public class ProductDetailController extends HttpServlet {
         }
 
         // Lấy variant có giá thấp nhất để hiển thị giá
-//        List<ProductVariant> variants = product.getVariants();
+        // List<ProductVariant> variants = product.getVariants();
         ProductVariant minVariant = null;
         if (variants != null && !variants.isEmpty()) {
             minVariant = variants.stream()

@@ -267,8 +267,6 @@
 										<i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
 									</button>
 								</div>
-
-
 							</a>
 						</c:forEach>
 					</c:otherwise>

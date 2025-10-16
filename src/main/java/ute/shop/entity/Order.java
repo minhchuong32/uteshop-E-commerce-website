@@ -54,7 +54,7 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Delivery> deliveries = new ArrayList<>();
     
- // Mỗi đơn hàng thuộc về 1 shop
+    // Mỗi đơn hàng thuộc về 1 shop
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shop_id", nullable = false)
     private Shop shop;

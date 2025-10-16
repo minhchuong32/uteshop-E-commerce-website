@@ -11,6 +11,8 @@ public interface IPromotionService {
 
 	List<Promotion> getValidPromotionsByShop(int shopId);
 
+    List<Promotion> getValidPromotionsByProduct(int productId);
+
 	void insert(Promotion p);
 
 	void update(Promotion p);

@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="vi_VN"/>
 
-<div class="container mt-5 text-center">
+<div class="container mt-5 mb-5 text-center">
     <h3>Thanh toán qua MoMo</h3>
     <p class="lead">Số tiền cần thanh toán:</p>
     <h2 class="text-danger">
