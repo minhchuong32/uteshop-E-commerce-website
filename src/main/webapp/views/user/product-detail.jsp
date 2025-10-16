@@ -271,10 +271,34 @@
 											<i class="bi ${i <= r.rating ? 'bi-star-fill' : 'bi-star'}"></i>
 										</c:forEach>
 									</div>
-									<p class="mb-0 text-muted">${r.comment}</p>
+
+									<!-- Nội dung đánh giá -->
+									<p class="mb-1 text-muted">${r.comment}</p>
+
+									<!-- ✅ Hiển thị ảnh hoặc video nếu có -->
+									<c:if test="${not empty r.mediaUrl}">
+										<c:choose>
+											<c:when
+												test="${fn:endsWith(r.mediaUrl, '.mp4') || fn:endsWith(r.mediaUrl, '.mov') || fn:endsWith(r.mediaUrl, '.avi')}">
+												<video controls
+													style="width: 200px; border-radius: 8px; display: block; margin-top: 6px;">
+													<source
+														src="${pageContext.request.contextPath}/${r.mediaUrl}"
+														type="video/mp4">
+													Trình duyệt không hỗ trợ phát video.
+												</video>
+											</c:when>
+											<c:otherwise>
+												<img src="${pageContext.request.contextPath}/${r.mediaUrl}"
+													alt="Ảnh đánh giá"
+													style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px; display: block; margin-top: 6px;">
+											</c:otherwise>
+										</c:choose>
+									</c:if>
 								</div>
 							</div>
 						</c:forEach>
+
 					</c:when>
 					<c:otherwise>
 						<p class="text-muted text-center py-4">Chưa có đánh giá nào.</p>

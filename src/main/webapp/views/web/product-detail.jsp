@@ -147,10 +147,9 @@
 								<form action="${pageContext.request.contextPath}/login"
 									method="get" onsubmit="return validateSelection()">
 									<input type="hidden" name="redirect"
-										value="${pageContext.request.requestURI}">
-										<input type="hidden"
-										name="quantity" id="formQtyNow" value="1"> <input
-										type="hidden" name="action" value="buyNow">
+										value="${pageContext.request.requestURI}"> <input
+										type="hidden" name="quantity" id="formQtyNow" value="1">
+									<input type="hidden" name="action" value="buyNow">
 									<button type="submit" class="btn btn-dark w-100">Mua
 										ngay</button>
 								</form>
@@ -298,31 +297,6 @@
 						alt="Avatar" class="rounded-circle me-3"
 						style="width: 50px; height: 50px; object-fit: cover;">
 
-					<div class="flex-grow-1">
-						<form action="${pageContext.request.contextPath}/review/add"
-							method="post">
-							<input type="hidden" name="productId"
-								value="${product.productId}" />
-
-							<!-- Người dùng chọn rating -->
-							<div class="mb-2 text-warning">
-								<c:forEach var="i" begin="1" end="5">
-									<input type="radio" class="btn-check" name="rating"
-										id="star${i}" value="${i}">
-									<label class="bi bi-star-fill btn btn-outline-warning"
-										for="star${i}"></label>
-								</c:forEach>
-							</div>
-
-							<!-- Comment -->
-							<textarea name="comment" rows="3" class="form-control mb-2"
-								placeholder="Chia sẻ cảm nhận của bạn..."></textarea>
-
-							<!-- Nút gửi -->
-							<button type="submit" class="btn btn-primary-custom">Gửi
-								đánh giá</button>
-						</form>
-					</div>
 				</div>
 			</c:if>
 
@@ -331,32 +305,55 @@
 			</c:if>
 
 
-			<!-- Danh sách các review -->
-			<c:forEach var="r" items="${reviews}">
-				<div class="border-bottom pb-2 mb-3 d-flex">
-					<img
-						src="${pageContext.request.contextPath}/assets/images${r.user.avatar}"
-						class="rounded-circle me-3"
-						style="width: 40px; height: 40px; object-fit: cover;">
-					<div>
-						<strong>${r.user.username}</strong>
-						<div class="text-warning small">
-							<c:forEach var="i" begin="1" end="5">
-								<i class="bi ${i <= r.rating ? 'bi-star-fill' : 'bi-star'}"></i>
-							</c:forEach>
-						</div>
-						<p class="mb-0">${r.comment}</p>
-					</div>
-				</div>
-			</c:forEach>
+			<c:choose>
+				<c:when test="${not empty reviews}">
+					<c:forEach var="r" items="${reviews}">
+						<div class="d-flex gap-3 border-bottom pb-3 mb-3">
+							<img
+								src="${pageContext.request.contextPath}/assets/images${r.user.avatar}"
+								class="rounded-circle"
+								style="width: 40px; height: 40px; object-fit: cover;">
+							<div class="flex-grow-1">
+								<strong class="d-block">${r.user.username}</strong>
+								<div class="text-warning small mb-1">
+									<c:forEach var="i" begin="1" end="5">
+										<i class="bi ${i <= r.rating ? 'bi-star-fill' : 'bi-star'}"></i>
+									</c:forEach>
+								</div>
 
-			<!-- Nếu chưa có review nào -->
-			<c:if test="${empty reviews}">
-				<p>Chưa có đánh giá nào.</p>
-			</c:if>
-		</div>
-	</div>
-	<style>
+								<!-- Nội dung đánh giá -->
+								<p class="mb-1 text-muted">${r.comment}</p>
+
+								<!-- ✅ Hiển thị ảnh hoặc video nếu có -->
+								<c:if test="${not empty r.mediaUrl}">
+									<c:choose>
+										<c:when
+											test="${fn:endsWith(r.mediaUrl, '.mp4') || fn:endsWith(r.mediaUrl, '.mov') || fn:endsWith(r.mediaUrl, '.avi')}">
+											<video controls
+												style="width: 200px; border-radius: 8px; display: block; margin-top: 6px;">
+												<source
+													src="${pageContext.request.contextPath}/${r.mediaUrl}"
+													type="video/mp4">
+												Trình duyệt không hỗ trợ phát video.
+											</video>
+										</c:when>
+										<c:otherwise>
+											<img src="${pageContext.request.contextPath}/${r.mediaUrl}"
+												alt="Ảnh đánh giá"
+												style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px; display: block; margin-top: 6px;">
+										</c:otherwise>
+									</c:choose>
+								</c:if>
+							</div>
+						</div>
+					</c:forEach>
+
+				</c:when>
+				<c:otherwise>
+					<p class="text-muted text-center py-4">Chưa có đánh giá nào.</p>
+				</c:otherwise>
+			</c:choose>
+			<style>
 /* ẢNH CHÍNH SẢN PHẨM */
 .product-detail-img {
 	width: 100%; /* Ảnh full chiều ngang container */
@@ -384,18 +381,15 @@
 	transform: scale(1.05);
 }
 </style>
+		</div>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		<!-- Truyền biến từ JSP sang JS -->
+		<div id="product-detail" data-product-id="${product.productId}"
+			data-context="${pageContext.request.contextPath}"></div>
 
-
-	</div>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-	<!-- Truyền biến từ JSP sang JS -->
-	<div id="product-detail" data-product-id="${product.productId}"
-		data-context="${pageContext.request.contextPath}"></div>
-
-	<script
-		src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
-
+		<script
+			src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
 </body>
 </html>
 
