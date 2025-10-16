@@ -18,7 +18,7 @@
 
 				<img id="mainImg" src="${pageContext.request.contextPath}${imgPath}"
 					alt="${product.name}" class="w-100 rounded-3 mb-3"
-					style="height: 500px; object-fit: cover; background: #f9f9f9;">
+					style="height: 500px; object-fit: contain; background: #f9f9f9;">
 
 				<!-- Thumbnails -->
 				<div class="d-flex gap-2 flex-wrap">
