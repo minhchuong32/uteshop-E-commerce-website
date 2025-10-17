@@ -85,7 +85,8 @@ public class ProductController extends HttpServlet {
             int startIndex = Math.max(0, (currentPage - 1) * PAGE_SIZE);
             int endIndex = Math.min(startIndex + PAGE_SIZE, totalProducts);
             List<Product> products = allProducts.subList(startIndex, endIndex);
-
+            
+            req.setAttribute("selectedCategory", categoryId);
             req.setAttribute("categories", categoryService.findAll());
             req.setAttribute("list", products);
             req.setAttribute("totalPages", totalPages);
