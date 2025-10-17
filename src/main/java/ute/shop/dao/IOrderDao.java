@@ -25,6 +25,8 @@ public interface IOrderDao {
 	List<Order> findByUserId(Integer userId);
 
 	List<Order> getOrdersByUserAndStatus(int userId, String status);
+	boolean updateStatus(int orderId, String status);
+
 
 	// Vendor dashboard
 	long countOrdersByShop(int shopId);

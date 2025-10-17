@@ -87,6 +87,19 @@
 						<a class="btn btn-link text-primary" data-bs-toggle="collapse"
 							href="#detail-${o.orderId}" role="button" aria-expanded="false">
 							Xem chi tiết </a>
+							
+						<!-- Nút hủy đơn hàng: chỉ hiển thị nếu trạng thái là "Mới" -->
+						<c:if test="${o.status eq 'Mới'}">
+							<form method="post"
+								action="${pageContext.request.contextPath}/user/orders/cancel"
+								style="display: inline;">
+								<input type="hidden" name="orderId" value="${o.orderId}" />
+								<button type="submit" class="btn btn-outline-danger btn-sm mt-1"
+									onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này không?');">
+									<i class="bi bi-x-circle me-1"></i> Hủy hàng
+								</button>
+							</form>
+						</c:if>
 
 						<!-- Nút khiếu nại chỉ hiển thị nếu đơn hàng đã giao -->
 						<c:if test="${o.status eq 'Đã giao'}">

@@ -108,4 +108,9 @@ public class OrderServiceImpl implements IOrderService {
 	public List<Order> findAllForAdmin() {
 		return orderDao.findAllForAdmin();
 	}
+
+	@Override
+	public boolean updateStatus(int orderId, String status) {
+		return orderDao.updateStatus(orderId, status);
+	}
 }
