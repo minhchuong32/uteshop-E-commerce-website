@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
 <!-- CSS riêng -->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/assets/css/product-vendor.css">
@@ -109,8 +110,8 @@
         </div>
 
         <!-- PHÂN TRANG -->
-		<c:set var="categoryParam" value="${not empty selectedCategory ? '&category=' + selectedCategory : ''}" />
-		
+		<c:set var="categoryParam" value="${not empty selectedCategory ? '&category=' += selectedCategory : ''}" />
+
 		<c:if test="${totalPages > 1}">
 		    <nav aria-label="Page navigation">
 		        <ul class="pagination justify-content-center mt-4">

@@ -126,7 +126,6 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 			if (d != null) {
 				d.setStatus(status);
 
-				// ✅ Đồng bộ trạng thái với Order tương ứng
 				if (d.getOrder() != null) {
 					switch (status) {
 					case "Đang giao":

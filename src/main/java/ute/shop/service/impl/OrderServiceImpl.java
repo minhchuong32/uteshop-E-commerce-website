@@ -114,5 +114,10 @@ public class OrderServiceImpl implements IOrderService {
 		return orderDao.insert(order);
 	}
 
+	public void insert(Order order) {
+		
+		
+	}
+
 	
 }
