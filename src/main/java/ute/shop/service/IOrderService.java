@@ -25,6 +25,7 @@ public interface IOrderService {
 	List<Order> getOrdersByUser(Integer userId);
 
 	List<Order> getOrdersByUserAndStatus(int userId, String status);
+	boolean updateStatus(int orderId, String status);
 
 	// Vendor DashBoard
 	long getTotalOrders(int shopId);

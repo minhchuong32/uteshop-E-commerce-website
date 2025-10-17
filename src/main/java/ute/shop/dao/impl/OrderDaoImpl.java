@@ -297,4 +297,27 @@ public class OrderDaoImpl implements IOrderDao {
 			em.close();
 		}
 	}
+
+	@Override
+	public boolean updateStatus(int orderId, String status) {
+		EntityManager em = JPAConfig.getEntityManager();
+	    EntityTransaction tx = em.getTransaction();
+	    try {
+	        tx.begin();
+	        Order order = em.find(Order.class, orderId);
+	        if (order != null) {
+	            order.setStatus(status);
+	            em.merge(order);
+	            tx.commit();
+	            return true;
+	        }
+	        return false;
+	    } catch (Exception e) {
+	        if (tx.isActive()) tx.rollback();
+	        e.printStackTrace();
+	        return false;
+	    } finally {
+	        em.close();
+	    }
+	}
 }
