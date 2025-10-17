@@ -109,4 +109,9 @@ public class DeliveryServiceImpl implements IDeliveryService {
 		return deliveryDao.countAll();
 	}
 
+	@Override
+	public boolean insert(Delivery delivery) {
+		return deliveryDao.insert(delivery);
+	}
+
 }

@@ -7,11 +7,13 @@ import ute.shop.dao.IShopDao;
 import ute.shop.entity.*;
 import ute.shop.service.ICarrierService;
 import ute.shop.service.ICartItemService;
+import ute.shop.service.IDeliveryService;
 import ute.shop.service.IOrderService;
 import ute.shop.service.IPromotionService;
 import ute.shop.service.IShopService;
 import ute.shop.service.impl.CarrierServiceImpl;
 import ute.shop.service.impl.CartItemServiceImpl;
+import ute.shop.service.impl.DeliveryServiceImpl;
 import ute.shop.service.impl.OrderServiceImpl;
 import ute.shop.service.impl.PromotionServiceImpl;
 import ute.shop.service.impl.ShopServiceImpl;
@@ -35,6 +37,8 @@ public class CheckoutController extends HttpServlet {
 	private final IPromotionService promotionService = new PromotionServiceImpl();
 	private final IShopService shopservice = new ShopServiceImpl();
 	private final ICarrierService carrierService = new CarrierServiceImpl();
+	private final IDeliveryService deliveryService = new DeliveryServiceImpl();
+
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -170,34 +174,45 @@ public class CheckoutController extends HttpServlet {
 				total = BigDecimal.ZERO;
 
 			allShopTotal = allShopTotal.add(total);
-			// ---- Tạo đơn hàng ----
-			Order order = new Order();
-			order.setUser(user);
-			Shop shop = shopservice.getReferenceById(shopId);
-			order.setShop(shop);
-			order.setPaymentMethod(payment);
-			order.setStatus("Mới");
-			order.setCreatedAt(new Date());
-			order.setAddress(address);
-			order.setTotalAmount(total);
 
-			// Thêm chi tiết đơn hàng
-			for (CartItem ci : shopItems) {
-				OrderDetail od = new OrderDetail();
-				od.setOrder(order);
-				od.setProductVariant(ci.getProductVariant());
-				od.setQuantity(ci.getQuantity());
-				od.setPrice(ci.getPrice());
-				order.getOrderDetails().add(od);
-			}
+			 // ----- Tạo Order -----
+	        Order order = new Order();
+	        order.setUser(user);
+	        order.setShop(shopservice.getById(shopId));
+	        order.setPaymentMethod(payment);
+	        order.setStatus("Mới");
+	        order.setCreatedAt(new Date());
+	        order.setAddress(address);
+	        order.setTotalAmount(total);
 
-			boolean success = orderService.insert(order);
-			if (success) {
-				// Xóa giỏ hàng cho sản phẩm đã đặt
-				shopItems.forEach(ci -> cartService.removeFromCart(ci.getCartItemId()));
-			} else {
-				allSuccess = false;
-			}
+	        // ----- OrderDetails -----
+	        for (CartItem ci : shopItems) {
+	            OrderDetail od = new OrderDetail();
+	            od.setOrder(order);
+	            od.setProductVariant(ci.getProductVariant());
+	            od.setQuantity(ci.getQuantity());
+	            od.setPrice(ci.getPrice());
+	            order.getOrderDetails().add(od);
+	        }
+
+	        // ----- Delivery -----
+	        Delivery delivery = new Delivery();
+	        delivery.setOrder(order);
+	        delivery.setCreatedAt(new Date());
+	        delivery.setStatus("Mới");
+	        delivery.setCarrier(carrier);
+	        order.getDeliveries().add(delivery);
+
+	        // ----- Lưu toàn bộ trong 1 lần -----
+	        Order savedOrder = orderService.save(order);
+
+	        if (savedOrder != null) {
+	            shopItems.forEach(ci -> cartService.removeFromCart(ci.getCartItemId()));
+	        } else {
+	            allSuccess = false;
+	        }
+
+
 		}
 
 		if (allSuccess) {

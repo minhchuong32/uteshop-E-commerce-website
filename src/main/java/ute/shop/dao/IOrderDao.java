@@ -9,8 +9,8 @@ public interface IOrderDao {
 	List<Order> getAll();
 
 	Order getById(int id);
-
-	boolean insert(Order order);
+	Order save(Order order);
+	Order insert(Order order);
 
 	void update(Order order);
 

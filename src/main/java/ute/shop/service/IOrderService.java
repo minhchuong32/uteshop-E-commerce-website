@@ -10,8 +10,7 @@ public interface IOrderService {
 
 	Order getById(int id);
 
-	boolean insert(Order order);
-
+	Order save(Order order);
 	void update(Order order);
 
 	void delete(int id);
