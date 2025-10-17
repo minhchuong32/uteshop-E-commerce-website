@@ -28,21 +28,33 @@
 					<td><span class="badge bg-info">${c.status}</span></td>
 					<td>${c.createdAt}</td>
 					<td class="text-center">
-						<!-- Nút Chat --> <a
-						href="${pageContext.request.contextPath}/admin/complaints/chat?id=${c.complaintId}"
-						class="text-success me-3" title="Trao đổi khiếu nại"> <i
-							class="bi bi-chat-dots-fill fs-5"></i>
-					</a> <!-- Nút Sửa --> <a
-						href="${pageContext.request.contextPath}/admin/complaints/edit?id=${c.complaintId}"
-						class="text-primary me-3" title="Chỉnh sửa"> <i
-							class="bi bi-pencil-fill"></i>
-					</a> <!-- Nút Xóa --> <a href="javascript:void(0);" class="text-danger"
-						data-bs-toggle="modal"
-						data-bs-target="#confirmDeleteComplaintModal"
-						data-id="${c.complaintId}"
-						data-url="${pageContext.request.contextPath}/admin/complaints/delete"
-						title="Xóa khiếu nại"> <i class="bi bi-trash-fill fs-5"></i>
-					</a>
+						<div class="btn-group" role="group">
+
+							<!-- Nút Chat -->
+							<button type="button" class="btn btn-success btn-sm me-2"
+								title="Trao đổi khiếu nại"
+								onclick="window.location.href='${pageContext.request.contextPath}/admin/complaints/chat?id=${c.complaintId}'">
+								<i class="bi bi-chat-dots-fill"></i>
+							</button>
+
+							<!-- Nút Sửa -->
+							<button type="button" class="btn btn-primary btn-sm me-2"
+								title="Chỉnh sửa"
+								onclick="window.location.href='${pageContext.request.contextPath}/admin/complaints/edit?id=${c.complaintId}'">
+								<i class="bi bi-pencil-fill"></i>
+							</button>
+
+							<!-- Nút Xóa -->
+							<button type="button" class="btn btn-danger btn-sm deleteBtn"
+								title="Xóa khiếu nại" data-bs-toggle="modal"
+								data-bs-target="#confirmDeleteComplaintModal"
+								data-id="${c.complaintId}"
+								data-url="${pageContext.request.contextPath}/admin/complaints/delete">
+								<i class="bi bi-trash-fill"></i>
+							</button>
+
+						</div>
+
 					</td>
 
 				</tr>

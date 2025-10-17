@@ -140,6 +140,7 @@ INSERT INTO deliveries (shipper_id, order_id, status, note_text, created_at, car
 
 
 
-
-
+-- Sửa deliveries
+ALTER TABLE deliveries 
+ALTER COLUMN shipper_id INT NULL;
 
