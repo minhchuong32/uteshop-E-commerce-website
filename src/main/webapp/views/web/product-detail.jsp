@@ -20,12 +20,15 @@
 							<c:when test="${fn:startsWith(img.imageUrl, '/assets/')}">
 								<img id="mainImg"
 									src="${pageContext.request.contextPath}${img.imageUrl}"
-									alt="${product.name}" class="product-detail-img mb-3" />
+									alt="${product.name}" class="product-detail-img mb-3"
+									style="height: 500px; object-fit: contain; background: #f9f9f9;" />
 							</c:when>
 							<c:otherwise>
 								<img id="mainImg"
 									src="${pageContext.request.contextPath}/assets${img.imageUrl.startsWith('/') ? img.imageUrl : '/' + img.imageUrl}"
-									alt="${product.name}" class="product-detail-img mb-3" />
+									alt="${product.name}" class="product-detail-img mb-3"
+									style="height: 500px; object-fit: contain; background: #f9f9f9;"
+									 />
 							</c:otherwise>
 						</c:choose>
 					</c:if>
@@ -154,7 +157,6 @@
 										ngay</button>
 								</form>
 							</c:if>
-
 						</c:when>
 
 						<c:otherwise>

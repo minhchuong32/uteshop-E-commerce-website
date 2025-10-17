@@ -175,7 +175,41 @@
 		</div>
 	</div>
 </div>
+<!-- ==================== TOAST CONTAINER ==================== -->
+<div class="toast-container position-fixed top-0 end-0 p-3"
+	style="z-index: 2000">
+	<!-- Toast Thành công -->
+	<c:if test="${not empty sessionScope.success}">
+		<div id="toastSuccess"
+			class="toast align-items-center text-bg-success border-0 shadow-sm"
+			role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="d-flex">
+				<div class="toast-body">
+					<i class="bi bi-check-circle-fill me-2"></i>${sessionScope.success}
+				</div>
+				<button type="button" class="btn-close btn-close-white me-2 m-auto"
+					data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+		</div>
+		<c:remove var="success" scope="session" />
+	</c:if>
 
+	<!-- Toast Lỗi -->
+	<c:if test="${not empty sessionScope.error}">
+		<div id="toastError"
+			class="toast align-items-center text-bg-danger border-0 shadow-sm"
+			role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="d-flex">
+				<div class="toast-body">
+					<i class="bi bi-exclamation-triangle-fill me-2"></i>${sessionScope.error}
+				</div>
+				<button type="button" class="btn-close btn-close-white me-2 m-auto"
+					data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+		</div>
+		<c:remove var="error" scope="session" />
+	</c:if>
+</div>
 
 <!-- JS DataTables -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -189,29 +223,18 @@
 	src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
 
 <script>
-	$(document).ready(function() {
-		$('#userTable').DataTable({
-			"pageLength" : 10, // Mỗi trang 10 user
-			"lengthChange" : false, // Ẩn lựa chọn số dòng
-			"ordering" : true, // Cho phép sắp xếp
-			"searching" : true, // Ô tìm kiếm
-			"language" : { // Dịch sang tiếng Việt
-				"search" : "Tìm kiếm:",
-				"paginate" : {
-					"first" : "Đầu",
-					"last" : "Cuối",
-					"next" : "›",
-					"previous" : "‹"
-				},
-				"info" : "Hiển thị _START_ - _END_ / _TOTAL_ người dùng",
-				"infoEmpty" : "Không có dữ liệu",
-				"zeroRecords" : "Không tìm thấy kết quả phù hợp"
-			},
-			"columnDefs" : [ {
-				"orderable" : false,
-				"targets" : [ 1, 7 ]
-			} // Không cho sắp xếp cột ảnh + hành động
-			]
-		});
-	});
+// DataTable
+$('#userTable').DataTable({
+  pageLength: 5,
+  ordering : true,
+  lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
+  language: {
+    lengthMenu: "Hiển thị _MENU_ dòng",
+    search: "Tìm kiếm:",
+    paginate: { previous: "Trước", next: "Sau" },
+    info: "Hiển thị _START_–_END_ / _TOTAL_ Người Dùng",
+    emptyTable: "Không có dữ liệu"
+  }
+});
+
 </script>

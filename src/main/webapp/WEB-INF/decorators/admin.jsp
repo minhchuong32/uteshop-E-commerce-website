@@ -16,23 +16,28 @@
 	href="${pageContext.request.contextPath}/assets/css/common.css">
 
 <!-- Bootstrap -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-	
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+	rel="stylesheet">
+
 <!-- DataTables -->
 <link rel="stylesheet"
 	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
 
 <!-- JS Bootstrap + Chart -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 /* Hiệu ứng fade-in/fade-out */
 #preloader {
-
 	transition: opacity 0.5s ease;
 }
+
 #preloader.hidden {
 	opacity: 0.9;
 	visibility: hidden;
@@ -67,9 +72,9 @@
 			<nav
 				class="col-12 col-md-2 col-xl-2 shadow-sm pt-4 d-flex flex-column position-sticky top-0 vh-100 rounded-end"
 				style="height: calc(100vh - 76px); background-color: #00558D; margin-top: 76px">
-				<h5 class="text-center mb-4 text-white border-bottom border-white pb-3">
-					Quản trị hệ thống
-				</h5>
+				<h5
+					class="text-center mb-4 text-white border-bottom border-white pb-3">
+					Quản trị hệ thống</h5>
 
 				<ul class="nav flex-column flex-grow-1">
 					<li class="nav-item mb-1"><a
@@ -90,7 +95,7 @@
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='categories' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=categories">
-							<i class="bi bi-tags-fill me-2"></i> Quản lý Danh mục 
+							<i class="bi bi-tags-fill me-2"></i> Quản lý Danh mục
 					</a></li>
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='shops' ? 'active' : ''}"
@@ -170,6 +175,7 @@
 		}
 	});
 	</script>
+	
 
 </body>
 </html>

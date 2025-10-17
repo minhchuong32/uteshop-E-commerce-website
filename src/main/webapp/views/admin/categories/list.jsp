@@ -118,17 +118,17 @@
 <script>
 $(document).ready(function() {
 	$('#categoryTable').DataTable({
-		pageLength: 10,
-		lengthChange: false,
-		searching: true,
-		language: {
-			search: "Tìm kiếm:",
-			paginate: { first: "Đầu", last: "Cuối", next: "›", previous: "‹" },
-			info: "Hiển thị _START_ - _END_ / _TOTAL_ danh mục",
-			infoEmpty: "Không có dữ liệu",
-			zeroRecords: "Không tìm thấy kết quả phù hợp"
-		},
-		columnDefs: [{ orderable: false, targets: [1, 4] }]
-	});
+		  pageLength: 5,
+		  ordering : true,
+		  lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
+		  language: {
+		    lengthMenu: "Hiển thị _MENU_ dòng",
+		    search: "Tìm kiếm:",
+		    paginate: { previous: "Trước", next: "Sau" },
+		    info: "Hiển thị _START_–_END_ / _TOTAL_ Danh Mục",
+		    emptyTable: "Không có dữ liệu"
+		  }
+		});
+
 });
 </script>

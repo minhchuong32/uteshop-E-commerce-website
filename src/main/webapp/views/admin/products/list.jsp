@@ -159,19 +159,18 @@
 </div>
 <script>
 $(document).ready(function() {
-	const table = $('#productTable').DataTable({
-		"pageLength": 10,
-		"lengthChange": false,
-		"ordering": true,
-		"language": {
-			"search": "Tìm kiếm:",
-			"paginate": { "next": "›", "previous": "‹" },
-			"info": "Hiển thị _START_ - _END_ / _TOTAL_ sản phẩm",
-			"infoEmpty": "Không có dữ liệu",
-			"zeroRecords": "Không tìm thấy sản phẩm phù hợp"
-		},
-		columnDefs: [{ orderable: false, targets: [1,6] }]
-	});
+	$('#productTable').DataTable({
+		  pageLength: 5,
+		  ordering : true,
+		  lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
+		  language: {
+		    lengthMenu: "Hiển thị _MENU_ dòng",
+		    search: "Tìm kiếm:",
+		    paginate: { previous: "Trước", next: "Sau" },
+		    info: "Hiển thị _START_–_END_ / _TOTAL_ Sản Phẩm",
+		    emptyTable: "Không có dữ liệu"
+		  }
+		});
 
 	// Khi click dòng sản phẩm
 	$('#productTable tbody').on('click', 'tr.product-row', function(e) {

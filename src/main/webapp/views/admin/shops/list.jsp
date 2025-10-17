@@ -162,30 +162,16 @@
 
 <script>
 
-	$(document).ready(function() {
-		$('#shopTable').DataTable({
-			"pageLength" : 10,
-			"lengthChange" : false,
-			"ordering" : true,
-			"searching" : true,
-			"language" : {
-				"search" : "Tìm kiếm:",
-				"paginate" : {
-					"first" : "Đầu",
-					"last" : "Cuối",
-					"next" : "›",
-					"previous" : "‹"
-				},
-				"info" : "Hiển thị _START_ - _END_ / _TOTAL_ cửa hàng",
-				"infoEmpty" : "Không có dữ liệu",
-				"zeroRecords" : "Không tìm thấy kết quả phù hợp",
-				"emptyTable" : "Không có dữ liệu"
-			},
-			"columnDefs" : [ {
-				"orderable" : false,
-				"targets" : [ 1, 5 ]
-			} // không sắp xếp cột ảnh và hành động
-			]
-		});
+$('#shopTable').DataTable({
+	  pageLength: 1,
+	  ordering : true,
+	  lengthMenu: [[1, 10, 25, 50, -1], [1, 10, 25, 50, "Tất cả"]],
+	  language: {
+	    lengthMenu: "Hiển thị _MENU_ dòng",
+	    search: "Tìm kiếm:",
+	    paginate: { previous: "Trước", next: "Sau" },
+	    info: "Hiển thị _START_–_END_ / _TOTAL_ Cửa Hàng",
+	    emptyTable: "Không có dữ liệu"
+	  }
 	});
 </script>

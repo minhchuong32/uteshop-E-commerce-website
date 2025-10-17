@@ -165,39 +165,18 @@ $(document).ready(function() {
     const contextPath = '<%= request.getContextPath() %>';
     
     // ====================== KHỞI TẠO DATATABLE ======================
-    const table = $('#carrierTable').DataTable({
-        language: {
-            "decimal": "",
-            "emptyTable": "Không có dữ liệu",
-            "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
-            "infoEmpty": "Hiển thị 0 đến 0 của 0 bản ghi",
-            "infoFiltered": "(lọc từ _MAX_ tổng số bản ghi)",
-            "infoPostFix": "",
-            "thousands": ",",
-            "lengthMenu": "Hiển thị _MENU_ bản ghi",
-            "loadingRecords": "Đang tải...",
-            "processing": "Đang xử lý...",
-            "search": "Tìm kiếm:",
-            "zeroRecords": "Không tìm thấy kết quả",
-            "paginate": {
-                "first": "Đầu",
-                "last": "Cuối",
-                "next": "Sau",
-                "previous": "Trước"
-            },
-            "aria": {
-                "sortAscending": ": sắp xếp tăng dần",
-                "sortDescending": ": sắp xếp giảm dần"
-            }
-        },
-        pageLength: 10,
-        lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
-        order: [[0, 'asc']],
-        responsive: true,
-        columnDefs: [
-            { orderable: false, targets: 4 } // Cột "Hành động" không sort
-        ]
-    });
+    $('#carrierTable').DataTable({
+	  pageLength: 5,
+	  ordering : true,
+	  lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
+	  language: {
+	    lengthMenu: "Hiển thị _MENU_ dòng",
+	    search: "Tìm kiếm:",
+	    paginate: { previous: "Trước", next: "Sau" },
+	    info: "Hiển thị _START_–_END_ / _TOTAL_ Nhà Vận Chuyển",
+	    emptyTable: "Không có dữ liệu"
+	  }
+	});
 
     // ====================== MODAL THÊM ======================
     $('#btnAddCarrier').on('click', function() {
