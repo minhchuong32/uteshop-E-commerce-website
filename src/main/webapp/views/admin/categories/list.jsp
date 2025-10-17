@@ -116,39 +116,3 @@
 		</div>
 	</div>
 </div>
-
-<!-- JS DataTables -->
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<script
-	src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
-
-<script>
-	$(document)
-			.ready(
-					function() {
-						$('#categoryTable')
-								.DataTable(
-										{
-											pageLength : 5,
-											ordering : true,
-											lengthMenu : [
-													[ 5, 10, 25, 50, -1 ],
-													[ 5, 10, 25, 50, "Tất cả" ] ],
-											language : {
-												lengthMenu : "Hiển thị _MENU_ dòng",
-												search : "Tìm kiếm:",
-												paginate : {
-													previous : "Trước",
-													next : "Sau"
-												},
-												info : "Hiển thị _START_–_END_ / _TOTAL_ Danh Mục",
-												emptyTable : "Không có dữ liệu"
-											}
-										});
-
-					});
-</script>

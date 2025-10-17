@@ -9,7 +9,7 @@ public interface IDeliveryService {
 	Delivery getById(Integer id);
 
 	Delivery save(Delivery delivery);
-
+	boolean insert(Delivery delivery);
 	void updateStatus(Integer deliveryId, String status);
 
 	void delete(Integer id);

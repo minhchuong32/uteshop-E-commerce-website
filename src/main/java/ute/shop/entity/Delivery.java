@@ -19,12 +19,12 @@ public class Delivery {
 
     // Mỗi đơn giao hàng gắn với 1 user có role = 'Shipper'
     @ManyToOne
-    @JoinColumn(name = "shipper_id", nullable = false)
+    @JoinColumn(name = "shipper_id", nullable = true)
     private User shipper;
 
     // Mỗi đơn giao hàng gắn với 1 order
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id")
     private Order order;
     
     // Liên kết tới nhà vận chuyển

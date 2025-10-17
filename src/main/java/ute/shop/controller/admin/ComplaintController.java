@@ -31,7 +31,7 @@ public class ComplaintController extends HttpServlet {
 			List<Complaint> list = complaintService.findAll();
 			req.setAttribute("complaints", list);
 			req.setAttribute("page", "complaints");
-			req.setAttribute("view", "/views/admin/complaints/dashboard.jsp");
+			req.setAttribute("view", "/views/admin/complaints/list.jsp");
 			req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 		} else if (uri.endsWith("/edit")) {
 			int id = Integer.parseInt(req.getParameter("id"));

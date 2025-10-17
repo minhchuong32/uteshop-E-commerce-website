@@ -159,17 +159,10 @@
 		</table>
 	</div>
 </div>
-<!-- ====== SCRIPT ====== -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Script khởi tạo dữ liệu cho biểu đồ -->
 <script>
+// Dữ liệu trạng thái
 const statusLabels = [
     <c:forEach var="s" items="${statusData}" varStatus="i">
         "${s[0]}"${!i.last ? ',' : ''}
@@ -181,18 +174,7 @@ const statusCounts = [
     </c:forEach>
 ];
 
-const ctx1 = document.getElementById('statusChart');
-new Chart(ctx1, {
-    type: 'pie',
-    data: {
-        labels: statusLabels,
-        datasets: [{
-            data: statusCounts,
-            backgroundColor: ['#007bff', '#ffc107', '#28a745', '#dc3545', '#6c757d']
-        }]
-    }
-});
-
+// Dữ liệu theo tháng
 const monthLabels = [
     <c:forEach var="m" items="${monthData}" varStatus="i">
         "Tháng ${m[0]}"${!i.last ? ',' : ''}
@@ -203,53 +185,14 @@ const monthCounts = [
         ${m[1]}${!i.last ? ',' : ''}
     </c:forEach>
 ];
-const ctx2 = document.getElementById('monthChart');
-new Chart(ctx2, {
-    type: 'bar',
-    data: {
-        labels: monthLabels,
-        datasets: [{
-            label: 'Số khiếu nại',
-            data: monthCounts,
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: { scales: { y: { beginAtZero: true } } }
+
+// Khởi tạo biểu đồ khi document ready
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof initStatusChart === 'function') {
+        initStatusChart(statusLabels, statusCounts);
+    }
+    if (typeof initMonthChart === 'function') {
+        initMonthChart(monthLabels, monthCounts);
+    }
 });
-
-// DataTable
-$('#complaintTable').DataTable({
-  pageLength: 5,
-  lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
-  language: {
-    lengthMenu: "Hiển thị _MENU_ dòng",
-    search: "Tìm kiếm:",
-    paginate: { previous: "Trước", next: "Sau" },
-    info: "Hiển thị _START_–_END_ / _TOTAL_ Khiếu nại",
-    emptyTable: "Không có dữ liệu"
-  }
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-		const deleteModal = document
-				.getElementById('confirmDeleteComplaintModal');
-		const confirmBtn = document.getElementById('deleteComplaintBtn');
-
-		if (deleteModal) {
-			deleteModal.addEventListener('show.bs.modal', function(event) {
-				const button = event.relatedTarget; // nút mở modal
-				const itemId = button.getAttribute('data-id');
-				const baseUrl = button.getAttribute('data-url');
-
-				if (itemId && baseUrl) {
-					const deleteUrl = `${baseUrl}?id=${itemId}`;
-					confirmBtn.setAttribute('href', deleteUrl);
-				}
-			});
-		}
-	});
 </script>
-
-

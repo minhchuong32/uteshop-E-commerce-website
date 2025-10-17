@@ -41,15 +41,10 @@
 									data-description="${carrier.carrierDescription}">
 									<i class="bi bi-pencil"></i> Sửa
 								</button>
-								<button type="button" class="btn btn-sm btn-danger deleteBtn"
-									data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-									data-id="${carrier.carrierId}"
-									data-url="${pageContext.request.contextPath}/admin/carriers/delete"
-									title="Xóa nhà vận chuyển">
-									<i class="bi bi-trash-fill fs-5"></i>
+								<button class="btn btn-sm btn-danger deleteBtn"
+									data-id="${carrier.carrierId}">
+									<i class="bi bi-trash"></i> Xóa
 								</button>
-
-
 							</td>
 						</tr>
 					</c:forEach>
@@ -147,23 +142,21 @@
 		</div>
 	</div>
 </div>
-<!-- Modal Xóa -->
+
+<!-- ====================== MODAL XÓA ====================== -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1"
 	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content shadow-lg border-0 rounded-3">
+		<div class="modal-content">
 			<div class="modal-header bg-danger text-white">
 				<h5 class="modal-title">
 					<i class="bi bi-exclamation-triangle-fill me-2"></i> Xác nhận xóa
 				</h5>
 				<button type="button" class="btn-close btn-close-white"
-					data-bs-dismiss="modal" aria-label="Đóng"></button>
+					data-bs-dismiss="modal"></button>
 			</div>
 			<div class="modal-body">
-				<p>
-					Bạn có chắc muốn xóa nhà vận chuyển này không? <strong>Hành
-						động này không thể hoàn tác!</strong>
-				</p>
+				<p>Bạn có chắc muốn xóa đơn vị vận chuyển này không?</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button"
@@ -171,97 +164,16 @@
 					data-bs-dismiss="modal">Hủy</button>
 				<a id="deleteConfirmBtn" href="#"
 					class="btn btn-danger rounded-pill px-4"> <i
-					class="bi bi-trash-fill me-1"></i> Xóa
+					class="bi bi-trash-fill me-1"></i>Xóa
 				</a>
 			</div>
 		</div>
 	</div>
 </div>
-<!-- ====================== DATATABLES CSS ====================== -->
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
-
-
-<!-- ====================== DATATABLES JS ====================== -->
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<script
-	src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-<script
-	src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
-<script
-	src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
-<!-- ====================== SCRIPT XỬ LÝ MODAL & DATATABLE ====================== -->
+<!-- Biến JSP truyền cho file JS -->
 <script>
-$(document).ready(function() {
-    const contextPath = '<%=request.getContextPath()%>
-	';
-
-						// ====================== KHỞI TẠO DATATABLE ======================
-						$('#carrierTable')
-								.DataTable(
-										{
-											pageLength : 5,
-											ordering : true,
-											lengthMenu : [
-													[ 5, 10, 25, 50, -1 ],
-													[ 5, 10, 25, 50, "Tất cả" ] ],
-											language : {
-												lengthMenu : "Hiển thị _MENU_ dòng",
-												search : "Tìm kiếm:",
-												paginate : {
-													previous : "Trước",
-													next : "Sau"
-												},
-												info : "Hiển thị _START_–_END_ / _TOTAL_ Nhà Vận Chuyển",
-												emptyTable : "Không có dữ liệu"
-											}
-										});
-
-						// ====================== MODAL THÊM ======================
-						$('#btnAddCarrier').on('click', function() {
-							$('#addCarrierForm')[0].reset();
-							new bootstrap.Modal($('#addCarrierModal')).show();
-						});
-
-						// ====================== MODAL SỬA ======================
-						$('#carrierTable tbody').on(
-								'click',
-								'.editBtn',
-								function() {
-									const btn = $(this);
-									$('#editId').val(btn.data('id'));
-									$('#editName').val(btn.data('name'));
-									$('#editFee').val(btn.data('fee'));
-									$('#editDescription').val(
-											btn.data('description'));
-									new bootstrap.Modal($('#editCarrierModal'))
-											.show();
-								});
-
-						// ====================== MODAL XÓA ======================
-						// Lấy phần tử HTML (không phải jQuery)
-						const deleteModal = new bootstrap.Modal(document
-								.getElementById('confirmDeleteModal'));
-						const deleteBtn = document
-								.getElementById('deleteConfirmBtn');
-
-						// Bắt sự kiện click trên nút xóa
-						$('#carrierTable tbody')
-								.on(
-										'click',
-										'.deleteBtn',
-										function() {
-											const id = $(this).data('id');
-											deleteBtn.href = `${contextPath}/admin/carriers/delete?id=${id}`;
-											deleteModal.show();
-										});
-
-					});
+    const contextPath = '<%= request.getContextPath() %>';
 </script>
+
+<!-- File JS xử lý riêng -->
 

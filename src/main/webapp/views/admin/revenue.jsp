@@ -118,8 +118,7 @@
 			<div class="col-md-6">
 				<div class="card shadow-sm h-100">
 					<div class="card-body">
-						<h5 class="text-primary-custom mb-3">Tỷ lệ doanh thu & phí
-							sàn</h5>
+						<h5 class="text-primary-custom mb-3">Tỷ lệ doanh thu và phí sàn</h5>
 						<canvas id="feeChart" height="160"></canvas>
 					</div>
 				</div>
@@ -150,127 +149,14 @@
 		</div>
 	</div>
 
-	<!--  Chart.js -->
+	<!-- File JS riêng cho trang doanh thu -->
 	<script>
-const ctx1 = document.getElementById('revenueChart').getContext('2d');
-new Chart(ctx1, {
-    type: 'bar',
-    data: {
-        labels: [${months}],
-        datasets: [{
-            label: 'Doanh thu (₫)',
-            data: [${revenues}],
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-            borderColor: 'rgb(54, 162, 235)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true,
-                title: { display: true, text: 'VNĐ', font: { weight: 'bold' } },
-                ticks: { callback: value => value.toLocaleString('vi-VN') + ' ₫' }
-            },
-            x: { title: { display: true, text: 'Tháng', font: { weight: 'bold' } } }
-        },
-        plugins: {
-            legend: { display: false },
-            tooltip: {
-                callbacks: {
-                    label: ctx => ctx.dataset.label + ': ' + ctx.parsed.y.toLocaleString('vi-VN') + ' ₫'
-                }
-            }
-        }
-    }
-});
-
-const ctx2 = document.getElementById('feeChart').getContext('2d');
-new Chart(ctx2, {
-    type: 'pie',
-    data: {
-        labels: ['Doanh thu sau phí', 'Phí sàn'],
-        datasets: [{
-            data: [${totalRevenue}, ${platformFee}],
-            backgroundColor: ['#28a745', '#dc3545']
-        }]
-    }
-});
-
-
-function validateDateRange() {
-    const start = document.getElementById("startDate").value;
-    const end = document.getElementById("endDate").value;
-    const alertBox = document.getElementById("alertBox");
-
-    // Nếu chưa chọn ngày → hiển thị cảnh báo
-    if (!start || !end) {
-        alertBox.classList.remove("d-none"); // hiện alert
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // cuộn lên đầu trang
-        return false; // chặn submit
-    }
-
-    // Nếu ngày bắt đầu sau ngày kết thúc → cảnh báo lỗi logic
-    if (new Date(start) > new Date(end)) {
-        alertBox.classList.remove("d-none");
-        alertBox.classList.add("alert-danger");
-        alertBox.innerHTML = "⚠️ Ngày bắt đầu không thể sau ngày kết thúc.";
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        return false;
-    }
-
-    // Ẩn cảnh báo nếu hợp lệ
-    alertBox.classList.add("d-none");
-    return true;
-}
-
-
-const growthCtx = document.getElementById('growthChart').getContext('2d');
-const revenues = [${revenues}];
-const growthRates = [];
-
-for (let i = 1; i < revenues.length; i++) {
-    const prev = revenues[i - 1];
-    const curr = revenues[i];
-    const rate = prev > 0 ? ((curr - prev) / prev) * 100 : 0;
-    growthRates.push(rate.toFixed(2));
-}
-
-new Chart(growthCtx, {
-    type: 'line',
-    data: {
-        labels: [${months}].slice(1),
-        datasets: [{
-            label: 'Tăng trưởng (%)',
-            data: growthRates,
-            borderColor: 'rgb(255, 99, 132)',
-            tension: 0.3,
-            fill: false,
-            borderWidth: 2,
-            pointRadius: 4
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: {
-                beginAtZero: true,
-                title: { display: true, text: '% Tăng trưởng' }
-            },
-            x: {
-                title: { display: true, text: 'Tháng' }
-            }
-        },
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    label: ctx => ctx.parsed.y + '%'
-                }
-            }
-        }
-    }
-});
+    const months = [${months}];
+    const revenues = [${revenues}];
+    const totalRevenue = ${totalRevenue};
+    const platformFee = ${platformFee};
+    const feeRate = ${feeRate};
 </script>
+
 </body>
 </html>

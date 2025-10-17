@@ -122,7 +122,7 @@ BEGIN
     SET NOCOUNT ON;
 
     INSERT INTO deliveries (order_id, carrier_id, status, created_at)
-    SELECT order_id, 1, N'Chờ xử lý', GETDATE()
+    SELECT order_id, 1, N'Mới', GETDATE()
     FROM inserted;
 END;
 
@@ -140,7 +140,4 @@ INSERT INTO deliveries (shipper_id, order_id, status, note_text, created_at, car
 
 
 
--- Sửa deliveries
-ALTER TABLE deliveries 
-ALTER COLUMN shipper_id INT NULL;
 

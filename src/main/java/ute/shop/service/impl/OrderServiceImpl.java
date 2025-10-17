@@ -24,11 +24,6 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public boolean insert(Order order) {
-    	return orderDao.insert(order);
-    }
-
-    @Override
     public void update(Order order) {
         orderDao.update(order);
     }
@@ -113,4 +108,16 @@ public class OrderServiceImpl implements IOrderService {
 	public boolean updateStatus(int orderId, String status) {
 		return orderDao.updateStatus(orderId, status);
 	}
+
+	@Override
+	public Order save(Order order) {
+		return orderDao.insert(order);
+	}
+
+	public void insert(Order order) {
+		
+		
+	}
+
+	
 }

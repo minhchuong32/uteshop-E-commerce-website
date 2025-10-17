@@ -11,6 +11,7 @@ public interface IDeliveryDao {
 	List<Delivery> findAll();
 
 	Delivery save(Delivery delivery);
+	boolean insert(Delivery delivery);
 
 	void updateStatus(Integer deliveryId, String status);
 

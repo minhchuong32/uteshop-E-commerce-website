@@ -1,6 +1,7 @@
 package ute.shop.dao.impl;
 
 import jakarta.persistence.*;
+import ute.shop.config.JPAConfig;
 import ute.shop.dao.IDeliveryDao;
 import ute.shop.entity.Carrier;
 import ute.shop.entity.Delivery;
@@ -125,7 +126,6 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 			if (d != null) {
 				d.setStatus(status);
 
-				// ✅ Đồng bộ trạng thái với Order tương ứng
 				if (d.getOrder() != null) {
 					switch (status) {
 					case "Đang giao":
@@ -283,6 +283,33 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 		} finally {
 			em.close();
 		}
+	}
+
+	@Override
+	public boolean insert(Delivery delivery) {
+		EntityManager em = JPAConfig.getEntityManager();
+	    EntityTransaction tx = em.getTransaction();
+	    try {
+	        tx.begin();
+	        System.out.println("🚚 Tạo Delivery cho Order ID = " + delivery.getOrder().getOrderId());
+
+	        // 🔥 đảm bảo Order (đã detach) được gắn lại vào persistence context
+	        if (delivery.getOrder() != null) {
+
+	            Order managedOrder = em.merge(delivery.getOrder());
+	            delivery.setOrder(managedOrder);
+	        }
+
+	        em.persist(delivery);
+	        tx.commit();
+	        return true;
+	    } catch (Exception e) {
+	        if (tx.isActive()) tx.rollback();
+	        e.printStackTrace();
+	        return false;
+	    } finally {
+	        em.close();
+	    }
 	}
 
 //	public static void main(String[] args) {

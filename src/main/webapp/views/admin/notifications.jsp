@@ -83,20 +83,5 @@
     </div>
 </div>
 
-<style>
-body {
-    background-color: #f8f9fa;
-}
-h3 i {
-    margin-right: 8px;
-}
-.table-hover tbody tr:hover {
-    background-color: #eef7ff !important;
-}
-.table-warning {
-    background-color: #fff8e1 !important;
-}
-</style>
-
 </body>
 </html>
