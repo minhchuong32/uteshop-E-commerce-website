@@ -1,21 +1,31 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<div class="container mt-4">
+
+<!-- CSS riêng -->
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/dashboard-vendor.css">
+	
+<div class="container mt-4 text-primary-custom fw-bold mb-4">
     <h4 class="mb-4">📊 Dashboard Cửa hàng</h4>
 
     <!-- 1. Thống kê số liệu tổng quan -->
     <div class="row g-3 mb-4">
         <div class="col-md-3">
+         <a href="${pageContext.request.contextPath}/vendor/orders"
+			class="dashboard-card text-decoration-none">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
-                    <i class="bi bi-people-fill fs-2 mb-2 text-primary"></i>
+                    <i class="bi bi-people-fill fs-2 mb-2 text-primary-custom"></i>
                     <h6 class="card-title">Khách hàng</h6>
                     <p class="fw-bold mb-0">${totalCustomers}</p>
                 </div>
             </div>
+            </a>
         </div>
         <div class="col-md-3">
+        <a href="${pageContext.request.contextPath}/vendor/products"
+			class="dashboard-card text-decoration-none">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
                     <i class="bi bi-box-seam fs-2 mb-2 text-success"></i>
@@ -23,8 +33,11 @@
                     <p class="fw-bold mb-0">${totalProducts}</p>
                 </div>
             </div>
+            </a>
         </div>
         <div class="col-md-3">
+        <a href="${pageContext.request.contextPath}/vendor/orders"
+        class="dashboard-card text-decoration-none">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
                     <i class="bi bi-cart-check-fill fs-2 mb-2 text-warning"></i>
@@ -32,8 +45,11 @@
                     <p class="fw-bold mb-0">${totalOrders}</p>
                 </div>
             </div>
+            </a>
         </div>
         <div class="col-md-3">
+        <a href="${pageContext.request.contextPath}/vendor/stats"
+        class="dashboard-card text-decoration-none">
             <div class="card text-center shadow-sm">
                 <div class="card-body">
                     <i class="bi bi-cash-stack fs-2 mb-2 text-danger"></i>
@@ -41,6 +57,7 @@
                     <p class="fw-bold mb-0">₫<fmt:formatNumber value="${totalRevenue}" type="currency" currencySymbol=""/></p>
                 </div>
             </div>
+            </a>
         </div>
     </div>
 
