@@ -27,6 +27,10 @@ import ute.shop.service.impl.ReviewServiceImpl;
 		maxRequestSize = 1024 * 1024 * 20 // 20MB
 	)
 public class ReviewAddController extends HttpServlet{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final IReviewService reviewService = new ReviewServiceImpl();
     private final IProductService productService = new ProductServiceImpl();
     @Override

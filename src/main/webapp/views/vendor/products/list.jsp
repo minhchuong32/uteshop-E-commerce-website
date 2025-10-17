@@ -1,50 +1,60 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-
+<!-- CSS riêng -->
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/product-vendor.css">
+	
 <div class="container mt-4">
     <!-- DANH MỤC -->
     <div class="bg-white shadow-sm p-3 mb-4 rounded">
-        <h5 class="fw-bold text-uppercase text-primary mb-3">
+        <h5 class="fw-bold text-uppercase text-primary-custom mb-3">
             <i class="bi bi-grid me-2"></i> Danh mục sản phẩm
         </h5>
 
-        <!-- Thanh danh mục -->
-        <div class="d-flex flex-row flex-nowrap overflow-auto gap-3 pb-2">
-            <!-- Tất cả danh mục -->
+       <!-- Thanh danh mục -->
+<div class="category-container">
+    <div class="d-flex flex-row flex-nowrap overflow-auto gap-3 pb-3 px-2">
+        <!-- Tất cả danh mục -->
+        <div class="text-center flex-shrink-0">
+            <a href="${pageContext.request.contextPath}/vendor/products"
+               class="category-item d-block text-decoration-none ${empty selectedCategory ? 'active' : ''}">
+                <div class="category-card">
+                    <div class="category-icon-wrapper all-category">
+                        <i class="bi bi-grid-3x3-gap fs-3"></i>
+                    </div>
+                    <div class="category-name mt-2">Tất cả</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Danh mục động -->
+        <c:forEach var="c" items="${categories}">
             <div class="text-center flex-shrink-0">
-                <a href="${pageContext.request.contextPath}/vendor/products"
-                   class="d-block text-decoration-none ${empty selectedCategory ? 'fw-bold text-primary' : 'text-dark'}">
-                    <div class="py-2">
-                        <div>Tất cả</div>
+                <a href="${pageContext.request.contextPath}/vendor/products?category=${c.categoryId}"
+                   class="category-item d-block text-decoration-none ${selectedCategory == c.categoryId ? 'active' : ''}">
+                    <div class="category-card">
+                        <div class="category-icon-wrapper">
+                            <img src="${pageContext.request.contextPath}/assets/${c.image}"
+                                 class="category-image"
+                                 alt="${c.name}">
+                        </div>
+                        <div class="category-name mt-2">${c.name}</div>
                     </div>
                 </a>
             </div>
-
-            <!-- Danh mục động -->
-            <c:forEach var="c" items="${categories}">
-                <div class="text-center flex-shrink-0">
-                    <a href="${pageContext.request.contextPath}/vendor/products?category=${c.categoryId}"
-                       class="d-block text-decoration-none ${selectedCategory == c.categoryId ? 'fw-bold text-primary' : 'text-dark'}">
-                        <div class="py-2">
-                            <img src="${pageContext.request.contextPath}/assets/${c.image}" 
-                                 class="img-fluid rounded mb-1 border"
-                                 style="height:60px; width:60px; object-fit:cover;">
-                            <div>${c.name}</div>
-                        </div>
-                    </a>
-                </div>
-            </c:forEach>
-        </div>
+        </c:forEach>
     </div>
+</div>
+
 
     <!-- SẢN PHẨM -->
     <div class="bg-white rounded shadow-sm p-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold text-uppercase text-primary">
+            <h5 class="fw-bold text-uppercase text-primary-custom">
                 <i class="bi bi-box-seam me-2"></i> Sản phẩm trong cửa hàng
             </h5>
-            <a href="${pageContext.request.contextPath}/vendor/products/add" class="btn btn-primary btn-sm">
+            <a href="${pageContext.request.contextPath}/vendor/products/add" class="btn btn-primary-custom btn-sm">
                 <i class="bi bi-plus-circle"></i> Thêm sản phẩm
             </a>
         </div>

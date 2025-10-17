@@ -2,7 +2,7 @@
 <%@ include file="/commons/taglib.jsp" %>
 
 <div class="container py-5">
-    <h3 class="mb-4 text-center text-primary fw-bold">
+    <h3 class="mb-4 text-center text-primary-custom fw-bold">
         <i class="bi bi-bell-fill me-2"></i>Thông báo của nhà bán hàng
     </h3>
 
