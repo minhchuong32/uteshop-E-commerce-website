@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
-<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
+<%@ include file="/commons/taglib.jsp"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,56 +20,36 @@
 <!-- Favicon -->
 <link rel="icon" type="image/png"
 	href="${pageContext.request.contextPath}/assets/images/favicon.png">
+<!-- CSS -->
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/common.css">
 
-<style>
-body {
-	min-height: 100vh;
-	margin: 0;
-	display: flex;
-	flex-direction: column;
-	background: linear-gradient(to bottom right, #00558D, #ffffff);
-}
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/auth/verify-otp.css">
 
-.main-content {
-	flex: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-top: 100px;
-}
-
-.reset-card {
-	max-width: 420px;
-	width: 100%;
-	padding: 2rem;
-	border-radius: 1rem;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	background: #fff;
-	text-align: center;
-}
-
-.reset-card h4 {
-	margin-bottom: 1.5rem;
-	font-weight: bold;
-	color: #333;
-}
-
-.reset-card .form-control {
-	height: 50px;
-	border-radius: 0.5rem;
-	text-align: center;
-	font-size: 18px;
-	letter-spacing: 5px;
-}
-
-.reset-card .btn {
-	height: 50px;
-	font-weight: 600;
-	border-radius: 0.5rem;
-}
-</style>
 </head>
 <body>
+	<!-- Modern Loading Overlay -->
+	<div id="preloader"
+		class="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center"
+		style="z-index: 9999;">
+
+		<img
+			src="${pageContext.request.contextPath}/assets/images/logo_strong.png"
+			alt="UteShop" width="90" class="mb-4">
+		<div class="loader-dots mb-4">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<h5 class="fw-bold text-primary-custom">Đang tải UteShop...</h5>
+	</div>
+
+	<!-- Header -->
+	<%@ include file="/commons/auth/header.jsp"%>
+
+
 	<div class="main-content">
 		<div class="reset-card py-4 mb-3">
 			<h4>Nhập mã OTP</h4>
@@ -95,5 +74,11 @@ body {
 
 		</div>
 	</div>
+
+	<!-- Footer -->
+	<%@ include file="/commons/auth/footer.jsp"%>
+
+	<!-- Script điều khiển hiệu ứng loading -->
+	<script src="${pageContext.request.contextPath}/assets/js/loading.js"></script>
 </body>
 </html>

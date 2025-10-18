@@ -105,7 +105,14 @@ public class UserController extends HttpServlet {
 				String name = req.getParameter("name");
 				String phone = req.getParameter("phone");
 				String address = req.getParameter("address");
-
+				
+				// Kiểm tra email trùng
+				Optional<User> existing = userService.findByEmail(email);
+				if (existing.isPresent()) {
+					req.getSession().setAttribute("error", "Email đã tồn tại, vui lòng chọn email khác!");
+					resp.sendRedirect(req.getContextPath() + "/admin/users/add");
+					return;
+				}
 				// Upload avatar
 				Part filePart = req.getPart("avatar");
 				String avatarFileName = null;
@@ -153,8 +160,15 @@ public class UserController extends HttpServlet {
 				String phone = req.getParameter("phone");
 				String address = req.getParameter("address");
 
+				// Kiểm tra email trùng
+				Optional<User> existing = userService.findByEmail(email);
+				if (existing.isPresent()) {
+					req.getSession().setAttribute("error", "Email đã tồn tại, vui lòng chọn email khác!");
+					resp.sendRedirect(req.getContextPath() + "/admin/users/add");
+					return;
+				}
+				
 				Optional<User> optUser = userService.getUserById(id);
-
 				if (optUser.isPresent()) {
 					User user = optUser.get();
 
@@ -191,11 +205,25 @@ public class UserController extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			req.setAttribute("error", "Lỗi khi xử lý dữ liệu: " + e.getMessage());
-			req.setAttribute("page", "users");
-			req.setAttribute("view", "/views/admin/users/dashboard.jsp");
-			req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
+			e.printStackTrace(); // Giữ lại để debug trên console
+
+			
+			String currentUri = req.getRequestURI();
+
+			// Lưu lỗi vào SESSION
+			req.getSession().setAttribute("error", "Thêm người dùng thất bại! Lỗi: " + e.getMessage());
+
+			// Redirect lại đúng trang gây ra lỗi
+			if (currentUri.contains("/add")) {
+				resp.sendRedirect(req.getContextPath() + "/admin/users/add");
+			} else if (currentUri.contains("/edit")) {
+				// Lấy id từ request để redirect lại đúng trang edit
+				String id = req.getParameter("id");
+				resp.sendRedirect(req.getContextPath() + "/admin/users/edit?id=" + id);
+			} else {
+				// Trường hợp mặc định, quay về trang danh sách
+				resp.sendRedirect(req.getContextPath() + "/admin/users");
+			}
 		}
 	}
 

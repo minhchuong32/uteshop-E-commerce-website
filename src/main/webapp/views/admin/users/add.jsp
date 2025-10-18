@@ -2,6 +2,32 @@
 <%@ include file="/commons/taglib.jsp"%>
 
 <div class="container-fluid">
+	<!-- Hiển thị thông báo thành công -->
+	<c:if test="${not empty sessionScope.error}">
+		<div id="toastError"
+			class="toast align-items-center text-bg-danger border-0 shadow-sm"
+			role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="d-flex">
+				<div class="toast-body">
+					<i class="bi bi-exclamation-triangle-fill me-2"></i>${sessionScope.error}
+				</div>
+				<button type="button" class="btn-close btn-close-white me-2 m-auto"
+					data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+		</div>
+		<c:remove var="error" scope="session" />
+	</c:if>
+
+	<!-- Hiển thị thông báo lỗi -->
+	<c:if test="${not empty error}">
+		<div
+			class="alert alert-danger alert-dismissible fade show mt-3 shadow-sm"
+			role="alert">
+			<i class="bi bi-exclamation-triangle-fill me-2"></i> ${error}
+			<button type="button" class="btn-close" data-bs-dismiss="alert"
+				aria-label="Đóng"></button>
+		</div>
+	</c:if>
 	<h3 class="mb-4 fw-bold text-primary-custom">Thêm người dùng</h3>
 
 	<form action="${pageContext.request.contextPath}/admin/users/add"
