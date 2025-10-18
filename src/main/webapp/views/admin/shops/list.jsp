@@ -149,29 +149,5 @@
 	</div>
 </div>
 
-<!-- JS DataTables -->
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
-<!-- JS Xử lý Modal Xóa -->
-<script
-	src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
 
-<script>
-
-$('#shopTable').DataTable({
-	  pageLength: 1,
-	  ordering : true,
-	  lengthMenu: [[1, 10, 25, 50, -1], [1, 10, 25, 50, "Tất cả"]],
-	  language: {
-	    lengthMenu: "Hiển thị _MENU_ dòng",
-	    search: "Tìm kiếm:",
-	    paginate: { previous: "Trước", next: "Sau" },
-	    info: "Hiển thị _START_–_END_ / _TOTAL_ Cửa Hàng",
-	    emptyTable: "Không có dữ liệu"
-	  }
-	});
-</script>

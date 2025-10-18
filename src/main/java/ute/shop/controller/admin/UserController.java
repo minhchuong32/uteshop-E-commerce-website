@@ -36,7 +36,7 @@ public class UserController extends HttpServlet {
 				List<User> allUsers = userService.getAllUsers();
 				req.setAttribute("users", allUsers);
 				req.setAttribute("page", "users");
-				req.setAttribute("view", "/views/admin/users/dashboard.jsp");
+				req.setAttribute("view", "/views/admin/users/list.jsp");
 				req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 
 			} else if (uri.endsWith("/add")) {
@@ -80,7 +80,7 @@ public class UserController extends HttpServlet {
 			e.printStackTrace();
 			req.setAttribute("error", "Đã xảy ra lỗi: " + e.getMessage());
 			req.setAttribute("page", "users");
-			req.setAttribute("view", "/views/admin/users/dashboard.jsp");
+			req.setAttribute("view", "/views/admin/users/list.jsp");
 			req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 		}
 	}

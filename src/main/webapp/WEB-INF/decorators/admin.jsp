@@ -15,7 +15,8 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/assets/css/common.css">
 
-<!-- Bootstrap -->
+<!-- ====== CSS ====== -->
+<!-- Bootstrap CSS + Bootstrap Icons -->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -23,14 +24,15 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
 	rel="stylesheet">
 
-<!-- DataTables -->
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+<!-- DataTables CSS (Bootstrap 5 integration) -->
+<link
+	href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css"
+	rel="stylesheet">
 
-<!-- JS Bootstrap + Chart -->
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 
 <style>
 /* Hiệu ứng fade-in/fade-out */
@@ -125,7 +127,7 @@
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='promotions' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/admin/home?page=promotions">
-							<i class="bi bi-currency-dollar me-2"></i></i> Quản lý Khuyến mại
+							<i class="bi bi-currency-dollar me-2"></i> Quản lý Khuyến mại
 					</a></li>
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='settings' ? 'active' : ''}"
@@ -154,6 +156,75 @@
 	<!-- Footer -->
 	<%@ include file="/commons/admin/footer.jsp"%>
 
+	<!-- ====== JS ====== -->
+
+
+	<!-- Bootstrap Bundle JS (includes Popper) -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		defer></script>
+
+	<!-- DataTables JS -->
+	<script
+		src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js "
+		defer></script>
+	<script
+		src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"
+		defer></script>
+
+
+	<!-- Custom Admin Scripts -->
+	<script
+		src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js "
+		defer></script>
+
+	<!-- ========================== PAGE-SPECIFIC SCRIPTS ========================== -->
+	<c:if test="${page == 'categories'}">
+		<script
+			src="${pageContext.request.contextPath}/assets/js/admin/category-list.js"></script>
+	</c:if>
+
+	<c:if test="${page == 'complaints'}">
+		<script
+			src="${pageContext.request.contextPath}/assets/js/admin/complaint-list.js"></script>
+	</c:if>
+
+	<c:if test="${page == 'orders'}">
+		<script
+			src="${pageContext.request.contextPath}/assets/js/admin/order-list.js"></script>
+	</c:if>
+
+	<c:if test="${page == 'products'}">
+		<script
+			src="${pageContext.request.contextPath}/assets/js/admin/product-list.js"></script>
+	</c:if>
+
+	<c:if test="${page == 'promotions'}">
+		<script
+			src="${pageContext.request.contextPath}/assets/js/admin/promotion-list.js"></script>
+	</c:if>
+
+	<c:if test="${page == 'shops'}">
+		<script
+			src="${pageContext.request.contextPath}/assets/js/admin/shop-list.js"></script>
+	</c:if>
+
+	<c:if test="${page == 'users'}">
+		<script
+			src="${pageContext.request.contextPath}/assets/js/admin/user-list.js"></script>
+	</c:if>
+
+	<c:if test="${page == 'carriers'}">
+		<script
+			src="${pageContext.request.contextPath}/assets/js/admin/carrier-list.js"></script>
+	</c:if>
+
+	<c:if test="${page == 'revenue'}">
+		<script
+			src="${pageContext.request.contextPath}/assets/js/admin/revenue-list.js"></script>
+	</c:if>
+
+
 	<!-- Script điều khiển hiệu ứng loading -->
 	<script>
 	const loader = document.getElementById("preloader");
@@ -175,7 +246,7 @@
 		}
 	});
 	</script>
-	
+
 
 </body>
 </html>
