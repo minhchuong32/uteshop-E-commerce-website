@@ -141,5 +141,3 @@ INSERT INTO deliveries (shipper_id, order_id, status, note_text, created_at, car
 
 
 
-
-

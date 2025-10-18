@@ -10,6 +10,7 @@
 		<canvas id="deliveryChart" height="100"></canvas>
 	</div>
 </div>
+
 <!-- ====================== THÔNG BÁO ====================== -->
 <c:if test="${not empty sessionScope.message}">
 	<div
@@ -171,8 +172,9 @@
 											class="btn btn-outline-primary btn-sm" title="Chỉnh sửa">
 											<i class="bi bi-pencil-square"></i>
 										</a>
+										<!-- ===== Nút Xóa ===== -->
 										<button type="button" class="btn btn-sm btn-danger"
-											data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+											data-bs-toggle="modal" data-bs-target="#confirmDeleteOrderModal"
 											data-delete-url="${pageContext.request.contextPath}/admin/orders/delete?orderId=${o.orderId}&deliveryId=${d.deliveryId}">
 											<i class="bi bi-trash"></i>
 										</button>
@@ -189,7 +191,7 @@
 	</div>
 </div>
 <!-- ====== MODAL XÓA ====== -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+<div class="modal fade" id="confirmDeleteOrderModal" tabindex="-1">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content border-0 shadow-lg rounded-3">
 			<div class="modal-header bg-danger text-white">
@@ -211,97 +213,20 @@
 		</div>
 	</div>
 </div>
-
-<!-- ====== SCRIPT ====== -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-
-<!-- ====================== SCRIPT DATA TABLE ====================== -->
+<!-- Script khởi tạo dữ liệu biểu đồ -->
 <script>
-// DataTable
-$(document).ready(function() {
-    // Khởi tạo DataTable
-    var table = $('#ordersTable').DataTable({
-        pageLength: 5,
-        lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
-        language: {
-            lengthMenu: "Hiển thị _MENU_ dòng",
-            search: "Tìm kiếm:",
-            paginate: { previous: "Trước", next: "Sau" },
-            info: "Hiển thị _START_–_END_ / _TOTAL_ đơn hàng",
-            emptyTable: "Không có dữ liệu"
-        }
-    });
-
-    // Custom filter function
-    $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
-            var orderStatus = $('#filterOrderStatus').val();
-            var deliveryStatus = $('#filterDeliveryStatus').val();
-            var paymentMethod = $('#filterPayment').val();
-
-            var rowOrderStatus = data[5].replace(/<[^>]+>/g, '').trim(); // cột trạng thái đơn
-            var rowDeliveryStatus = data[8].replace(/<[^>]+>/g, '').trim(); // cột trạng thái giao hàng
-            var rowPayment = data[3].trim(); // cột thanh toán
-
-            if ((orderStatus === "" || rowOrderStatus === orderStatus) &&
-                (deliveryStatus === "" || rowDeliveryStatus === deliveryStatus) &&
-                (paymentMethod === "" || rowPayment === paymentMethod)) {
-                return true;
-            }
-            return false;
-        }
-    );
-
-    // Khi thay đổi bộ lọc
-    $('#filterOrderStatus, #filterDeliveryStatus, #filterPayment').on('change', function() {
-        table.draw();
-    });
-
-    // Reset bộ lọc
-    $('#resetFilters').on('click', function() {
-        $('#filterOrderStatus').val('');
-        $('#filterDeliveryStatus').val('');
-        $('#filterPayment').val('');
-        table.draw();
-    });
-});
-
-// Modal xóa
-const modal = document.getElementById('confirmDeleteModal');
-modal.addEventListener('show.bs.modal', e => {
-  document.getElementById('deleteConfirmBtn').href =
-    e.relatedTarget.getAttribute('data-delete-url');
-});
-
-// Vẽ biểu đồ Chart.js
+// Dữ liệu cho biểu đồ hiệu suất giao hàng
 const shipperNames = [], totalDeliveries = [], successRates = [];
 <c:forEach var="s" items="${stats}">
     shipperNames.push("${s[0]}");
     totalDeliveries.push(${s[1]});
     successRates.push(${s[2]});
-</c:forEach>;
-new Chart(document.getElementById('deliveryChart'), {
-    type: 'bar',
-    data: {
-        labels: shipperNames,
-        datasets: [
-            { label: 'Tổng đơn hàng', data: totalDeliveries, backgroundColor: 'rgba(0,85,141,0.6)' },
-            { label: 'Tỷ lệ giao thành công (%)', data: successRates, backgroundColor: 'rgba(40,167,69,0.6)', yAxisID: 'y1' }
-        ]
-    },
-    options: {
-        responsive: true,
-        scales: {
-            y: { beginAtZero: true, title: { display: true, text: 'Tổng số đơn' } },
-            y1: { beginAtZero: true, position: 'right', title: { display: true, text: 'Tỷ lệ (%)' }, max: 100, grid: { drawOnChartArea: false } }
-        }
+</c:forEach>
+
+// Khởi tạo biểu đồ khi document ready
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof initDeliveryChart === 'function') {
+        initDeliveryChart(shipperNames, totalDeliveries, successRates);
     }
 });
-
-
 </script>

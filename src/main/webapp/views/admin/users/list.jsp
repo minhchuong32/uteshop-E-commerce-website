@@ -111,32 +111,36 @@
 								</c:choose></td>
 
 							<td class="text-center">
-								<!-- Edit --> <a
-								href="${pageContext.request.contextPath}/admin/users/edit?id=${u.userId}"
-								class="text-warning me-3" title="Sửa"> <i
-									class="bi bi-pencil-square fs-5"></i>
-							</a> <!-- Delete --> <a href="javascript:void(0);"
-								class="text-danger me-3" data-bs-toggle="modal"
-								data-bs-target="#confirmDeleteModal" data-id="${u.userId}"
-								data-url="${pageContext.request.contextPath}/admin/users/delete"
-								title="Xóa người dùng"> <i class="bi bi-trash-fill fs-5"></i>
-							</a> <!-- Lock / Unlock --> <c:choose>
+								<!-- Sửa -->
+								<button type="button" class="btn btn-link text-warning p-0 me-3"
+									title="Sửa"
+									onclick="window.location.href='${pageContext.request.contextPath}/admin/users/edit?id=${u.userId}'">
+									<i class="bi bi-pencil-square fs-5"></i>
+								</button> <!-- Xóa -->
+								<button type="button" class="btn btn-link text-danger p-0 me-3"
+									data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+									data-id="${u.userId}"
+									data-url="${pageContext.request.contextPath}/admin/users/delete"
+									title="Xóa người dùng">
+									<i class="bi bi-trash-fill fs-5"></i>
+								</button> <!-- Khóa / Mở khóa --> <c:choose>
 									<c:when test="${u.status eq 'active'}">
-										<a
-											href="${pageContext.request.contextPath}/admin/users/lock?id=${u.userId}"
-											class="text-danger" title="Khóa tài khoản"> <i
-											class="bi bi-lock-fill fs-5"></i>
-										</a>
+										<button type="button" class="btn btn-link text-danger p-0"
+											title="Khóa tài khoản"
+											onclick="window.location.href='${pageContext.request.contextPath}/admin/users/lock?id=${u.userId}'">
+											<i class="bi bi-lock-fill fs-5"></i>
+										</button>
 									</c:when>
 									<c:otherwise>
-										<a
-											href="${pageContext.request.contextPath}/admin/users/unlock?id=${u.userId}"
-											class="text-success" title="Mở khóa tài khoản"> <i
-											class="bi bi-unlock-fill fs-5"></i>
-										</a>
+										<button type="button" class="btn btn-link text-success p-0"
+											title="Mở khóa tài khoản"
+											onclick="window.location.href='${pageContext.request.contextPath}/admin/users/unlock?id=${u.userId}'">
+											<i class="bi bi-unlock-fill fs-5"></i>
+										</button>
 									</c:otherwise>
 								</c:choose>
 							</td>
+
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -210,31 +214,3 @@
 		<c:remove var="error" scope="session" />
 	</c:if>
 </div>
-
-<!-- JS DataTables -->
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-
-<!-- JS Xử lý Modal Xóa -->
-<script
-	src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
-
-<script>
-// DataTable
-$('#userTable').DataTable({
-  pageLength: 5,
-  ordering : true,
-  lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
-  language: {
-    lengthMenu: "Hiển thị _MENU_ dòng",
-    search: "Tìm kiếm:",
-    paginate: { previous: "Trước", next: "Sau" },
-    info: "Hiển thị _START_–_END_ / _TOTAL_ Người Dùng",
-    emptyTable: "Không có dữ liệu"
-  }
-});
-
-</script>

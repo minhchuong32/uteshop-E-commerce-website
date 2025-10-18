@@ -54,13 +54,14 @@
 								<a href="${pageContext.request.contextPath}/admin/products/edit?id=${p.productId}" class="text-warning me-3">
 									<i class="bi bi-pencil-square fs-5"></i>
 								</a>
-								<!-- Xóa --> <a href="javascript:void(0);"
-								class="text-danger me-2" data-bs-toggle="modal"
-								data-bs-target="#confirmDeleteModal" data-id="${p.productId}"
-								data-url="${pageContext.request.contextPath}/admin/products/delete"
-								title="Xóa"> <i class="bi bi-trash-fill fs-5"></i>
-							</a>
-							
+								<!-- Xóa -->
+								<a href="javascript:void(0);"
+									class="text-danger me-2" data-bs-toggle="modal"
+									data-bs-target="#confirmDeleteModal" data-id="${p.productId}"
+									data-url="${pageContext.request.contextPath}/admin/products/delete"
+									title="Xóa">
+									<i class="bi bi-trash-fill fs-5"></i>
+								</a>
 							</td>
 						</tr>
 					</c:forEach>
@@ -70,7 +71,7 @@
 	</div>
 </div>
 
-<!--  Modal chi tiết sản phẩm -->
+<!-- Modal chi tiết sản phẩm -->
 <div class="modal fade" id="productDetailModal" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-centered">
 		<div class="modal-content border-0 shadow-lg">
@@ -107,7 +108,7 @@
 							</tr>
 						</thead>
 						<tbody id="variantBody">
-							<tr><td colspan="5" class="text-center text-muted">Đang tải...</td></tr>
+							<tr><td colspan="6" class="text-center text-muted">Đang tải...</td></tr>
 						</tbody>
 					</table>
 				</div>
@@ -119,17 +120,8 @@
 	</div>
 </div>
 
-<!--  Script DataTables + Xử lý Modal -->
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<!-- JS Xử lý Modal Xóa -->
-<script
-	src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
-
 <!-- Modal xác nhận xóa -->
-<div class="modal fade" id="confirmDeleteModal" tabindex="-1"
-	aria-hidden="true">
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content shadow-lg border-0 rounded-3">
 			<div class="modal-header bg-danger text-white">
@@ -141,7 +133,7 @@
 			</div>
 			<div class="modal-body">
 				<p>
-					Bạn có chắc muốn xóa cửa hàng này không? Hành động này <strong>không
+					Bạn có chắc muốn xóa sản phẩm này không? Hành động này <strong>không
 						thể hoàn tác</strong>.
 				</p>
 			</div>
@@ -157,102 +149,16 @@
 		</div>
 	</div>
 </div>
+
+<!-- Script khởi tạo xử lý click sản phẩm -->
 <script>
-$(document).ready(function() {
-	$('#productTable').DataTable({
-		  pageLength: 5,
-		  ordering : true,
-		  lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
-		  language: {
-		    lengthMenu: "Hiển thị _MENU_ dòng",
-		    search: "Tìm kiếm:",
-		    paginate: { previous: "Trước", next: "Sau" },
-		    info: "Hiển thị _START_–_END_ / _TOTAL_ Sản Phẩm",
-		    emptyTable: "Không có dữ liệu"
-		  }
-		});
+// Context path cho AJAX requests
+const contextPath = '${pageContext.request.contextPath}';
 
-	// Khi click dòng sản phẩm
-	$('#productTable tbody').on('click', 'tr.product-row', function(e) {
-		// Bỏ qua nếu click vào nút xóa / sửa
-		if ($(e.target).closest('a').length > 0) return;
-
-		var id = $(this).data('id');
-		var name = $(this).data('name');
-		var desc = $(this).data('desc') || 'Chưa có mô tả';
-		var category = $(this).data('category');
-		var shop = $(this).data('shop');
-		var img = $(this).data('img');
-
-		// Gán vào modal
-		$('#detailImage').attr('src', img);
-		$('#detailName').text(name);
-		$('#detailDesc').text(desc);
-		$('#detailCategory').text(category);
-		$('#detailShop').text(shop);
-
-		// Gọi AJAX lấy biến thể
-		$('#variantBody').html('<tr><td colspan="6" class="text-center text-muted">Đang tải...</td></tr>');
-		$.ajax({
-			url: '${pageContext.request.contextPath}/admin/products/variants?productId=' + id,
-			type: 'GET',
-			dataType: 'json',
-			cache: false,
-			success: function(data) {
-				console.log("Raw data:", data);
-				console.log("Type:", typeof data);
-				
-				// Nếu data là string, parse nó
-				if (typeof data === 'string') {
-					try {
-						data = JSON.parse(data);
-					} catch(e) {
-						console.error("JSON parse error:", e);
-						$('#variantBody').html('<tr><td colspan="6" class="text-danger text-center">Lỗi định dạng dữ liệu!</td></tr>');
-						return;
-					}
-				}
-				
-				if (!data || data.length === 0) {
-					$('#variantBody').html('<tr><td colspan="6" class="text-center text-muted">Không có biến thể</td></tr>');
-					return;
-				}
-				
-				var contextPath = '${pageContext.request.contextPath}';
-				var rows = '';
-				for (var i = 0; i < data.length; i++) {
-				    var v = data[i];
-				    // Chuyển giá trị chuỗi sang số để format đúng
-				    var price = parseFloat(v.price) || 0;
-				    var oldPrice = v.oldPrice ? parseFloat(v.oldPrice) : 0;
-				    
-				    // Xử lý URL ảnh
-				    var imgUrl = v.imageUrl || '/images/products/default-product.jpg';
-				    // Nếu imageUrl chưa có contextPath, thêm vào
-				    if (imgUrl.indexOf(contextPath) === -1) {
-				        imgUrl = contextPath + '/assets' + imgUrl;
-				    }
-
-				    rows += '<tr>' +
-				        '<td class="text-center"><img src="' + imgUrl + '" class="rounded border" width="50" height="50" style="object-fit: cover;"></td>' +
-				        '<td>' + (v.optionName || '-') + '</td>' +
-				        '<td>' + (v.optionValue || '-') + '</td>' +
-				        '<td>' + (price ? price.toLocaleString('vi-VN') + '₫' : '-') + '</td>' +
-				        '<td>' + (oldPrice ? oldPrice.toLocaleString('vi-VN') + '₫' : '-') + '</td>' +
-				        '<td>' + (v.stock || 0) + '</td>' +
-				        '</tr>';
-				}
-				$('#variantBody').html(rows);
-			},
-			error: function(xhr, status, error) {
-				console.error("AJAX Error:", status, error);
-				$('#variantBody').html('<tr><td colspan="6" class="text-danger text-center">Lỗi tải dữ liệu!</td></tr>');
-			}
-		});
-
-		var modal = new bootstrap.Modal(document.getElementById('productDetailModal'));
-		modal.show();
-	});
+// Khởi tạo xử lý click vào dòng sản phẩm
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof handleProductRowClick === 'function') {
+        handleProductRowClick(contextPath);
+    }
 });
 </script>
-
