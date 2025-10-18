@@ -31,6 +31,8 @@
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 
 <style>
 /* Hiệu ứng fade-in/fade-out */
@@ -159,20 +161,22 @@
 
 	<!-- Bootstrap Bundle JS (includes Popper) -->
 	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+		defer></script>
 
 	<!-- DataTables JS -->
 	<script
-		src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+		src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js "
+		defer></script>
 	<script
-		src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+		src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"
+		defer></script>
 
-	<!-- Chart.js -->
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 	<!-- Custom Admin Scripts -->
 	<script
-		src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js"></script>
+		src="${pageContext.request.contextPath}/assets/js/admin/modal-delete.js "
+		defer></script>
 
 	<!-- ========================== PAGE-SPECIFIC SCRIPTS ========================== -->
 	<c:if test="${page == 'categories'}">
