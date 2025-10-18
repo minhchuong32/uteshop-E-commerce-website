@@ -72,18 +72,31 @@
                     <td>${d.order.totalAmount}</td>
                     <td>${d.status}</td>
                     <td>
-                        <form action="${pageContext.request.contextPath}/shipper/orders" method="post" class="d-flex justify-content-center">
-                            <input type="hidden" name="deliveryId" value="${d.deliveryId}" />
-                            <select name="status" class="form-select form-select-sm me-2 w-auto">
-                                <option value="Đang giao" ${d.status=='Đang giao'?'selected':''}>Đang giao</option>
-                                <option value="Đã giao" ${d.status=='Đã giao'?'selected':''}>Đã giao</option>
-                                <option value="Trả lại" ${d.status=='Trả lại'?'selected':''}>Trả lại</option>
-                            </select>
-                            <button type="submit" class="btn btn-primary btn-sm">
-                                <i class="bi bi-arrow-repeat"></i> Cập nhật
-                            </button>
-                        </form>
-                    </td>
+					    <div class="d-flex align-items-center justify-content-center">
+					        <!-- Form cập nhật trạng thái -->
+					        <form action="${pageContext.request.contextPath}/shipper/orders" 
+					              method="post" 
+					              class="d-flex align-items-center me-2">
+					            <input type="hidden" name="deliveryId" value="${d.deliveryId}" />
+					
+					            <select name="status" class="form-select form-select-sm me-2 w-auto">
+					                <option value="Đang giao" ${d.status=='Đang giao'?'selected':''}>Đang giao</option>
+					                <option value="Đã giao" ${d.status=='Đã giao'?'selected':''}>Đã giao</option>
+					                <option value="Trả lại" ${d.status=='Trả lại'?'selected':''}>Trả lại</option>
+					            </select>
+					
+					            <button type="submit" class="btn btn-primary btn-sm">
+					                <i class="bi bi-arrow-repeat"></i> Cập nhật
+					            </button>
+					        </form>
+					
+					        <!-- Nút tạo phiếu -->
+					        <a href="${pageContext.request.contextPath}/shipper/delivery/form?id=${d.deliveryId}"
+					           class="btn btn-outline-secondary btn-sm">
+					            <i class="bi bi-file-earmark-text"></i> Tạo phiếu
+					        </a>
+					    </div>
+					</td>
                 </tr>
             </c:forEach>
             <c:if test="${empty delivering}">
