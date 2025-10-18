@@ -35,10 +35,6 @@
 
                 <div class="row mt-3">
                     <div class="col-md-6">
-                        <label class="form-label">Giá mặc định</label>
-                        <input type="number" step="0.01" name="price" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
                         <label class="form-label">Ảnh đại diện</label>
                         <input type="file" name="imageFile" class="form-control" accept="image/*">
                     </div>

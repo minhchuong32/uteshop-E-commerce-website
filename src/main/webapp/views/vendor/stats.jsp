@@ -58,4 +58,92 @@
 	    </div>
 	</div>
 
+    <div class="row g-3">
+        <!--  Biểu đồ phương thức thanh toán -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">Phương thức thanh toán</h6>
+                    <canvas id="paymentChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!--  Biểu đồ hoàn/hủy -->
+	<div class="col-md-6">
+	    <div class="card shadow-sm">
+	        <div class="card-body">
+	            <div class="d-flex justify-content-between align-items-center mb-3">
+	                <h6 class="card-title mb-0">Tỷ lệ hoàn / hủy đơn hàng</h6>
+	
+	                <!-- Bộ lọc tháng/năm -->
+	                <form method="get" class="d-flex gap-2 align-items-center">
+	                    <select name="month" class="form-select form-select-sm" style="width: 100px;">
+	                        <c:forEach var="i" begin="1" end="12">
+	                            <option value="${i}" ${i == selectedMonth ? 'selected' : ''}>Tháng ${i}</option>
+	                        </c:forEach>
+	                    </select>
+	                    <input type="number" name="year" class="form-control form-control-sm" value="${selectedYear}" min="2020" max="2030" style="width: 90px;">
+	                    <button class="btn btn-sm btn-primary" type="submit">Xem</button>
+	                </form>
+	            </div>
+	
+	             <canvas id="returnCancelChart"></canvas>
+
+	        </div>
+	    </div>
+	</div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const paymentLabels = [<c:forEach var="r" items="${paymentStats}" varStatus="loop">'${r[0]}'<c:if test="${!loop.last}">,</c:if></c:forEach>];
+    const paymentData = [<c:forEach var="r" items="${paymentStats}" varStatus="loop">${r[1]}<c:if test="${!loop.last}">,</c:if></c:forEach>];
+
+    new Chart(document.getElementById('paymentChart'), {
+        type: 'pie',
+        data: {
+            labels: paymentLabels,
+            datasets: [{ data: paymentData, backgroundColor: ['#36a2eb', '#ffcd56'] }]
+        },
+        options: { responsive: true }
+    });
+</script>
+<script>
+const canceledCount = ${canceledCount != null ? canceledCount : 0};
+const notCanceledCount = ${notCanceledCount != null ? notCanceledCount : 0};
+const totalOrders = ${totalOrders != null ? totalOrders : 0};
+
+const cancelLabels = ['Đã hủy', 'Còn lại'];
+const cancelData = [canceledCount, notCanceledCount];
+
+console.log("Canceled:", canceledCount, "NotCanceled:", notCanceledCount, "Total:", totalOrders);
+
+new Chart(document.getElementById('returnCancelChart'), {
+  type: 'pie',
+  data: {
+    labels: cancelLabels,
+    datasets: [{
+      data: cancelData,
+      backgroundColor: ['#ff6384', '#36a2eb']
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'bottom' },
+      tooltip: {
+    	  callbacks: {
+    	    label: function(context) {
+    	      const total = totalOrders;
+    	      const value = context.dataset.data[context.dataIndex]; // ✅ cách an toàn nhất
+    	      const percent = total > 0 ? (value / total * 100).toFixed(1) : 0;
+    	      console.log("Tooltip data:", context.label, value, percent);
+    	      return `\${context.label}: \${value} đơn (\${percent}%)`;
+    	    }
+    	  }
+    	}
+    }
+  }
+});
+</script>
+
