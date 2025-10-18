@@ -7,6 +7,7 @@ import ute.shop.entity.User;
 import ute.shop.service.IOrderService;
 
 import java.util.List;
+import java.util.Map;
 
 
 public class OrderServiceImpl implements IOrderService {
@@ -117,6 +118,16 @@ public class OrderServiceImpl implements IOrderService {
 	public void insert(Order order) {
 		
 		
+	}
+
+	@Override
+	public List<Object[]> getPaymentMethodStatsByShop(int shopId) {
+		return orderDao.getPaymentMethodStatsByShop(shopId);
+	}
+
+	@Override
+	public List<Map<String, Object>> getReturnCancelRateByMonth(int shopId, int month, int year) {
+		return orderDao.getReturnCancelRateByMonth(shopId, month, year);
 	}
 
 	

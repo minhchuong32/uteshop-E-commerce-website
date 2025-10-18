@@ -3,12 +3,15 @@ package ute.shop.controller.vendors;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import ute.shop.dao.IOrderDao;
 import ute.shop.dao.IProductDao;
 import ute.shop.dao.IRevenueDao;
+import ute.shop.dao.impl.OrderDaoImpl;
 import ute.shop.dao.impl.ProductDaoImpl;
 import ute.shop.dao.impl.RevenueDaoImpl;
 import ute.shop.entity.Shop;
@@ -18,6 +21,7 @@ public class StatController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final IRevenueDao revenueDao = new RevenueDaoImpl();
     private final IProductDao productDao = new ProductDaoImpl();
+    private final IOrderDao orderDao = new OrderDaoImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -48,7 +52,37 @@ public class StatController extends HttpServlet {
         req.setAttribute("previousMonthRevenue", revenueData.get("previous"));
         req.setAttribute("changePercent", revenueData.get("changePercent"));
         req.setAttribute("topCategories", topCategories);
+        
+        String monthParam = req.getParameter("month");
+        String yearParam = req.getParameter("year");
+        LocalDate now = LocalDate.now();
+        int month = monthParam != null ? Integer.parseInt(monthParam) : now.getMonthValue();
+        int year = yearParam != null ? Integer.parseInt(yearParam) : now.getYear();
 
+        List<Object[]> paymentStats = orderDao.getPaymentMethodStatsByShop(shopId);
+        List<Map<String, Object>> returnCancelStats = orderDao.getReturnCancelRateByMonth(shopId, month, year);
+        
+        long canceled = 0;
+        long notCanceled = 0;
+        long total = 0;
+
+        if (!returnCancelStats.isEmpty()) {
+            canceled = ((Number) returnCancelStats.get(0).get("value")).longValue();
+            notCanceled = ((Number) returnCancelStats.get(1).get("value")).longValue();
+            total = canceled + notCanceled;
+        }
+
+        req.setAttribute("canceledCount", canceled);
+        req.setAttribute("notCanceledCount", notCanceled);
+        req.setAttribute("totalOrders", total);
+
+        System.out.printf("[SHOP %d] Thống kê: Đã hủy: %d | Còn lại: %d | Tổng: %d%n",
+                shopId, canceled, notCanceled, total);
+        
+        req.setAttribute("paymentStats", paymentStats);
+        req.setAttribute("selectedMonth", month);
+        req.setAttribute("selectedYear", year);
+        
         req.setAttribute("page", "stats");
         req.setAttribute("view", "/views/vendor/stats.jsp");
         req.getRequestDispatcher("/WEB-INF/decorators/vendor.jsp").forward(req, resp);

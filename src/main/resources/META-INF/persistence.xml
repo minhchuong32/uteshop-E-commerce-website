@@ -12,7 +12,11 @@ https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
 				value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 			<property name="jakarta.persistence.jdbc.user" value="sa" />
 			<property name="jakarta.persistence.jdbc.password"
+<<<<<<< HEAD
 				value="2357" />
+=======
+				value="261" />
+>>>>>>> 9e324eeb7dd67c1bb1b20c068ab954dbc793b181
 
 			<property name="hibernate.show_sql" value="true" />
 			<property name="hibernate.format_sql" value="true" />

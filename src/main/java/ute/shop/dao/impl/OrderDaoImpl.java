@@ -7,7 +7,10 @@ import ute.shop.entity.Order;
 import ute.shop.entity.User;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrderDaoImpl implements IOrderDao {
 
@@ -333,6 +336,72 @@ public class OrderDaoImpl implements IOrderDao {
 	        if (tx.isActive()) tx.rollback();
 	        e.printStackTrace();
 	        return null;
+	    } finally {
+	        em.close();
+	    }
+	}
+	
+	//Vendor thong ke bo sung
+	@Override
+	public List<Object[]> getPaymentMethodStatsByShop(int shopId) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String sql = """
+	            SELECT o.payment_method, COUNT(o.order_id)
+	            FROM orders o
+	            JOIN order_details od ON o.order_id = od.order_id
+	            JOIN product_variants pv ON od.product_variant_id = pv.id
+	            JOIN products p ON pv.product_id = p.product_id
+	            WHERE p.shop_id = :sid
+	            GROUP BY o.payment_method
+	        """;
+	        return em.createNativeQuery(sql)
+	                 .setParameter("sid", shopId)
+	                 .getResultList();
+	    } finally {
+	        em.close();
+	    }
+	}
+
+	@Override
+	public List<Map<String, Object>> getReturnCancelRateByMonth(int shopId, int month, int year) {
+	    EntityManager em = JPAConfig.getEntityManager();
+	    try {
+	        String sql = """
+	            SELECT
+	                COALESCE(SUM(CASE WHEN o.status = N'Đã hủy' THEN 1 ELSE 0 END), 0) AS canceled,
+	                COALESCE(COUNT(*), 0) AS total
+	            FROM orders o
+	            WHERE o.shop_id = :shopId
+	              AND MONTH(o.created_at) = :month
+	              AND YEAR(o.created_at) = :year
+	        """;
+
+	        Object[] result = (Object[]) em.createNativeQuery(sql)
+	                .setParameter("shopId", shopId)
+	                .setParameter("month", month)
+	                .setParameter("year", year)
+	                .getSingleResult();
+
+	        if (result == null) return List.of();
+
+	        long canceled = ((Number) result[0]).longValue();
+	        long total = ((Number) result[1]).longValue();
+	        long notCanceled = total - canceled;
+
+	        List<Map<String, Object>> list = new ArrayList<>();
+
+	        Map<String, Object> canceledMap = new HashMap<>();
+	        canceledMap.put("label", "Đã hủy");
+	        canceledMap.put("value", canceled);
+	        list.add(canceledMap);
+
+	        Map<String, Object> remainingMap = new HashMap<>();
+	        remainingMap.put("label", "Còn lại");
+	        remainingMap.put("value", notCanceled);
+	        list.add(remainingMap);
+
+	        return list;
 	    } finally {
 	        em.close();
 	    }

@@ -4,6 +4,7 @@ import ute.shop.entity.Order;
 import ute.shop.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IOrderDao {
 	List<Order> getAll();
@@ -46,5 +47,9 @@ public interface IOrderDao {
 	List<Order> findRecentOrders(int limit);
 
 	List<Order> findAllForAdmin();
+	
+	//Vendor thong ke bo sung
+	List<Object[]> getPaymentMethodStatsByShop(int shopId);
+	List<Map<String, Object>> getReturnCancelRateByMonth(int shopId, int month, int year);
 
 }

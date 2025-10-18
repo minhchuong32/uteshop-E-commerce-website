@@ -44,10 +44,6 @@
 
                 <div class="row mt-3 align-items-center">
                     <div class="col-md-6">
-                        <label class="form-label">Giá bán</label>
-                        <input type="number" step="0.01" name="price" value="${product.price}" class="form-control" required>
-                    </div>
-                    <div class="col-md-6">
                         <label class="form-label">Ảnh đại diện hiện tại</label><br>
                         <img src="${pageContext.request.contextPath}/assets/${product.imageUrl}"
                              class="border rounded" width="120" alt="Ảnh sản phẩm">
