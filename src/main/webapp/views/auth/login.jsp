@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
-<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
+<%@ include file="/commons/taglib.jsp"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,66 +21,35 @@
 <link rel="icon" type="image/png"
 	href="${pageContext.request.contextPath}/assets/images/favicon.png">
 
-<style>
-html, body {
-	height: 100%;
-	margin: 0;
-}
+<!-- CSS -->
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/common.css">
 
-body {
-	display: flex;
-	flex-direction: column;
-	background: linear-gradient(to bottom right, #00558D, #ffffff);
-}
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/auth/login.css">
 
-.main-content {
-	flex: 1; /* chiếm hết chiều cao còn lại để đẩy footer xuống */
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.login-card {
-	max-width: 420px;
-	width: 100%;
-	padding: 2rem;
-	border-radius: 1rem;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-	background: #fff;
-}
-</style>
 </head>
 <body>
+
+	<!-- Modern Loading Overlay -->
+	<div id="preloader"
+		class="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center"
+		style="z-index: 9999;">
+
+		<img
+			src="${pageContext.request.contextPath}/assets/images/logo_strong.png"
+			alt="UteShop" width="90" class="mb-4">
+		<div class="loader-dots mb-4">
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<h5 class="fw-bold text-primary-custom">Đang tải UteShop...</h5>
+	</div>
+
 	<!-- Header -->
-	<header>
-		<nav class="navbar navbar-expand-lg navbar-dark fixed-top"
-			style="background-color: #FFFFFF">
-			<div class="container">
-				<!-- Logo -->
-				<a class="navbar-brand d-flex align-items-center w-29px"
-					href="${pageContext.request.contextPath}/"> <img
-					src="${pageContext.request.contextPath}/assets/images/logo_strong.png"
-					alt="Logo" height="50" class="me-2">
-				</a>
-				<!-- Toggle button -->
-				<button class="navbar-toggler" type="button"
-					data-bs-toggle="collapse" data-bs-target="#navbarContent"
-					aria-controls="navbarContent" aria-expanded="false"
-					aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<!-- Menu -->
-				<div class="collapse navbar-collapse" id="navbarContent">
-					<ul
-						class="navbar-nav mb-2 mb-lg-0 align-items-center user-links ms-auto">
-						<li class="nav-item fw-semibold register-btn"><a
-							class="nav-link text-primary" style="color: #00558D !important;"
-							href="${pageContext.request.contextPath}/register">Đăng ký</a></li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</header>
+	<%@ include file="/commons/auth/header.jsp"%>
 
 	<!-- Main content -->
 	<div class="main-content mt-5 py-4">
@@ -150,10 +118,14 @@ body {
 	</div>
 
 	<!-- Footer -->
-	<%@ include file="/commons/web/footer.jsp"%>
+	<%@ include file="/commons/auth/footer.jsp"%>
 
 	<!-- Scripts -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+	<!-- Script điều khiển hiệu ứng loading -->
+	<script src="${pageContext.request.contextPath}/assets/js/loading.js"></script>
 </body>
 </html>

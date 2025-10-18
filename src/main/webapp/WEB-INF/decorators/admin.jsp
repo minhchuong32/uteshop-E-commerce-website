@@ -34,33 +34,24 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 
-<style>
-/* Hiệu ứng fade-in/fade-out */
-#preloader {
-	transition: opacity 0.5s ease;
-}
-
-#preloader.hidden {
-	opacity: 0.9;
-	visibility: hidden;
-}
-</style>
-
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
-	<!-- Loading Overlay -->
+	<!-- Modern Loading Overlay -->
 	<div id="preloader"
-		class="position-fixed top-0 start-0 w-100 h-100 bg-white d-flex flex-column justify-content-center align-items-center"
+		class="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center"
 		style="z-index: 9999;">
+
 		<img
 			src="${pageContext.request.contextPath}/assets/images/logo_strong.png"
-			alt="UteShop" width="90" class="mb-3">
-		<div class="spinner-border text-primary-custom mb-3" role="status"
-			style="width: 3rem; height: 3rem;">
-			<span class="visually-hidden text-primary-custom">Loading...</span>
+			alt="UteShop" width="90" class="mb-4">
+		<div class="loader-dots mb-4">
+			<div></div>
+			<div></div>
+			<div></div>
 		</div>
+
 		<h5 class="fw-bold text-primary-custom">Đang tải UteShop...</h5>
 	</div>
 
@@ -226,27 +217,7 @@
 
 
 	<!-- Script điều khiển hiệu ứng loading -->
-	<script>
-	const loader = document.getElementById("preloader");
-
-	// Ẩn preloader sau khi trang load xong
-	window.addEventListener("load", () => {
-		setTimeout(() => loader.classList.add("hidden"), 300);
-	});
-
-	// Hiện preloader khi rời trang
-	window.addEventListener("beforeunload", () => {
-		loader.classList.remove("hidden");
-	});
-
-	// Ẩn preloader nếu người dùng quay lại trang (Back/Forward cache)
-	window.addEventListener("pageshow", (event) => {
-		if (event.persisted) {
-			setTimeout(() => loader.classList.add("hidden"), 100);
-		}
-	});
-	</script>
-
-
+	<script
+			src="${pageContext.request.contextPath}/assets/js/loading.js"></script>
 </body>
 </html>
