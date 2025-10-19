@@ -1,9 +1,24 @@
 /* ================== RESET LAYOUT ================== */
-html, body {
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	background-color: #F5F5F5;
+/* html, body { */
+/* 	height: 100%; */
+/* 	margin: 0; */
+/* 	padding: 0; */
+/* 	background-color: #F5F5F5; */
+/* } */
+
+html {
+    height: 100%;
+}
+
+body {
+    display: flex; /* 1. Biến body thành một flex container */
+    flex-direction: column; /* 2. Sắp xếp các phần tử con theo chiều dọc */
+    min-height: 100vh; /* 3. Đặt chiều cao tối thiểu của body bằng 100% chiều cao màn hình */
+    margin: 0; /* Xóa margin mặc định */
+}
+
+.main-content {
+    flex: 1; /* 4. Cho phép phần nội dung chính tự động co giãn để lấp đầy không gian trống */
 }
 
 /* Thanh cuộn tùy chỉnh */

@@ -109,10 +109,15 @@ public class UserController extends HttpServlet {
 				// Kiểm tra email trùng
 				Optional<User> existing = userService.findByEmail(email);
 				if (existing.isPresent()) {
-					req.getSession().setAttribute("error", "Email đã tồn tại, vui lòng chọn email khác!");
-					resp.sendRedirect(req.getContextPath() + "/admin/users/add");
+					// Lưu thông báo lỗi vào request attribute
+					req.setAttribute("error", "Email đã tồn tại, vui lòng chọn email khác!");
+					req.setAttribute("page", "users");
+					req.setAttribute("view", "/views/admin/users/add.jsp");
+					// Forward để giữ lại dữ liệu form
+					req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 					return;
 				}
+				
 				// Upload avatar
 				Part filePart = req.getPart("avatar");
 				String avatarFileName = null;
@@ -160,17 +165,24 @@ public class UserController extends HttpServlet {
 				String phone = req.getParameter("phone");
 				String address = req.getParameter("address");
 
-				// Kiểm tra email trùng
-				Optional<User> existing = userService.findByEmail(email);
-				if (existing.isPresent()) {
-					req.getSession().setAttribute("error", "Email đã tồn tại, vui lòng chọn email khác!");
-					resp.sendRedirect(req.getContextPath() + "/admin/users/add");
-					return;
-				}
-				
 				Optional<User> optUser = userService.getUserById(id);
 				if (optUser.isPresent()) {
 					User user = optUser.get();
+					
+					// Kiểm tra email trùng (chỉ khi email thay đổi)
+					if (!user.getEmail().equals(email)) {
+						Optional<User> existing = userService.findByEmail(email);
+						if (existing.isPresent()) {
+							// Lưu thông báo lỗi vào request attribute
+							req.setAttribute("error", "Email đã tồn tại, vui lòng chọn email khác!");
+							req.setAttribute("user", user);
+							req.setAttribute("page", "users");
+							req.setAttribute("view", "/views/admin/users/edit.jsp");
+							// Forward để giữ lại dữ liệu form
+							req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
+							return;
+						}
+					}
 
 					Part filePart = req.getPart("avatar");
 					if (filePart != null && filePart.getSize() > 0) {
@@ -200,28 +212,35 @@ public class UserController extends HttpServlet {
 					resp.sendRedirect(req.getContextPath() + "/admin/users");
 				} else {
 					req.setAttribute("error", "Không tìm thấy người dùng cần chỉnh sửa!");
+					req.setAttribute("page", "users");
+					req.setAttribute("view", "/views/admin/users/edit.jsp");
 					req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 				}
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace(); // Giữ lại để debug trên console
+			e.printStackTrace();
 
-			
 			String currentUri = req.getRequestURI();
 
-			// Lưu lỗi vào SESSION
-			req.getSession().setAttribute("error", "Thêm người dùng thất bại! Lỗi: " + e.getMessage());
+			// Lưu lỗi vào REQUEST attribute thay vì SESSION
+			req.setAttribute("error", "Thao tác thất bại! Lỗi: " + e.getMessage());
 
-			// Redirect lại đúng trang gây ra lỗi
+			// Forward để hiển thị lỗi ngay lập tức
 			if (currentUri.contains("/add")) {
-				resp.sendRedirect(req.getContextPath() + "/admin/users/add");
+				req.setAttribute("page", "users");
+				req.setAttribute("view", "/views/admin/users/add.jsp");
+				req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 			} else if (currentUri.contains("/edit")) {
-				// Lấy id từ request để redirect lại đúng trang edit
 				String id = req.getParameter("id");
-				resp.sendRedirect(req.getContextPath() + "/admin/users/edit?id=" + id);
+				Optional<User> optUser = userService.getUserById(Integer.parseInt(id));
+				if (optUser.isPresent()) {
+					req.setAttribute("user", optUser.get());
+				}
+				req.setAttribute("page", "users");
+				req.setAttribute("view", "/views/admin/users/edit.jsp");
+				req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 			} else {
-				// Trường hợp mặc định, quay về trang danh sách
 				resp.sendRedirect(req.getContextPath() + "/admin/users");
 			}
 		}

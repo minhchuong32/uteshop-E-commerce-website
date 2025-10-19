@@ -1,7 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<%@ include file="/commons/taglib.jsp"%>
 <div class="container py-4">
 	<h3 class="fw-bold mb-4 text-primary-custom">
 		<i class="bi bi-cart-check"></i> Giỏ hàng của bạn
