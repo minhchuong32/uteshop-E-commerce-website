@@ -17,33 +17,7 @@
 
 	<div class="card shadow-sm">
 		<div class="card-body table-responsive">
-			<!-- Hiển thị thông báo thành công -->
-			<c:if test="${not empty sessionScope.error}">
-				<div id="toastError"
-					class="toast align-items-center text-bg-danger border-0 shadow-sm"
-					role="alert" aria-live="assertive" aria-atomic="true">
-					<div class="d-flex">
-						<div class="toast-body">
-							<i class="bi bi-exclamation-triangle-fill me-2"></i>${sessionScope.error}
-						</div>
-						<button type="button"
-							class="btn-close btn-close-white me-2 m-auto"
-							data-bs-dismiss="toast" aria-label="Close"></button>
-					</div>
-				</div>
-				<c:remove var="error" scope="session" />
-			</c:if>
 
-			<!-- Hiển thị thông báo lỗi -->
-			<c:if test="${not empty error}">
-				<div
-					class="alert alert-danger alert-dismissible fade show mt-3 shadow-sm"
-					role="alert">
-					<i class="bi bi-exclamation-triangle-fill me-2"></i> ${error}
-					<button type="button" class="btn-close" data-bs-dismiss="alert"
-						aria-label="Đóng"></button>
-				</div>
-			</c:if>
 
 			<table id="userTable" class="table table-hover align-middle mb-0">
 				<thead class="table-light">
@@ -183,38 +157,4 @@
 		</div>
 	</div>
 </div>
-<!-- ==================== TOAST CONTAINER ==================== -->
-<div class="toast-container position-fixed top-0 end-0 p-3"
-	style="z-index: 2000">
-	<!-- Toast Thành công -->
-	<c:if test="${not empty sessionScope.success}">
-		<div id="toastSuccess"
-			class="toast align-items-center text-bg-success border-0 shadow-sm"
-			role="alert" aria-live="assertive" aria-atomic="true">
-			<div class="d-flex">
-				<div class="toast-body">
-					<i class="bi bi-check-circle-fill me-2"></i>${sessionScope.success}
-				</div>
-				<button type="button" class="btn-close btn-close-white me-2 m-auto"
-					data-bs-dismiss="toast" aria-label="Close"></button>
-			</div>
-		</div>
-		<c:remove var="success" scope="session" />
-	</c:if>
 
-	<!-- Toast Lỗi -->
-	<c:if test="${not empty sessionScope.error}">
-		<div id="toastError"
-			class="toast align-items-center text-bg-danger border-0 shadow-sm"
-			role="alert" aria-live="assertive" aria-atomic="true">
-			<div class="d-flex">
-				<div class="toast-body">
-					<i class="bi bi-exclamation-triangle-fill me-2"></i>${sessionScope.error}
-				</div>
-				<button type="button" class="btn-close btn-close-white me-2 m-auto"
-					data-bs-dismiss="toast" aria-label="Close"></button>
-			</div>
-		</div>
-		<c:remove var="error" scope="session" />
-	</c:if>
-</div>

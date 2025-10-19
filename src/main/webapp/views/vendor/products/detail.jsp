@@ -36,9 +36,11 @@
 
 					<!-- Ảnh từ ProductImage -->
 					<c:forEach var="img" items="${product.images}">
-						<img
-							src="${pageContext.request.contextPath}/assets${img.imageUrl}"
-							onclick="changeImage(this)">
+						<c:if test="${!img.main}">
+					        <img
+					            src="${pageContext.request.contextPath}/assets${img.imageUrl}"
+					            onclick="changeImage(this)">
+					    </c:if>
 					</c:forEach>
 
 					<!-- Ảnh từ variant -->
