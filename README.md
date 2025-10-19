@@ -52,7 +52,7 @@ Uteshop-servlet/
 - Cài **SQL Server** (tham khảo hướng dẫn trên YouTube).
 - Tạo database uteshopdb
 - Tải mã nguồn UTEShop từ GitHub nhóm.
-- Chạy script uteshop.sql để tạo CSDL.
+- Chạy script /db/uteshop_insert_db_sqlserver.sql để tạo CSDL.
 - Khởi động Tomcat --> truy cập http://localhost:8080/uteshop.
 - Đăng nhập bằng tài khoản Admin mặc định:
 o	Username: chuongminh3225@gmail.com
