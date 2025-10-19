@@ -27,12 +27,17 @@
                         </select>
                     </div>
                 </div>
-
+				
                 <div class="mt-3">
                     <label class="form-label">Mô tả</label>
                     <textarea name="description" class="form-control" rows="3"></textarea>
                 </div>
-
+				
+				<div class="col-md-6">
+	                <label class="form-label">Giá sản phẩm</label>
+	                <input type="number" step="0.01" name="price" class="form-control" placeholder="Nhập giá sản phẩm" required>
+	            </div>
+				
                 <div class="row mt-3">
                     <div class="col-md-6">
                         <label class="form-label">Ảnh đại diện</label>

@@ -41,7 +41,14 @@
                     <label class="form-label">Mô tả</label>
                     <textarea name="description" class="form-control" rows="3">${product.description}</textarea>
                 </div>
-
+				
+				<div class="col-md-6">
+			        <label class="form-label">Giá sản phẩm</label>
+			        <input type="number" step="0.01" name="price"
+			               value="${product.price}"
+			               class="form-control" placeholder="Nhập giá sản phẩm" required>
+			    </div>
+				
                 <div class="row mt-3 align-items-center">
                     <div class="col-md-6">
                         <label class="form-label">Ảnh đại diện hiện tại</label><br>
