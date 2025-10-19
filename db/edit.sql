@@ -112,24 +112,9 @@ UPDATE promotions SET product_id = 13 WHERE promotion_id = 13;
 UPDATE promotions SET product_id = 14 WHERE promotion_id = 14;
 
 
-
---Tạo trigger tự động tạo thông tin giao hàng sau hành động order của user -> admin gán id shipper và nhà vận chuyển (default = 1) 
-CREATE TRIGGER trg_create_delivery
-ON orders
-AFTER INSERT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO deliveries (order_id, carrier_id, status, created_at)
-    SELECT order_id, 1, N'Mới', GETDATE()
-    FROM inserted;
-END;
-
 -- Cho phép shipper_id null khi tạo delivery: 
 ALTER TABLE deliveries 
 ALTER COLUMN shipper_id INT NULL;
-
 
 -- Thêm thông tin deliveries: 
 INSERT INTO deliveries (shipper_id, order_id, status, note_text, created_at, carrier_id) VALUES
