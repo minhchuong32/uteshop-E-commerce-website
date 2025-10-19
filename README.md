@@ -214,37 +214,19 @@ o	Password: 123
 - Cập nhật trạng thái giao hàng. 
 - Thống kê số lượng đơn hàng được giao.
 
-### Điểm cộng kỹ thuật (giúp thầy/cô đánh giá cao hơn)
-
-Sử dụng Maven + Servlet + JSP/JSTL theo đúng mô hình MVC.
-
-JDBC + MySQL với DAO pattern rõ ràng.
-
+### Điểm cộng kỹ thuật
 Session + Cookie + Filter (ghi nhớ đăng nhập, chặn trang không đúng quyền).
-
 Upload ảnh sản phẩm (multipart/form-data).
-
 Hash mật khẩu (MD5/SHA-256) thay vì lưu plain text.
-
 Phân trang (Pagination) sản phẩm.
-
-🔹 3. Điểm cộng giao diện
-
+### Điểm cộng giao diện
 Dùng Bootstrap để làm UI responsive.
-
 Giao diện chia layout: header (menu), sidebar (danh mục), body (danh sách sản phẩm), footer.
-
 Trang quản trị riêng cho Admin (quản lý users, shops, orders, reports).
-
-🔹 4. Điểm cộng sáng tạo (tùy chọn)
-
+### Điểm cộng sáng tạo 
 Tích hợp thanh toán giả lập: (COD, MoMo, VNPAY – chỉ cần fake flow, không cần cổng thật).
-
 Hệ thống khuyến mãi (Promotion): giảm giá theo % hoặc số tiền cố định.
-
 Hệ thống giao hàng (Delivery): Shipper nhận đơn và cập nhật trạng thái.
-
 Tìm kiếm nâng cao: theo tên, giá, category.
-
 Dashboard báo cáo: Doanh thu theo tháng, số lượng đơn hàng, top sản phẩm bán chạy (chart JS).
 
