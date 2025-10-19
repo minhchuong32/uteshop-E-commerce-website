@@ -164,7 +164,12 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 			tx.begin();
 			Delivery d = em.find(Delivery.class, id);
 			if (d != null) {
-				em.remove(d);
+			    Order o = d.getOrder();
+			    if (o != null) {
+			        o.getDeliveries().remove(d);
+			        d.setOrder(null);
+			    }
+			    em.remove(d);
 			}
 			tx.commit();
 		} catch (Exception e) {
