@@ -168,4 +168,4 @@
 </div>
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/user/review.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/user/profile.js"></script>

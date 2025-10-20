@@ -5,14 +5,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import ute.shop.entity.CartItem;
 import ute.shop.entity.User;
-import ute.shop.entity.Product;
 import ute.shop.entity.ProductVariant;
 import ute.shop.entity.Shop;
 import ute.shop.service.ICartItemService;
-import ute.shop.service.IProductService;
 import ute.shop.service.IProductVariantService;
 import ute.shop.service.impl.CartItemServiceImpl;
-import ute.shop.service.impl.ProductServiceImpl;
 import ute.shop.service.impl.ProductVariantServiceImpl;
 
 import java.io.IOException;

@@ -11,7 +11,7 @@ public interface IUserDao {
 	List<User> findAll();
 
 	// Thêm mới User
-	void insert(User user);
+	User insert(User user);
 
 	// Cập nhật User (return true nếu thành công)
 	boolean update(User user);
@@ -40,5 +40,7 @@ public interface IUserDao {
 	List<User> getUsersByRole(String role);
 
 	long countAllUsers();
+
+	Optional<User> findByGoogleId(String googleId);
 
 }

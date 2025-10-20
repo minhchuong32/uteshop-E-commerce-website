@@ -1,3 +1,50 @@
-target/
-bin/
+# ========================
+# Maven & Build
+# ========================
+/target/
+*.class
+*.jar
+*.war
+*.ear
 
+# ========================
+# IDE Config Files
+# ========================
+*.iml
+.idea/
+*.ipr
+*.iws
+*.classpath
+*.project
+.settings/
+.vscode/
+.DS_Store
+
+# ========================
+# Logs & Temp
+# ========================
+*.log
+logs/
+temp/
+tmp/
+*.swp
+
+# ========================
+# Environment & Config
+# ========================
+# File chứa thông tin nhạy cảm (Google OAuth, DB, v.v.)
+src/main/resources/config.properties
+src/main/resources/application.properties
+.env
+*.env
+.env.*
+*.key
+*.pem
+*.crt
+
+# ========================
+# OS-specific files
+# ========================
+Thumbs.db
+ehthumbs.db
+Icon?

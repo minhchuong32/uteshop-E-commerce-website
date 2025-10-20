@@ -53,4 +53,6 @@ public interface IUserService {
 	List<User> getUsersByRole(String role);
 	
 	long countAllUsers();
+	
+	Optional<User> findByGoogleId(String googleId);
 }

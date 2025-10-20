@@ -3,7 +3,6 @@ package ute.shop.controller.users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import ute.shop.dao.IShopDao;
 import ute.shop.entity.*;
 import ute.shop.service.ICarrierService;
 import ute.shop.service.ICartItemService;
@@ -21,7 +20,6 @@ import ute.shop.service.impl.ShopServiceImpl;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +36,6 @@ public class CheckoutController extends HttpServlet {
 	private final IShopService shopservice = new ShopServiceImpl();
 	private final ICarrierService carrierService = new CarrierServiceImpl();
 	private final IDeliveryService deliveryService = new DeliveryServiceImpl();
-
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -175,43 +172,42 @@ public class CheckoutController extends HttpServlet {
 
 			allShopTotal = allShopTotal.add(total);
 
-			 // ----- Tạo Order -----
-	        Order order = new Order();
-	        order.setUser(user);
-	        order.setShop(shopservice.getById(shopId));
-	        order.setPaymentMethod(payment);
-	        order.setStatus("Mới");
-	        order.setCreatedAt(new Date());
-	        order.setAddress(address);
-	        order.setTotalAmount(total);
+			// ----- Tạo Order -----
+			Order order = new Order();
+			order.setUser(user);
+			order.setShop(shopservice.getById(shopId));
+			order.setPaymentMethod(payment);
+			order.setStatus("Mới");
+			order.setCreatedAt(new Date());
+			order.setAddress(address);
+			order.setTotalAmount(total);
 
-	        // ----- OrderDetails -----
-	        for (CartItem ci : shopItems) {
-	            OrderDetail od = new OrderDetail();
-	            od.setOrder(order);
-	            od.setProductVariant(ci.getProductVariant());
-	            od.setQuantity(ci.getQuantity());
-	            od.setPrice(ci.getPrice());
-	            order.getOrderDetails().add(od);
-	        }
+			// ----- OrderDetails -----
+			for (CartItem ci : shopItems) {
+				OrderDetail od = new OrderDetail();
+				od.setOrder(order);
+				od.setProductVariant(ci.getProductVariant());
+				od.setQuantity(ci.getQuantity());
+				od.setPrice(ci.getPrice());
+				order.getOrderDetails().add(od);
+			}
 
-	        // ----- Delivery -----
-	        Delivery delivery = new Delivery();
-	        delivery.setOrder(order);
-	        delivery.setCreatedAt(new Date());
-	        delivery.setStatus("Mới");
-	        delivery.setCarrier(carrier);
-	        order.getDeliveries().add(delivery);
+			// ----- Delivery -----
+			Delivery delivery = new Delivery();
+			delivery.setOrder(order);
+			delivery.setCreatedAt(new Date());
+			delivery.setStatus("Mới");
+			delivery.setCarrier(carrier);
+			order.getDeliveries().add(delivery);
 
-	        // ----- Lưu toàn bộ trong 1 lần -----
-	        Order savedOrder = orderService.save(order);
+			// ----- Lưu toàn bộ trong 1 lần -----
+			Order savedOrder = orderService.save(order);
 
-	        if (savedOrder != null) {
-	            shopItems.forEach(ci -> cartService.removeFromCart(ci.getCartItemId()));
-	        } else {
-	            allSuccess = false;
-	        }
-
+			if (savedOrder != null) {
+				shopItems.forEach(ci -> cartService.removeFromCart(ci.getCartItemId()));
+			} else {
+				allSuccess = false;
+			}
 
 		}
 

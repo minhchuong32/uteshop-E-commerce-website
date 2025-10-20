@@ -14,13 +14,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Integer userId;
-
+    
+    @Column(name = "google_id", unique = true, length = 255)
+    private String googleId;
     // Tên đăng nhập: NVARCHAR(50)
     @Column(name = "username", nullable = false, unique = true, length = 50, columnDefinition = "NVARCHAR(50)")
     private String username;
 
     // Mật khẩu (hash): NVARCHAR(255)
-    @Column(name = "password", nullable = false, length = 255, columnDefinition = "NVARCHAR(255)")
+    @Column(name = "password", nullable = true, length = 255, columnDefinition = "NVARCHAR(255)")
     private String password;
 
     // Email: NVARCHAR(100)
