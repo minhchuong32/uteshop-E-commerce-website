@@ -145,17 +145,15 @@ o	Password: admin123
   → Hỗ trợ làm việc nhóm, kiểm soát phiên bản và triển khai thử nghiệm.
 
 ## 🚀 6. Target
-### - Làm chuẩn theo yêu cầu cơ bản
+### Làm chuẩn theo yêu cầu cơ bản
 🔹 Chức năng chung
 - Tìm kiếm và lọc sản phẩm.  
 - Đăng ký tài khoản có gửi mã OTP kích hoạt qua Email.  
 - Đăng nhập, đăng xuất, quên mật khẩu (gửi mã OTP qua Email).  
 - Mật khẩu được mã hóa để đảm bảo an toàn.  
-
 **Guest (Khách truy cập)**
 - Xem trang chủ, hiển thị các sản phẩm bán chạy (trên 10 sản phẩm) của các shop, sắp xếp theo doanh số giảm dần.  
 - Xem chi tiết sản phẩm nhưng không thể mua hoặc đánh giá.  
-
 **User (Người dùng)**
 - Truy cập trang chủ và trang sản phẩm theo danh mục.  
 - Hiển thị danh sách 20 sản phẩm mới, bán chạy, đánh giá cao, yêu thích, có phân trang hoặc lazy loading.  
@@ -178,7 +176,6 @@ o	Password: admin123
   - Đánh giá sản phẩm đã mua.  
   - Bình luận sản phẩm (tối thiểu 50 ký tự, có thể kèm hình ảnh / video).  
   - Chọn và sử dụng mã giảm giá khi thanh toán.  
-
 **Vendor (Chủ cửa hàng / Seller)**
 - Có toàn bộ quyền của User.  
 - Đăng ký shop và quản lý trang chủ của shop.  
@@ -192,9 +189,7 @@ o	Password: admin123
   - Trả hàng / Hoàn tiền  
 - Tạo chương trình khuyến mãi cho sản phẩm.  
 - Thống kê doanh thu và hiệu suất bán hàng của shop.  
-
 ---
-
 **Admin (Quản trị viên)**
 - Tìm kiếm và quản lý người dùng.  
 - Quản lý sản phẩm của từng shop.  
@@ -206,45 +201,9 @@ o	Password: admin123
 - Quản lý nhà vận chuyển:  
   - Tên nhà vận chuyển.  
   - Phí vận chuyển.  
-
 ---
-
 **Shipper (Người giao hàng)**
 - Quản lý đơn hàng được phân công giao.
 - Cập nhật trạng thái giao hàng. 
 - Thống kê số lượng đơn hàng được giao.
-
-### Điểm cộng kỹ thuật (giúp thầy/cô đánh giá cao hơn)
-
-Sử dụng Maven + Servlet + JSP/JSTL theo đúng mô hình MVC.
-
-JDBC + MySQL với DAO pattern rõ ràng.
-
-Session + Cookie + Filter (ghi nhớ đăng nhập, chặn trang không đúng quyền).
-
-Upload ảnh sản phẩm (multipart/form-data).
-
-Hash mật khẩu (MD5/SHA-256) thay vì lưu plain text.
-
-Phân trang (Pagination) sản phẩm.
-
-🔹 3. Điểm cộng giao diện
-
-Dùng Bootstrap để làm UI responsive.
-
-Giao diện chia layout: header (menu), sidebar (danh mục), body (danh sách sản phẩm), footer.
-
-Trang quản trị riêng cho Admin (quản lý users, shops, orders, reports).
-
-🔹 4. Điểm cộng sáng tạo (tùy chọn)
-
-Tích hợp thanh toán giả lập: (COD, MoMo, VNPAY – chỉ cần fake flow, không cần cổng thật).
-
-Hệ thống khuyến mãi (Promotion): giảm giá theo % hoặc số tiền cố định.
-
-Hệ thống giao hàng (Delivery): Shipper nhận đơn và cập nhật trạng thái.
-
-Tìm kiếm nâng cao: theo tên, giá, category.
-
-Dashboard báo cáo: Doanh thu theo tháng, số lượng đơn hàng, top sản phẩm bán chạy (chart JS).
 
