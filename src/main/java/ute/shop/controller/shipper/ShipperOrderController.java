@@ -29,7 +29,7 @@ public class ShipperOrderController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getRequestURI();
 
-        // ✅ Trường hợp: Xóa đơn hàng
+        //  Trường hợp: Xóa đơn hàng
         if (uri.endsWith("/delete")) {
             String idStr = req.getParameter("id");
             if (idStr != null) {
@@ -40,7 +40,7 @@ public class ShipperOrderController extends HttpServlet {
             return;
         }
 
-        // ✅ Trường hợp: Hiển thị danh sách đơn hàng
+        //  Trường hợp: Hiển thị danh sách đơn hàng
         HttpSession session = req.getSession(false);
         User shipperLogin = (session != null) ? (User) session.getAttribute("account") : null;
 
@@ -51,13 +51,13 @@ public class ShipperOrderController extends HttpServlet {
 
         Integer shipperId = shipperLogin.getUserId();
 
-        // 1️⃣ Lấy các đơn đang tìm shipper hoặc đã gán nhưng chưa giao
+        //  Lấy các đơn đang tìm shipper hoặc đã gán nhưng chưa giao
         List<Delivery> unassigned = deliveryService.findUnassignedDeliveries();
 
-        // 2️⃣ Các đơn thuộc shipper hiện tại
+        // Các đơn thuộc shipper hiện tại
         List<Delivery> shipperDeliveries = deliveryService.getByShipper(shipperId);
 
-        // 3️⃣ Phân loại danh sách
+        //  Phân loại danh sách
         List<Delivery> delivering = shipperDeliveries.stream()
                 .filter(d -> "Đang giao".equalsIgnoreCase(d.getStatus()) ||
                              "Đã gán".equalsIgnoreCase(d.getStatus()))
@@ -82,7 +82,7 @@ public class ShipperOrderController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getRequestURI();
 
-        // ✅ Nhận đơn (assign)
+        //  Nhận đơn (assign)
         if (uri.endsWith("/assign")) {
             HttpSession session = req.getSession(false);
             User shipperLogin = (session != null) ? (User) session.getAttribute("account") : null;
@@ -128,7 +128,7 @@ public class ShipperOrderController extends HttpServlet {
             return;
         }
 
-        // ✅ Cập nhật trạng thái đơn hàng
+        //  Cập nhật trạng thái đơn hàng
         if (uri.endsWith("/orders")) {
             String deliveryIdStr = req.getParameter("deliveryId");
             String status = req.getParameter("status");

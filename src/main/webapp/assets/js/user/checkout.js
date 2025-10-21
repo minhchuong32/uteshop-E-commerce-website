@@ -1,6 +1,6 @@
 console.log("✅ checkout.js (with dynamic shipping + product discount)");
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 	let shippingFee = 30000; // mặc định
 
 	// 🪙 Định dạng tiền VND
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	// 🚚 Khi thay đổi đơn vị vận chuyển
 	const carrierSelect = document.querySelector('select[name="carrierId"]');
 	if (carrierSelect) {
-		carrierSelect.addEventListener("change", function () {
+		carrierSelect.addEventListener("change", function() {
 			const selected = this.selectedOptions[0];
 			if (!selected) return;
 			const text = selected.textContent;
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// 🧾 Khi chọn mã giảm giá theo sản phẩm
 	document.querySelectorAll(".promotion-select").forEach((select) => {
-		select.addEventListener("change", function () {
+		select.addEventListener("change", function() {
 			const productRow = this.closest(".d-flex");
 			const priceEl = productRow.querySelector(".text-end p");
 			const basePrice = parseFloat(priceEl.textContent.replace(/[^\d]/g, ""));

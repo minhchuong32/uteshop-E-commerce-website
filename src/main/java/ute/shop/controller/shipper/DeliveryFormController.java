@@ -30,7 +30,11 @@ import java.time.LocalDate;
 @WebServlet("/shipper/delivery/form")
 public class DeliveryFormController extends HttpServlet {
 
-    private final IDeliveryService deliveryService = new DeliveryServiceImpl();
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final IDeliveryService deliveryService = new DeliveryServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

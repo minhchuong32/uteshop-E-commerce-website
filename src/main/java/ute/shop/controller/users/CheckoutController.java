@@ -179,7 +179,7 @@ public class CheckoutController extends HttpServlet {
 			order.setPaymentMethod(payment);
 			order.setStatus("Mới");
 			order.setCreatedAt(new Date());
-			order.setAddress(address);
+//			order.setAddress(address);
 			order.setTotalAmount(total);
 
 			// ----- OrderDetails -----

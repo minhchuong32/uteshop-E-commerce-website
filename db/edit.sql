@@ -150,6 +150,25 @@ ALTER TABLE users
 ADD CONSTRAINT chk_auth_method 
 CHECK ([password] IS NOT NULL OR [google_id] IS NOT NULL);
 
--- them id cho login = fb 
-ALTER TABLE users ADD facebook_id NVARCHAR(255) UNIQUE NULL;
+--Insertvalue cho bảng shipping_address
+USE uteshopdb
+GO
+INSERT INTO shipping_addresses
+(user_id, recipient_name, phone_number, address_line, ward, district, city,created_at, is_default)
+VALUES
+(2, N'Nguyễn Văn A', '0901000001', N'12 Nguyễn Huệ', N'Bến Nghé', N'Quận 1', N'Hồ Chí Minh',GETDATE(), 1),
+(3, N'Trần Thị B', '0902000002', N'45 Lê Lợi', N'Bến Thành', N'Quận 1', N'Hồ Chí Minh',GETDATE(), 1),
+(4, N'Lê Văn C', '0903000003', N'22 Nguyễn Văn Linh', N'Hòa Minh', N'Liên Chiểu', N'Đà Nẵng',GETDATE(), 1),
+(5, N'Phạm Thị D', '0904000004', N'88 Hai Bà Trưng', N'Tân Định', N'Quận 1', N'Hồ Chí Minh',GETDATE(), 1),
+(6, N'Ngô Văn E', '0905000005', N'19 Trần Hưng Đạo', N'Hàng Bạc', N'Hoàn Kiếm', N'Hà Nội', GETDATE(),1),
+(6, N'Ngô Văn E', '0905000005', N'01 Võ Văn Ngân', N'Linh Chiểu', N'Thủ Đức', N'Hồ Chí Minh',GETDATE(), 0),
+(7, N'Đặng Thị F', '0906000006', N'5 Võ Văn Kiệt', N'Phạm Ngũ Lão', N'Quận 1', N'Hồ Chí Minh',GETDATE(), 1),
+(8, N'Hoàng Văn G', '0907000007', N'27 Nguyễn Trãi', N'Thanh Xuân Trung', N'Thanh Xuân', N'Hà Nội',GETDATE(), 1),
+(9, N'Bùi Thị H', '0908000008', N'71 Cách Mạng Tháng 8', N'Phú Thọ', N'Tân Bình', N'Hồ Chí Minh',GETDATE(), 1),
+(10, N'Ngô Văn I', '0909000009', N'3 Nguyễn Đình Chiểu', N'Đa Kao', N'Quận 1', N'Hồ Chí Minh',GETDATE(), 1),
+(10, N'Ngô Văn I', '0909000009', N'56 Điện Biên Phủ', N'Phước Long', N'Nha Trang', N'Khánh Hòa',GETDATE(), 0),
+(11, N'Lý Thị K', '0911000011', N'20 Lý Thường Kiệt', N'Phú Nhuận', N'Quận 5', N'Hồ Chí Minh',GETDATE(), 1),
+(12, N'Trương Văn L', '0912000012', N'9 Nguyễn Khuyến', N'Phước Tân', N'Biên Hòa', N'Đồng Nai',GETDATE(), 1),
+(13, N'Đoàn Văn N', '0913000013', N'15 Nguyễn Văn Cừ', N'An Khánh', N'Ninh Kiều', N'Cần Thơ',GETDATE(), 1);
+
 

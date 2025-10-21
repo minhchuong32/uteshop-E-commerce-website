@@ -1,5 +1,5 @@
 // Đảm bảo code chỉ chạy sau khi DOM đã được tải hoàn toàn
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 	/* Dữ liệu được truyền từ JSP thông qua object `revenuePageData` */
 
 	// 1. Biểu đồ cột: Doanh thu theo tháng

@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/commons/taglib.jsp"%>
-<!-- ====================== BIỂU ĐỒ HIỆU SUẤT ====================== -->
 <h4 class="fw-bold text-primary-custom mb-3 mt-4">
 	<i class="bi bi-bar-chart-fill me-2"></i>Hiệu suất giao hàng
 </h4>
@@ -11,7 +10,6 @@
 	</div>
 </div>
 
-<!-- ====================== THÔNG BÁO ====================== -->
 <c:if test="${not empty sessionScope.message}">
 	<div
 		class="alert alert-success alert-dismissible fade show alert-floating"
@@ -32,14 +30,12 @@
 	<c:remove var="error" scope="session" />
 </c:if>
 
-<!-- ====================== DANH SÁCH ĐƠN HÀNG ====================== -->
 <h3 class="fw-bold text-primary-custom mb-3">
 	<i class="bi bi-cart"></i> Quản lý đơn hàng
 </h3>
 
 <div class="card shadow-sm border-0">
 	<div class="card-body">
-		<!-- Bộ lọc nhanh -->
 		<div class="row mb-3">
 			<div class="col-md-3">
 				<label class="form-label small">Lọc theo trạng thái đơn:</label> <select
@@ -88,8 +84,7 @@
 					<tr>
 						<th>ID Đơn hàng</th>
 						<th>Khách hàng</th>
-						<th>Địa chỉ</th>
-						<th>Thanh toán</th>
+						<th>Địa chỉ giao hàng</th> <th>Thanh toán</th>
 						<th>Tổng tiền</th>
 						<th>Trạng thái đơn</th>
 						<th>Shipper</th>
@@ -109,7 +104,19 @@
 									class="text-muted"> <c:out value="${o.user.email}" /><br>
 										<c:out value="${o.user.phone}" />
 								</small></td>
-								<td><c:out value="${o.address}" /></td>
+								
+								<td>
+									<c:if test="${not empty o.shippingAddress}">
+										<b><c:out value="${o.shippingAddress.recipientName}"/></b><br>
+										<small class="text-muted">
+											<c:out value="${o.shippingAddress.phoneNumber}"/><br>
+											<c:out value="${o.shippingAddress.addressLine}, ${o.shippingAddress.ward}, ${o.shippingAddress.district}, ${o.shippingAddress.city}"/>
+										</small>
+									</c:if>
+									<c:if test="${empty o.shippingAddress}">
+										<span class="text-muted"><i>Chưa có địa chỉ</i></span>
+									</c:if>
+								</td>
 								<td class="text-center"><c:out value="${o.paymentMethod}" /></td>
 								<td class="text-end"><fmt:formatNumber
 										value="${o.totalAmount}" type="currency" currencySymbol="₫" />
@@ -172,7 +179,6 @@
 											class="btn btn-outline-primary btn-sm" title="Chỉnh sửa">
 											<i class="bi bi-pencil-square"></i>
 										</a>
-										<!-- ===== Nút Xóa ===== -->
 										<button type="button" class="btn btn-sm btn-danger"
 											data-bs-toggle="modal" data-bs-target="#confirmDeleteOrderModal"
 											data-delete-url="${pageContext.request.contextPath}/admin/orders/delete?orderId=${o.orderId}&deliveryId=${d.deliveryId}">
@@ -190,7 +196,6 @@
 		</div>
 	</div>
 </div>
-<!-- ====== MODAL XÓA ====== -->
 <div class="modal fade" id="confirmDeleteOrderModal" tabindex="-1">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content border-0 shadow-lg rounded-3">
@@ -213,7 +218,6 @@
 		</div>
 	</div>
 </div>
-<!-- Script khởi tạo dữ liệu biểu đồ -->
 <script>
 // Dữ liệu cho biểu đồ hiệu suất giao hàng
 const shipperNames = [], totalDeliveries = [], successRates = [];
