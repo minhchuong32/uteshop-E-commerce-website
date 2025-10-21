@@ -10,8 +10,8 @@
 		<div class="alert alert-danger">${error}</div>
 	</c:if>
 
-	<c:if test="${not empty sessionScope.message}">
-		<div class="alert alert-success">${sessionScope.message}</div>
+	<c:if test="${not empty message}">
+		<div class="alert alert-success">${message}</div>
 		<c:remove var="message" scope="session" />
 	</c:if>
 

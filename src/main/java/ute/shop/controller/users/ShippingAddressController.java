@@ -16,11 +16,15 @@ import ute.shop.service.impl.ShippingAddressServiceImpl;
 
 @WebServlet("/user/address")
 public class ShippingAddressController extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final IShippingAddressService addressService = new ShippingAddressServiceImpl();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		User account = (User) req.getSession().getAttribute("account");
+		User account = (User) req.getAttribute("account");
         if (account == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
@@ -36,7 +40,7 @@ public class ShippingAddressController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String action = req.getParameter("action");
-        User account = (User) req.getSession().getAttribute("account");
+        User account = (User) req.getAttribute("account");
 
         if ("add".equals(action)) {
             ShippingAddress addr = new ShippingAddress();

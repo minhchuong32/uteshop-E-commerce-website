@@ -45,9 +45,9 @@
 				<div class="avatar-section">
 					<div class="avatar-wrapper">
 						<c:choose>
-							<c:when test="${not empty sessionScope.account.avatar}">
+							<c:when test="${not empty account.avatar}">
 								<img
-									src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
+									src="${pageContext.request.contextPath}/assets/images${account.avatar}"
 									alt="Avatar" class="avatar-img" id="avatarPreview">
 							</c:when>
 							<c:otherwise>
@@ -61,7 +61,7 @@
 						</label>
 					</div>
 					<div class="user-id-badge">
-						<i class="fas fa-id-card"></i> ID: ${sessionScope.account.userId}
+						<i class="fas fa-id-card"></i> ID: ${account.userId}
 					</div>
 					<input type="file" id="avatarFile" name="avatarFile"
 						accept="image/*" style="display: none;"
@@ -79,42 +79,42 @@
 							<label class="form-label"> <i class="fas fa-user-tag"></i>
 								Tên đăng nhập
 							</label> <input type="text" class="form-control" name="username"
-								value="${sessionScope.account.username}" required>
+								value="${account.username}" required>
 						</div>
 
 						<div class="col-md-6 mb-3">
 							<label class="form-label"> <i class="fas fa-signature"></i>
 								Họ và tên
 							</label> <input type="text" class="form-control" name="name"
-								value="${sessionScope.account.name}" required>
+								value="${account.name}" required>
 						</div>
 
 						<div class="col-md-6 mb-3">
 							<label class="form-label"> <i class="fas fa-envelope"></i>
 								Email
 							</label> <input type="email" class="form-control" name="email"
-								value="${sessionScope.account.email}" required>
+								value="${account.email}" required>
 						</div>
 
 						<div class="col-md-6 mb-3">
 							<label class="form-label"> <i class="fas fa-phone"></i>
 								Số điện thoại
 							</label> <input type="text" class="form-control" name="phone"
-								value="${sessionScope.account.phone}" required>
+								value="${account.phone}" required>
 						</div>
 
 						<div class="col-md-9 mb-3">
 							<label class="form-label"> <i
 								class="fas fa-map-marker-alt"></i> Địa chỉ
 							</label>
-							<textarea class="form-control" name="address" rows="2">${sessionScope.account.address}</textarea>
+							<textarea class="form-control" name="address" rows="2">${account.address}</textarea>
 						</div>
 
 						<div class="col-md-3 mb-3">
 							<label class="form-label"> <i class="fas fa-info-circle"></i>
 								Trạng thái
 							</label> <input type="text" class="form-control"
-								value="${sessionScope.account.status}" readonly>
+								value="${account.status}" readonly>
 						</div>
 					</div>
 				</div>

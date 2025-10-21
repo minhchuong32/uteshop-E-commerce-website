@@ -42,12 +42,12 @@ public class CheckoutController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		User user = (User) req.getSession().getAttribute("account");
+		User user = (User) req.getAttribute("account");
 		if (user == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
-		// 🔹 Lấy danh sách địa chỉ giao hàng của user
+		//  Lấy danh sách địa chỉ giao hàng của user
 	    List<ShippingAddress> addresses = addressService.getAddressesByUser(user.getUserId());
 	    req.setAttribute("addresses", addresses);
 
@@ -103,7 +103,7 @@ public class CheckoutController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		User user = (User) req.getSession().getAttribute("account");
+		User user = (User) req.getAttribute("account");
 	    if (user == null) {
 	        resp.sendRedirect(req.getContextPath() + "/login");
 	        return;

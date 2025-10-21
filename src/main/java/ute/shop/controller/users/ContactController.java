@@ -44,8 +44,8 @@ public class ContactController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 
-		HttpSession session = req.getSession(false);
-		User user = (session != null) ? (User) session.getAttribute("account") : null;
+		
+		User user = (User) req.getAttribute("account");
 
 		String fullname = req.getParameter("fullname");
 		String email = req.getParameter("email");

@@ -15,36 +15,36 @@
 				<div class="mb-3">
 					<label class="form-label">Tên đăng nhập</label> <input type="text"
 						class="form-control" name="username"
-						value="${sessionScope.account.username}" readonly>
+						value="${account.username}" readonly>
 				</div>
 
 				<!-- Họ tên -->
 				<div class="mb-3">
 					<label class="form-label">Họ tên</label> <input type="text"
 						class="form-control" name="name"
-						value="${sessionScope.account.name}">
+						value="${account.name}">
 				</div>
 
 				<!-- Số điện thoại -->
 				<div class="mb-3">
 					<label class="form-label">Số điện thoại</label> <input type="text"
 						class="form-control" name="phone"
-						value="${sessionScope.account.phone}">
+						value="${account.phone}">
 				</div>
 
 				<!-- Địa chỉ -->
 				<div class="mb-3">
 					<label class="form-label">Địa chỉ</label>
-					<textarea class="form-control" name="address" rows="2">${sessionScope.account.address}</textarea>
+					<textarea class="form-control" name="address" rows="2">${account.address}</textarea>
 				</div>
 
 				<!-- Avatar -->
 				<div class="mb-3 text-center">
 					<label class="form-label d-block">Ảnh đại diện</label>
 					<c:choose>
-						<c:when test="${not empty sessionScope.account.avatar}">
+						<c:when test="${not empty account.avatar}">
 							<img
-								src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
+								src="${pageContext.request.contextPath}/assets/images${account.avatar}"
 								alt="avatar"
 								class="rounded-circle img-thumbnail mx-auto d-block" width="100"
 								height="100" style="object-fit: cover;">

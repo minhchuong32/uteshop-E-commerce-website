@@ -25,8 +25,8 @@ public class SettingController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		HttpSession session = request.getSession();
-		User admin = (User) session.getAttribute("account");
+		
+		User admin = (User) request.getAttribute("account");
 
 		if (admin == null) {
 			response.sendRedirect(request.getContextPath() + "/login");

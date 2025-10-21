@@ -41,8 +41,8 @@ public class ShipperOrderController extends HttpServlet {
         }
 
         //  Trường hợp: Hiển thị danh sách đơn hàng
-        HttpSession session = req.getSession(false);
-        User shipperLogin = (session != null) ? (User) session.getAttribute("account") : null;
+       
+        User shipperLogin = (User) req.getAttribute("account");
 
         if (shipperLogin == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
@@ -84,8 +84,8 @@ public class ShipperOrderController extends HttpServlet {
 
         //  Nhận đơn (assign)
         if (uri.endsWith("/assign")) {
-            HttpSession session = req.getSession(false);
-            User shipperLogin = (session != null) ? (User) session.getAttribute("account") : null;
+            
+            User shipperLogin = (User) req.getAttribute("account");
 
             if (shipperLogin == null) {
                 resp.sendRedirect(req.getContextPath() + "/login");

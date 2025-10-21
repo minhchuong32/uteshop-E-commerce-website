@@ -31,8 +31,8 @@ public class UserComplaintController extends HttpServlet {
 
 		// Danh sách khiếu nại của user
 		if (uri.endsWith("/complaints")) {
-			HttpSession session = req.getSession();
-			User user = (User) session.getAttribute("account");
+			
+			User user = (User) req.getAttribute("account");
 			if (user == null) {
 				resp.sendRedirect(req.getContextPath() + "/login");
 				return;
@@ -55,8 +55,8 @@ public class UserComplaintController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		HttpSession session = req.getSession();
-		User user = (User) session.getAttribute("account");
+		
+		User user = (User) req.getAttribute("account");
 		if (user == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;

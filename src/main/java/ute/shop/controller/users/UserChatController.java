@@ -22,8 +22,8 @@ public class UserChatController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("account");
+        
+        User user = (User) req.getAttribute("account");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
@@ -43,8 +43,8 @@ public class UserChatController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("account");
+    
+        User user = (User) req.getAttribute("account");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;

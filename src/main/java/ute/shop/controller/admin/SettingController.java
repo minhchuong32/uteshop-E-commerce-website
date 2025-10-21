@@ -25,8 +25,10 @@ public class SettingController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		HttpSession session = request.getSession();
-		User admin = (User) session.getAttribute("account");
+//		HttpSession session = request.getSession();
+//		User admin = (User) session.getAttribute("account");
+		
+		User admin = (User) request.getAttribute("account");
 
 		if (admin == null) {
 			response.sendRedirect(request.getContextPath() + "/login");
@@ -50,8 +52,10 @@ public class SettingController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		HttpSession session = request.getSession();
-		User admin = (User) session.getAttribute("account");
+//		HttpSession session = request.getSession();
+//		User admin = (User) session.getAttribute("account");
+		
+		User admin = (User) request.getAttribute("account");
 
 		if (admin == null) {
 			response.sendRedirect(request.getContextPath() + "/login");
@@ -131,7 +135,7 @@ public class SettingController extends HttpServlet {
 		boolean updatesetting = storeService.updateSettings(store);
 
 		if (updatedprofile && updatesetting) {
-			session.setAttribute("account", admin);
+
 			request.setAttribute("message", "Cập nhật thành công!");
 			request.setAttribute("messageType", "success");
 		} else {

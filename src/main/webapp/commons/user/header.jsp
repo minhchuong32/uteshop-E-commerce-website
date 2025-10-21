@@ -1,13 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/commons/taglib.jsp"%>
 
-<c:if test="${empty sessionScope.account}">
-	<script>
-		// Nếu chưa đăng nhập, tự động redirect đến /login
-		window.location.href = "<c:url value='/login'/>";
-	</script>
-</c:if>
-
 <header>
 	<nav class="navbar navbar-expand-lg navbar-dark fixed-top"
 		style="background-color: #FFFFFF;">
@@ -85,9 +78,9 @@
 						class="nav-link dropdown-toggle d-flex align-items-center"
 						href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
 						aria-expanded="false"> <c:choose>
-								<c:when test="${not empty sessionScope.account.avatar}">
+								<c:when test="${not empty account.avatar}">
 									<img
-										src="${pageContext.request.contextPath}/assets/images/${sessionScope.account.avatar}"
+										src="${pageContext.request.contextPath}/assets/images/${account.avatar}"
 										alt="avatar" class="rounded-circle me-2" width="32"
 										height="32" style="object-fit: cover;">
 								</c:when>
@@ -98,7 +91,7 @@
 										height="32" style="object-fit: cover;">
 								</c:otherwise>
 							</c:choose> <span class="fw-semibold text-dark">
-								${sessionScope.account.username} </span> <i
+								${account.username} </span> <i
 							class="bi bi-caret-down-fill text-secondary small"></i>
 					</a>
 

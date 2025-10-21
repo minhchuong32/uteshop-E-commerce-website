@@ -27,13 +27,8 @@ public class StatController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        HttpSession session = req.getSession(false);
-        if (session == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
-
-        Shop shop = (Shop) session.getAttribute("currentShop");
+      
+        Shop shop = (Shop) req.getAttribute("currentShop");
         if (shop == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;

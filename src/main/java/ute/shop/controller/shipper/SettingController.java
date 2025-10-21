@@ -24,8 +24,8 @@ public class SettingController extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        HttpSession session = request.getSession();
-        User shipper = (User) session.getAttribute("account");
+        
+        User shipper = (User) request.getAttribute("account");
 
         if (shipper == null || !"Shipper".equalsIgnoreCase(shipper.getRole())) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -43,8 +43,8 @@ public class SettingController extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        HttpSession session = request.getSession();
-        User shipper = (User) session.getAttribute("account");
+      
+        User shipper = (User) request.getAttribute("account");
 
         if (shipper == null || !"Shipper".equalsIgnoreCase(shipper.getRole())) {
             response.sendRedirect(request.getContextPath() + "/login");
@@ -98,7 +98,7 @@ public class SettingController extends HttpServlet {
         boolean updated = userService.updatePwd(shipper, changePwd);
 
         if (updated) {
-            session.setAttribute("account", shipper);
+            request.setAttribute("account", shipper);
             request.setAttribute("message", "Cập nhật thông tin thành công!");
             request.setAttribute("messageType", "success");
         } else {

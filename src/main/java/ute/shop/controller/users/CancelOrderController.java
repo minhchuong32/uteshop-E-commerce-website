@@ -22,7 +22,7 @@ public class CancelOrderController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		User user = (User) req.getSession().getAttribute("account");
+		User user = (User) req.getAttribute("account");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;

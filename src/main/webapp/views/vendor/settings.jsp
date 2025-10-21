@@ -54,18 +54,18 @@
 			<div class="card-header fw-bold bg-light">Thông tin tài khoản</div>
 			<div class="card-body">
 				<input type="hidden" name="user_id"
-					value="${sessionScope.account.userId}">
+					value="${account.userId}">
 				<div class="mb-3">
 					<label class="form-label">Username</label> <input type="text"
 						class="form-control" name="username"
-						value="${sessionScope.account.username}">
+						value="${account.username}">
 				</div>
 				<div class="mb-3 text-center">
 					<label class="form-label d-block">Ảnh đại diện</label>
 					<c:choose>
-						<c:when test="${not empty sessionScope.account.avatar}">
+						<c:when test="${not empty account.avatar}">
 							<img
-								src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
+								src="${pageContext.request.contextPath}/assets/images${account.avatar}"
 								alt="avatar"
 								class="rounded-circle img-thumbnail mx-auto d-block" width="120"
 								height="120" style="object-fit: cover;">
@@ -84,7 +84,7 @@
 				<div class="mb-3">
 					<label class="form-label">Email</label> <input type="email"
 						class="form-control" name="email"
-						value="${sessionScope.account.email}">
+						value="${account.email}">
 				</div>
 				<div class="mb-3">
 					<label class="form-label">Mật khẩu hiện tại</label> <input

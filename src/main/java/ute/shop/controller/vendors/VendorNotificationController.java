@@ -19,8 +19,8 @@ public class VendorNotificationController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        HttpSession session = req.getSession();
-        User vendor = (User) session.getAttribute("account");
+        
+        User vendor = (User) req.getAttribute("account");
 
         if (vendor == null || !"VENDOR".equalsIgnoreCase(vendor.getRole())) {
             resp.sendRedirect(req.getContextPath() + "/login");

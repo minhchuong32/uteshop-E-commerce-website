@@ -19,8 +19,8 @@ public class ShipperNotificationController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        HttpSession session = req.getSession();
-        User shipper = (User) session.getAttribute("account");
+      
+        User shipper = (User) req.getAttribute("account");
 
         List<Notification> notifications = notiService.getAllByUserId(shipper.getUserId());
         req.setAttribute("notifications", notifications);

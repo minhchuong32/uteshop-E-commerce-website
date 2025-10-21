@@ -92,7 +92,7 @@ public class ProductDetailController extends HttpServlet {
         List<Review> reviews = reviewService.getByProductId(productId);
 
         // Kiểm tra user đã mua chưa
-        User account = (User) req.getSession().getAttribute("account");
+        User account = (User) req.getAttribute("account");
         boolean hasPurchased = false;
         if (account != null) {
             hasPurchased = orderService.hasPurchased(account.getUserId(), productId);

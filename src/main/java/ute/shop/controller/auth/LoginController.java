@@ -1,6 +1,8 @@
 package ute.shop.controller.auth;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
+
 import ute.shop.utils.Constant;
 import ute.shop.entity.User;
 import ute.shop.service.IUserService;
@@ -11,118 +13,135 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import ute.shop.utils.JwtUtil;
 
 @WebServlet(urlPatterns = { "/login" })
 public class LoginController extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    private IUserService service = new UserServiceImpl();
+	private static final long serialVersionUID = 1L;
+	private final IUserService service = new UserServiceImpl();
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	// Regex kiểm tra đúng định dạng Gmail
+	private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 
-        // ===== Lấy cookie nếu có =====
-        Cookie[] cookies = request.getCookies();
-        String savedEmail = "";
-        String savedPassword = "";
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                switch (cookie.getName()) {
-                    case "rememberEmail":
-                        savedEmail = cookie.getValue();
-                        break;
-                    case "rememberPassword":
-                        savedPassword = cookie.getValue();
-                        break;
-                }
-            }
-        }
+		String alert = request.getParameter("alert");
+		if (alert != null) {
+			String message;
+			switch (alert) {
+			case "session_expired":
+				message = "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!";
+				break;
+			case "user_not_found":
+				message = "Người dùng không tồn tại trong hệ thống.";
+				break;
+			case "invalid_token":
+				message = "Có lỗi xác thực. Vui lòng đăng nhập lại.";
+				break;
+			default:
+				message = "Đã xảy ra lỗi không mong muốn.";
+				break;
+			}
+			request.setAttribute("alert", message);
+		}
 
-        // ===== Gửi dữ liệu sang JSP =====
-        request.setAttribute("savedEmail", savedEmail);
-        request.setAttribute("savedPassword", savedPassword);
+		// Lấy cookie nếu có
+		Cookie[] cookies = request.getCookies();
+		String savedEmail = "";
+		String savedPassword = "";
 
-        // Forward đến login.jsp
-        request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
-    }
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				switch (cookie.getName()) {
+				case "rememberEmail":
+					savedEmail = cookie.getValue();
+					break;
+				case "rememberPassword":
+					savedPassword = cookie.getValue();
+					break;
+				}
+			}
+		}
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+		request.setAttribute("savedEmail", savedEmail);
+		request.setAttribute("savedPassword", savedPassword);
 
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
+		request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+	}
 
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String remember = request.getParameter("remember");
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-        boolean isRememberMe = "on".equals(remember);
+		response.setContentType("text/html;charset=UTF-8");
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 
-        // ===== Kiểm tra dữ liệu =====
-        if (email == null || email.trim().isEmpty()) {
-            request.setAttribute("alert", "Email không được để trống");
-            request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
-            return;
-        }
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
 
-        if (password == null || password.trim().isEmpty()) {
-            request.setAttribute("alert", "Mật khẩu không được để trống");
-            request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
-            return;
-        }
+		// ==== Kiểm tra dữ liệu đầu vào ====
+		if (email == null || email.trim().isEmpty()) {
+			request.setAttribute("alert", "Email không được để trống");
+			request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+			return;
+		}
 
-        // ===== Xử lý login =====
-        User user = service.login(email, password);
+		if (!EMAIL_PATTERN.matcher(email).matches()) {
+			request.setAttribute("alert", "Vui lòng nhập đúng định dạng Gmail (ví dụ: example@gmail.com)");
+			request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+			return;
+		}
 
-        if (user != null) {
-            // Tạo session
-            HttpSession session = request.getSession(true);
-            session.setAttribute("account", user);
+		if (password == null || password.trim().isEmpty()) {
+			request.setAttribute("alert", "Mật khẩu không được để trống");
+			request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+			return;
+		}
 
-            // Ghi nhớ đăng nhập
-            if (isRememberMe) {
-                saveRememberMe(response, email, password);
-            }
+		// ==== Xử lý đăng nhập ====
+		User user = service.login(email, password);
 
-            // Điều hướng theo vai trò
-            switch (user.getRole().toLowerCase()) {
-                case "admin":
-                    response.sendRedirect(request.getContextPath() + "/admin/home");
-                    break;
-                case "shipper":
-                    response.sendRedirect(request.getContextPath() + "/shipper/home");
-                    break;
-                case "vendor":
-                    response.sendRedirect(request.getContextPath() + "/vendor/home");
-                    break;
-                case "user":
-                    response.sendRedirect(request.getContextPath() + "/user/home");
-                    break;
-                default:
-                    response.sendRedirect(request.getContextPath() + "/web/home");
-                    break;
-            }
+		if (user == null) {
+			request.setAttribute("alert", "Email hoặc mật khẩu không đúng");
+			request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+			return;
+		}
 
-        } else {
-            request.setAttribute("alert", "Email hoặc mật khẩu không đúng");
-            request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
-        }
-    }
+		// ===== Tạo mới JWT token và cookie =====
+		Cookie oldJwtCookie = new Cookie("jwt_token", "");
+		oldJwtCookie.setMaxAge(0);
+		oldJwtCookie.setPath("/");
+		oldJwtCookie.setHttpOnly(true);
+		response.addCookie(oldJwtCookie);
 
-    // ===== Lưu cookie Remember Me =====
-    private void saveRememberMe(HttpServletResponse response, String email, String password) {
-        Cookie emailCookie = new Cookie("rememberEmail", email);
-        emailCookie.setMaxAge(7 * 24 * 60 * 60); // 7 ngày
-        emailCookie.setPath("/");
-        response.addCookie(emailCookie);
+		String jwt = JwtUtil.generateToken(user);
+		Cookie jwtCookie = new Cookie("jwt_token", jwt);
+		jwtCookie.setMaxAge(24 * 60 * 60);
+		jwtCookie.setPath("/");
+		jwtCookie.setHttpOnly(true);
+		response.addCookie(jwtCookie);
 
-        Cookie passwordCookie = new Cookie("rememberPassword", password);
-        passwordCookie.setMaxAge(7 * 24 * 60 * 60);
-        passwordCookie.setPath("/");
-        response.addCookie(passwordCookie);
-    }
+		// ===== Điều hướng theo vai trò =====
+		String context = request.getContextPath();
+		switch (user.getRole().toLowerCase()) {
+		case "admin":
+			response.sendRedirect(context + "/admin/home");
+			return;
+		case "shipper":
+			response.sendRedirect(context + "/shipper/home");
+			return;
+		case "vendor":
+			response.sendRedirect(context + "/vendor/home");
+			return;
+		case "user":
+			response.sendRedirect(context + "/user/home");
+			return;
+		default:
+			response.sendRedirect(context + "/web/home");
+			return;
+		}
+	}
 }

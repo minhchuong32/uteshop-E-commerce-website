@@ -97,7 +97,7 @@
 			<div class="card-body">
 				<div class="mb-3">
 					<label class="form-label">Username</label>
-					<input type="text" class="form-control" name="username" value="${sessionScope.account.username}">
+					<input type="text" class="form-control" name="username" value="${account.username}">
 				</div>
 
 				<!-- Avatar preview -->
@@ -105,9 +105,9 @@
 					<label class="form-label d-block">Ảnh đại diện</label>
 
 					<c:choose>
-						<c:when test="${not empty sessionScope.account.avatar}">
+						<c:when test="${not empty account.avatar}">
 							<img id="avatarPreview"
-								src="${pageContext.request.contextPath}/assets/images${sessionScope.account.avatar}"
+								src="${pageContext.request.contextPath}/assets/images${account.avatar}"
 								alt="avatar"
 								class="rounded-circle img-thumbnail mx-auto d-block"
 								width="120" height="120" style="object-fit: cover;">
@@ -126,7 +126,7 @@
 
 				<div class="mb-3">
 					<label class="form-label">Email</label>
-					<input type="email" class="form-control" name="email" value="${sessionScope.account.email}">
+					<input type="email" class="form-control" name="email" value="${account.email}">
 				</div>
 				<div class="mb-3">
 					<label class="form-label">Mật khẩu hiện tại</label>

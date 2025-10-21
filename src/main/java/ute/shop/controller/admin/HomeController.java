@@ -17,9 +17,7 @@ public class HomeController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		// Kiểm tra đăng nhập
-		HttpSession session = req.getSession(false);
-		User admin = (session != null) ? (User) session.getAttribute("account") : null;
+		User admin = (User) req.getAttribute("account");
 		if (admin == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;

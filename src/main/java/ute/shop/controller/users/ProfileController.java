@@ -25,8 +25,7 @@ public class ProfileController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		HttpSession session = request.getSession();
-		User account = (User) session.getAttribute("account");
+		User account = (User) request.getAttribute("account");
 
 		if (account == null) {
 			response.sendRedirect(request.getContextPath() + "/login");
@@ -40,8 +39,8 @@ public class ProfileController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		HttpSession session = request.getSession();
-		User account = (User) session.getAttribute("account");
+		
+		User account = (User) request.getAttribute("account");
 
 		if (account == null) {
 			response.sendRedirect(request.getContextPath() + "/login");
@@ -122,7 +121,7 @@ public class ProfileController extends HttpServlet {
 		boolean updated = service.updatePwd(account, changePwd);
 
 		if (updated) {
-			session.setAttribute("account", account);
+			request.setAttribute("account", account);
 			request.setAttribute("success", "Cập nhật hồ sơ thành công!");
 		} else {
 			request.setAttribute("error", "Có lỗi xảy ra khi cập nhật hồ sơ!");

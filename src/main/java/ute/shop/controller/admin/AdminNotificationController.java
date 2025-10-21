@@ -23,8 +23,13 @@ public class AdminNotificationController extends HttpServlet {
 
         //  Xem toàn bộ danh sách thông báo
         if (uri.endsWith("/notifications")) {
-            HttpSession session = req.getSession();
-            User admin = (User) session.getAttribute("account");
+        	
+//            HttpSession session = req.getSession();
+//            User admin = (User) session.getAttribute("account");
+        	
+        	// jwt
+        	User admin = (User) req.getAttribute("account");
+        	
             if (admin == null) {
                 resp.sendRedirect(req.getContextPath() + "/login");
                 return;

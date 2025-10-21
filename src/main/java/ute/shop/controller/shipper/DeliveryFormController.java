@@ -112,7 +112,7 @@ public class DeliveryFormController extends HttpServlet {
         infoTable.addCell(new Cell().add(new Paragraph(d.getOrder().getUser().getUsername())));
 
         infoTable.addCell(new Cell().add(new Paragraph("🏠 Địa chỉ:")));
-        infoTable.addCell(new Cell().add(new Paragraph(d.getOrder().getAddress())));
+//        infoTable.addCell(new Cell().add(new Paragraph(d.getOrder().getAddress())));
 
         infoTable.addCell(new Cell().add(new Paragraph("💰 Tổng tiền:")));
         infoTable.addCell(new Cell().add(new Paragraph(String.valueOf(d.getOrder().getTotalAmount()))));

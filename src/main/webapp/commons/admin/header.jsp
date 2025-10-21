@@ -92,8 +92,8 @@
                            href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
                             <c:choose>
-                                <c:when test="${not empty sessionScope.account.avatar}">
-                                    <img src="${pageContext.request.contextPath}/assets/images/${sessionScope.account.avatar}"
+                                <c:when test="${not empty account.avatar}">
+                                    <img src="${pageContext.request.contextPath}/assets/images/${account.avatar}"
                                          alt="avatar" class="rounded-circle me-2"
                                          width="32" height="32" style="object-fit: cover;">
                                 </c:when>
@@ -105,7 +105,7 @@
                                 </c:otherwise>
                             </c:choose>
                             <span class="fw-semibold text-dark">
-                                ${sessionScope.account.username}
+                                ${account.username}
                             </span>
                             <i class="bi bi-caret-down-fill text-secondary small"></i>
                         </a>

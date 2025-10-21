@@ -5,16 +5,17 @@ import java.util.Optional;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import ute.shop.dao.IUserDao;
 import ute.shop.dao.impl.UserDaoImpl;
 import ute.shop.entity.User;
 import ute.shop.utils.GoogleOAuthUtils;
 import ute.shop.utils.GoogleOAuthUtils.GoogleUserInfo;
+import ute.shop.utils.JwtUtil;
 
 @WebServlet(urlPatterns = "/oauth2callback")
 public class GoogleCallbackServlet extends HttpServlet {
@@ -65,9 +66,22 @@ public class GoogleCallbackServlet extends HttpServlet {
 				}
 			}
 
-			// Lưu người dùng vào session
-			HttpSession session = request.getSession();
-			session.setAttribute("account", user);
+			// XÓA COOKIE CŨ
+			Cookie oldJwtCookie = new Cookie("jwt_token", "");
+			oldJwtCookie.setMaxAge(0);
+			oldJwtCookie.setPath("/");
+			oldJwtCookie.setHttpOnly(true);
+			response.addCookie(oldJwtCookie);
+
+			// Tạo JWT token mới	
+			String jwtToken = JwtUtil.generateToken(user);
+
+			// Tạo Cookie an toàn để lưu trữ token
+			Cookie jwtCookie = new Cookie("jwt_token", jwtToken);
+			jwtCookie.setMaxAge(24 * 60 * 60);
+			jwtCookie.setPath("/");
+			jwtCookie.setHttpOnly(true);
+			response.addCookie(jwtCookie);
 
 			// Điều hướng theo vai trò
 			String redirectUrl;
