@@ -22,25 +22,44 @@
 			<div class="mb-4">
 				<h5>📦 Thông tin giao hàng</h5>
 				<div class="card p-3">
-					<div class="mb-3">
-						<label for="fullname" class="form-label">Họ và tên</label> <input
-							type="text" id="fullname" name="fullname"
-							value="${sessionScope.user.fullName}" class="form-control"
-							required>
+					<div class="card mb-3">
+						<div class="card-header bg-light fw-bold">📦 Chọn địa chỉ
+							giao hàng</div>
+						<div class="card-body">
+							<c:choose>
+								<c:when test="${not empty addresses}">
+									<c:forEach var="addr" items="${addresses}">
+										<div class="form-check mb-2 p-2 border rounded">
+											<input class="form-check-input" type="radio"
+												name="selectedAddressId" id="address-${addr.addressId}"
+												value="${addr.addressId}"
+												<c:if test="${defaultAddress != null && addr.addressId == defaultAddress.addressId}">checked</c:if>>
+											<label class="form-check-label"
+												for="address-${addr.addressId}"> <strong>${addr.recipientName}</strong>
+												(${addr.phoneNumber})<br> ${addr.addressLine},
+												${addr.ward}, ${addr.district}, ${addr.city} <c:if
+													test="${addr.isDefault}">
+													<span class="badge bg-success ms-2">Mặc định</span>
+												</c:if>
+											</label>
+										</div>
+									</c:forEach>
+									<a href="${pageContext.request.contextPath}/user/address"
+										class="btn btn-sm btn-outline-primary mt-2">✏️ Quản lý địa
+										chỉ</a>
+								</c:when>
+								<c:otherwise>
+									<div class="alert alert-warning">
+										Bạn chưa có địa chỉ giao hàng. <a
+											href="${pageContext.request.contextPath}/user/address"
+											class="alert-link">Thêm ngay</a>.
+									</div>
+								</c:otherwise>
+							</c:choose>
+						</div>
 					</div>
 
-					<div class="mb-3">
-						<label for="phone" class="form-label">Số điện thoại</label> <input
-							type="text" id="phone" name="phone"
-							value="${sessionScope.user.phone}" class="form-control" required>
-					</div>
 
-					<div class="mb-3">
-						<label for="address" class="form-label">Địa chỉ giao hàng</label>
-						<textarea id="address" name="address" rows="2"
-							class="form-control"
-							placeholder="Nhập địa chỉ nhận hàng chi tiết" required>${sessionScope.user.address}</textarea>
-					</div>
 				</div>
 			</div>
 			<div class="mt-2 mb-2">

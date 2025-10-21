@@ -1,4 +1,4 @@
-console.log("product-detail.js optimized");
+console.log("product-detail.js new");
 
 // ==========================
 // DOM Elements Cache
@@ -162,6 +162,13 @@ window.validateSelection = validateSelection;
 // Update Variant Info
 // ==========================
 function updateVariantInfo(data) {
+	console.group("🔄 Cập nhật variant thông tin");
+		console.log("🆔 Variant ID:", data.variantId || "(không có)");
+		console.log("💰 Giá hiện tại:", data.price ? formatCurrency(data.price) : "(không có)");
+		console.log("💸 Giá cũ:", data.oldPrice ? formatCurrency(data.oldPrice) : "(không có)");
+		console.log("📦 Tồn kho:", data.stock ?? "(không có)");
+		console.log("🖼 Ảnh:", data.imageUrl || "(không có)");
+		console.groupEnd();
 	var currentPriceEl = getEl("current-price");
 	var oldPriceEl = getEl("old-price");
 	var stockEl = getEl("stock-value");
@@ -197,9 +204,11 @@ function updateVariantInfo(data) {
 		mainImg.src = appContext + data.imageUrl;
 	}
 
-	var variantInput = getEl("variantId");
-	if (variantInput && data.variantId) {
-		variantInput.value = data.variantId;
+	var variantInput1 = getEl("variantId");
+	var variantInput2 = getEl("variantIdNow");
+	if (data.variantId) {
+	    if (variantInput1) variantInput1.value = data.variantId;
+	    if (variantInput2) variantInput2.value = data.variantId;
 	}
 }
 
@@ -220,8 +229,9 @@ function setupVariantListener() {
 	for (var i = 0; i < radios.length; i++) {
 		radios[i].addEventListener("change", function() {
 			var selectedOptions = getSelectedOptions();
+			console.log("🧩 Lựa chọn hiện tại:", selectedOptions);
 			var options = Object.assign({}, selectedOptions, { productId: productId });
-
+			console.log("📦 Gửi dữ liệu đến API:", options);
 			fetch(appContext + "/api/variant/select", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },

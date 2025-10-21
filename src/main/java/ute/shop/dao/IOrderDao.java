@@ -10,7 +10,6 @@ public interface IOrderDao {
 	List<Order> getAll();
 
 	Order getById(int id);
-	Order save(Order order);
 	Order insert(Order order);
 
 	void update(Order order);

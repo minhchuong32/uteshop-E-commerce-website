@@ -9,12 +9,14 @@ import ute.shop.service.ICartItemService;
 import ute.shop.service.IDeliveryService;
 import ute.shop.service.IOrderService;
 import ute.shop.service.IPromotionService;
+import ute.shop.service.IShippingAddressService;
 import ute.shop.service.IShopService;
 import ute.shop.service.impl.CarrierServiceImpl;
 import ute.shop.service.impl.CartItemServiceImpl;
 import ute.shop.service.impl.DeliveryServiceImpl;
 import ute.shop.service.impl.OrderServiceImpl;
 import ute.shop.service.impl.PromotionServiceImpl;
+import ute.shop.service.impl.ShippingAddressServiceImpl;
 import ute.shop.service.impl.ShopServiceImpl;
 
 import java.io.IOException;
@@ -36,6 +38,7 @@ public class CheckoutController extends HttpServlet {
 	private final IShopService shopservice = new ShopServiceImpl();
 	private final ICarrierService carrierService = new CarrierServiceImpl();
 	private final IDeliveryService deliveryService = new DeliveryServiceImpl();
+	private final IShippingAddressService addressService = new ShippingAddressServiceImpl();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -44,6 +47,20 @@ public class CheckoutController extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
+		// 🔹 Lấy danh sách địa chỉ giao hàng của user
+	    List<ShippingAddress> addresses = addressService.getAddressesByUser(user.getUserId());
+	    req.setAttribute("addresses", addresses);
+
+	    // 🔹 Tìm địa chỉ mặc định
+	    ShippingAddress defaultAddress = addresses.stream()
+	    		.filter(ShippingAddress::getIsDefault)
+	            .findFirst()
+	            .orElse(null);
+	    req.setAttribute("defaultAddress", defaultAddress);
+
+	    if (defaultAddress == null) {
+	        req.setAttribute("noDefaultAddress", true);
+	    }
 
 		String[] selectedParams = req.getParameterValues("selectedItems");
 		List<CartItem> cartItems;
@@ -68,7 +85,6 @@ public class CheckoutController extends HttpServlet {
 				.collect(Collectors.groupingBy(item -> item.getProductVariant().getProduct().getShop().getShopId()));
 
 		// Thêm danh sách đơn vị vận chuyển
-
 		List<Carrier> carriers = carrierService.findAll();
 		req.setAttribute("carriers", carriers);
 
@@ -97,7 +113,25 @@ public class CheckoutController extends HttpServlet {
 
 		String[] selectedIds = req.getParameterValues("selectedItems");
 		String payment = req.getParameter("paymentMethod").toUpperCase();
-		String address = req.getParameter("address");
+		
+		//Địa chỉ
+		String addressIdStr = req.getParameter("selectedAddressId");
+		ShippingAddress shippingAddress = null;
+		if (addressIdStr != null && !addressIdStr.isEmpty()) {
+		    int addrId = Integer.parseInt(addressIdStr);
+		    shippingAddress = addressService.getById(addrId);
+		} else {
+		    // fallback: lấy địa chỉ mặc định
+		    List<ShippingAddress> addresses = addressService.getAddressesByUser(user.getUserId());
+		    shippingAddress = addresses.stream().filter(ShippingAddress::getIsDefault).findFirst().orElse(null);
+		}
+
+		if (shippingAddress == null) {
+		    req.setAttribute("error", "Vui lòng chọn hoặc thêm địa chỉ giao hàng!");
+		    doGet(req, resp);
+		    return;
+		}
+
 
 		if (selectedIds == null || selectedIds.length == 0) {
 			req.setAttribute("error", "Vui lòng chọn sản phẩm cần thanh toán!");
@@ -179,7 +213,7 @@ public class CheckoutController extends HttpServlet {
 			order.setPaymentMethod(payment);
 			order.setStatus("Mới");
 			order.setCreatedAt(new Date());
-			order.setAddress(address);
+			order.setShippingAddress(shippingAddress);
 			order.setTotalAmount(total);
 
 			// ----- OrderDetails -----

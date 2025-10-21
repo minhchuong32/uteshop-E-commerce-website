@@ -25,23 +25,25 @@ public class ProductVariantDaoImpl implements IProductVariantDao {
 
     @Override
     public ProductVariant findByOptions(Integer productId, Map<String, Object> selectedOptions) {
-        EntityManager em = JPAConfig.getEntityManager();
+    	EntityManager em = JPAConfig.getEntityManager();
         try {
-            StringBuilder jpql = new StringBuilder("SELECT v FROM ProductVariant v WHERE v.product.productId = :pid");
-
-            // Xây dựng query động dựa trên số lượng options
-            for (String key : selectedOptions.keySet()) {
-                jpql.append(" AND v.optionName = :optName AND v.optionValue = :optValue");
+            if (selectedOptions == null || selectedOptions.isEmpty()) {
+            	System.out.println("[DAO] ❌ Không có lựa chọn nào được truyền vào");
+                return null;
             }
 
-            TypedQuery<ProductVariant> query = em.createQuery(jpql.toString(), ProductVariant.class);
+            // Lấy cặp key-value đầu tiên trong map
+            Map.Entry<String, Object> entry = selectedOptions.entrySet().iterator().next();
+
+            String jpql = "SELECT v FROM ProductVariant v "
+                        + "WHERE v.product.productId = :pid "
+                        + "AND v.optionName = :optName "
+                        + "AND v.optionValue = :optValue";
+
+            TypedQuery<ProductVariant> query = em.createQuery(jpql, ProductVariant.class);
             query.setParameter("pid", productId);
-
-            // Set parameters cho từng option
-            for (Entry<String, Object> e : selectedOptions.entrySet()) {
-                query.setParameter("optName", e.getKey());
-                query.setParameter("optValue", e.getValue());
-            }
+            query.setParameter("optName", entry.getKey());
+            query.setParameter("optValue", entry.getValue().toString());
 
             return query.getResultStream().findFirst().orElse(null);
         } finally {

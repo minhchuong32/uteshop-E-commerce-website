@@ -109,17 +109,7 @@ public class OrderServiceImpl implements IOrderService {
 	public boolean updateStatus(int orderId, String status) {
 		return orderDao.updateStatus(orderId, status);
 	}
-
-	@Override
-	public Order save(Order order) {
-		return orderDao.insert(order);
-	}
-
-	public void insert(Order order) {
-		
-		
-	}
-
+	
 	@Override
 	public List<Object[]> getPaymentMethodStatsByShop(int shopId) {
 		return orderDao.getPaymentMethodStatsByShop(shopId);
@@ -128,6 +118,11 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public List<Map<String, Object>> getReturnCancelRateByMonth(int shopId, int month, int year) {
 		return orderDao.getReturnCancelRateByMonth(shopId, month, year);
+	}
+
+	@Override
+	public Order save(Order order) {
+		return orderDao.insert(order);
 	}
 
 	
