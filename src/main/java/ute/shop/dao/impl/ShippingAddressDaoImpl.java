@@ -3,6 +3,7 @@ package ute.shop.dao.impl;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 import ute.shop.config.JPAConfig;
 import ute.shop.dao.IShippingAddressDao;
@@ -75,6 +76,46 @@ public class ShippingAddressDaoImpl implements IShippingAddressDao {
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+	}
+
+	@Override
+	public void unsetOtherDefaults(int userId) {
+		EntityManager em = JPAConfig.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.createQuery(
+                "UPDATE ShippingAddress s SET s.isDefault = false WHERE s.user.userId = :uid"
+            ).setParameter("uid", userId)
+             .executeUpdate();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            throw e;
+        } finally {
+            em.close();
+        }
+	}
+
+	@Override
+	public void unsetOtherDefaults(int userId, int excludeId) {
+		EntityManager em = JPAConfig.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.createQuery(
+                "UPDATE ShippingAddress s SET s.isDefault = false WHERE s.user.userId = :uid AND s.addressId <> :aid"
+            )
+            .setParameter("uid", userId)
+            .setParameter("aid", excludeId)
+            .executeUpdate();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
             throw e;
         } finally {
             em.close();
