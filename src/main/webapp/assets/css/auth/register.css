@@ -70,3 +70,30 @@ body {
 	width: 20px;
 	height: 20px;
 }
+
+.btn-facebook {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	padding: 12px 20px;
+	background-color: #fff;
+	border: 1px solid #dadce0;
+	border-radius: 4px;
+	color: #3c4043;
+	font-weight: 500;
+	text-decoration: none;
+	transition: all 0.3s ease;
+}
+
+.btn-facebook:hover {
+	background-color: #f8f9fa;
+	border-color: #dadce0;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	color: #3c4043;
+}
+
+.btn-facebook i {
+	color: #1877f2; /* Màu xanh Facebook */
+	font-size: 20px;
+}

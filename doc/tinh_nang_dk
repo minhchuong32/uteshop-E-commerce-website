@@ -1,0 +1,27 @@
+Cấu hình Google
+Google Cloud Console
+Lấy Client ID, Secret
+Người dùng vào trang login.jsp, nhấp vào nút "Đăng nhập với Google".
+
+Trình duyệt gửi yêu cầu đến /login-google.
+
+GoogleLoginServlet nhận yêu cầu, tạo URL và chuyển hướng người dùng sang trang đăng nhập của Google.
+
+Người dùng đăng nhập và đồng ý cấp quyền trên trang của Google.
+
+Google chuyển hướng người dùng trở lại trang của bạn, tới địa chỉ /oauth2callback kèm theo một code.
+
+GoogleCallbackServlet nhận code, dùng nó để lấy thông tin người dùng (ID, email, tên, ảnh).
+
+Servlet kiểm tra trong database:
+
+Nếu google_id đã có, đăng nhập thành công.
+
+Nếu chưa có, kiểm tra email. Nếu email đã có, liên kết tài khoản (cập nhật google_id).
+
+Nếu cả hai đều chưa có, tạo một tài khoản User mới.
+
+Lưu đối tượng User vào session và chuyển hướng người dùng đến trang chủ.
+
+
+

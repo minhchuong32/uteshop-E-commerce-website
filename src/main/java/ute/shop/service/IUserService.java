@@ -55,4 +55,5 @@ public interface IUserService {
 	long countAllUsers();
 	
 	Optional<User> findByGoogleId(String googleId);
+	
 }

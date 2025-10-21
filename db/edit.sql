@@ -149,3 +149,7 @@ ALTER TABLE users ALTER COLUMN password VARCHAR(255) NULL;
 ALTER TABLE users
 ADD CONSTRAINT chk_auth_method 
 CHECK ([password] IS NOT NULL OR [google_id] IS NOT NULL);
+
+-- them id cho login = fb 
+ALTER TABLE users ADD facebook_id NVARCHAR(255) UNIQUE NULL;
+

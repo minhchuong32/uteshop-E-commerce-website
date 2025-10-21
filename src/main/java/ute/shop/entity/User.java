@@ -14,7 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Integer userId;
-    
+
     @Column(name = "google_id", unique = true, length = 255)
     private String googleId;
     // Tên đăng nhập: NVARCHAR(50)
