@@ -113,6 +113,11 @@
 									class="bi bi-bag-check me-2"></i> Đơn hàng
 							</a></li>
 							<li><a class="dropdown-item"
+								href="${pageContext.request.contextPath}/user/address"> <i
+									class="bi bi-geo-alt-fill me-2"></i> Địa chỉ giao hàng
+							</a></li>
+
+							<li><a class="dropdown-item"
 								href="${pageContext.request.contextPath}/user/complaints"> <i
 									class="bi bi-exclamation-diamond me-2"></i> Khiếu nại của tôi
 							</a></li>

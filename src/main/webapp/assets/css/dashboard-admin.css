@@ -1,4 +1,3 @@
-
 /* ================== CLICK ================== */
 .dashboard-card {
 	cursor: pointer;
@@ -7,6 +6,7 @@
 	color: inherit;
 	display: block;
 }
+
 .dashboard-card:hover {
 	transform: translateY(-4px);
 	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
@@ -17,6 +17,7 @@
 .dashboard-card .card-body {
 	padding: 1.3rem;
 }
+
 .dashboard-card i {
 	display: block;
 	margin-bottom: 0.4rem;
