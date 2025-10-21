@@ -4,12 +4,12 @@ import ute.shop.entity.User;
 import ute.shop.service.IUserService;
 import ute.shop.service.impl.UserServiceImpl;
 
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.*;
 
+import java.io.File;
 import java.io.IOException;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
@@ -48,6 +48,12 @@ public class ProfileController extends HttpServlet {
 			return;
 		}
 
+		// Thư mục upload thực tế
+		String uploadPath = request.getServletContext().getRealPath("/assets/images/avatars");
+		File uploadDir = new File(uploadPath);
+		if (!uploadDir.exists())
+			uploadDir.mkdirs();
+
 		// Lấy dữ liệu form
 		String email = request.getParameter("email");
 		String oldPassword = request.getParameter("oldPassword");
@@ -58,14 +64,17 @@ public class ProfileController extends HttpServlet {
 		String name = request.getParameter("name");
 		String address = request.getParameter("address");
 
-		// Upload avatar nếu có
-		Part avatarPart = request.getPart("avatarFile");
-		 if (avatarPart != null && avatarPart.getSize() > 0) {
-	            String fileName = avatarPart.getSubmittedFileName();
-	            String uploadPath = request.getServletContext().getRealPath("/uploads");
-	            avatarPart.write(uploadPath + "/" + fileName);
-	            account.setAvatar(fileName); // chỉ lưu tên file
-	        }
+		// Upload avatar
+		Part filePart = request.getPart("avatar");
+		String avatarFileName = null;
+
+		if (filePart != null && filePart.getSize() > 0) {
+			String originalFileName = java.nio.file.Path.of(filePart.getSubmittedFileName()).getFileName().toString();
+			avatarFileName = originalFileName;
+
+			// Lưu file vào thư mục thực tế
+			filePart.write(uploadPath + File.separator + avatarFileName);
+		}
 
 		// Gán lại username, email nếu có
 		if (username != null && !username.trim().isEmpty()) {
@@ -83,29 +92,35 @@ public class ProfileController extends HttpServlet {
 		if (name != null && !name.trim().isEmpty()) {
 			account.setName(name);
 		}
-	
+
+		// Lưu đường dẫn tương đối đúng format DB
+		if (avatarFileName != null) {
+			account.setAvatar("/avatars/" + avatarFileName);
+		} else {
+			account.setAvatar("/avatars/default.jpg"); // ảnh mặc định
+		}
+
 		// Đổi mật khẩu nếu có
-        boolean changePwd = false;
-        if (oldPassword != null && !oldPassword.isEmpty()) {
-        	String oldPasswordHash = service.hashPassword(oldPassword);
-            if (!oldPasswordHash.equals(account.getPassword())) {
-                request.setAttribute("error", "Mật khẩu hiện tại không đúng!");
-                request.getRequestDispatcher("/views/user/profile.jsp").forward(request, response);
-                return;
-            }
-            if (!newPassword.equals(confirmPassword)) {
-                request.setAttribute("error", "Xác nhận mật khẩu mới không khớp!");
-                request.getRequestDispatcher("/views/user/profile.jsp").forward(request, response);
-                return;
-            }
-            account.setPassword(newPassword);
-            changePwd = true; // xác nhận thay đôỉ pass  
-        }
+		boolean changePwd = false;
+		if (oldPassword != null && !oldPassword.isEmpty()) {
+			String oldPasswordHash = service.hashPassword(oldPassword);
+			if (!oldPasswordHash.equals(account.getPassword())) {
+				request.setAttribute("error", "Mật khẩu hiện tại không đúng!");
+				request.getRequestDispatcher("/views/user/profile.jsp").forward(request, response);
+				return;
+			}
+			if (!newPassword.equals(confirmPassword)) {
+				request.setAttribute("error", "Xác nhận mật khẩu mới không khớp!");
+				request.getRequestDispatcher("/views/user/profile.jsp").forward(request, response);
+				return;
+			}
+			account.setPassword(newPassword);
+			changePwd = true; // xác nhận thay đôỉ pass
+		}
 
-        // Update DB
-        boolean updated = service.updatePwd(account, changePwd);
+		// Update DB
+		boolean updated = service.updatePwd(account, changePwd);
 
-		
 		if (updated) {
 			session.setAttribute("account", account);
 			request.setAttribute("success", "Cập nhật hồ sơ thành công!");

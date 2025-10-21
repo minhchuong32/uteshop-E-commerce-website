@@ -14,6 +14,10 @@ import ute.shop.service.impl.OrderServiceImpl;
 
 @WebServlet(urlPatterns = { "/user/orders/cancel" })
 public class CancelOrderController extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final IOrderService orderService = new OrderServiceImpl();
 
 	@Override

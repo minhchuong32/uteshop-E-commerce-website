@@ -52,11 +52,11 @@ Uteshop-servlet/
 - Cài **SQL Server** (tham khảo hướng dẫn trên YouTube).
 - Tạo database uteshopdb
 - Tải mã nguồn UTEShop từ GitHub nhóm.
-- Chạy script uteshop.sql để tạo CSDL.
+- Chạy script /db/uteshop_insert_db_sqlserver.sql để tạo CSDL.
 - Khởi động Tomcat --> truy cập http://localhost:8080/uteshop.
 - Đăng nhập bằng tài khoản Admin mặc định:
-o	Username: admin@uteshop.com
-o	Password: admin123
+o	Username: chuongminh3225@gmail.com
+o	Password: 123
 ---
 ## 👥 3. Phân chia công việc
 ### **Nguyễn Thị Thanh Thùy – Vendor + Shipper**
@@ -206,4 +206,22 @@ o	Password: admin123
 - Quản lý đơn hàng được phân công giao.
 - Cập nhật trạng thái giao hàng. 
 - Thống kê số lượng đơn hàng được giao.
+
+### Điểm cộng kỹ thuật
+- Session + Cookie + Filter (ghi nhớ đăng nhập, chặn trang không đúng quyền).
+- Upload ảnh sản phẩm (multipart/form-data).
+- Hash mật khẩu (MD5/SHA-256) thay vì lưu plain text.
+- Phân trang (Pagination) sản phẩm. 
+
+### Điểm cộng giao diện
+- Dùng Bootstrap để làm UI responsive.
+- Giao diện chia layout: header (menu), sidebar (danh mục), body (danh sách sản phẩm), footer.
+- Trang quản trị riêng cho Admin (quản lý users, shops, orders, reports).
+
+### Điểm cộng sáng tạo 
+- Tích hợp thanh toán giả lập: (COD, MoMo, VNPAY – chỉ cần fake flow, không cần cổng thật).
+- Hệ thống khuyến mãi (Promotion): giảm giá theo % hoặc số tiền cố định.
+- Hệ thống giao hàng (Delivery): Shipper nhận đơn và cập nhật trạng thái.
+- Tìm kiếm nâng cao: theo tên, giá, category.
+- Dashboard báo cáo: Doanh thu theo tháng, số lượng đơn hàng, top sản phẩm bán chạy (chart JS).
 

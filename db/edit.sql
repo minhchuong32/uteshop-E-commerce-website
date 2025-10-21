@@ -126,3 +126,26 @@ INSERT INTO deliveries (shipper_id, order_id, status, note_text, created_at, car
 
 
 
+-- Update table users: [20/10/25]
+ALTER TABLE users ADD google_id VARCHAR(255);
+
+--  Tạo index cho google_id để tăng tốc độ truy vấn (và chỉ unique nếu không NULL)
+CREATE UNIQUE INDEX idx_users_google_id_notnull
+ON users(google_id)
+WHERE google_id IS NOT NULL;
+
+--  Tạo index cho email nếu chưa có
+IF NOT EXISTS (
+    SELECT 1 FROM sys.indexes WHERE name = 'idx_users_email' AND object_id = OBJECT_ID('users')
+)
+BEGIN
+    CREATE INDEX idx_users_email ON users(email);
+END
+
+-- cho phep pass null (dang nhap = gg)
+ALTER TABLE users ALTER COLUMN password VARCHAR(255) NULL;
+
+-- pass or id gg not null 
+ALTER TABLE users
+ADD CONSTRAINT chk_auth_method 
+CHECK ([password] IS NOT NULL OR [google_id] IS NOT NULL);

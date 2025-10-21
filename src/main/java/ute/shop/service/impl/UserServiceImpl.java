@@ -139,4 +139,9 @@ public class UserServiceImpl implements IUserService {
 	public long countAllUsers() {
 		return userDao.countAllUsers();
 	}
+
+	@Override
+	public Optional<User> findByGoogleId(String googleId) {
+		return userDao.findByGoogleId(googleId);
+	}
 }
