@@ -104,165 +104,129 @@ public class CheckoutController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		User user = (User) req.getSession().getAttribute("account");
-		if (user == null) {
-			resp.sendRedirect(req.getContextPath() + "/login");
-			return;
-		}
+	    if (user == null) {
+	        resp.sendRedirect(req.getContextPath() + "/login");
+	        return;
+	    }
 
-		req.setCharacterEncoding("UTF-8");
+	    req.setCharacterEncoding("UTF-8");
+	    String[] selectedIds = req.getParameterValues("selectedItems");
+	    String payment = req.getParameter("paymentMethod").toUpperCase();
 
-		String[] selectedIds = req.getParameterValues("selectedItems");
-		String payment = req.getParameter("paymentMethod").toUpperCase();
-		
-		//Địa chỉ
-		String addressIdStr = req.getParameter("selectedAddressId");
-		ShippingAddress shippingAddress = null;
-		if (addressIdStr != null && !addressIdStr.isEmpty()) {
-		    int addrId = Integer.parseInt(addressIdStr);
-		    shippingAddress = addressService.getById(addrId);
-		} else {
-		    // fallback: lấy địa chỉ mặc định
-		    List<ShippingAddress> addresses = addressService.getAddressesByUser(user.getUserId());
-		    shippingAddress = addresses.stream().filter(ShippingAddress::getIsDefault).findFirst().orElse(null);
-		}
+	    // Lấy địa chỉ giao hàng
+	    String addressIdStr = req.getParameter("selectedAddressId");
+	    ShippingAddress shippingAddress = null;
+	    if (addressIdStr != null && !addressIdStr.isEmpty()) {
+	        shippingAddress = addressService.getById(Integer.parseInt(addressIdStr));
+	    }
+	    if (shippingAddress == null) {
+	        req.setAttribute("error", "Vui lòng chọn hoặc thêm địa chỉ giao hàng!");
+	        doGet(req, resp);
+	        return;
+	    }
 
-		if (shippingAddress == null) {
-		    req.setAttribute("error", "Vui lòng chọn hoặc thêm địa chỉ giao hàng!");
-		    doGet(req, resp);
-		    return;
-		}
+	    // Lấy sản phẩm được chọn
+	    List<CartItem> selectedItems = cartService.getCartByIds(selectedIds);
+	    if (selectedItems.isEmpty()) {
+	        req.setAttribute("error", "Không tìm thấy sản phẩm được chọn!");
+	        doGet(req, resp);
+	        return;
+	    }
 
+	    // Lấy đơn vị vận chuyển
+	    Carrier carrier = null;
+	    BigDecimal shippingFee = new BigDecimal("30000"); // mặc định
+	    String carrierIdStr = req.getParameter("carrierId");
+	    if (carrierIdStr != null && !carrierIdStr.isEmpty()) {
+	        carrier = carrierService.findById(Integer.parseInt(carrierIdStr));
+	        if (carrier != null) shippingFee = carrier.getCarrierFee();
+	    }
 
-		if (selectedIds == null || selectedIds.length == 0) {
-			req.setAttribute("error", "Vui lòng chọn sản phẩm cần thanh toán!");
-			doGet(req, resp);
-			return;
-		}
+	    // Gom theo shop
+	    Map<Integer, List<CartItem>> itemsByShop = selectedItems.stream()
+	            .collect(Collectors.groupingBy(i -> i.getProductVariant().getProduct().getShop().getShopId()));
 
-		// Lấy item từ DB
-		List<CartItem> selectedItems = cartService.getCartByIds(selectedIds);
-		if (selectedItems.isEmpty()) {
-			req.setAttribute("error", "Không tìm thấy sản phẩm được chọn!");
-			doGet(req, resp);
-			return;
-		}
-		// Lấy đơn vị vận chuyển
-		String carrierIdStr = req.getParameter("carrierId");
-		Carrier carrier = null;
-		BigDecimal shippingFee = BigDecimal.ZERO;
-		if (carrierIdStr != null && !carrierIdStr.isEmpty()) {
-			int carrierId = Integer.parseInt(carrierIdStr);
-			carrier = carrierService.findById(carrierId);
-			if (carrier != null)
-				shippingFee = carrier.getCarrierFee();
-		} else {
-			shippingFee = new BigDecimal("30000"); // mặc định
-		}
+	    BigDecimal allShopTotal = BigDecimal.ZERO;
+	    boolean allSuccess = true;
 
-		// Gom theo shop
-		Map<Integer, List<CartItem>> itemsByShop = selectedItems.stream()
-				.collect(Collectors.groupingBy(i -> i.getProductVariant().getProduct().getShop().getShopId()));
+	    for (Map.Entry<Integer, List<CartItem>> entry : itemsByShop.entrySet()) {
+	        Integer shopId = entry.getKey();
+	        List<CartItem> shopItems = entry.getValue();
 
-		BigDecimal shippingFee1 = new BigDecimal("30000");
-		boolean allSuccess = true;
-		BigDecimal allShopTotal = BigDecimal.ZERO;
-		// ---- Lặp qua từng shop để tạo đơn riêng ----
-		for (Map.Entry<Integer, List<CartItem>> entry : itemsByShop.entrySet()) {
-			Integer shopId = entry.getKey();
-			List<CartItem> shopItems = entry.getValue();
+	        BigDecimal subtotal = shopItems.stream()
+	                .map(i -> i.getPrice().multiply(BigDecimal.valueOf(i.getQuantity())))
+	                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-			BigDecimal subtotal = shopItems.stream()
-					.map(i -> i.getPrice().multiply(BigDecimal.valueOf(i.getQuantity())))
-					.reduce(BigDecimal.ZERO, BigDecimal::add);
+	        // Áp dụng khuyến mãi
+	        BigDecimal discountTotal = BigDecimal.ZERO;
+	        for (CartItem item : shopItems) {
+	            String promoParam = req.getParameter("promotionId_product[" + item.getProductVariant().getProduct().getProductId() + "]");
+	            if (promoParam != null && !promoParam.isEmpty()) {
+	                Promotion promo = promotionService.findById(Integer.parseInt(promoParam));
+	                if (promo != null) {
+	                    BigDecimal price = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
+	                    BigDecimal discount = "percent".equalsIgnoreCase(promo.getDiscountType())
+	                            ? price.multiply(promo.getValue().divide(BigDecimal.valueOf(100)))
+	                            : promo.getValue();
+	                    discountTotal = discountTotal.add(discount.min(price));
+	                }
+	            }
+	        }
 
-			// --- Áp dụng khuyến mãi từng sản phẩm ---
-			BigDecimal productDiscount = BigDecimal.ZERO;
-			for (CartItem item : shopItems) {
-				String promoParam = req.getParameter(
-						"promotionId_product[" + item.getProductVariant().getProduct().getProductId() + "]");
-				if (promoParam != null && !promoParam.isEmpty()) {
-					Promotion promo = promotionService.findById(Integer.parseInt(promoParam));
-					if (promo != null) {
-						BigDecimal price = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
-						BigDecimal discount = BigDecimal.ZERO;
+	        BigDecimal total = subtotal.add(shippingFee).subtract(discountTotal).max(BigDecimal.ZERO);
+	        allShopTotal = allShopTotal.add(total);
 
-						if ("percent".equalsIgnoreCase(promo.getDiscountType())) {
-							discount = price.multiply(promo.getValue().divide(BigDecimal.valueOf(100))).setScale(0,
-									RoundingMode.HALF_UP);
-						} else if ("fixed".equalsIgnoreCase(promo.getDiscountType())) {
-							discount = promo.getValue();
-						}
+	        // Tạo Order
+	        Order order = new Order();
+	        order.setUser(user);
+	        order.setShop(shopservice.getById(shopId));
+	        order.setPaymentMethod(payment);
+	        order.setStatus("Mới");
+	        order.setCreatedAt(new Date());
+	        order.setShippingAddress(shippingAddress);
+	        order.setTotalAmount(total);
 
-						if (discount.compareTo(price) > 0)
-							discount = price; // tránh âm tiền
-						productDiscount = productDiscount.add(discount);
-					}
-				}
-			}
+	        // Tạo OrderDetail
+	        shopItems.forEach(ci -> {
+	            OrderDetail od = new OrderDetail();
+	            od.setOrder(order);
+	            od.setProductVariant(ci.getProductVariant());
+	            od.setQuantity(ci.getQuantity());
+	            od.setPrice(ci.getPrice());
+	            order.getOrderDetails().add(od);
+	        });
 
-			BigDecimal total = subtotal.add(shippingFee1).subtract(productDiscount);
-			if (total.compareTo(BigDecimal.ZERO) < 0)
-				total = BigDecimal.ZERO;
+	        // Tạo Delivery
+	        Delivery delivery = new Delivery();
+	        delivery.setOrder(order);
+	        delivery.setCreatedAt(new Date());
+	        delivery.setStatus("Mới");
+	        delivery.setCarrier(carrier);
+	        order.getDeliveries().add(delivery);
 
-			allShopTotal = allShopTotal.add(total);
+	        // Lưu Order + Details + Delivery
+	        Order savedOrder = orderService.save(order);
+	        if (savedOrder != null) {
+	            shopItems.forEach(ci -> cartService.removeFromCart(ci.getCartItemId()));
+	        } else {
+	            allSuccess = false;
+	        }
+	    }
 
-			// ----- Tạo Order -----
-			Order order = new Order();
-			order.setUser(user);
-			order.setShop(shopservice.getById(shopId));
-			order.setPaymentMethod(payment);
-			order.setStatus("Mới");
-			order.setCreatedAt(new Date());
-			order.setShippingAddress(shippingAddress);
-			order.setTotalAmount(total);
-
-			// ----- OrderDetails -----
-			for (CartItem ci : shopItems) {
-				OrderDetail od = new OrderDetail();
-				od.setOrder(order);
-				od.setProductVariant(ci.getProductVariant());
-				od.setQuantity(ci.getQuantity());
-				od.setPrice(ci.getPrice());
-				order.getOrderDetails().add(od);
-			}
-
-			// ----- Delivery -----
-			Delivery delivery = new Delivery();
-			delivery.setOrder(order);
-			delivery.setCreatedAt(new Date());
-			delivery.setStatus("Mới");
-			delivery.setCarrier(carrier);
-			order.getDeliveries().add(delivery);
-
-			// ----- Lưu toàn bộ trong 1 lần -----
-			Order savedOrder = orderService.save(order);
-
-			if (savedOrder != null) {
-				shopItems.forEach(ci -> cartService.removeFromCart(ci.getCartItemId()));
-			} else {
-				allSuccess = false;
-			}
-
-		}
-
-		if (allSuccess) {
-			req.getSession().setAttribute("paymentTotal", allShopTotal);
-
-			switch (payment) {
-			case "COD" -> {
-				req.getSession().setAttribute("success", "🎉 Đặt hàng thành công!");
-				resp.sendRedirect(req.getContextPath() + "/user/orders");
-			}
-			case "MOMO" -> resp.sendRedirect(req.getContextPath() + "/user/payment/momo");
-			case "VNPAY" -> resp.sendRedirect(req.getContextPath() + "/user/payment/vnpay");
-			default -> {
-				req.getSession().setAttribute("error", "Phương thức thanh toán không hợp lệ!");
-				resp.sendRedirect(req.getContextPath() + "/user/checkout");
-			}
-			}
-		} else {
-			req.setAttribute("error", "❌ Có lỗi xảy ra khi đặt hàng một số shop, vui lòng thử lại!");
-			doGet(req, resp);
-		}
+	    if (allSuccess) {
+	        req.getSession().setAttribute("paymentTotal", allShopTotal);
+	        switch (payment) {
+	            case "COD" -> resp.sendRedirect(req.getContextPath() + "/user/orders");
+	            case "MOMO" -> resp.sendRedirect(req.getContextPath() + "/user/payment/momo");
+	            case "VNPAY" -> resp.sendRedirect(req.getContextPath() + "/user/payment/vnpay");
+	            default -> {
+	                req.getSession().setAttribute("error", "Phương thức thanh toán không hợp lệ!");
+	                resp.sendRedirect(req.getContextPath() + "/user/checkout");
+	            }
+	        }
+	    } else {
+	        req.setAttribute("error", "❌ Có lỗi xảy ra khi đặt hàng một số shop, vui lòng thử lại!");
+	        doGet(req, resp);
+	    }
 	}
 }

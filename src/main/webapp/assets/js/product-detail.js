@@ -1,4 +1,4 @@
-console.log("product-detail.js new");
+console.log("product-detail.js new new");
 
 // ==========================
 // DOM Elements Cache
@@ -163,11 +163,11 @@ window.validateSelection = validateSelection;
 // ==========================
 function updateVariantInfo(data) {
 	console.group("🔄 Cập nhật variant thông tin");
-		console.log("🆔 Variant ID:", data.variantId || "(không có)");
-		console.log("💰 Giá hiện tại:", data.price ? formatCurrency(data.price) : "(không có)");
-		console.log("💸 Giá cũ:", data.oldPrice ? formatCurrency(data.oldPrice) : "(không có)");
-		console.log("📦 Tồn kho:", data.stock ?? "(không có)");
-		console.log("🖼 Ảnh:", data.imageUrl || "(không có)");
+		console.log("Variant ID:", data.variantId );
+		console.log("Giá hiện tại:", data.price);
+		console.log("Giá cũ:", data.oldPrice );
+		console.log("Tồn kho:", data.stock);
+		console.log("Ảnh:", data.imageUrl);
 		console.groupEnd();
 	var currentPriceEl = getEl("current-price");
 	var oldPriceEl = getEl("old-price");

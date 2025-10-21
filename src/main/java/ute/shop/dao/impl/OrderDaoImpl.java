@@ -51,21 +51,15 @@ public class OrderDaoImpl implements IOrderDao {
 	    EntityTransaction tx = em.getTransaction();
 	    try {
 	        tx.begin();
-	        
-	        // Gắn lại quan hệ hai chiều nếu cần (đảm bảo các entity con có order)
 	        if (order.getOrderDetails() != null) {
 	            order.getOrderDetails().forEach(od -> od.setOrder(order));
 	        }
 	        if (order.getDeliveries() != null) {
 	            order.getDeliveries().forEach(dv -> dv.setOrder(order));
 	        }
-
 	        em.persist(order);
-	        em.flush(); // bắt buộc để sinh ID ngay lập tức
 	        tx.commit();
-
-	        // Lấy lại entity sau khi persist (với ID mới)
-	        return em.find(Order.class, order.getOrderId());
+	        return order; // ID đã sinh, không cần em.find()
 	    } catch (Exception e) {
 	        if (tx.isActive()) tx.rollback();
 	        e.printStackTrace();
