@@ -119,7 +119,7 @@ public class OrderController extends HttpServlet {
 				return;
 			}
 
-			// Cập nhật thông tin đơn hàng
+//			 Cập nhật thông tin đơn hàng
 			order.setAddress(address);
 			order.setPaymentMethod(payment);
 			if (orderStatusParam != null && !orderStatusParam.isEmpty()) {

@@ -39,17 +39,18 @@ public class Order {
     // Ngày tạo
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false)
-    private Date createdAt = new Date();
-
-    // Địa chỉ giao hàng
-    @Column(name = "address", length = 255, columnDefinition = "NVARCHAR(255)")
-    private String address;
-
+    private Date createdAt = new Date(); 
+    
+    // ========== Quan hệ ==========
     // Chi tiết đơn hàng
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
-
+    //Địa chỉ giao hàng (Order)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shipping_address_id", nullable = true)
+    private ShippingAddress shippingAddress;
+    
     // Giao hàng (lịch sử)
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Delivery> deliveries = new ArrayList<>();
