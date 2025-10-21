@@ -8,10 +8,9 @@ import java.util.Map;
 
 public interface IOrderService {
 	List<Order> getAll();
-
+	Order save(Order order);
 	Order getById(int id);
 
-	Order save(Order order);
 	void update(Order order);
 
 	void delete(int id);

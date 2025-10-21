@@ -51,13 +51,19 @@ public class OrderDaoImpl implements IOrderDao {
 	    EntityTransaction tx = em.getTransaction();
 	    try {
 	        tx.begin();
-	        em.persist(order); // chỉ cần persist Order
+	        if (order.getOrderDetails() != null) {
+	            order.getOrderDetails().forEach(od -> od.setOrder(order));
+	        }
+	        if (order.getDeliveries() != null) {
+	            order.getDeliveries().forEach(dv -> dv.setOrder(order));
+	        }
+	        em.persist(order);
 	        tx.commit();
-	        return order; // đã có ID và tất cả các con được cascade lưu tự động
+	        return order; // ID đã sinh, không cần em.find()
 	    } catch (Exception e) {
-	        tx.rollback();
+	        if (tx.isActive()) tx.rollback();
 	        e.printStackTrace();
-	        throw e;
+	        return null;
 	    } finally {
 	        em.close();
 	    }
@@ -317,25 +323,6 @@ public class OrderDaoImpl implements IOrderDao {
 	        if (tx.isActive()) tx.rollback();
 	        e.printStackTrace();
 	        return false;
-	    } finally {
-	        em.close();
-	    }
-	}
-
-	@Override
-	public Order save(Order order) {
-		EntityManager em = JPAConfig.getEntityManager();
-	    EntityTransaction tx = em.getTransaction();
-	    try {
-	        tx.begin();
-	        Order managed = em.merge(order);
-	        em.flush();
-	        tx.commit();
-	        return em.find(Order.class, managed.getOrderId());
-	    } catch (Exception e) {
-	        if (tx.isActive()) tx.rollback();
-	        e.printStackTrace();
-	        return null;
 	    } finally {
 	        em.close();
 	    }

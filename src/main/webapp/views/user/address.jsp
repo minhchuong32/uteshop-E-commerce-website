@@ -48,10 +48,10 @@
             <c:forEach var="a" items="${addresses}">
                 <tr>
                     <td>${a.recipientName}</td>
-                    <td>${a.phoneNumber}</td>
+                    <td class="text-center">${a.phoneNumber}</td>
                     <td>${a.addressLine}, ${a.ward}, ${a.district}, ${a.city}</td>
-                    <td><c:if test="${a.isDefault}">✅</c:if></td>
-                    <td>
+                    <td class="text-center"><c:if test="${a.isDefault}">✅</c:if></td>
+                    <td class="text-center">
                         <!-- Nút sửa -->
                         <button type="button" class="btn btn-sm btn-warning"
                             onclick="showEditForm('${a.addressId}', '${a.recipientName}', '${a.phoneNumber}', '${a.addressLine}', '${a.ward}', '${a.district}', '${a.city}', '${a.isDefault}')">
@@ -111,20 +111,5 @@
     </div>
 </div>
 
-<script>
-function showEditForm(id, name, phone, address, ward, district, city, isDefault) {
-    document.getElementById('editFormContainer').style.display = 'block';
-    document.getElementById('editAddressId').value = id;
-    document.getElementById('editRecipientName').value = name;
-    document.getElementById('editPhone').value = phone;
-    document.getElementById('editAddressLine').value = address;
-    document.getElementById('editWard').value = ward;
-    document.getElementById('editDistrict').value = district;
-    document.getElementById('editCity').value = city;
-    document.getElementById('editIsDefault').checked = (isDefault === 'true');
-}
+<script src="${pageContext.request.contextPath}/assets/js/user/address.js"></script>
 
-function cancelEdit() {
-    document.getElementById('editFormContainer').style.display = 'none';
-}
-</script>
