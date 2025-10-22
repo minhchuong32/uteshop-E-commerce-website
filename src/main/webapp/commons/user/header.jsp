@@ -86,7 +86,7 @@
 								</c:when>
 								<c:otherwise>
 									<img
-										src="${pageContext.request.contextPath}/assets/images/default.jpg"
+										src="${pageContext.request.contextPath}/assets/images/avatars/default.jpg"
 										alt="avatar" class="rounded-circle me-2" width="32"
 										height="32" style="object-fit: cover;">
 								</c:otherwise>

@@ -5,6 +5,7 @@
 	href="${pageContext.request.contextPath}/assets/css/theme.css">
 
 <div class="container">
+
 	<c:if test="${not empty successMessage}">
 		<div class="alert alert-success text-center fw-bold mt-3 mb-3">
 			${successMessage}</div>
@@ -36,7 +37,7 @@
 
 
 	<!-- Nếu không có đơn hàng -->
-	<c:if test="${not empty message}">
+	<c:if test="${ empty orders}">
 		<div class="text-center my-5">
 			<h4 class="fw-bold">Giỏ hàng trống</h4>
 			<p>Hãy thêm sản phẩm để tiếp tục mua sắm.</p>
@@ -86,7 +87,7 @@
 						<a class="btn btn-link text-primary" data-bs-toggle="collapse"
 							href="#detail-${o.orderId}" role="button" aria-expanded="false">
 							Xem chi tiết </a>
-							
+
 						<!-- Nút hủy đơn hàng: chỉ hiển thị nếu trạng thái là "Mới" -->
 						<c:if test="${o.status eq 'Mới'}">
 							<form method="post"
@@ -144,14 +145,14 @@
 										<div class="text-end">
 											<c:if test="${o.status eq 'Đã giao'}">
 												<c:choose>
-											
+
 													<c:when test="${not product.reviewed}">
 														<a
 															href="${pageContext.request.contextPath}/user/review/add?productId=${product.productId}"
 															class="btn btn-outline-primary btn-sm">Đánh giá</a>
 													</c:when>
 
-									
+
 													<c:otherwise>
 														<a
 															href="${pageContext.request.contextPath}/user/review/edit?productId=${product.productId}"

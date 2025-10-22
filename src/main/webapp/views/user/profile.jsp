@@ -52,7 +52,7 @@
 							</c:when>
 							<c:otherwise>
 								<img
-									src="${pageContext.request.contextPath}assets/images/avatar/default.jpg"
+									src="${pageContext.request.contextPath}/assets/images/avatars/default.jpg"
 									alt="Default Avatar" class="avatar-img" id="avatarPreview">
 							</c:otherwise>
 						</c:choose>
