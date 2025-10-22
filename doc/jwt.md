@@ -16,18 +16,19 @@ Filter xác thực: Một Filter trên server sẽ chặn các yêu cầu này l
 ## 1. Lấy thông tin User (Quan trọng nhất) 🧑‍💻
 Đây là thay đổi phổ biến nhất. JwtSecurityFilter đã tự động xác thực và đặt thông tin user vào mỗi request.
 
-Code cũ (Không dùng nữa):
+Code cũ (Không dùng nữa): sessionScope
 
 Java
 
 HttpSession session = req.getSession();
 User user = (User) session.getAttribute("account");
-✅ Code mới (Cách làm chuẩn):
+Code mới (Cách làm chuẩn): requestScope
 
 Java
 
 User user = (User) req.getAttribute("account");
 Lý do: Filter của chúng ta đã làm hết việc nặng nhọc. Bạn chỉ cần lấy đối tượng User từ request attribute là được.
+
 
 ## 2. Gửi thông báo tạm thời (Flash Messages) 💬
 Chúng ta không dùng session để lưu thông báo tạm thời nữa (ví dụ: "Cập nhật thành công!"). Thay vào đó, chúng ta sẽ truyền một mã trạng thái qua URL.
