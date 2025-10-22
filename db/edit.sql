@@ -171,4 +171,7 @@ VALUES
 (12, N'Trương Văn L', '0912000012', N'9 Nguyễn Khuyến', N'Phước Tân', N'Biên Hòa', N'Đồng Nai',GETDATE(), 1),
 (13, N'Đoàn Văn N', '0913000013', N'15 Nguyễn Văn Cừ', N'An Khánh', N'Ninh Kiều', N'Cần Thơ',GETDATE(), 1);
 
+-- thêm cột type message cho tin nhắn khiếu nại 
+ALTER TABLE complaint_messages
+ADD message_type VARCHAR(20) NOT NULL DEFAULT 'TEXT';
 

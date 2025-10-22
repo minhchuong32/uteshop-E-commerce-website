@@ -39,46 +39,46 @@ public class UserChatController extends HttpServlet {
         req.getRequestDispatcher("/views/user/complaints/chat.jsp").forward(req, resp);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-
-    
-        User user = (User) req.getAttribute("account");
-        if (user == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
-
-        int complaintId = Integer.parseInt(req.getParameter("complaintId"));
-        String content = req.getParameter("content");
-
-        // ====== 1. Lưu tin nhắn ======
-        Complaint complaint = complaintService.findById(complaintId);
-        ComplaintMessage msg = ComplaintMessage.builder()
-                .complaint(complaint)
-                .sender(user)
-                .content(content)
-                .build();
-        msgService.insert(msg);
-
-        // ====== 2. Gửi thông báo cho Admin ======
-        try {
-            // Giả sử bạn có nhiều Admin → lấy admin đầu tiên hoặc theo điều kiện role = 'ADMIN'
-            List<User> admins = userService.getUsersByRole("ADMIN");
-            for (User admin : admins) {
-                Notification noti = Notification.builder()
-                        .user(admin) // admin nhận thông báo
-                        .message("Người dùng " + user.getUsername() + " đã gửi tin nhắn trong khiếu nại #" + complaintId)
-                        .relatedComplaint(complaint)
-                        .build();
-                notiService.insert(noti);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // ====== 3. Quay lại trang chat ======
-        resp.sendRedirect(req.getContextPath() + "/user/chat?complaintId=" + complaintId);
-    }
+//    @Override
+//    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+//            throws ServletException, IOException {
+//
+//    
+//        User user = (User) req.getAttribute("account");
+//        if (user == null) {
+//            resp.sendRedirect(req.getContextPath() + "/login");
+//            return;
+//        }
+//
+//        int complaintId = Integer.parseInt(req.getParameter("complaintId"));
+//        String content = req.getParameter("content");
+//
+//        // ====== 1. Lưu tin nhắn ======
+//        Complaint complaint = complaintService.findById(complaintId);
+//        ComplaintMessage msg = ComplaintMessage.builder()
+//                .complaint(complaint)
+//                .sender(user)
+//                .content(content)
+//                .build();
+//        msgService.insert(msg);
+//
+//        // ====== 2. Gửi thông báo cho Admin ======
+//        try {
+//            // Giả sử bạn có nhiều Admin → lấy admin đầu tiên hoặc theo điều kiện role = 'ADMIN'
+//            List<User> admins = userService.getUsersByRole("ADMIN");
+//            for (User admin : admins) {
+//                Notification noti = Notification.builder()
+//                        .user(admin) // admin nhận thông báo
+//                        .message("Người dùng " + user.getUsername() + " đã gửi tin nhắn trong khiếu nại #" + complaintId)
+//                        .relatedComplaint(complaint)
+//                        .build();
+//                notiService.insert(noti);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        // ====== 3. Quay lại trang chat ======
+//        resp.sendRedirect(req.getContextPath() + "/user/chat?complaintId=" + complaintId);
+//    }
 }

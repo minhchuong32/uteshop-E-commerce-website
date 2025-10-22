@@ -13,22 +13,61 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.10.1</version>
+		</dependency>
+		<!-- Thư viện hỗ trợ giao tiếp WebSocket trong Jakarta EE (Servlet 5 trở
+		lên) -->
+		<!-- Cho phép ứng dụng Java tạo kênh giao tiếp hai chiều (real-time)
+		giữa client và server -->
+		<!-- Ví dụ: dùng trong chat app, thông báo đơn hàng, hoặc truyền dữ liệu
+		trực tiếp -->
+		<!-- 'scope=provided' nghĩa là thư viện này đã có sẵn trong server (VD:
+		Tomcat, GlassFish), không cần đóng gói vào file WAR -->
+		<dependency>
+			<groupId>jakarta.websocket</groupId>
+			<artifactId>jakarta.websocket-api</artifactId>
+			<version>2.1.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Thư viện JWT (JSON Web Token) dùng để tạo và xác thực token đăng
+		nhập -->
+		<!-- 'jjwt-api' là phần khai báo giao diện (API) — chứa các lớp và
+		phương thức chính để làm việc với JWT -->
+		<!-- Dùng để tạo, ký và xác thực token khi người dùng đăng nhập hoặc
+		truy cập tài nguyên -->
+		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
 			<version>0.11.5</version>
 		</dependency>
+
+		<!-- Phần triển khai (implementation) của thư viện JWT -->
+		<!-- Chứa mã thực thi thật của các lớp trong jjwt-api (ví dụ: thuật toán
+		ký HMAC, RSA...) -->
+		<!-- 'scope=runtime' nghĩa là chỉ cần khi chạy chương trình (không cần
+		lúc biên dịch) -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Module hỗ trợ Jackson cho JWT -->
+		<!-- Jackson giúp chuyển đổi giữa đối tượng Java và JSON, rất hữu ích
+		khi parse payload của JWT -->
+		<!-- Dùng để serialize/deserialize dữ liệu trong token (phần body) -->
+		<!-- 'scope=runtime' vì chỉ cần khi chương trình thực thi -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
+
 		<!-- Thư viện chính để làm việc với OAuth 2.0 -->
 		<dependency>
 			<groupId>com.google.oauth-client</groupId>

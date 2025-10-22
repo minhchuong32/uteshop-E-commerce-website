@@ -7,5 +7,5 @@ import ute.shop.entity.ComplaintMessage;
 public interface IComplaintMessageService {
 	List<ComplaintMessage> findByComplaintId(int complaintId);
 
-	void insert(ComplaintMessage message);
+	ComplaintMessage insert(ComplaintMessage message);
 }

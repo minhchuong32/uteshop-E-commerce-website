@@ -75,39 +75,39 @@ public class ComplaintController extends HttpServlet {
 			resp.sendRedirect(req.getContextPath() + "/admin/complaints");
 		}
 
-		// ==================== Gửi tin nhắn chat ====================
-		else if (uri.endsWith("/chat")) {
-			int complaintId = Integer.parseInt(req.getParameter("complaintId"));
-			String content = req.getParameter("content");
-
-			HttpSession session = req.getSession();
-			User admin = (User) session.getAttribute("account");
-
-			if (admin == null) {
-				resp.sendRedirect(req.getContextPath() + "/login");
-				return;
-			}
-
-			// Lấy complaint trước khi dùng
-			Complaint complaint = complaintService.findById(complaintId);
-			if (complaint == null) {
-				resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Không tìm thấy khiếu nại");
-				return;
-			}
-
-			// Lưu tin nhắn mới
-			ComplaintMessage msg = ComplaintMessage.builder().complaint(complaint).sender(admin).content(content)
-					.build();
-			msgService.insert(msg);
-
-			// Gửi thông báo cho User
-			Notification noti = Notification.builder().user(complaint.getUser()) // người gửi complaint sẽ nhận thông
-																					// báo
-					.message("Admin đã phản hồi khiếu nại #" + complaintId).relatedComplaint(complaint).build();
-
-			new NotificationServiceImpl().insert(noti);
-
-			resp.sendRedirect(req.getContextPath() + "/admin/complaints/chat?id=" + complaintId);
-		}
+//		// ==================== Gửi tin nhắn chat ====================
+//		else if (uri.endsWith("/chat")) {
+//			int complaintId = Integer.parseInt(req.getParameter("complaintId"));
+//			String content = req.getParameter("content");
+//
+//			HttpSession session = req.getSession();
+//			User admin = (User) session.getAttribute("account");
+//
+//			if (admin == null) {
+//				resp.sendRedirect(req.getContextPath() + "/login");
+//				return;
+//			}
+//
+//			// Lấy complaint trước khi dùng
+//			Complaint complaint = complaintService.findById(complaintId);
+//			if (complaint == null) {
+//				resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Không tìm thấy khiếu nại");
+//				return;
+//			}
+//
+//			// Lưu tin nhắn mới
+//			ComplaintMessage msg = ComplaintMessage.builder().complaint(complaint).sender(admin).content(content)
+//					.build();
+//			msgService.insert(msg);
+//
+//			// Gửi thông báo cho User
+//			Notification noti = Notification.builder().user(complaint.getUser()) // người gửi complaint sẽ nhận thông
+//																					// báo
+//					.message("Admin đã phản hồi khiếu nại #" + complaintId).relatedComplaint(complaint).build();
+//
+//			new NotificationServiceImpl().insert(noti);
+//
+//			resp.sendRedirect(req.getContextPath() + "/admin/complaints/chat?id=" + complaintId);
+//		}
 	}
 }

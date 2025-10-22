@@ -14,7 +14,7 @@ public class ComplaintMessageServiceImpl implements IComplaintMessageService {
 		return dao.findByComplaintId(complaintId);
 	}
 
-	public void insert(ComplaintMessage msg) {
-		dao.insert(msg);
+	public ComplaintMessage insert(ComplaintMessage msg) {
+		return dao.insert(msg);
 	}
 }

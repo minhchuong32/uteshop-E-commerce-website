@@ -26,16 +26,19 @@ public class ComplaintMessageDaoImpl implements IComplaintMessageDao {
         }
     }
 
-    public void insert(ComplaintMessage message) {
+    @Override
+    public ComplaintMessage insert(ComplaintMessage message) {
         EntityManager em = JPAConfig.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
             em.persist(message);
             tx.commit();
+            return message; // Trả về đối tượng đã được lưu
         } catch (Exception e) {
-            tx.rollback();
+            if (tx.isActive()) tx.rollback();
             e.printStackTrace();
+            return null; // Trả về null nếu có lỗi
         } finally {
             em.close();
         }
