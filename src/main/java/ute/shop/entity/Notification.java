@@ -25,7 +25,7 @@ public class Notification {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "related_complaint_id", nullable = true)
-    private Complaint relatedComplaint; // ✅ Liên kết đến khiếu nại
+    private Complaint relatedComplaint; //  Liên kết đến khiếu nại
 
     @Column(name = "title", columnDefinition = "NVARCHAR(255)")
     private String title;

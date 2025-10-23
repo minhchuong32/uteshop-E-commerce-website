@@ -27,10 +27,10 @@ public class UserNotificationController extends HttpServlet {
 
         String uri = req.getRequestURI();
 
-        // ======================== 1Click "Xem tất cả" ========================
+        // ======================== Click "Xem tất cả" ========================
         if (uri.endsWith("/notifications")) {
             List<Notification> notifications = notiService.getAllByUserId(user.getUserId());
-            req.setAttribute("notifications", notifications);
+            req.setAttribute("notis", notifications);
             req.getRequestDispatcher("/views/user/notifications.jsp").forward(req, resp);
             return;
         }
@@ -43,16 +43,17 @@ public class UserNotificationController extends HttpServlet {
                     int notiId = Integer.parseInt(notiIdParam);
                     Notification noti = notiService.findById(notiId);
 
-                    // Nếu có complaint liên kết
-                    if (noti != null && noti.getRelatedComplaint() != null) {
+                    if (noti != null) {
                         // đánh dấu là đã đọc
                         noti.setRead(true);
-                        notiService.update(noti);
-
-                        // chuyển hướng đến trang chat khiếu nại tương ứng
-                        resp.sendRedirect(req.getContextPath()
-                                + "/user/chat?complaintId=" + noti.getRelatedComplaint().getComplaintId());
-                        return;
+                        notiService.update(noti);		
+                        
+                        if(noti.getRelatedComplaint().getComplaintId() !=  0) {
+                        	// chuyển hướng đến trang chat khiếu nại tương ứng
+                        	resp.sendRedirect(req.getContextPath()
+                        			+ "/user/chat?complaintId=" + noti.getRelatedComplaint().getComplaintId());                        	
+                        	return;
+                        }
                     }
                 } catch (NumberFormatException e) {
                     System.err.println("Lỗi ID thông báo không hợp lệ: " + notiIdParam);

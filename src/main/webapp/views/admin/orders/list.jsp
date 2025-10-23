@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>>
 <%@ include file="/commons/taglib.jsp"%>
 <h4 class="fw-bold text-primary-custom mb-3 mt-4">
 	<i class="bi bi-bar-chart-fill me-2"></i>Hiệu suất giao hàng

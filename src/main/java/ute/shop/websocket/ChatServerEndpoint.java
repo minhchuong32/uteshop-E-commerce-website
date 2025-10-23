@@ -1,17 +1,20 @@
 package ute.shop.websocket;
 
-import com.google.gson.Gson; 
+import com.google.gson.Gson;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import ute.shop.entity.Complaint;
 import ute.shop.entity.ComplaintMessage;
+import ute.shop.entity.Notification;
 import ute.shop.entity.User;
 import ute.shop.service.IComplaintMessageService;
 import ute.shop.service.IComplaintService;
+import ute.shop.service.INotificationService;
 import ute.shop.service.IUserService;
 import ute.shop.service.impl.ComplaintMessageServiceImpl;
 import ute.shop.service.impl.ComplaintServiceImpl;
+import ute.shop.service.impl.NotificationServiceImpl;
 import ute.shop.service.impl.UserServiceImpl;
 
 import java.io.IOException;
@@ -30,7 +33,8 @@ public class ChatServerEndpoint {
 	private static final IComplaintMessageService msgService = new ComplaintMessageServiceImpl();
 	private static final IComplaintService complaintService = new ComplaintServiceImpl();
 	private static final IUserService userService = new UserServiceImpl();
-	private static final Gson gson = new Gson(); // Khởi tạo Gson một lần
+	private static final Gson gson = new Gson();
+	private static final INotificationService notiService = new NotificationServiceImpl();
 
 	@OnOpen
 	public void onOpen(Session session, @PathParam("complaintId") int complaintId, @PathParam("userId") int userId)
@@ -70,7 +74,7 @@ public class ChatServerEndpoint {
 		int complaintId = (int) session.getUserProperties().get("complaintId");
 		int senderId = (int) session.getUserProperties().get("userId");
 
-		//  Lấy thông tin cần thiết từ DB
+		// Lấy thông tin cần thiết từ DB
 		Complaint complaint = complaintService.findById(complaintId);
 		Optional<User> senderOptional = userService.getUserById(senderId); // Đổi tên biến cho rõ ràng
 
@@ -81,33 +85,28 @@ public class ChatServerEndpoint {
 		}
 
 		User sender = senderOptional.get();
-		//  Parse chuỗi JSON nhận được từ client thành object MessageDTO
-        MessageDTO receivedMsg = gson.fromJson(jsonMessage, MessageDTO.class);
+		// Parse chuỗi JSON nhận được từ client thành object MessageDTO
+		MessageDTO receivedMsg = gson.fromJson(jsonMessage, MessageDTO.class);
 
-        //  Lưu tin nhắn vào Database, bao gồm cả loại tin nhắn (TEXT/IMAGE)
-        ComplaintMessage newMessage = ComplaintMessage.builder()
-                .complaint(complaint)
-                .sender(sender)
-                .content(receivedMsg.getContent()) // Nội dung là text hoặc URL ảnh
-                .messageType(receivedMsg.getType().toUpperCase()) // Lưu loại tin nhắn
-                .originalFilename(receivedMsg.getOriginalFilename())
-                .build();
-        newMessage = msgService.insert(newMessage); // Lấy lại object để có timestamp
+		// Lưu tin nhắn vào Database, bao gồm cả loại tin nhắn (TEXT/IMAGE)
+		ComplaintMessage newMessage = ComplaintMessage.builder().complaint(complaint).sender(sender)
+				.content(receivedMsg.getContent()) // Nội dung là text hoặc URL ảnh
+				.messageType(receivedMsg.getType().toUpperCase()) // Lưu loại tin nhắn
+				.originalFilename(receivedMsg.getOriginalFilename()).build();
+		newMessage = msgService.insert(newMessage); // Lấy lại object để có timestamp
 
-        //  Chuẩn bị object DTO để gửi lại cho tất cả client trong phòng
-        MessageDTO messageToSend = new MessageDTO(
-            sender.getUserId(),
-            sender.getUsername(),
-            sender.getAvatar(),
-            newMessage.getContent(),
-            new SimpleDateFormat("dd/MM/yyyy HH:mm").format(newMessage.getCreatedAt()),
-            newMessage.getMessageType(), // Gửi đi cả loại tin nhắn
-            newMessage.getOriginalFilename()
-        );
-        String finalJsonMessage = gson.toJson(messageToSend);
+		// Tạo và lưu thông báo cho người nhận
+		createAndSaveNotification(sender, complaint);
 
-        //  Gửi broadcast
-        broadcast(complaintId, finalJsonMessage);
+		// Chuẩn bị object DTO để gửi lại cho tất cả client trong phòng
+		MessageDTO messageToSend = new MessageDTO(sender.getUserId(), sender.getUsername(), sender.getAvatar(),
+				newMessage.getContent(), new SimpleDateFormat("dd/MM/yyyy HH:mm").format(newMessage.getCreatedAt()),
+				newMessage.getMessageType(), // Gửi đi cả loại tin nhắn
+				newMessage.getOriginalFilename());
+		String finalJsonMessage = gson.toJson(messageToSend);
+
+		// Gửi broadcast
+		broadcast(complaintId, finalJsonMessage);
 	}
 
 	@OnClose
@@ -142,6 +141,44 @@ public class ChatServerEndpoint {
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * Tạo và lưu thông báo vào CSDL cho người nhận. - Nếu Admin gửi, thông báo sẽ
+	 * được gửi đến người dùng tạo khiếu nại. - Nếu người dùng gửi, thông báo sẽ
+	 * được gửi đến tất cả Admin.
+	 * 
+	 * @param sender    Người gửi tin nhắn
+	 * @param complaint Khiếu nại liên quan
+	 */
+	private void createAndSaveNotification(User sender, Complaint complaint) {
+		List<User> recipients = new ArrayList<>();
+		String notificationMessage;
+
+		// Xác định người nhận và nội dung thông báo
+		if ("Admin".equalsIgnoreCase(sender.getRole())) {
+			// Admin gửi -> thông báo cho người dùng
+			recipients.add(complaint.getUser());
+			notificationMessage = "Admin đã phản hồi khiếu nại #" + complaint.getComplaintId() + " của bạn.";
+		} else {
+			// Người dùng gửi -> thông báo cho tất cả Admin
+			recipients.addAll(userService.getUsersByRole("ADMIN"));
+			notificationMessage = "Người dùng '" + sender.getUsername() + "' đã gửi tin nhắn trong khiếu nại #"
+					+ complaint.getComplaintId() + ".";
+		}
+
+		// Tạo và lưu thông báo cho từng người nhận
+		for (User recipient : recipients) {
+			// Đảm bảo không tự gửi thông báo cho chính mình
+			if (recipient.getUserId() == sender.getUserId()) {
+				continue;
+			}
+
+			Notification notification = Notification.builder().user(recipient) // Người sẽ nhận thông báo
+					.message(notificationMessage).relatedComplaint(complaint).read(false) // Mặc định là chưa đọc
+					.build();
+			notiService.insert(notification);
 		}
 	}
 

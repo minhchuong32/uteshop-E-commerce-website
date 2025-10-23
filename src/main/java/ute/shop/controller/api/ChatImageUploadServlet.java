@@ -16,9 +16,10 @@ import java.util.Map;
 import java.util.UUID;
 
 @WebServlet(urlPatterns = "/api/upload-chat-file")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2 MB
-		maxFileSize = 1024 * 1024 * 10, // 10 MB
-		maxRequestSize = 1024 * 1024 * 50 // 50 MB
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024 * 2,  // 2 MB
+    maxFileSize = 1024 * 1024 * 10,       // 10 MB
+    maxRequestSize = 1024 * 1024 * 50     // 50 MB
 )
 public class ChatImageUploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +38,7 @@ public class ChatImageUploadServlet extends HttpServlet {
 			Part filePart = req.getPart("file");
 			if (filePart == null || filePart.getSize() == 0) {
 				responseMap.put("success", false);
-				responseMap.put("message", "Không có file được upload.");
+				responseMap.put("message", "Không có file nào được chọn.");
 				resp.getWriter().write(gson.toJson(responseMap));
 				return;
 			}
@@ -47,7 +48,7 @@ public class ChatImageUploadServlet extends HttpServlet {
 			if (!isAllowedFile(originalFileName)) {
 				responseMap.put("success", false);
 				responseMap.put("message",
-						"Loại file không được phép. Chỉ cho phép: ảnh, PDF, Word, Excel, PowerPoint, text.");
+						"Loại file không được phép. Vui lòng chỉ tải lên ảnh, PDF, Word, Excel...");
 				resp.getWriter().write(gson.toJson(responseMap));
 				return;
 			}
@@ -72,18 +73,22 @@ public class ChatImageUploadServlet extends HttpServlet {
 
 			resp.getWriter().write(gson.toJson(responseMap));
 
+		} catch (IllegalStateException e) {
+			// Bắt lỗi cụ thể khi file vượt quá dung lượng cho phép
+            e.printStackTrace();
+            responseMap.put("success", false);
+            responseMap.put("message", "Dung lượng file vượt quá giới hạn 10MB.");
+            resp.setStatus(HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE); // 413
+            resp.getWriter().write(gson.toJson(responseMap));
 		} catch (Exception e) {
 			e.printStackTrace();
 			responseMap.put("success", false);
-			responseMap.put("message", "Lỗi khi upload file: " + e.getMessage());
+			responseMap.put("message", "Lỗi máy chủ khi tải file: " + e.getMessage());
 			resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			resp.getWriter().write(gson.toJson(responseMap));
 		}
 	}
 
-	/**
-	 * Kiểm tra loại file được phép upload. ĐÃ BỎ VIDEO VÀ AUDIO.
-	 */
 	private boolean isAllowedFile(String filename) {
 		String lowerName = filename.toLowerCase();
 		return lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg") || lowerName.endsWith(".png")

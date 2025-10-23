@@ -19,6 +19,7 @@ body {
 	/* 3. Đặt chiều cao tối thiểu của body bằng 100% chiều cao màn hình */
 	margin: 0;
 	/* Xóa margin mặc định */
+	background-color: #F5F5F5; 
 }
 
 .main-content {
@@ -494,4 +495,16 @@ body {
 		transform: scale(1.2);
 		opacity: 1;
 	}
+}
+
+
+/* ================== HEADER & DROPDOWN STYLING (MỚI) ================== */
+/* Thêm bóng đổ tinh tế cho header để phân biệt với nội dung */
+header .navbar.fixed-top {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Đảm bảo dropdown luôn hiển thị trên cùng, cao hơn các thành phần khác */
+header .navbar .dropdown-menu {
+    z-index: 1100;
 }

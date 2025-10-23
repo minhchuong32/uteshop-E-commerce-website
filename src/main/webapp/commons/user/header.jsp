@@ -131,7 +131,7 @@
 					</a></li>
 				</ul>
 
-				<!-- 🔔 Thông báo -->
+				<!--  Thông báo -->
 				<ul class="navbar-nav align-items-center me-3">
 					<li class="nav-item dropdown position-relative"><a
 						class="nav-link position-relative" href="#" id="notifDropdown"

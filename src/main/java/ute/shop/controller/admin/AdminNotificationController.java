@@ -24,10 +24,6 @@ public class AdminNotificationController extends HttpServlet {
         //  Xem toàn bộ danh sách thông báo
         if (uri.endsWith("/notifications")) {
         	
-//            HttpSession session = req.getSession();
-//            User admin = (User) session.getAttribute("account");
-        	
-        	// jwt
         	User admin = (User) req.getAttribute("account");
         	
             if (admin == null) {
@@ -35,7 +31,7 @@ public class AdminNotificationController extends HttpServlet {
                 return;
             }
 
-            req.setAttribute("notifications", notiService.getAllByUserId(admin.getUserId()));
+            req.setAttribute("notis", notiService.getAllByUserId(admin.getUserId()));
             
             req.setAttribute("page", "complaints");
             req.setAttribute("view", "/views/admin/notifications.jsp");
