@@ -25,6 +25,7 @@
 	href="${pageContext.request.contextPath}/assets/css/user-home.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/assets/css/detail-product.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/chat.css">
 
 </head>
 <body>

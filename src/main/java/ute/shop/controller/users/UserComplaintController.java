@@ -17,7 +17,7 @@ import java.util.List;
 @WebServlet(urlPatterns = { 
     "/user/complaints", 
     "/user/complaints/add",
-    "/user/complaints/chat"  // ← THÊM ENDPOINT NÀY
+    "/user/complaints/chat" 
 })
 @MultipartConfig
 public class UserComplaintController extends HttpServlet {

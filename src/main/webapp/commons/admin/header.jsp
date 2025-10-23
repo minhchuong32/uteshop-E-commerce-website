@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%-- <%@ page contentType="text/html;charset=UTF-8" language="java"%> --%>
 <%@ include file="/commons/taglib.jsp"%>
 
 <header>
@@ -6,14 +6,12 @@
          style="background-color: #ffffff; height: 76px;">
         <div class="container-fluid px-4">
 
-            <!-- Logo -->
             <a class="navbar-brand d-flex align-items-center"
                href="${pageContext.request.contextPath}/admin/home">
                 <img src="${pageContext.request.contextPath}/assets/images/logo_strong.png"
                      alt="Logo" height="50" class="me-2">
             </a>
 
-            <!-- Toggle cho mobile -->
             <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse" data-bs-target="#navbarContent"
                     aria-controls="navbarContent" aria-expanded="false"
@@ -21,11 +19,9 @@
                 <i class="bi bi-list"></i>
             </button>
 
-            <!-- Nội dung bên phải -->
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
 
-                    <!-- Thông báo -->
                     <li class="nav-item dropdown position-relative me-3">
                         <a class="nav-link position-relative" href="#" id="notifDropdown"
                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -38,7 +34,6 @@
                             </c:if>
                         </a>
 
-                        <!-- Danh sách thông báo -->
                         <ul class="dropdown-menu dropdown-menu-end shadow"
                             aria-labelledby="notifDropdown"
                             style="width: 320px; max-height: 400px; overflow-y: auto;">
@@ -86,20 +81,19 @@
                         </ul>
                     </li>
 
-                    <!-- Avatar Admin -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center"
                            href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
                             <c:choose>
                                 <c:when test="${not empty account.avatar}">
-                                    <img src="${pageContext.request.contextPath}/assets/images/${account.avatar}"
+                                    <img src="${pageContext.request.contextPath}/assets/images${account.avatar}"
                                          alt="avatar" class="rounded-circle me-2"
                                          width="32" height="32" style="object-fit: cover;">
                                 </c:when>
                                 <c:otherwise>
                                 
-                                    <img src="${pageContext.request.contextPath}/assets/images/avatars/default.jpg"
+                                    <img src="${pageContext.request.contextPath}/assets/images/default-avatar.png"
                                          alt="avatar" class="rounded-circle me-2"
                                          width="32" height="32" style="object-fit: cover;">
                                 </c:otherwise>
@@ -107,7 +101,7 @@
                             <span class="fw-semibold text-dark">
                                 ${account.username}
                             </span>
-                            <i class="bi bi-caret-down-fill text-secondary small"></i>
+                            <i class="bi bi-caret-down-fill text-secondary small ms-1"></i>
                         </a>
 
                         <ul class="dropdown-menu shadow dropdown-menu-end"
@@ -136,17 +130,5 @@
 <style>
 .navbar .dropdown-toggle::after {
     display: none;
-}
-.nav-item.dropdown img {
-    object-fit: cover;
-}
-.dropdown-menu {
-    min-width: 200px;
-    right: 0;
-    left: auto !important;
-    transform: translateX(0) !important;
-}
-.dropdown-item small {
-    line-height: 1.2;
 }
 </style>

@@ -1,7 +1,6 @@
-
 package ute.shop.websocket;
 
-import com.google.gson.Gson; // THAY ĐỔI: Import Gson
+import com.google.gson.Gson; 
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
@@ -24,10 +23,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @ServerEndpoint("/chat/{complaintId}/{userId}")
 public class ChatServerEndpoint {
 
-	//  Sử dụng CopyOnWriteArraySet, một lựa chọn tốt cho kịch bản đọc  nhiều, ghi ít
+	// Sử dụng CopyOnWriteArraySet, một lựa chọn tốt cho kịch bản đọc nhiều, ghi ít
 	private static final Map<Integer, Set<Session>> rooms = new ConcurrentHashMap<>();
 
-	//  Chuyển sang static final để chỉ khởi tạo 1 lần duy nhất
+	// Chuyển sang static final để chỉ khởi tạo 1 lần duy nhất
 	private static final IComplaintMessageService msgService = new ComplaintMessageServiceImpl();
 	private static final IComplaintService complaintService = new ComplaintServiceImpl();
 	private static final IUserService userService = new UserServiceImpl();
@@ -58,7 +57,7 @@ public class ChatServerEndpoint {
 			session.close(new CloseReason(CloseReason.CloseCodes.VIOLATED_POLICY, "Unauthorized"));
 			return;
 		}
-		//  Dùng CopyOnWriteArraySet cho thread-safe và hiệu năng tốt khi broadcast
+		// Dùng CopyOnWriteArraySet cho thread-safe và hiệu năng tốt khi broadcast
 		rooms.computeIfAbsent(complaintId, k -> new CopyOnWriteArraySet<>()).add(session);
 		session.getUserProperties().put("complaintId", complaintId);
 		session.getUserProperties().put("userId", userId);
@@ -66,7 +65,7 @@ public class ChatServerEndpoint {
 	}
 
 	@OnMessage
-	public void onMessage(String messageContent, Session session) {
+	public void onMessage(String jsonMessage, Session session) {
 		// Lấy thông tin từ session
 		int complaintId = (int) session.getUserProperties().get("complaintId");
 		int senderId = (int) session.getUserProperties().get("userId");
@@ -82,17 +81,33 @@ public class ChatServerEndpoint {
 		}
 
 		User sender = senderOptional.get();
-		//  Lưu tin nhắn vào Database (giống logic trong doPost cũ)
-		ComplaintMessage newMessage = ComplaintMessage.builder().complaint(complaint).sender(sender)
-				.content(messageContent).build();
-		newMessage = msgService.insert(newMessage); // insert và lấy lại object để có createdAt
+		//  Parse chuỗi JSON nhận được từ client thành object MessageDTO
+        MessageDTO receivedMsg = gson.fromJson(jsonMessage, MessageDTO.class);
 
-		//  Dùng DTO và Gson để tạo JSON một cách an toàn và sạch sẽ
-		MessageDTO messageDTO = new MessageDTO(sender.getUserId(), sender.getUsername(), newMessage.getContent(),
-				new SimpleDateFormat("dd/MM/yyyy HH:mm").format(newMessage.getCreatedAt()));
-		String jsonMessage = gson.toJson(messageDTO);
+        //  Lưu tin nhắn vào Database, bao gồm cả loại tin nhắn (TEXT/IMAGE)
+        ComplaintMessage newMessage = ComplaintMessage.builder()
+                .complaint(complaint)
+                .sender(sender)
+                .content(receivedMsg.getContent()) // Nội dung là text hoặc URL ảnh
+                .messageType(receivedMsg.getType().toUpperCase()) // Lưu loại tin nhắn
+                .originalFilename(receivedMsg.getOriginalFilename())
+                .build();
+        newMessage = msgService.insert(newMessage); // Lấy lại object để có timestamp
 
-		broadcast(complaintId, jsonMessage);
+        //  Chuẩn bị object DTO để gửi lại cho tất cả client trong phòng
+        MessageDTO messageToSend = new MessageDTO(
+            sender.getUserId(),
+            sender.getUsername(),
+            sender.getAvatar(),
+            newMessage.getContent(),
+            new SimpleDateFormat("dd/MM/yyyy HH:mm").format(newMessage.getCreatedAt()),
+            newMessage.getMessageType(), // Gửi đi cả loại tin nhắn
+            newMessage.getOriginalFilename()
+        );
+        String finalJsonMessage = gson.toJson(messageToSend);
+
+        //  Gửi broadcast
+        broadcast(complaintId, finalJsonMessage);
 	}
 
 	@OnClose
@@ -133,16 +148,37 @@ public class ChatServerEndpoint {
 	// Tạo một lớp nhỏ (DTO) để biểu diễn dữ liệu tin nhắn
 	// Điều này giúp code trong sáng và dễ quản lý hơn là dùng chuỗi JSON thủ công
 	private static class MessageDTO {
-		private final int senderId;
-		private final String senderUsername;
-		private final String content;
-		private final String createdAt;
+		private int senderId;
+		private String senderUsername;
+		private String senderAvatar;
+		private String content;
+		private String createdAt;
+		private String type;
+		private String originalFilename;
 
-		public MessageDTO(int senderId, String senderUsername, String content, String createdAt) {
+		// Cập nhật constructor
+		public MessageDTO(int senderId, String senderUsername, String senderAvatar, String content, String createdAt,
+				String type, String originalFilename) {
 			this.senderId = senderId;
 			this.senderUsername = senderUsername;
+			this.senderAvatar = senderAvatar;
 			this.content = content;
 			this.createdAt = createdAt;
+			this.type = type;
+			this.originalFilename = originalFilename;
+		}
+
+		public String getOriginalFilename() {
+			return originalFilename;
+		}
+
+		// Getter cần thiết để Gson có thể parse từ JSON
+		public String getContent() {
+			return content;
+		}
+
+		public String getType() {
+			return type;
 		}
 	}
 }

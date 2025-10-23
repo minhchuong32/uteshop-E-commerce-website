@@ -1,0 +1,41 @@
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    align-self: flex-end;
+}
+.message-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 85%;
+}
+.message-container.sent {
+    flex-direction: row-reverse;
+    margin-left: auto;
+}
+.message-bubble {
+    max-width: 100%;
+    word-wrap: break-word;
+}
+.file-attachment {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+.file-attachment a {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 500;
+}
+.file-attachment a:hover {
+    text-decoration: underline;
+}
+.file-attachment .bi {
+    font-size: 1.8rem;
+}
