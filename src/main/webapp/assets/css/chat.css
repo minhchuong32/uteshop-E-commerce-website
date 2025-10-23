@@ -39,3 +39,9 @@
 .file-attachment .bi {
     font-size: 1.8rem;
 }
+
+.media-player {
+    max-width: 400px;
+    margin-top: 10px;
+    border-radius: 8px;
+}
