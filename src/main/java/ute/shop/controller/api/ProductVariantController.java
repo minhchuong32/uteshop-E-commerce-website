@@ -1,4 +1,4 @@
-package ute.shop.controller;
+package ute.shop.controller.api;
 
 import java.io.IOException;
 import java.util.HashMap;

@@ -180,8 +180,16 @@ public class CheckoutController extends HttpServlet {
 	        Order order = new Order();
 	        order.setUser(user);
 	        order.setShop(shopservice.getById(shopId));
-	        order.setPaymentMethod(payment);
-	        order.setStatus("Mới");
+			order.setPaymentMethod(payment);
+			switch (payment) {
+			case "COD" -> order.setStatus("Mới");
+			case "MOMO" -> order.setStatus("Chờ thanh toán MOMO");
+			case "VNPAY" -> order.setStatus("Chờ thanh toán VNPAY");
+			default -> {
+				order.setStatus("Mới");
+				}
+			}
+
 	        order.setCreatedAt(new Date());
 	        order.setShippingAddress(shippingAddress);
 	        order.setTotalAmount(total);

@@ -31,12 +31,14 @@ public class CancelOrderController extends HttpServlet {
         int orderId = Integer.parseInt(req.getParameter("orderId"));
         Order order = orderService.getById(orderId);
 
-        if (order != null && "Mới".equals(order.getStatus())) {
-            orderService.updateStatus(orderId, "Đã hủy");
-            req.getSession().setAttribute("success", "Đơn hàng #" + orderId + " đã được hủy thành công.");
-        } else {
-            req.getSession().setAttribute("success", "Không thể hủy đơn hàng này.");
-        }
+		if (order != null && ("Mới".equals(order.getStatus()) 
+				|| "Chờ thanh toán MOMO".equals(order.getStatus())
+				|| "Chờ thanh toán VNPAY".equals(order.getStatus()))) {
+			orderService.updateStatus(orderId, "Đã hủy");
+			req.getSession().setAttribute("success", "Đơn hàng #" + orderId + " đã được hủy thành công.");
+		} else {
+			req.getSession().setAttribute("success", "Không thể hủy đơn hàng này.");
+		}
 
         resp.sendRedirect(req.getContextPath() + "/user/orders");
 	}

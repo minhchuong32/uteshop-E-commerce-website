@@ -89,7 +89,10 @@
 							Xem chi tiết </a>
 
 						<!-- Nút hủy đơn hàng: chỉ hiển thị nếu trạng thái là "Mới" -->
-						<c:if test="${o.status eq 'Mới'}">
+						<c:if
+							test="${o.status eq 'Mới' 
+    							or o.status eq 'Chờ thanh toán MOMO' 
+    							or o.status eq 'Chờ thanh toán VNPAY'}">
 							<form method="post"
 								action="${pageContext.request.contextPath}/user/orders/cancel"
 								style="display: inline;">
