@@ -3,6 +3,7 @@ package ute.shop.dao.impl;
 import jakarta.persistence.*;
 import ute.shop.config.JPAConfig;
 import ute.shop.dao.IOrderDao;
+import ute.shop.entity.Delivery;
 import ute.shop.entity.Order;
 import ute.shop.entity.User;
 
@@ -329,20 +330,38 @@ public class OrderDaoImpl implements IOrderDao {
 	public boolean updateStatus(int orderId, String status) {
 		EntityManager em = JPAConfig.getEntityManager();
 	    EntityTransaction tx = em.getTransaction();
+
 	    try {
 	        tx.begin();
+
+	        // Tìm đơn hàng
 	        Order order = em.find(Order.class, orderId);
-	        if (order != null) {
-	            order.setStatus(status);
-	            em.merge(order);
-	            tx.commit();
-	            return true;
+	        if (order == null) {
+	            return false;
 	        }
-	        return false;
+
+	        // Cập nhật trạng thái đơn hàng
+	        order.setStatus(status);
+	        em.merge(order);
+
+	        // Cập nhật trạng thái các bản ghi Delivery liên quan (nếu có)
+	        List<Delivery> deliveries = order.getDeliveries();
+	        if (deliveries != null && !deliveries.isEmpty()) {
+	            for (Delivery d : deliveries) {
+	                d.setStatus(status); // hoặc bạn có thể ánh xạ theo logic riêng, ví dụ:
+	                // if ("Đã hủy".equals(status)) d.setStatus("canceled");
+	                em.merge(d);
+	            }
+	        }
+
+	        tx.commit();
+	        return true;
+
 	    } catch (Exception e) {
 	        if (tx.isActive()) tx.rollback();
 	        e.printStackTrace();
 	        return false;
+
 	    } finally {
 	        em.close();
 	    }
