@@ -168,36 +168,49 @@
 							<!-- Thông tin giao hàng -->
 							<div class="col-md-6">
 								<h6 class="fw-bold mb-2">Thông tin giao hàng</h6>
-								<p class="mb-0">${o.user.username}</p>
-								<p class="mb-0">${o.user.email}</p>
-								<p class="mb-0">${o.user.phone}</p>
-								<p class="mb-0">${o.address}</p>
-							</div>
-						</div>
 
-						<!-- Timeline (delivery history) -->
-						<div class="mt-3">
-							<h6 class="fw-bold mb-2">Tiến trình đơn hàng</h6>
-							<ul class="list-unstyled">
-								<c:forEach var="deli" items="${o.deliveries}">
-									<li class="mb-1"><c:choose>
-											<c:when test='${deli.status eq "Đã giao"}'>
-												<span class="fw-bold text-success">●</span>
-												<span class="text-success">${deli.status}</span>
-											</c:when>
-											<c:when test='${deli.status eq "Đã hủy"}'>
-												<span class="fw-bold text-danger">●</span>
-												<span class="text-danger">${deli.status}</span>
-											</c:when>
-											<c:otherwise>
-												<span class="fw-bold text-warning">●</span>
-												<span class="text-warning">${deli.status}</span>
-											</c:otherwise>
-										</c:choose> <small class="text-muted">(<fmt:formatDate
-												value="${deli.createdAt}" pattern="dd/MM/yyyy HH:mm" />)
-									</small></li>
-								</c:forEach>
-							</ul>
+								<c:choose>
+									<c:when test="${o.shippingAddress != null}">
+										<p class="mb-0 fw-semibold">Người nhận:
+											${o.shippingAddress.recipientName}</p>
+										<p class="mb-0">Số điện thoại:
+											${o.shippingAddress.phoneNumber}</p>
+										<p class="mb-0">Địa chỉ: ${o.shippingAddress.addressLine},
+											${o.shippingAddress.ward}, ${o.shippingAddress.district},
+											${o.shippingAddress.city}</p>
+									</c:when>
+									<c:otherwise>
+										<p class="text-muted fst-italic">Chưa có thông tin giao
+											hàng</p>
+									</c:otherwise>
+								</c:choose>
+
+							</div>
+
+							<!-- Timeline (delivery history) -->
+							<div class="mt-3">
+								<h6 class="fw-bold mb-2">Tiến trình đơn hàng</h6>
+								<ul class="list-unstyled">
+									<c:forEach var="deli" items="${o.deliveries}">
+										<li class="mb-1"><c:choose>
+												<c:when test='${deli.status eq "Đã giao"}'>
+													<span class="fw-bold text-success">●</span>
+													<span class="text-success">${deli.status}</span>
+												</c:when>
+												<c:when test='${deli.status eq "Đã hủy"}'>
+													<span class="fw-bold text-danger">●</span>
+													<span class="text-danger">${deli.status}</span>
+												</c:when>
+												<c:otherwise>
+													<span class="fw-bold text-warning">●</span>
+													<span class="text-warning">${deli.status}</span>
+												</c:otherwise>
+											</c:choose> <small class="text-muted">(<fmt:formatDate
+													value="${deli.createdAt}" pattern="dd/MM/yyyy HH:mm" />)
+										</small></li>
+									</c:forEach>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>

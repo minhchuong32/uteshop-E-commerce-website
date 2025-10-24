@@ -117,16 +117,20 @@ public class OrderDaoImpl implements IOrderDao {
 	@Override
 	public List<Order> findByUser(User user) {
 		EntityManager em = JPAConfig.getEntityManager();
-		try {
-			String jpql = "SELECT o FROM Order o " + "LEFT JOIN FETCH o.orderDetails d "
-					+ "LEFT JOIN FETCH d.productVariant pv " + "LEFT JOIN FETCH pv.product p " + "WHERE o.user = :user "
-					+ "ORDER BY o.createdAt DESC";
-			TypedQuery<Order> query = em.createQuery(jpql, Order.class);
-			query.setParameter("user", user);
-			return query.getResultList();
-		} finally {
-			em.close();
-		}
+	    try {
+	        String jpql = "SELECT DISTINCT o FROM Order o "
+	                + "LEFT JOIN FETCH o.orderDetails d "
+	                + "LEFT JOIN FETCH d.productVariant pv "
+	                + "LEFT JOIN FETCH pv.product p "
+	                + "LEFT JOIN FETCH o.shippingAddress sa "
+	                + "WHERE o.user = :user "
+	                + "ORDER BY o.createdAt DESC";
+	        TypedQuery<Order> query = em.createQuery(jpql, Order.class);
+	        query.setParameter("user", user);
+	        return query.getResultList();
+	    } finally {
+	        em.close();
+	    }
 	}
 
 	@Override
@@ -296,22 +300,29 @@ public class OrderDaoImpl implements IOrderDao {
 	@Override
 	public List<Order> getOrdersByUserAndStatus(int userId, String status) {
 		EntityManager em = JPAConfig.getEntityManager();
-		try {
-			// Truy vấn đơn hàng + orderDetails
-			List<Order> orders = em.createQuery(
-					"SELECT DISTINCT o FROM Order o " + "LEFT JOIN FETCH o.orderDetails d "
-							+ "WHERE o.user.userId = :userId AND o.status = :status " + "ORDER BY o.createdAt DESC",
-					Order.class).setParameter("userId", userId).setParameter("status", status).getResultList();
+	    try {
+	        String jpql = "SELECT DISTINCT o FROM Order o "
+	                + "LEFT JOIN FETCH o.orderDetails d "
+	                + "LEFT JOIN FETCH d.productVariant pv "
+	                + "LEFT JOIN FETCH pv.product p "
+	                + "LEFT JOIN FETCH o.shippingAddress sa "
+	                + "WHERE o.user.userId = :userId AND o.status = :status "
+	                + "ORDER BY o.createdAt DESC";
 
-			// Sau đó fetch deliveries riêng (Hibernate sẽ tự cache)
-			for (Order o : orders) {
-				o.getDeliveries().size(); // Lazy load
-			}
+	        TypedQuery<Order> query = em.createQuery(jpql, Order.class);
+	        query.setParameter("userId", userId);
+	        query.setParameter("status", status);
+	        List<Order> orders = query.getResultList();
 
-			return orders;
-		} finally {
-			em.close();
-		}
+	        // Lazy load các danh sách con khác nếu cần
+	        for (Order o : orders) {
+	            o.getDeliveries().size();
+	        }
+
+	        return orders;
+	    } finally {
+	        em.close();
+	    }
 	}
 
 	@Override

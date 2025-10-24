@@ -35,12 +35,11 @@ public class ReviewAddController extends HttpServlet{
     private final IProductService productService = new ProductServiceImpl();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	User user = (User) req.getSession().getAttribute("account");
+    	User user = (User) req.getAttribute("account");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-
         int productId = Integer.parseInt(req.getParameter("productId"));
         Product product = productService.findById(productId);
 
@@ -51,11 +50,11 @@ public class ReviewAddController extends HttpServlet{
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     	resp.setCharacterEncoding("UTF-8");
-		User user = (User) req.getSession().getAttribute("account");
-		if (user == null) {
-			resp.sendRedirect(req.getContextPath() + "/login");
-			return;
-		}
+    	User user = (User) req.getAttribute("account");
+        if (user == null) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
 
 		int productId = Integer.parseInt(req.getParameter("productId"));
 		Product product = productService.findById(productId);
