@@ -1,4 +1,4 @@
-console.log("✅ checkout.js (with dynamic shipping + product discount)");
+console.log("✅ checkout.js new (with dynamic shipping + product discount)");
 
 document.addEventListener("DOMContentLoaded", function() {
 	let shippingFee = 30000; // mặc định
@@ -24,23 +24,31 @@ document.addEventListener("DOMContentLoaded", function() {
 		carrierSelect.addEventListener("change", function() {
 			const selected = this.selectedOptions[0];
 			if (!selected) return;
+
 			const text = selected.textContent;
 			const feeMatch = text.match(/([\d.,]+)/); // lấy số trong "(+30.000₫)"
 			if (feeMatch) {
 				shippingFee = parseFloat(feeMatch[1].replace(/[^\d]/g, "")) || 0;
 			}
 
-			// ✅ Cập nhật hiển thị phí vận chuyển
+			// ✅ Cập nhật hiển thị phí vận chuyển trong từng shop (bên trái)
+			document.querySelectorAll(".card-body .d-flex").forEach((row) => {
+				if (row.textContent.includes("Phí vận chuyển")) {
+					const feeEl = row.querySelector("strong");
+					if (feeEl) feeEl.textContent = formatCurrency(shippingFee);
+				}
+			});
+
+			// ✅ Cập nhật phần tóm tắt bên phải
 			document.querySelectorAll(".shop-summary-shipping").forEach((el) => {
 				el.textContent = formatCurrency(shippingFee);
-			});
-			document.querySelectorAll(".card-body .d-flex span + strong").forEach((el) => {
-				if (el.textContent.includes("₫")) el.textContent = formatCurrency(shippingFee);
 			});
 
 			// ✅ Cập nhật lại tổng từng shop và toàn đơn
 			document.querySelectorAll(".card-body").forEach((shopCard) => {
-				updateShopTotals(shopCard.querySelector(".d-flex"));
+				// tìm phần tử "Tạm tính" (để biết shop này có bao nhiêu sản phẩm)
+				const anyProductRow = shopCard.querySelector(".d-flex.align-items-center");
+				if (anyProductRow) updateShopTotals(anyProductRow);
 			});
 		});
 	}
