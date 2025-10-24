@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class OrderDaoImpl implements IOrderDao {
 
@@ -348,8 +349,7 @@ public class OrderDaoImpl implements IOrderDao {
 	        List<Delivery> deliveries = order.getDeliveries();
 	        if (deliveries != null && !deliveries.isEmpty()) {
 	            for (Delivery d : deliveries) {
-	                d.setStatus(status); // hoặc bạn có thể ánh xạ theo logic riêng, ví dụ:
-	                // if ("Đã hủy".equals(status)) d.setStatus("canceled");
+	                d.setStatus(status); 
 	                em.merge(d);
 	            }
 	        }
@@ -428,6 +428,76 @@ public class OrderDaoImpl implements IOrderDao {
 	        list.add(remainingMap);
 
 	        return list;
+	    } finally {
+	        em.close();
+	    }
+	}
+
+	@Override
+	public boolean updateStatusForOrders(List<Integer> orderIds, String status) {
+		if (orderIds == null || orderIds.isEmpty()) return false;
+
+	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityTransaction tx = em.getTransaction();
+
+	    try {
+	        tx.begin();
+
+	        // Ghép danh sách ID thành chuỗi: "1,2,3"
+	        String idList = orderIds.stream()
+	                .map(String::valueOf)
+	                .collect(Collectors.joining(","));
+
+	        // Escape dấu nháy đơn trong chuỗi để tránh lỗi SQL
+	        String safeStatus = status.replace("'", "''");
+
+	        // ⚙️ In trạng thái hiện tại (trước khi update)
+	        System.out.println("=== Trạng thái TRƯỚC khi cập nhật ===");
+	        List<Object[]> beforeList = em.createNativeQuery(
+	                "SELECT [order_id], [status] FROM [dbo].[orders] WHERE [order_id] IN (" + idList + ")"
+	        ).getResultList();
+	        for (Object[] row : beforeList) {
+	            System.out.println(" - order_id: " + row[0] + ", status: " + row[1]);
+	        }
+
+	        // ⚙️ Cập nhật bảng orders
+	        String updateOrdersSql = String.format(
+	            "UPDATE [dbo].[orders] " +
+	            "SET [status] = N'%s' " +
+	            "WHERE [order_id] IN (%s)",
+	            safeStatus, idList
+	        );
+
+	        int updatedOrders = em.createNativeQuery(updateOrdersSql).executeUpdate();
+	        System.out.println("✅ Đã cập nhật " + updatedOrders + " dòng trong [orders]");
+
+	        // ⚙️ Cập nhật bảng deliveries (nếu có dữ liệu liên quan)
+	        String updateDeliveriesSql = String.format(
+	            "UPDATE [dbo].[deliveries] " +
+	            "SET [status] = N'%s' " +
+	            "WHERE [order_id] IN (%s)",
+	            safeStatus, idList
+	        );
+
+	        int updatedDeliveries = em.createNativeQuery(updateDeliveriesSql).executeUpdate();
+	        System.out.println("✅ Đã cập nhật " + updatedDeliveries + " dòng trong [deliveries]");
+
+	        // ⚙️ In trạng thái SAU khi update
+	        System.out.println("=== Trạng thái SAU khi cập nhật ===");
+	        List<Object[]> afterList = em.createNativeQuery(
+	                "SELECT [order_id], [status] FROM [dbo].[orders] WHERE [order_id] IN (" + idList + ")"
+	        ).getResultList();
+	        for (Object[] row : afterList) {
+	            System.out.println(" - order_id: " + row[0] + ", status: " + row[1]);
+	        }
+
+	        tx.commit();
+	        return true;
+
+	    } catch (Exception e) {
+	        if (tx.isActive()) tx.rollback();
+	        e.printStackTrace();
+	        return false;
 	    } finally {
 	        em.close();
 	    }

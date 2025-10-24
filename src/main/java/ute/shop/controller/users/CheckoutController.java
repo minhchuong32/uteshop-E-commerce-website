@@ -22,6 +22,8 @@ import ute.shop.service.impl.ShopServiceImpl;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -149,6 +151,10 @@ public class CheckoutController extends HttpServlet {
 	    BigDecimal allShopTotal = BigDecimal.ZERO;
 	    boolean allSuccess = true;
 
+	    // Chuẩn bị list lưu thông tin để truyền sang VNPay
+	    StringBuilder orderIds = new StringBuilder();
+	    StringBuilder shopNames = new StringBuilder();
+	    
 	    for (Map.Entry<Integer, List<CartItem>> entry : itemsByShop.entrySet()) {
 	        Integer shopId = entry.getKey();
 	        List<CartItem> shopItems = entry.getValue();
@@ -216,25 +222,36 @@ public class CheckoutController extends HttpServlet {
 	        Order savedOrder = orderService.save(order);
 	        if (savedOrder != null) {
 	            shopItems.forEach(ci -> cartService.removeFromCart(ci.getCartItemId()));
+	            
+	            if (orderIds.length() > 0) {
+	                orderIds.append(",");
+	                shopNames.append(",");
+	            }
+	            orderIds.append(savedOrder.getOrderId());
+	            shopNames.append(savedOrder.getShop().getName());
 	        } else {
 	            allSuccess = false;
 	        }
 	    }
 
 	    if (allSuccess) {
-	        req.getSession().setAttribute("paymentTotal", allShopTotal);
 	        switch (payment) {
 	            case "COD" -> resp.sendRedirect(req.getContextPath() + "/user/orders");
-	            case "MOMO" -> resp.sendRedirect(req.getContextPath() + "/user/payment/momo");
-	            case "VNPAY" -> resp.sendRedirect(req.getContextPath() + "/user/payment/vnpay");
+	            case "MOMO" -> resp.sendRedirect(req.getContextPath() + "/user/payment/momo?paymentTotal="
+	                    + allShopTotal + "&orderIds=" + orderIds + "&shopNames=" + shopNames);
+	            case "VNPAY" -> {
+	                String redirectUrl = req.getContextPath() + "/user/payment/vnpay"
+	                    + "?paymentTotal=" + allShopTotal
+	                    + "&orderIds=" + URLEncoder.encode(orderIds.toString(), StandardCharsets.UTF_8)
+	                    + "&shopNames=" + URLEncoder.encode(shopNames.toString(), StandardCharsets.UTF_8);
+	                resp.sendRedirect(redirectUrl);
+	            }
 	            default -> {
-	                req.getSession().setAttribute("error", "Phương thức thanh toán không hợp lệ!");
+	                req.setAttribute("error", "Phương thức thanh toán không hợp lệ!");
 	                resp.sendRedirect(req.getContextPath() + "/user/checkout");
 	            }
 	        }
-	    } else {
-	        req.setAttribute("error", "❌ Có lỗi xảy ra khi đặt hàng một số shop, vui lòng thử lại!");
-	        doGet(req, resp);
 	    }
+
 	}
 }

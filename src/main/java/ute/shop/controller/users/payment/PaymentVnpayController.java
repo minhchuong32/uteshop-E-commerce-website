@@ -27,28 +27,42 @@ public class PaymentVnpayController extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		User user = (User) req.getAttribute("account");
+		// ✅ Kiểm tra JWT (user đã được set trong filter)
+        User user = (User) req.getAttribute("account");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
-        
-		BigDecimal total = (BigDecimal) req.getSession().getAttribute("paymentTotal");
-        if (total == null) {
-            resp.sendRedirect(req.getContextPath() + "/user/checkout");
+
+        // ✅ Lấy thông tin đơn hàng từ request (truyền từ frontend hoặc trang checkout)
+        String totalStr = req.getParameter("paymentTotal");
+        String orderIds = req.getParameter("orderIds");
+        String shopNames = req.getParameter("shopNames");
+
+        if (totalStr == null || orderIds == null) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Thiếu thông tin đơn hàng.");
             return;
         }
 
-        long amount = total.multiply(BigDecimal.valueOf(100)).longValue();
+        BigDecimal total;
+        try {
+            total = new BigDecimal(totalStr);
+        } catch (NumberFormatException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Số tiền không hợp lệ.");
+            return;
+        }
 
+        // ✅ Chuẩn bị dữ liệu VNPay
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", "2.1.0");
         vnp_Params.put("vnp_Command", "pay");
         vnp_Params.put("vnp_TmnCode", VnPayConfig.getTmnCode());
-        vnp_Params.put("vnp_Amount", String.valueOf(amount));
+        vnp_Params.put("vnp_Amount", String.valueOf(total.multiply(BigDecimal.valueOf(100)).longValue())); // nhân 100
         vnp_Params.put("vnp_CurrCode", "VND");
-        vnp_Params.put("vnp_TxnRef", String.valueOf(System.currentTimeMillis()));
-        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang #" + vnp_Params.get("vnp_TxnRef"));
+
+        // Dùng orderIds làm mã giao dịch tạm
+        vnp_Params.put("vnp_TxnRef", orderIds.replace(",", "-"));
+        vnp_Params.put("vnp_OrderInfo", "Thanh toán đơn hàng " + orderIds + " - " + shopNames);
         vnp_Params.put("vnp_OrderType", "other");
         vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_ReturnUrl", VnPayConfig.getReturnUrl());
@@ -60,19 +74,21 @@ public class PaymentVnpayController extends HttpServlet {
         cld.add(Calendar.MINUTE, 15);
         vnp_Params.put("vnp_ExpireDate", formatter.format(cld.getTime()));
 
+        // ✅ Build query và hash
         List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
         Collections.sort(fieldNames);
 
         StringBuilder hashData = new StringBuilder();
         StringBuilder query = new StringBuilder();
+
         for (Iterator<String> itr = fieldNames.iterator(); itr.hasNext();) {
             String fieldName = itr.next();
             String fieldValue = vnp_Params.get(fieldName);
             if (fieldValue != null && !fieldValue.isEmpty()) {
                 hashData.append(fieldName).append('=')
-                        .append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
-                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII)).append('=')
-                        .append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+                        .append(URLEncoder.encode(fieldValue, StandardCharsets.UTF_8));
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.UTF_8)).append('=')
+                        .append(URLEncoder.encode(fieldValue, StandardCharsets.UTF_8));
                 if (itr.hasNext()) {
                     query.append('&');
                     hashData.append('&');
@@ -84,11 +100,13 @@ public class PaymentVnpayController extends HttpServlet {
         query.append("&vnp_SecureHash=").append(secureHash);
 
         String paymentUrl = VnPayConfig.getVnpUrl() + "?" + query;
-        resp.sendRedirect(paymentUrl);
-	}
 
-	private String hmacSHA512(String key, String data) {
-		try {
+        // ✅ Gửi người dùng sang trang thanh toán
+        resp.sendRedirect(paymentUrl);
+    }
+
+    private String hmacSHA512(String key, String data) {
+        try {
             javax.crypto.Mac hmac512 = javax.crypto.Mac.getInstance("HmacSHA512");
             javax.crypto.spec.SecretKeySpec secretKey = new javax.crypto.spec.SecretKeySpec(
                     key.getBytes(StandardCharsets.UTF_8), "HmacSHA512");
@@ -100,5 +118,5 @@ public class PaymentVnpayController extends HttpServlet {
         } catch (Exception ex) {
             throw new RuntimeException("Lỗi tạo chữ ký VNPAY", ex);
         }
-	}
+    }
 }

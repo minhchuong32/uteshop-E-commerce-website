@@ -26,6 +26,7 @@ public interface IOrderDao {
 
 	List<Order> getOrdersByUserAndStatus(int userId, String status);
 	boolean updateStatus(int orderId, String status);
+	boolean updateStatusForOrders(List<Integer> orderIds, String status);
 
 
 	// Vendor dashboard
