@@ -8,12 +8,8 @@ import ute.shop.entity.*;
 import ute.shop.service.impl.*;
 import ute.shop.service.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
-import java.util.UUID;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
 		maxFileSize = 1024 * 1024 * 10, // 10MB
@@ -26,9 +22,6 @@ public class ComplaintController extends HttpServlet {
 	private final IComplaintAnalyticsService service = new ComplaintAnalyticsServiceImpl();
 	private final IComplaintService complaintService = new ComplaintServiceImpl();
 	private final IComplaintMessageService msgService = new ComplaintMessageServiceImpl();
-
-	// Định nghĩa thư mục upload
-	private static final String UPLOAD_DIR = "assets/images/complaints";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
