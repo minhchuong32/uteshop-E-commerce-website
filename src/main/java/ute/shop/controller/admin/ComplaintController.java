@@ -1,15 +1,24 @@
 package ute.shop.controller.admin;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import ute.shop.entity.*;
 import ute.shop.service.impl.*;
 import ute.shop.service.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.UUID;
 
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+		maxFileSize = 1024 * 1024 * 10, // 10MB
+		maxRequestSize = 1024 * 1024 * 50 // 50MB
+)
 @WebServlet(urlPatterns = { "/admin/complaints", "/admin/complaints/edit", "/admin/complaints/delete",
 		"/admin/complaints/chat" })
 public class ComplaintController extends HttpServlet {
@@ -18,8 +27,12 @@ public class ComplaintController extends HttpServlet {
 	private final IComplaintService complaintService = new ComplaintServiceImpl();
 	private final IComplaintMessageService msgService = new ComplaintMessageServiceImpl();
 
+	// Định nghĩa thư mục upload
+	private static final String UPLOAD_DIR = "assets/images/complaints";
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
 		req.setAttribute("totalComplaints", service.countAll());
 		req.setAttribute("statusData", service.countByStatus());
 		req.setAttribute("monthData", service.countByMonth());
@@ -27,7 +40,6 @@ public class ComplaintController extends HttpServlet {
 		String uri = req.getRequestURI();
 
 		if (uri.endsWith("/complaints")) {
-			// Danh sách khiếu nại
 			List<Complaint> list = complaintService.findAll();
 			req.setAttribute("complaints", list);
 			req.setAttribute("page", "complaints");
@@ -45,7 +57,6 @@ public class ComplaintController extends HttpServlet {
 			complaintService.delete(id);
 			resp.sendRedirect(req.getContextPath() + "/admin/complaints");
 		} else if (uri.endsWith("/chat")) {
-			// Trang chat khiếu nại
 			int complaintId = Integer.parseInt(req.getParameter("id"));
 			Complaint complaint = complaintService.findById(complaintId);
 			List<ComplaintMessage> messages = msgService.findByComplaintId(complaintId);
@@ -60,20 +71,21 @@ public class ComplaintController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
 		String uri = req.getRequestURI();
 
-		// ==================== Cập nhật trạng thái khiếu nại ====================
-		if (uri.endsWith("/complaints")) {
-			int id = Integer.parseInt(req.getParameter("complaintId"));
-			String status = req.getParameter("status");
+		if (uri.endsWith("/edit")) {
+			try {
+				int id = Integer.parseInt(req.getParameter("complaintId"));
+				String status = req.getParameter("status");
 
-			Complaint c = complaintService.findById(id);
-			c.setStatus(status);
-			complaintService.update(c);
+				Complaint c = complaintService.findById(id);
+				c.setStatus(status);
 
+				complaintService.update(c);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			resp.sendRedirect(req.getContextPath() + "/admin/complaints");
 		}
-
 	}
 }

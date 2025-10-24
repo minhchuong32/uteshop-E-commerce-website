@@ -175,3 +175,13 @@ VALUES
 ALTER TABLE complaint_messages
 ADD message_type VARCHAR(20) NOT NULL DEFAULT 'TEXT';
 
+
+-- 24/10 : sửa đường dẫn attechments trong bảng complaints :
+UPDATE [uteshopdb].[dbo].[complaints]
+SET [attachment] = REPLACE([attachment], '/attachments/', '/complaints/')
+WHERE [attachment] LIKE '/attachments/%';
+
+UPDATE [uteshopdb].[dbo].[complaints]
+SET [attachment] = '/complaints/complaint6-anc.jpg'
+WHERE [complaint_id] = 6;
+

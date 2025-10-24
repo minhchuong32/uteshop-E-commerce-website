@@ -12,6 +12,7 @@
 				<th>Đơn hàng</th>
 				<th>Tiêu đề</th>
 				<th>Nội dung</th>
+				<th>File đính kèm</th>
 				<th>Trạng thái</th>
 				<th>Ngày tạo</th>
 				<th class="text-center">Hành động</th>
@@ -25,6 +26,31 @@
 					<td>${c.order.orderId}</td>
 					<td>${c.title}</td>
 					<td>${c.content}</td>
+					<td>
+						<c:if test="${not empty c.attachment}">
+							<c:set var="fileExt" value="${fn:toLowerCase(fn:substringAfter(c.attachment, '.'))}" />
+							
+							<c:choose>
+								<%-- Nếu là ảnh --%>
+								<c:when test="${fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif'}">
+									<%--  Thêm contextPath --%>
+									<a href="${pageContext.request.contextPath}/assets/images/${c.attachment}" target="_blank">
+										<img src="${pageContext.request.contextPath}/assets/images${c.attachment}" alt="File đính kèm" style="width: 80px; height: auto; border-radius: 5px;">
+									</a>
+								</c:when>
+								<%-- Nếu là file khác --%>
+								<c:otherwise>
+									<%-- Thêm contextPath --%>
+									<a href="${pageContext.request.contextPath}/assets/images${c.attachment}" download title="Tải file">
+										<i class="bi bi-file-earmark-arrow-down-fill fs-4"></i>
+									</a>
+								</c:otherwise>
+							</c:choose>
+						</c:if>
+						<c:if test="${empty c.attachment}">
+							<span class="text-muted">Không có</span>
+						</c:if>
+					</td>
 					<td><span class="badge bg-info">${c.status}</span></td>
 					<td>${c.createdAt}</td>
 					<td class="text-center">
