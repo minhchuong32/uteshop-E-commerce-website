@@ -126,22 +126,14 @@ public class LoginController extends HttpServlet {
 
 		// ===== Điều hướng theo vai trò =====
 		String context = request.getContextPath();
-		switch (user.getRole().toLowerCase()) {
-		case "admin":
-			response.sendRedirect(context + "/admin/home");
-			return;
-		case "shipper":
-			response.sendRedirect(context + "/shipper/home");
-			return;
-		case "vendor":
-			response.sendRedirect(context + "/vendor/home");
-			return;
-		case "user":
-			response.sendRedirect(context + "/user/home");
-			return;
-		default:
-			response.sendRedirect(context + "/web/home");
-			return;
+		String role = user.getRole() != null ? user.getRole().toLowerCase() : "";
+
+		switch (role) {
+		    case "admin" -> response.sendRedirect(context + "/admin/home");
+		    case "shipper" -> response.sendRedirect(context + "/shipper/home");
+		    case "vendor", "user" -> response.sendRedirect(context + "/user/home");
+		    default -> response.sendRedirect(context + "/web/home");
 		}
+		return;
 	}
 }

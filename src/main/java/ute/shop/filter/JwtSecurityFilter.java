@@ -67,46 +67,36 @@ public class JwtSecurityFilter implements Filter {
 				String uri = httpRequest.getRequestURI();
 				String contextPath = httpRequest.getContextPath();
 
-				// Kiểm tra quyền truy cập dựa trên vai trò
+				// ================== PHÂN QUYỀN ==================
 				if (uri.startsWith(contextPath + "/admin") && !"Admin".equalsIgnoreCase(role)) {
 					httpResponse.sendRedirect(contextPath + "/access-denied");
 					return;
 				}
-
 				if (uri.startsWith(contextPath + "/vendor") && !"Vendor".equalsIgnoreCase(role)) {
 					httpResponse.sendRedirect(contextPath + "/access-denied");
 					return;
 				}
-
 				if (uri.startsWith(contextPath + "/shipper") && !"Shipper".equalsIgnoreCase(role)) {
 					httpResponse.sendRedirect(contextPath + "/access-denied");
 					return;
 				}
-
-				// Mặc định, vai trò "User" cũng cần được kiểm tra
-				if (uri.startsWith(contextPath + "/user") && !"User".equalsIgnoreCase(role)) {
+				if (uri.startsWith(contextPath + "/user") && 
+				    !( "User".equalsIgnoreCase(role) || "Vendor".equalsIgnoreCase(role) )) {
 					httpResponse.sendRedirect(contextPath + "/access-denied");
 					return;
 				}
-			
-				// ================== LOGIC LẤY SHOP CHO VENDOR ==================
-			   
-			    if (uri.startsWith(httpRequest.getContextPath() + "/vendor")) {
-			        if ("Vendor".equalsIgnoreCase(userAccount.getRole())) {
-			            Shop shop = shopService.findByUserId(userAccount.getUserId());
-			            if (shop != null) {
-			                // Đặt shop vào request để các controller sau có thể dùng
-			                httpRequest.setAttribute("currentShop", shop);
-			            } else {
-			                // Nếu vendor chưa có shop, chuyển hướng đến trang đăng ký
-			                // (tránh lặp vô hạn nếu đang ở chính trang đăng ký)
-			                if (!uri.endsWith("/vendor/register-shop")) {
-			                    httpResponse.sendRedirect(httpRequest.getContextPath() + "/vendor/register-shop");
-			                    return; // Dừng xử lý ngay lập tức
-			                }
-			            }
-			        }
-			    }
+
+				// ================== LOGIC SHOP CỦA VENDOR ==================
+				if ("Vendor".equalsIgnoreCase(role)) {
+					Shop shop = shopService.findByUserId(userAccount.getUserId());
+
+					// Không ép buộc shop khác null nữa → cho phép vendor chưa có shop
+					// để họ đăng ký sau như Shopee
+					if (shop != null) {
+						httpRequest.setAttribute("currentShop", shop);
+					}
+				}
+
 				// Nếu mọi thứ hợp lệ (xác thực & phân quyền) -> cho phép đi tiếp
 				chain.doFilter(request, response);
 
