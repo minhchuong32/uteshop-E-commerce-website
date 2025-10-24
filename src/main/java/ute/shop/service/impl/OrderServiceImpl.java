@@ -125,5 +125,10 @@ public class OrderServiceImpl implements IOrderService {
 		return orderDao.insert(order);
 	}
 
+	@Override
+	public boolean updateStatusForOrders(List<Integer> orderIds, String status) {
+		return orderDao.updateStatusForOrders(orderIds, status);
+	}
+
 	
 }

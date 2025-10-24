@@ -29,7 +29,7 @@ public class Order {
     private BigDecimal totalAmount;
 
     // Trạng thái đơn hàng
-    @Column(name = "status", length = 20, columnDefinition = "NVARCHAR(20) DEFAULT N'new'")
+    @Column(name = "status", length = 20, columnDefinition = "NVARCHAR(20) DEFAULT N'Mới'")
     private String status;
 
     // Phương thức thanh toán
