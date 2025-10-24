@@ -26,14 +26,23 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Order> findAllForAdmin() {
-		EntityManager em = JPAConfig.getEntityManager();
-		List<Order> list = em.createQuery(
-				"SELECT DISTINCT o FROM Order o " + "LEFT JOIN FETCH o.deliveries d " + "LEFT JOIN FETCH d.shipper s "
-						+ "LEFT JOIN FETCH d.carrier c " + "LEFT JOIN FETCH o.user u " + "LEFT JOIN FETCH o.shop sh",
-				Order.class).getResultList();
-		em.close();
-		return list;
+	    EntityManager em = JPAConfig.getEntityManager();
+
+	    List<Order> list = em.createQuery(
+	        "SELECT DISTINCT o FROM Order o "
+	      + "LEFT JOIN FETCH o.deliveries d "
+	      + "LEFT JOIN FETCH d.shipper s "
+	      + "LEFT JOIN FETCH d.carrier c "
+	      + "LEFT JOIN FETCH o.user u "
+	      + "LEFT JOIN FETCH o.shop sh "
+	      + "LEFT JOIN FETCH o.shippingAddress sa",  
+	        Order.class
+	    ).getResultList();
+
+	    em.close();
+	    return list;
 	}
+
 
 	@Override
 	public Order getById(int id) {
