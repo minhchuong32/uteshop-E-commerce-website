@@ -30,9 +30,15 @@
 	<c:remove var="error" scope="session" />
 </c:if>
 
-<h3 class="fw-bold text-primary-custom mb-3">
+<h3 class="fw-bold text-primary-custom mb-0">
 	<i class="bi bi-cart"></i> Quản lý đơn hàng
 </h3>
+
+<a href="${pageContext.request.contextPath}/admin/orders/report"
+	class="btn btn-success mt-4" id="exportPdfBtn"> <i
+	class="bi bi-file-earmark-pdf-fill me-1"></i> Xuất báo cáo PDF
+</a>
+
 
 <div class="card shadow-sm border-0">
 	<div class="card-body">
@@ -84,7 +90,8 @@
 					<tr>
 						<th>ID Đơn hàng</th>
 						<th>Khách hàng</th>
-						<th>Địa chỉ giao hàng</th> <th>Thanh toán</th>
+						<th>Địa chỉ giao hàng</th>
+						<th>Thanh toán</th>
 						<th>Tổng tiền</th>
 						<th>Trạng thái đơn</th>
 						<th>Shipper</th>
@@ -104,19 +111,17 @@
 									class="text-muted"> <c:out value="${o.user.email}" /><br>
 										<c:out value="${o.user.phone}" />
 								</small></td>
-								
-								<td>
-									<c:if test="${not empty o.shippingAddress}">
-										<b><c:out value="${o.shippingAddress.recipientName}"/></b><br>
-										<small class="text-muted">
-											<c:out value="${o.shippingAddress.phoneNumber}"/><br>
-											<c:out value="${o.shippingAddress.addressLine}, ${o.shippingAddress.ward}, ${o.shippingAddress.district}, ${o.shippingAddress.city}"/>
+
+								<td><c:if test="${not empty o.shippingAddress}">
+										<b><c:out value="${o.shippingAddress.recipientName}" /></b>
+										<br>
+										<small class="text-muted"> <c:out
+												value="${o.shippingAddress.phoneNumber}" /><br> <c:out
+												value="${o.shippingAddress.addressLine}, ${o.shippingAddress.ward}, ${o.shippingAddress.district}, ${o.shippingAddress.city}" />
 										</small>
-									</c:if>
-									<c:if test="${empty o.shippingAddress}">
+									</c:if> <c:if test="${empty o.shippingAddress}">
 										<span class="text-muted"><i>Chưa có địa chỉ</i></span>
-									</c:if>
-								</td>
+									</c:if></td>
 								<td class="text-center"><c:out value="${o.paymentMethod}" /></td>
 								<td class="text-end"><fmt:formatNumber
 										value="${o.totalAmount}" type="currency" currencySymbol="₫" />
@@ -180,7 +185,8 @@
 											<i class="bi bi-pencil-square"></i>
 										</a>
 										<button type="button" class="btn btn-sm btn-danger"
-											data-bs-toggle="modal" data-bs-target="#confirmDeleteOrderModal"
+											data-bs-toggle="modal"
+											data-bs-target="#confirmDeleteOrderModal"
 											data-delete-url="${pageContext.request.contextPath}/admin/orders/delete?orderId=${o.orderId}&deliveryId=${d.deliveryId}">
 											<i class="bi bi-trash"></i>
 										</button>
