@@ -28,7 +28,7 @@
 
                 <div class="text-center">
                     <button type="submit" class="btn btn-success px-4">Đăng ký</button>
-                    <a href="${pageContext.request.contextPath}/login" class="btn btn-secondary px-4">Hủy</a>
+                    <a href="${pageContext.request.contextPath}/user/home" class="btn btn-secondary px-4">Hủy</a>
                 </div>
             </form>
         </div>

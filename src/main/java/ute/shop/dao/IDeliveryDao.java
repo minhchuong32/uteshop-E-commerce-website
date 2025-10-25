@@ -14,6 +14,7 @@ public interface IDeliveryDao {
 	boolean insert(Delivery delivery);
 
 	void updateStatus(Integer deliveryId, String status);
+	boolean updateStatusForDeliveries(List<Integer> orderIds, String status);
 
 	void delete(Integer id);
 

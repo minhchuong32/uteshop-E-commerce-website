@@ -214,7 +214,14 @@ public class CheckoutController extends HttpServlet {
 	        Delivery delivery = new Delivery();
 	        delivery.setOrder(order);
 	        delivery.setCreatedAt(new Date());
-	        delivery.setStatus("Mới");
+	        switch (payment) {
+			case "COD" -> delivery.setStatus("Mới");
+			case "MOMO" -> delivery.setStatus("Chờ thanh toán MOMO");
+			case "VNPAY" -> delivery.setStatus("Chờ thanh toán VNPAY");
+			default -> {
+				delivery.setStatus("Mới");
+				}
+			}
 	        delivery.setCarrier(carrier);
 	        order.getDeliveries().add(delivery);
 

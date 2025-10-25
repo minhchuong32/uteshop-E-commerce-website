@@ -317,6 +317,32 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 	    }
 	}
 
+	@Override
+	public boolean updateStatusForDeliveries(List<Integer> orderIds, String status) {
+		if (orderIds == null || orderIds.isEmpty()) return false;
+
+        EntityManager em = JPAConfig.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+
+            // ✅ Liên kết order.orderId dùng alias
+            em.createQuery("UPDATE Delivery d SET d.status = :status WHERE d.order.orderId IN :ids")
+              .setParameter("status", status)
+              .setParameter("ids", orderIds)
+              .executeUpdate();
+
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (tx.isActive()) tx.rollback();
+            return false;
+        } finally {
+            em.close();
+        }
+	}
+
 //	public static void main(String[] args) {
 //		DeliveryDaoImpl dao = new DeliveryDaoImpl();
 //

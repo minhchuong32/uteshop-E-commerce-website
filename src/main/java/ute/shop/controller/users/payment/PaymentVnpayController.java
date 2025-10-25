@@ -74,49 +74,33 @@ public class PaymentVnpayController extends HttpServlet {
         cld.add(Calendar.MINUTE, 15);
         vnp_Params.put("vnp_ExpireDate", formatter.format(cld.getTime()));
 
-        // ✅ Build query và hash
+     // ✅ Build query string & secure hash thống nhất
         List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
         Collections.sort(fieldNames);
-
-        StringBuilder hashData = new StringBuilder();
         StringBuilder query = new StringBuilder();
 
         for (Iterator<String> itr = fieldNames.iterator(); itr.hasNext();) {
             String fieldName = itr.next();
             String fieldValue = vnp_Params.get(fieldName);
             if (fieldValue != null && !fieldValue.isEmpty()) {
-                hashData.append(fieldName).append('=')
-                        .append(URLEncoder.encode(fieldValue, StandardCharsets.UTF_8));
-                query.append(URLEncoder.encode(fieldName, StandardCharsets.UTF_8)).append('=')
-                        .append(URLEncoder.encode(fieldValue, StandardCharsets.UTF_8));
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII))
+                     .append('=')
+                     .append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
                 if (itr.hasNext()) {
                     query.append('&');
-                    hashData.append('&');
                 }
             }
         }
 
-        String secureHash = hmacSHA512(VnPayConfig.getHashSecret(), hashData.toString());
+        // ✅ Tạo chữ ký bằng chính hàm trong VnPayConfig
+        String secureHash = VnPayConfig.hashAllFields(vnp_Params);
         query.append("&vnp_SecureHash=").append(secureHash);
 
+        // ✅ Ghép URL
         String paymentUrl = VnPayConfig.getVnpUrl() + "?" + query;
-
-        // ✅ Gửi người dùng sang trang thanh toán
         resp.sendRedirect(paymentUrl);
+
     }
 
-    private String hmacSHA512(String key, String data) {
-        try {
-            javax.crypto.Mac hmac512 = javax.crypto.Mac.getInstance("HmacSHA512");
-            javax.crypto.spec.SecretKeySpec secretKey = new javax.crypto.spec.SecretKeySpec(
-                    key.getBytes(StandardCharsets.UTF_8), "HmacSHA512");
-            hmac512.init(secretKey);
-            byte[] bytes = hmac512.doFinal(data.getBytes(StandardCharsets.UTF_8));
-            StringBuilder hash = new StringBuilder();
-            for (byte b : bytes) hash.append(String.format("%02x", b));
-            return hash.toString();
-        } catch (Exception ex) {
-            throw new RuntimeException("Lỗi tạo chữ ký VNPAY", ex);
-        }
-    }
+    
 }

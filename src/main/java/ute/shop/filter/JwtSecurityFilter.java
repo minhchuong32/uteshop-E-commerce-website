@@ -72,10 +72,12 @@ public class JwtSecurityFilter implements Filter {
 					httpResponse.sendRedirect(contextPath + "/access-denied");
 					return;
 				}
-				if (uri.startsWith(contextPath + "/vendor") && !"Vendor".equalsIgnoreCase(role)) {
-					httpResponse.sendRedirect(contextPath + "/access-denied");
-					return;
-				}
+				if (uri.startsWith(contextPath + "/vendor") && 
+					    !( "Vendor".equalsIgnoreCase(role) || "User".equalsIgnoreCase(role) )) {
+						httpResponse.sendRedirect(contextPath + "/access-denied");
+						return;
+					}
+
 				if (uri.startsWith(contextPath + "/shipper") && !"Shipper".equalsIgnoreCase(role)) {
 					httpResponse.sendRedirect(contextPath + "/access-denied");
 					return;
@@ -87,7 +89,7 @@ public class JwtSecurityFilter implements Filter {
 				}
 
 				// ================== LOGIC SHOP CỦA VENDOR ==================
-				if ("Vendor".equalsIgnoreCase(role)) {
+				if ("Vendor".equalsIgnoreCase(role) || "User".equalsIgnoreCase(role)) {
 					Shop shop = shopService.findByUserId(userAccount.getUserId());
 
 					// Không ép buộc shop khác null nữa → cho phép vendor chưa có shop
