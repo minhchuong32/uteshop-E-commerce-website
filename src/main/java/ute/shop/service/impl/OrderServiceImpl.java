@@ -1,6 +1,8 @@
 package ute.shop.service.impl;
 
+import ute.shop.dao.IDeliveryDao;
 import ute.shop.dao.IOrderDao;
+import ute.shop.dao.impl.DeliveryDaoImpl;
 import ute.shop.dao.impl.OrderDaoImpl;
 import ute.shop.entity.Order;
 import ute.shop.entity.User;
@@ -13,6 +15,7 @@ import java.util.Map;
 public class OrderServiceImpl implements IOrderService {
 
     private final IOrderDao orderDao = new OrderDaoImpl();
+    private final IDeliveryDao deliveryDao = new DeliveryDaoImpl();
 
     @Override
     public List<Order> getAll() {
@@ -126,9 +129,13 @@ public class OrderServiceImpl implements IOrderService {
 	}
 
 	@Override
-	public boolean updateStatusForOrders(List<Integer> orderIds, String status) {
-		return orderDao.updateStatusForOrders(orderIds, status);
+	public boolean updateStatusAfterPayment(List<Integer> orderIds, String status) {
+		System.out.println("👉 [Service] Bắt đầu cập nhật sau thanh toán");
+		boolean orderUpdated = orderDao.updateStatusForOrders(orderIds, status);
+        boolean deliveryUpdated = deliveryDao.updateStatusForDeliveries(orderIds, status);
+        return orderUpdated && deliveryUpdated;
 	}
+
 
 	
 }

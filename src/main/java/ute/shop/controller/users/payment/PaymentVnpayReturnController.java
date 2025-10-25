@@ -61,15 +61,20 @@ public class PaymentVnpayReturnController extends HttpServlet {
 				}
 			}).filter(Objects::nonNull).collect(Collectors.toList());
 		}
+		System.out.println(">>> VNPAY RETURN START");
+		System.out.println("orderRef = " + orderRef);
+		System.out.println("orderIds = " + orderIds);
+		System.out.println("signValue = " + signValue);
+		System.out.println("vnp_SecureHash = " + vnp_SecureHash);
+		System.out.println("vnp_ResponseCode = " + vnp_ResponseCode);
 
 		if (signValue.equals(vnp_SecureHash)) {
 			if ("00".equals(vnp_ResponseCode)) {
-				// ✅ Thanh toán thành công
-				orderService.updateStatusForOrders(orderIds, "Mới");
+				// Thanh toán thành công
+				orderService.updateStatusAfterPayment(orderIds, "Mới");
 				req.setAttribute("message", "✅ Thanh toán VNPay thành công. Tổng tiền: " + amount + " VNĐ.");
 			} else {
-				// ❌ Thanh toán thất bại
-				orderService.updateStatusForOrders(orderIds, "Thanh toán VNPAY thất bại");
+				// Thanh toán thất bại
 				req.setAttribute("message", "❌ Thanh toán thất bại. Mã lỗi: " + vnp_ResponseCode);
 			}
 		} else {

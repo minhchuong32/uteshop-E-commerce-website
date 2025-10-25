@@ -28,23 +28,17 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Order> findAllForAdmin() {
-	    EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getEntityManager();
 
-	    List<Order> list = em.createQuery(
-	        "SELECT DISTINCT o FROM Order o "
-	      + "LEFT JOIN FETCH o.deliveries d "
-	      + "LEFT JOIN FETCH d.shipper s "
-	      + "LEFT JOIN FETCH d.carrier c "
-	      + "LEFT JOIN FETCH o.user u "
-	      + "LEFT JOIN FETCH o.shop sh "
-	      + "LEFT JOIN FETCH o.shippingAddress sa",  
-	        Order.class
-	    ).getResultList();
+		List<Order> list = em
+				.createQuery("SELECT DISTINCT o FROM Order o " + "LEFT JOIN FETCH o.deliveries d "
+						+ "LEFT JOIN FETCH d.shipper s " + "LEFT JOIN FETCH d.carrier c " + "LEFT JOIN FETCH o.user u "
+						+ "LEFT JOIN FETCH o.shop sh " + "LEFT JOIN FETCH o.shippingAddress sa", Order.class)
+				.getResultList();
 
-	    em.close();
-	    return list;
+		em.close();
+		return list;
 	}
-
 
 	@Override
 	public Order getById(int id) {
@@ -59,25 +53,26 @@ public class OrderDaoImpl implements IOrderDao {
 	@Override
 	public Order insert(Order order) {
 		EntityManager em = JPAConfig.getEntityManager();
-	    EntityTransaction tx = em.getTransaction();
-	    try {
-	        tx.begin();
-	        if (order.getOrderDetails() != null) {
-	            order.getOrderDetails().forEach(od -> od.setOrder(order));
-	        }
-	        if (order.getDeliveries() != null) {
-	            order.getDeliveries().forEach(dv -> dv.setOrder(order));
-	        }
-	        em.persist(order);
-	        tx.commit();
-	        return order; // ID đã sinh, không cần em.find()
-	    } catch (Exception e) {
-	        if (tx.isActive()) tx.rollback();
-	        e.printStackTrace();
-	        return null;
-	    } finally {
-	        em.close();
-	    }
+		EntityTransaction tx = em.getTransaction();
+		try {
+			tx.begin();
+			if (order.getOrderDetails() != null) {
+				order.getOrderDetails().forEach(od -> od.setOrder(order));
+			}
+			if (order.getDeliveries() != null) {
+				order.getDeliveries().forEach(dv -> dv.setOrder(order));
+			}
+			em.persist(order);
+			tx.commit();
+			return order; // ID đã sinh, không cần em.find()
+		} catch (Exception e) {
+			if (tx.isActive())
+				tx.rollback();
+			e.printStackTrace();
+			return null;
+		} finally {
+			em.close();
+		}
 	}
 
 	@Override
@@ -119,20 +114,16 @@ public class OrderDaoImpl implements IOrderDao {
 	@Override
 	public List<Order> findByUser(User user) {
 		EntityManager em = JPAConfig.getEntityManager();
-	    try {
-	        String jpql = "SELECT DISTINCT o FROM Order o "
-	                + "LEFT JOIN FETCH o.orderDetails d "
-	                + "LEFT JOIN FETCH d.productVariant pv "
-	                + "LEFT JOIN FETCH pv.product p "
-	                + "LEFT JOIN FETCH o.shippingAddress sa "
-	                + "WHERE o.user = :user "
-	                + "ORDER BY o.createdAt DESC";
-	        TypedQuery<Order> query = em.createQuery(jpql, Order.class);
-	        query.setParameter("user", user);
-	        return query.getResultList();
-	    } finally {
-	        em.close();
-	    }
+		try {
+			String jpql = "SELECT DISTINCT o FROM Order o " + "LEFT JOIN FETCH o.orderDetails d "
+					+ "LEFT JOIN FETCH d.productVariant pv " + "LEFT JOIN FETCH pv.product p "
+					+ "LEFT JOIN FETCH o.shippingAddress sa " + "WHERE o.user = :user " + "ORDER BY o.createdAt DESC";
+			TypedQuery<Order> query = em.createQuery(jpql, Order.class);
+			query.setParameter("user", user);
+			return query.getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	@Override
@@ -302,140 +293,135 @@ public class OrderDaoImpl implements IOrderDao {
 	@Override
 	public List<Order> getOrdersByUserAndStatus(int userId, String status) {
 		EntityManager em = JPAConfig.getEntityManager();
-	    try {
-	        String jpql = "SELECT DISTINCT o FROM Order o "
-	                + "LEFT JOIN FETCH o.orderDetails d "
-	                + "LEFT JOIN FETCH d.productVariant pv "
-	                + "LEFT JOIN FETCH pv.product p "
-	                + "LEFT JOIN FETCH o.shippingAddress sa "
-	                + "WHERE o.user.userId = :userId AND o.status = :status "
-	                + "ORDER BY o.createdAt DESC";
+		try {
+			String jpql = "SELECT DISTINCT o FROM Order o " + "LEFT JOIN FETCH o.orderDetails d "
+					+ "LEFT JOIN FETCH d.productVariant pv " + "LEFT JOIN FETCH pv.product p "
+					+ "LEFT JOIN FETCH o.shippingAddress sa " + "WHERE o.user.userId = :userId AND o.status = :status "
+					+ "ORDER BY o.createdAt DESC";
 
-	        TypedQuery<Order> query = em.createQuery(jpql, Order.class);
-	        query.setParameter("userId", userId);
-	        query.setParameter("status", status);
-	        List<Order> orders = query.getResultList();
+			TypedQuery<Order> query = em.createQuery(jpql, Order.class);
+			query.setParameter("userId", userId);
+			query.setParameter("status", status);
+			List<Order> orders = query.getResultList();
 
-	        // Lazy load các danh sách con khác nếu cần
-	        for (Order o : orders) {
-	            o.getDeliveries().size();
-	        }
+			// Lazy load các danh sách con khác nếu cần
+			for (Order o : orders) {
+				o.getDeliveries().size();
+			}
 
-	        return orders;
-	    } finally {
-	        em.close();
-	    }
+			return orders;
+		} finally {
+			em.close();
+		}
 	}
 
 	@Override
 	public boolean updateStatus(int orderId, String status) {
 		EntityManager em = JPAConfig.getEntityManager();
-	    EntityTransaction tx = em.getTransaction();
+		EntityTransaction tx = em.getTransaction();
 
-	    try {
-	        tx.begin();
+		try {
+			tx.begin();
 
-	        // Tìm đơn hàng
-	        Order order = em.find(Order.class, orderId);
-	        if (order == null) {
-	            return false;
-	        }
+			// Tìm đơn hàng
+			Order order = em.find(Order.class, orderId);
+			if (order == null) {
+				return false;
+			}
 
-	        // Cập nhật trạng thái đơn hàng
-	        order.setStatus(status);
-	        em.merge(order);
+			// Cập nhật trạng thái đơn hàng
+			order.setStatus(status);
+			em.merge(order);
 
-	        // Cập nhật trạng thái các bản ghi Delivery liên quan (nếu có)
-	        List<Delivery> deliveries = order.getDeliveries();
-	        if (deliveries != null && !deliveries.isEmpty()) {
-	            for (Delivery d : deliveries) {
-	                d.setStatus(status); 
-	                em.merge(d);
-	            }
-	        }
+			// Cập nhật trạng thái các bản ghi Delivery liên quan (nếu có)
+			List<Delivery> deliveries = order.getDeliveries();
+			if (deliveries != null && !deliveries.isEmpty()) {
+				for (Delivery d : deliveries) {
+					d.setStatus(status);
+					em.merge(d);
+				}
+			}
 
-	        tx.commit();
-	        return true;
+			tx.commit();
+			return true;
 
-	    } catch (Exception e) {
-	        if (tx.isActive()) tx.rollback();
-	        e.printStackTrace();
-	        return false;
+		} catch (Exception e) {
+			if (tx.isActive())
+				tx.rollback();
+			e.printStackTrace();
+			return false;
 
-	    } finally {
-	        em.close();
-	    }
+		} finally {
+			em.close();
+		}
 	}
-	
-	//Vendor thong ke bo sung
+
+	// Vendor thong ke bo sung
 	@Override
 	public List<Object[]> getPaymentMethodStatsByShop(int shopId) {
-	    EntityManager em = JPAConfig.getEntityManager();
-	    try {
-	        String sql = """
-	            SELECT o.payment_method, COUNT(o.order_id)
-	            FROM orders o
-	            JOIN order_details od ON o.order_id = od.order_id
-	            JOIN product_variants pv ON od.product_variant_id = pv.id
-	            JOIN products p ON pv.product_id = p.product_id
-	            WHERE p.shop_id = :sid
-	            GROUP BY o.payment_method
-	        """;
-	        return em.createNativeQuery(sql)
-	                 .setParameter("sid", shopId)
-	                 .getResultList();
-	    } finally {
-	        em.close();
-	    }
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			String sql = """
+					    SELECT o.payment_method, COUNT(o.order_id)
+					    FROM orders o
+					    JOIN order_details od ON o.order_id = od.order_id
+					    JOIN product_variants pv ON od.product_variant_id = pv.id
+					    JOIN products p ON pv.product_id = p.product_id
+					    WHERE p.shop_id = :sid
+					    GROUP BY o.payment_method
+					""";
+			return em.createNativeQuery(sql).setParameter("sid", shopId).getResultList();
+		} finally {
+			em.close();
+		}
 	}
 
 	@Override
 	public List<Map<String, Object>> getReturnCancelRateByMonth(int shopId, int month, int year) {
-	    EntityManager em = JPAConfig.getEntityManager();
-	    try {
-	        String sql = """
-	            SELECT
-	                COALESCE(SUM(CASE WHEN o.status = N'Đã hủy' THEN 1 ELSE 0 END), 0) AS canceled,
-	                COALESCE(COUNT(*), 0) AS total
-	            FROM orders o
-	            WHERE o.shop_id = :shopId
-	              AND MONTH(o.created_at) = :month
-	              AND YEAR(o.created_at) = :year
-	        """;
+		EntityManager em = JPAConfig.getEntityManager();
+		try {
+			String sql = """
+					    SELECT
+					        COALESCE(SUM(CASE WHEN o.status = N'Đã hủy' THEN 1 ELSE 0 END), 0) AS canceled,
+					        COALESCE(COUNT(*), 0) AS total
+					    FROM orders o
+					    WHERE o.shop_id = :shopId
+					      AND MONTH(o.created_at) = :month
+					      AND YEAR(o.created_at) = :year
+					""";
 
-	        Object[] result = (Object[]) em.createNativeQuery(sql)
-	                .setParameter("shopId", shopId)
-	                .setParameter("month", month)
-	                .setParameter("year", year)
-	                .getSingleResult();
+			Object[] result = (Object[]) em.createNativeQuery(sql).setParameter("shopId", shopId)
+					.setParameter("month", month).setParameter("year", year).getSingleResult();
 
-	        if (result == null) return List.of();
+			if (result == null)
+				return List.of();
 
-	        long canceled = ((Number) result[0]).longValue();
-	        long total = ((Number) result[1]).longValue();
-	        long notCanceled = total - canceled;
+			long canceled = ((Number) result[0]).longValue();
+			long total = ((Number) result[1]).longValue();
+			long notCanceled = total - canceled;
 
-	        List<Map<String, Object>> list = new ArrayList<>();
+			List<Map<String, Object>> list = new ArrayList<>();
 
-	        Map<String, Object> canceledMap = new HashMap<>();
-	        canceledMap.put("label", "Đã hủy");
-	        canceledMap.put("value", canceled);
-	        list.add(canceledMap);
+			Map<String, Object> canceledMap = new HashMap<>();
+			canceledMap.put("label", "Đã hủy");
+			canceledMap.put("value", canceled);
+			list.add(canceledMap);
 
-	        Map<String, Object> remainingMap = new HashMap<>();
-	        remainingMap.put("label", "Còn lại");
-	        remainingMap.put("value", notCanceled);
-	        list.add(remainingMap);
+			Map<String, Object> remainingMap = new HashMap<>();
+			remainingMap.put("label", "Còn lại");
+			remainingMap.put("value", notCanceled);
+			list.add(remainingMap);
 
-	        return list;
-	    } finally {
-	        em.close();
-	    }
+			return list;
+		} finally {
+			em.close();
+		}
 	}
 
 	@Override
 	public boolean updateStatusForOrders(List<Integer> orderIds, String status) {
-		if (orderIds == null || orderIds.isEmpty()) return false;
+		System.out.println("Đang cập nhật order");
+	    if (orderIds == null || orderIds.isEmpty()) return false;
 
 	    EntityManager em = JPAConfig.getEntityManager();
 	    EntityTransaction tx = em.getTransaction();
@@ -443,60 +429,26 @@ public class OrderDaoImpl implements IOrderDao {
 	    try {
 	        tx.begin();
 
-	        // Ghép danh sách ID thành chuỗi: "1,2,3"
+	        // ✅ Tạo chuỗi ID an toàn
 	        String idList = orderIds.stream()
-	                .map(String::valueOf)
-	                .collect(Collectors.joining(","));
+	                                .map(String::valueOf)
+	                                .collect(Collectors.joining(","));
 
-	        // Escape dấu nháy đơn trong chuỗi để tránh lỗi SQL
-	        String safeStatus = status.replace("'", "''");
+	        // ✅ SQL Server native query (không cần parameter ? trong danh sách)
+	        String sql = "UPDATE orders SET status = :status WHERE order_id IN (" + idList + ")";
 
-	        // ⚙️ In trạng thái hiện tại (trước khi update)
-	        System.out.println("=== Trạng thái TRƯỚC khi cập nhật ===");
-	        List<Object[]> beforeList = em.createNativeQuery(
-	                "SELECT [order_id], [status] FROM [dbo].[orders] WHERE [order_id] IN (" + idList + ")"
-	        ).getResultList();
-	        for (Object[] row : beforeList) {
-	            System.out.println(" - order_id: " + row[0] + ", status: " + row[1]);
-	        }
-
-	        // ⚙️ Cập nhật bảng orders
-	        String updateOrdersSql = String.format(
-	            "UPDATE [dbo].[orders] " +
-	            "SET [status] = N'%s' " +
-	            "WHERE [order_id] IN (%s)",
-	            safeStatus, idList
-	        );
-
-	        int updatedOrders = em.createNativeQuery(updateOrdersSql).executeUpdate();
-	        System.out.println("✅ Đã cập nhật " + updatedOrders + " dòng trong [orders]");
-
-	        // ⚙️ Cập nhật bảng deliveries (nếu có dữ liệu liên quan)
-	        String updateDeliveriesSql = String.format(
-	            "UPDATE [dbo].[deliveries] " +
-	            "SET [status] = N'%s' " +
-	            "WHERE [order_id] IN (%s)",
-	            safeStatus, idList
-	        );
-
-	        int updatedDeliveries = em.createNativeQuery(updateDeliveriesSql).executeUpdate();
-	        System.out.println("✅ Đã cập nhật " + updatedDeliveries + " dòng trong [deliveries]");
-
-	        // ⚙️ In trạng thái SAU khi update
-	        System.out.println("=== Trạng thái SAU khi cập nhật ===");
-	        List<Object[]> afterList = em.createNativeQuery(
-	                "SELECT [order_id], [status] FROM [dbo].[orders] WHERE [order_id] IN (" + idList + ")"
-	        ).getResultList();
-	        for (Object[] row : afterList) {
-	            System.out.println(" - order_id: " + row[0] + ", status: " + row[1]);
-	        }
+	        Query query = em.createNativeQuery(sql);
+	        query.setParameter("status", status);
+	        int rows = query.executeUpdate();
 
 	        tx.commit();
-	        return true;
+
+	        System.out.println("Đã cập nhật " + rows + " đơn hàng.");
+	        return rows > 0;
 
 	    } catch (Exception e) {
-	        if (tx.isActive()) tx.rollback();
 	        e.printStackTrace();
+	        if (tx.isActive()) tx.rollback();
 	        return false;
 	    } finally {
 	        em.close();
