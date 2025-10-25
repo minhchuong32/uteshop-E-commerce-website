@@ -28,7 +28,6 @@ public interface IOrderDao {
 	boolean updateStatus(int orderId, String status);
 	boolean updateStatusForOrders(List<Integer> orderIds, String status);
 
-
 	// Vendor dashboard
 	long countOrdersByShop(int shopId);
 
