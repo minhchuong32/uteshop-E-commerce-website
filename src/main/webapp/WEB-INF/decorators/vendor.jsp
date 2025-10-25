@@ -78,7 +78,7 @@
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='promotions' ? 'active' : ''}"
 						href="${pageContext.request.contextPath}/vendor/home?page=promotions">
-							<i class="bi bi-cart-check-fill me-2"></i> Quản lý Khuyến mãi
+							<i class="bi bi-currency-dollar me-2"></i> Quản lý Khuyến mãi
 					</a></li>
 					<li class="nav-item mb-1"><a
 						class="nav-link ${page=='stats' ? 'active' : ''}"

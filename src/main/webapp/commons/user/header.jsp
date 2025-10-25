@@ -114,6 +114,13 @@
 								href="${pageContext.request.contextPath}/user/complaints"> <i
 									class="bi bi-exclamation-diamond me-2"></i> Khiếu nại của tôi
 							</a></li>
+							
+							<li>
+							  <a class="dropdown-item" href="${pageContext.request.contextPath}/vendor/home">
+							    <i class="bi bi-shop me-2"></i> Shop của tôi
+							  </a>
+							</li>
+							
 							<li><hr class="dropdown-divider"></li>
 							<li><a class="dropdown-item text-danger"
 								href="${pageContext.request.contextPath}/logout"> <i

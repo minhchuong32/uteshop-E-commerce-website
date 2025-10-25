@@ -32,8 +32,10 @@ public class HomeController extends HttpServlet {
         // User userLogin = (User) req.getAttribute("account"); // Không cần user nữa nếu chỉ dùng shopId
         Shop shop = (Shop) req.getAttribute("currentShop");
         
-        // Filter đã đảm bảo shop không thể null khi request đến được đây.
-        // Bạn không cần kiểm tra if (shop == null) nữa.
+        if (shop == null) {
+          resp.sendRedirect(req.getContextPath() + "/vendor/register-shop");
+          return;
+        }
 
         int shopId = shop.getShopId();
         
