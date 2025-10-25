@@ -2,6 +2,7 @@
 <%@ include file="/commons/taglib.jsp"%>
 
 <div class="container-fluid">
+
 	<h3 class="mb-4 fw-bold text-primary-custom">
 		<i class="bi bi-shop me-2"></i> Quản lý cửa hàng
 	</h3>
@@ -17,24 +18,33 @@
 	<div class="card shadow-sm border-0">
 		<div class="card-body table-responsive">
 
-			<!-- Thông báo thành công -->
-			<c:if test="${not empty sessionScope.success}">
+			<%-- ======================== ALERT MESSAGES ======================== --%>
+			<c:if test="${not empty param.message}">
 				<div
-					class="alert alert-success alert-dismissible fade show shadow-sm"
+					class="alert alert-success alert-dismissible fade show mb-3 shadow-sm"
 					role="alert">
-					<i class="bi bi-check-circle-fill me-2"></i>${sessionScope.success}
+					<i class="bi bi-check-circle-fill me-2"></i>
+					<c:choose>
+						<c:when test="${param.message == 'DelSuccess'}">Xóa thành công!</c:when>
+						<c:when test="${param.message == 'AddSuccess'}">Thêm thành công!</c:when>
+						<c:when test="${param.message == 'EditSuccess'}">Cập nhật thành công!</c:when>
+						<c:otherwise>Thao tác thành công!</c:otherwise>
+					</c:choose>
 					<button type="button" class="btn-close" data-bs-dismiss="alert"
 						aria-label="Đóng"></button>
 				</div>
-				<c:remove var="success" scope="session" />
 			</c:if>
 
-			<!-- Thông báo lỗi -->
-			<c:if test="${not empty error}">
+			<c:if test="${not empty param.error}">
 				<div
-					class="alert alert-danger alert-dismissible fade show shadow-sm"
+					class="alert alert-danger alert-dismissible fade show mb-3 shadow-sm"
 					role="alert">
-					<i class="bi bi-exclamation-triangle-fill me-2"></i>${error}
+					<i class="bi bi-exclamation-triangle-fill me-2"></i>
+					<c:choose>
+						<c:when test="${param.error == 'errorPost'}">Có lỗi trong quá trình sửa hoặc thêm!. Vui lòng thử lại.</c:when>
+						<c:when test="${param.error == 'errorGet'}">Có lỗi trong quá trình lấy dữ liệu!</c:when>
+						<c:otherwise>Có lỗi xảy ra. Vui lòng thử lại.</c:otherwise>
+					</c:choose>
 					<button type="button" class="btn-close" data-bs-dismiss="alert"
 						aria-label="Đóng"></button>
 				</div>
@@ -62,12 +72,12 @@
 									<div
 										class="rounded-circle border overflow-hidden d-flex align-items-center justify-content-center"
 										style="width: 64px; height: 64px; background-color: #f8f9fa;">
-									<img
-										src="${empty s.logo 
+										<img
+											src="${empty s.logo 
         ? pageContext.request.contextPath.concat('/assets/images/shops/default-shop-logo.png')
         : pageContext.request.contextPath.concat('/assets/images/shops/').concat(s.logo.substring(s.logo.lastIndexOf('/') + 1))}"
-										alt="avatar" class="rounded-circle border"
-										style="width: 48px; height: 48px; object-fit: cover;">
+											alt="avatar" class="rounded-circle border"
+											style="width: 48px; height: 48px; object-fit: cover;">
 
 									</div>
 								</div>

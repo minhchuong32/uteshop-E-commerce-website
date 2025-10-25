@@ -2,6 +2,37 @@
 <%@ include file="/commons/taglib.jsp"%>
 
 <div class="container-fluid">
+	<%-- ======================== ALERT MESSAGES ======================== --%>
+	<c:if test="${not empty param.message}">
+		<div
+			class="alert alert-success alert-dismissible fade show mb-3 shadow-sm"
+			role="alert">
+			<i class="bi bi-check-circle-fill me-2"></i>
+			<c:choose>
+				<c:when test="${param.message == 'DelSuccess'}">Xóa thành công!</c:when>
+				<c:when test="${param.message == 'AddSuccess'}">Thêm thành công!</c:when>
+				<c:when test="${param.message == 'EditSuccess'}">Cập nhật thành công!</c:when>
+				<c:otherwise>Thao tác thành công!</c:otherwise>
+			</c:choose>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"
+				aria-label="Đóng"></button>
+		</div>
+	</c:if>
+
+	<c:if test="${not empty param.error}">
+		<div
+			class="alert alert-danger alert-dismissible fade show mb-3 shadow-sm"
+			role="alert">
+			<i class="bi bi-exclamation-triangle-fill me-2"></i>
+			<c:choose>
+				<c:when test="${param.error == 'errorPost'}">Có lỗi trong quá trình sửa hoặc thêm!. Vui lòng thử lại.</c:when>
+				<c:when test="${param.error == 'errorGet'}">Có lỗi trong quá trình lấy dữ liệu!</c:when>
+				<c:otherwise>Có lỗi xảy ra. Vui lòng thử lại.</c:otherwise>
+			</c:choose>
+			<button type="button" class="btn-close" data-bs-dismiss="alert"
+				aria-label="Đóng"></button>
+		</div>
+	</c:if>
 	<h3 class="text-primary-custom fw-bold mb-4">
 		<i class="bi bi-truck"></i> Quản lý đơn vị vận chuyển
 	</h3>
@@ -40,11 +71,14 @@
 									data-fee="${carrier.carrierFee}"
 									data-description="${carrier.carrierDescription}">
 									<i class="bi bi-pencil"></i> Sửa
-								</button>
-								<button class="btn btn-sm btn-danger deleteBtn"
-									data-id="${carrier.carrierId}">
-									<i class="bi bi-trash"></i> Xóa
-								</button>
+								</button> <!-- Xóa --> <a href="javascript:void(0);"
+								class="text-danger me-2 btn btn-delete" data-bs-toggle="modal"
+								data-bs-target="#confirmDeleteModal"
+								data-id="${carrier.carrierId}"
+								data-url="${pageContext.request.contextPath}/admin/carriers/delete"
+								title="Xóa"> <i class="bi bi-trash-fill fs-5"></i>
+							</a>
+
 							</td>
 						</tr>
 					</c:forEach>
@@ -170,10 +204,4 @@
 		</div>
 	</div>
 </div>
-<!-- Biến JSP truyền cho file JS -->
-<script>
-    const contextPath = '<%= request.getContextPath() %>';
-</script>
-
-<!-- File JS xử lý riêng -->
 

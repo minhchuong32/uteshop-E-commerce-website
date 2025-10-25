@@ -7,65 +7,67 @@
 	</h3>
 
 	<form action="${pageContext.request.contextPath}/admin/products/edit"
-		  method="post" enctype="multipart/form-data"
-		  class="card shadow-sm p-4 border-0">
+		method="post" enctype="multipart/form-data"
+		class="card shadow-sm p-4 border-0">
 
 		<input type="hidden" name="id" value="${product.productId}" />
 
 		<!--  Thông tin sản phẩm -->
 		<div class="mb-3">
-			<label class="form-label fw-semibold">Tên sản phẩm</label>
-			<input type="text" name="name" value="${product.name}" class="form-control"
-				   ${empty product.name ? 'required' : ''}>
+			<label class="form-label fw-semibold">Tên sản phẩm</label> <input
+				type="text" name="name" value="${product.name}" class="form-control"
+				${empty product.name ? 'required' : ''}>
 		</div>
 
 		<div class="mb-3">
 			<label class="form-label fw-semibold">Mô tả</label>
 			<textarea name="description" class="form-control" rows="3"
-					  ${empty product.description ? 'required' : ''}>${product.description}</textarea>
+				${empty product.description ? 'required' : ''}>${product.description}</textarea>
 		</div>
 
 		<div class="row mb-3">
 			<div class="col-md-6">
-				<label class="form-label fw-semibold">Danh mục</label>
-				<select name="categoryId" class="form-select"
-						${empty product.category ? 'required' : ''}>
+				<label class="form-label fw-semibold">Danh mục</label> <select
+					name="categoryId" class="form-select"
+					${empty product.category ? 'required' : ''}>
 					<option value="">-- Chọn danh mục --</option>
 					<c:forEach var="c" items="${categories}">
-						<option value="${c.categoryId}" ${c.categoryId eq product.category.categoryId ? 'selected' : ''}>${c.name}</option>
+						<option value="${c.categoryId}"
+							${c.categoryId eq product.category.categoryId ? 'selected' : ''}>${c.name}</option>
 					</c:forEach>
 				</select>
 			</div>
 
 			<div class="col-md-6">
-				<label class="form-label fw-semibold">Cửa hàng</label>
-				<select name="shopId" class="form-select"
-						${empty product.shop ? 'required' : ''}>
+				<label class="form-label fw-semibold">Cửa hàng</label> <select
+					name="shopId" class="form-select"
+					${empty product.shop ? 'required' : ''}>
 					<option value="">-- Chọn cửa hàng --</option>
 					<c:forEach var="s" items="${shops}">
-						<option value="${s.shopId}" ${s.shopId eq product.shop.shopId ? 'selected' : ''}>${s.name}</option>
+						<option value="${s.shopId}"
+							${s.shopId eq product.shop.shopId ? 'selected' : ''}>${s.name}</option>
 					</c:forEach>
 				</select>
 			</div>
 		</div>
-
 		<!-- Ảnh chính -->
 		<div class="mb-3 text-center">
 			<img id="mainPreview"
-				 src="${pageContext.request.contextPath}/assets${product.imageUrl}"
-				 class="rounded border mb-3"
-				 width="180" height="180" style="object-fit:cover;">
-			<input type="file" name="imageUrl" id="mainImageInput"
-				   class="form-control w-auto mx-auto" accept="image/*"
-				   ${empty product.imageUrl ? 'required' : ''}
-				   onchange="previewMainImage(this)">
-			<small class="text-muted d-block mt-1">Chọn ảnh sản phẩm nếu muốn thay đổi</small>
+				src="${pageContext.request.contextPath}/assets${product.imageUrl}"
+				class="rounded border mb-3" width="180" height="180"
+				style="object-fit: cover;"> <input type="file" name="imageUrl"
+				id="mainImageInput" class="form-control w-auto mx-auto"
+				accept="image/*" ${empty product.imageUrl ? 'required' : ''}
+				onchange="previewMainImage(this)"> <small
+				class="text-muted d-block mt-1">Chọn ảnh sản phẩm nếu muốn
+				thay đổi</small>
 		</div>
 
 		<hr class="my-4">
 		<h5 class="fw-bold text-primary-custom">Danh sách biến thể</h5>
 
-		<table id="variantTable" class="table table-bordered align-middle mt-3">
+		<table id="variantTable"
+			class="table table-bordered align-middle mt-3">
 			<thead class="table-light">
 				<tr>
 					<th>Tên tùy chọn</th>
@@ -80,27 +82,31 @@
 			<tbody>
 				<c:forEach var="v" items="${variants}">
 					<tr>
-						<td><input type="text" name="optionName" value="${v.optionName}" class="form-control"
-								   ${empty v.optionName ? 'required' : ''}></td>
-						<td><input type="text" name="optionValue" value="${v.optionValue}" class="form-control"
-								   ${empty v.optionValue ? 'required' : ''}></td>
-						<td><input type="number" step="0.01" name="price" value="${v.price}" class="form-control"
-								   ${empty v.price ? 'required' : ''}></td>
-						<td><input type="number" step="0.01" name="oldPrice" value="${v.oldPrice}" class="form-control"
-								   ${empty v.oldPrice ? 'required' : ''}></td>
-						<td><input type="number" name="stock" value="${v.stock}" class="form-control"
-								   ${empty v.stock ? 'required' : ''}></td>
+						<td><input type="text" name="optionName"
+							value="${v.optionName}" class="form-control"
+							${empty v.optionName ? 'required' : ''}></td>
+						<td><input type="text" name="optionValue"
+							value="${v.optionValue}" class="form-control"
+							${empty v.optionValue ? 'required' : ''}></td>
+						<td><input type="number" step="0.01" name="price"
+							value="${v.price}" class="form-control"
+							${empty v.price ? 'required' : ''}></td>
+						<td><input type="number" step="0.01" name="oldPrice"
+							value="${v.oldPrice}" class="form-control"
+							${empty v.oldPrice ? 'required' : ''}></td>
+						<td><input type="number" name="stock" value="${v.stock}"
+							class="form-control" ${empty v.stock ? 'required' : ''}></td>
+						<td class="text-center"><img
+							src="${pageContext.request.contextPath}/assets${v.imageUrl != null ? v.imageUrl : '/images/variants/default-product.jpg'}"
+							class="img-preview border rounded mb-2" width="70" height="70"
+							style="object-fit: cover;"> <input type="file"
+							name="variantImage" class="form-control form-control-sm"
+							accept="image/*" ${empty v.imageUrl ? 'required' : ''}
+							onchange="previewVariantImage(this)"></td>
 						<td class="text-center">
-							<img src="${pageContext.request.contextPath}/assets${v.imageUrl != null ? v.imageUrl : '/images/variants/default-product.jpg'}"
-								 class="img-preview border rounded mb-2"
-								 width="70" height="70" style="object-fit:cover;">
-							<input type="file" name="variantImage" class="form-control form-control-sm"
-								   accept="image/*"
-								   ${empty v.imageUrl ? 'required' : ''}
-								   onchange="previewVariantImage(this)">
-						</td>
-						<td class="text-center">
-							<button type="button" class="btn btn-danger btn-sm removeRow"><i class="bi bi-x"></i></button>
+							<button type="button" class="btn btn-danger btn-sm removeRow">
+								<i class="bi bi-x"></i>
+							</button>
 						</td>
 					</tr>
 				</c:forEach>
@@ -108,13 +114,16 @@
 		</table>
 
 		<!-- Thêm dòng mới -->
-		<button type="button" id="addRow" class="btn btn-outline-primary-custom btn-sm mb-3">
+		<button type="button" id="addRow"
+			class="btn btn-outline-primary-custom btn-sm mb-3">
 			<i class="bi bi-plus"></i> Thêm biến thể
 		</button>
 
 		<div class="d-flex justify-content-between mt-4">
-			<a href="${pageContext.request.contextPath}/admin/products" class="btn btn-outline-secondary">Quay lại</a>
-			<button type="submit" class="btn btn-primary-custom">Cập nhật</button>
+			<a href="${pageContext.request.contextPath}/admin/products"
+				class="btn btn-outline-secondary">Quay lại</a>
+			<button type="submit" class="btn btn-primary-custom">Cập
+				nhật</button>
 		</div>
 	</form>
 </div>
@@ -127,9 +136,9 @@ document.getElementById("addRow").addEventListener("click", () => {
 	row.innerHTML = `
 		<td><input type="text" name="optionName" class="form-control" placeholder="VD: Màu sắc" required></td>
 		<td><input type="text" name="optionValue" class="form-control" placeholder="VD: Xanh dương" required></td>
-		<td><input type="number" step="0.01" name="price" class="form-control" required></td>
-		<td><input type="number" step="0.01" name="oldPrice" class="form-control" required></td>
-		<td><input type="number" name="stock" class="form-control" required></td>
+		<td><input type="number" min="0" step="0.01" name="price" class="form-control" required></td>
+		<td><input type="number" min="0" step="0.01" name="oldPrice" class="form-control" required></td>
+		<td><input type="number" name="stock"  min="0" step = "1" class="form-control" required></td>
 		<td class="text-center">
 			<img src="${pageContext.request.contextPath}/assets/images/products/default-product.jpg"
 				class="img-preview border rounded mb-2" width="70" height="70" style="object-fit:cover;">

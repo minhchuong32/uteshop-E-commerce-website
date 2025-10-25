@@ -56,14 +56,12 @@ public class CategoryController extends HttpServlet {
             } else if (uri.endsWith("/delete")) {
                 int id = Integer.parseInt(req.getParameter("id"));
                 categoryService.delete(id);
-                req.getSession().setAttribute("success", "Xóa danh mục thành công!");
-                resp.sendRedirect(req.getContextPath() + "/admin/categories");
+                
+                resp.sendRedirect(req.getContextPath() + "/admin/categories?message=DelSuccess");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            req.setAttribute("error", "Lỗi xử lý: " + e.getMessage());
-            req.setAttribute("view", "/views/admin/categories/list.jsp");
-            req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/admin/categories?error=errorGet");
         }
     }
 
@@ -89,10 +87,9 @@ public class CategoryController extends HttpServlet {
                 Category c = new Category();
                 c.setName(name);
                 c.setImage(fileName != null ? "/images/categories/" + fileName : "/images/categories/default-category.jpg");
-
                 categoryService.save(c);
-                req.getSession().setAttribute("success", "Thêm danh mục thành công!");
-                resp.sendRedirect(req.getContextPath() + "/admin/categories");
+                
+                resp.sendRedirect(req.getContextPath() + "/admin/categories?message=AddSuccess");
             }
 
             if (uri.endsWith("/edit")) {
@@ -110,16 +107,14 @@ public class CategoryController extends HttpServlet {
                     }
                     c.setName(name);
                     categoryService.update(c);
-                    req.getSession().setAttribute("success", "Cập nhật danh mục thành công!");
-                    resp.sendRedirect(req.getContextPath() + "/admin/categories");
+                  
+                    resp.sendRedirect(req.getContextPath() + "/admin/categories?message=EditSuccess");
                 }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            req.setAttribute("error", "Lỗi khi xử lý dữ liệu: " + e.getMessage());
-            req.setAttribute("view", "/views/admin/categories/list.jsp");
-            req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/admin/categories?error=errorPost");
         }
     }
 }

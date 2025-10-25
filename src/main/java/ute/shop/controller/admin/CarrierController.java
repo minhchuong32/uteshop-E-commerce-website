@@ -35,7 +35,7 @@ public class CarrierController extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi xử lý yêu cầu!");
+            resp.sendRedirect(req.getContextPath() + "/admin/carriers?error=errorGet");
         }
     }
 
@@ -46,12 +46,15 @@ public class CarrierController extends HttpServlet {
         try {
             if (url.endsWith("/add")) {
                 addCarrier(req, resp);
+                
             } else if (url.endsWith("/edit")) {
                 updateCarrier(req, resp);
+               
             }
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi xử lý yêu cầu!");
+            resp.sendRedirect(req.getContextPath() + "/admin/carriers?error=errorPost");
+            
         }
     }
 
@@ -70,7 +73,7 @@ public class CarrierController extends HttpServlet {
 
         carrierDao.save(carrier);
 
-        resp.sendRedirect(req.getContextPath() + "/admin/carriers");
+        resp.sendRedirect(req.getContextPath() + "/admin/carriers?message=AddSuccess");
     }
 
     // ====================== XỬ LÝ SỬA ======================
@@ -90,13 +93,14 @@ public class CarrierController extends HttpServlet {
 
         carrierDao.update(carrier);
 
-        resp.sendRedirect(req.getContextPath() + "/admin/carriers");
+        resp.sendRedirect(req.getContextPath() + "/admin/carriers?message=EditSuccess");
     }
 
     // ====================== XỬ LÝ XÓA ======================
     private void deleteCarrier(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         carrierDao.delete(id);
-        resp.sendRedirect(req.getContextPath() + "/admin/carriers");
+
+        resp.sendRedirect(req.getContextPath() + "/admin/carriers?message=DelSuccess");
     }
 }

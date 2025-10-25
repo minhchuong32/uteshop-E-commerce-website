@@ -91,4 +91,15 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => { isDownloading = false; }, 2000); 
         });
     }
+	
+	// == LOGIC HIDE ALERT ==
+	const alertEl = document.querySelector(".alert");
+	   if (alertEl) {
+	     setTimeout(() => {
+	       alertEl.classList.add("fade");
+	       alertEl.style.transition = "opacity 0.5s ease";
+	       alertEl.style.opacity = "0";
+	       setTimeout(() => alertEl.remove(), 500); // Xóa khỏi DOM sau khi mờ
+	     }, 3000);
+	   }
 });

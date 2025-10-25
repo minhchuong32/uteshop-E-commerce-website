@@ -19,5 +19,7 @@ public interface IRevenueService {
 	BigDecimal getTotalRevenue(int shopId);
 
 	List<Object[]> getRevenueByMonthByShop(int shopId);
+	
+	
 
 }

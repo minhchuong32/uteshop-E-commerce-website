@@ -18,11 +18,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import ute.shop.entity.Product;
 import ute.shop.entity.ProductVariant;
+import ute.shop.entity.Review;
 import ute.shop.service.impl.*;
 import ute.shop.service.*;
 
 @WebServlet(urlPatterns = { "/admin/products", "/admin/products/add", "/admin/products/edit", "/admin/products/delete",
-		"/admin/products/variants" })
+		"/admin/products/variants", "/admin/products/reviews" })
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1MB
 		maxFileSize = 1024 * 1024 * 5, // 5MB
 		maxRequestSize = 1024 * 1024 * 20 // 20MB
@@ -35,6 +36,7 @@ public class ProductController extends HttpServlet {
 	private final IProductImageService imageService = new ProductImageServiceImpl();
 	private final ICategoryService categoryService = new CategoryServiceImpl();
 	private final IShopService shopService = new ShopServiceImpl();
+	private final IReviewService reviewService = new ReviewServiceImpl();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -55,6 +57,29 @@ public class ProductController extends HttpServlet {
 				req.setAttribute("page", "products");
 				req.setAttribute("view", "/views/admin/products/add.jsp");
 				req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
+			}
+			else if (uri.endsWith("/reviews")) {
+				int productId = Integer.parseInt(req.getParameter("productId"));
+				List<Review> reviews = reviewService.getByProductId(productId); // Giả sử bạn có service này
+
+				List<Map<String, Object>> result = new ArrayList<>();
+				for (Review r : reviews) {
+					Map<String, Object> item = new HashMap<>();
+					item.put("reviewId", r.getReviewId());
+					item.put("rating", r.getRating());
+					item.put("comment", r.getComment());
+					// Lấy username từ user liên kết, kiểm tra null để tránh lỗi
+					item.put("username", (r.getUser() != null) ? r.getUser().getUsername() : "Anonymous");
+					result.add(item);
+				}
+
+				resp.setContentType("application/json;charset=UTF-8");
+				resp.setCharacterEncoding("UTF-8");
+
+				Gson gson = new Gson();
+				String json = gson.toJson(result);
+				resp.getWriter().write(json);
+				return; 
 			}
 
 			else if (uri.endsWith("/edit")) {
@@ -113,15 +138,13 @@ public class ProductController extends HttpServlet {
 				imageService.deleteImage((long) id);
 				variantService.deleteByProductId(id);
 				productService.delete(id);
-
-				req.getSession().setAttribute("success", "Đã xóa sản phẩm cùng toàn bộ ảnh và biến thể!");
-				resp.sendRedirect(req.getContextPath() + "/admin/products");
+				
+				resp.sendRedirect(req.getContextPath() + "/admin/products?message=DelSuccess");
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			req.setAttribute("error", "Lỗi: " + e.getMessage());
-			req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
+			resp.sendRedirect(req.getContextPath() + "/admin/products?errorGet");
 		}
 	}
 
@@ -203,9 +226,7 @@ public class ProductController extends HttpServlet {
 					}
 
 				}
-
-				req.getSession().setAttribute("success", "Thêm sản phẩm, biến thể và ảnh thành công!");
-				resp.sendRedirect(req.getContextPath() + "/admin/products");
+				resp.sendRedirect(req.getContextPath() + "/admin/products?message=AddSuccess");
 			}
 
 			// =============== EDIT PRODUCT ===============
@@ -275,15 +296,12 @@ public class ProductController extends HttpServlet {
 					}
 
 				}
-
-				req.getSession().setAttribute("success", "Cập nhật sản phẩm, biến thể và ảnh thành công!");
-				resp.sendRedirect(req.getContextPath() + "/admin/products");
+				resp.sendRedirect(req.getContextPath() + "/admin/products?message=EditSuccess");
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			req.getSession().setAttribute("error", e.getMessage());
-			resp.sendRedirect(req.getContextPath() + "/admin/products");
+			resp.sendRedirect(req.getContextPath() + "/admin/products?error=errorPost");
 		}
 	}
 }

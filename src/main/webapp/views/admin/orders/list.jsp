@@ -1,5 +1,43 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ include file="/commons/taglib.jsp"%>
+
+<c:if test="${not empty param.message}">
+	<div
+		class="alert alert-success alert-dismissible fade show mb-3 shadow-sm"
+		role="alert">
+		<i class="bi bi-check-circle-fill me-2"></i>
+		<c:choose>
+			<c:when test="${param.message == 'DelSuccess'}">Xóa thành công!</c:when>
+			<c:when test="${param.message == 'AddSuccess'}">Thêm thành công!</c:when>
+			<c:when test="${param.message == 'EditSuccess'}">Cập nhật thành công!</c:when>
+			<c:otherwise>Thao tác thành công!</c:otherwise>
+		</c:choose>
+		<button type="button" class="btn-close" data-bs-dismiss="alert"
+			aria-label="Đóng"></button>
+	</div>
+</c:if>
+
+<c:if test="${not empty param.error}">
+	<div
+		class="alert alert-danger alert-dismissible fade show mb-3 shadow-sm"
+		role="alert">
+		<i class="bi bi-exclamation-triangle-fill me-2"></i>errorIdForm
+		<c:choose>
+			<c:when test="${param.error == 'errorPost'}">Có lỗi trong quá trình sửa hoặc thêm!. Vui lòng thử lại.</c:when>
+			<c:when test="${param.error == 'errorGet'}">Có lỗi trong quá trình lấy dữ liệu!</c:when>
+			<c:when test="${param.error == 'errorDel'}">ID xóa không hợp lệ!</c:when>
+			<c:when test="${param.error == 'errorIdForm'}">Lỗi không lấy được ID Order vs Delivery hợp lệ!</c:when>
+			<c:when test="${param.error == 'errorIdOrder'}">ID Order không hợp lệ!</c:when>
+			<c:when test="${param.error == 'errorNullOrder'}">Đơn hàng không tồn tại!</c:when>
+			<c:when test="${param.error == 'errorID'}">ID không hợp lệ!</c:when>
+			<c:when test="${param.error == 'errorUpdate'}">Có lỗi khi cập nhật!</c:when>
+			<c:when test="${param.error == 'errorExportPdf'}">Có lỗi khi xuất file PDF!</c:when>
+			<c:otherwise>Có lỗi xảy ra. Vui lòng thử lại.</c:otherwise>
+		</c:choose>
+		<button type="button" class="btn-close" data-bs-dismiss="alert"
+			aria-label="Đóng"></button>
+	</div>
+</c:if>
 <h4 class="fw-bold text-primary-custom mb-3 mt-4">
 	<i class="bi bi-bar-chart-fill me-2"></i>Hiệu suất giao hàng
 </h4>
@@ -35,10 +73,10 @@
 </h3>
 
 <a href="${pageContext.request.contextPath}/admin/orders/report"
-	class="btn btn-success mt-4" id="exportPdfBtn"> <i
+	class="btn btn-primary-custom mt-4" id="exportPdfBtn"> <i
 	class="bi bi-file-earmark-pdf-fill me-1"></i> Xuất báo cáo PDF
-</a>
 
+</a>
 
 <div class="card shadow-sm border-0">
 	<div class="card-body">

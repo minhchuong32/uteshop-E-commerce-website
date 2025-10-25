@@ -16,8 +16,10 @@ function initCateTable() {
     });
 }
 
+
 // Khởi tạo khi DOM loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Khởi tạo DataTable
     initCateTable();
+   
 });

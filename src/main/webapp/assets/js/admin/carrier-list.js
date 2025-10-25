@@ -37,18 +37,4 @@ $(document).ready(function() {
 		new bootstrap.Modal($('#editCarrierModal')).show();
 	});
 
-	// ====================== MODAL XÓA ======================
-	const deleteModal = new bootstrap.Modal($('#confirmDeleteModal'));
-
-	$('#carrierTable tbody').on('click', '.deleteBtn', function() {
-		const id = $(this).data('id');
-		$('#deleteConfirmBtn').attr('href', `${contextPath}/admin/carriers/delete?id=${id}`);
-		deleteModal.show();
-	});
-
-	// ====================== HIỆU ỨNG CẢNH BÁO (TÙY CHỌN) ======================
-	const alertBox = $('#alertBox');
-	if (alertBox.length) {
-		setTimeout(() => alertBox.fadeOut(400), 3000);
-	}
 });

@@ -85,5 +85,7 @@ public class RevenueServiceImpl implements IRevenueService {
 	public List<Object[]> getRevenueByMonthByShop(int shopId) {
 		return dao.getRevenueByMonthByShop(shopId);
 	}
+	
+	
 
 }

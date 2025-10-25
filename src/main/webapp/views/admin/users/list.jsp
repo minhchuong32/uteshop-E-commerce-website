@@ -30,6 +30,8 @@
 				<c:when test="${param.error == 'errorNotfound'}">Không tìm thấy người dùng.</c:when>
 				<c:when test="${param.error == 'errorMail'}">Email đã tồn tại, vui lòng chọn email khác.</c:when>
 				<c:when test="${param.error == 'invalidId'}">ID không hợp lệ.</c:when>
+				<c:when test="${param.error == 'errorGet'}">Có lỗi trong quá trình lấy dữ liệu !</c:when>
+				<c:when test="${param.error == 'errorPost'}">Có lỗi trong quá trình chỉnh sửa dữ liệu !</c:when>
 				<c:otherwise>Có lỗi xảy ra. Vui lòng thử lại.</c:otherwise>
 			</c:choose>
 			<button type="button" class="btn-close" data-bs-dismiss="alert"
@@ -180,17 +182,3 @@
 		</div>
 	</div>
 </div>
-
-
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Tự động ẩn tất cả các alert sau 3 giây
-    const alertList = document.querySelectorAll(".alert");
-    alertList.forEach(function(alertEl) {
-      setTimeout(() => {
-        new bootstrap.Alert(alertEl).close();
-      }, 3000);
-    });
-  });
-</script>

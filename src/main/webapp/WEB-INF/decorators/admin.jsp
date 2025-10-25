@@ -27,7 +27,7 @@
 	rel="stylesheet">
 
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script> -->
 
 </head>
 

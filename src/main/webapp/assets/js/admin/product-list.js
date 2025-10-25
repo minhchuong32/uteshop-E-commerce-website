@@ -3,6 +3,7 @@
 // Khởi tạo DataTable cho bảng sản phẩm
 function initProductTable() {
 	$('#productTable').DataTable({
+		destroy: true,
 		pageLength: 5,
 		ordering: true,
 		lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
@@ -39,8 +40,9 @@ function handleProductRowClick(contextPath) {
 		$('#detailCategory').text(category);
 		$('#detailShop').text(shop);
 
-		// Gọi AJAX lấy biến thể
+		// Gọi AJAX lấy biến thể và review 
 		loadProductVariants(id, contextPath);
+		loadProductReviews(id, contextPath);
 
 		// Hiển thị modal
 		const modal = new bootstrap.Modal(document.getElementById('productDetailModal'));
@@ -117,8 +119,108 @@ function renderVariantRows(variants, contextPath) {
 	$('#variantBody').html(rows);
 }
 
+// Load danh sách đánh giá sản phẩm qua AJAX
+function loadProductReviews(productId, contextPath) {
+	const reviewContainer = $('#reviewContainer');
+	reviewContainer.html('<p class="text-center text-muted">Đang tải đánh giá...</p>');
+
+	$.ajax({
+		url: contextPath + '/admin/products/reviews?productId=' + productId,
+		type: 'GET',
+		dataType: 'json',
+		cache: false,
+		success: function(data) {
+			if (!data || data.length === 0) {
+				reviewContainer.html('<p class="text-center text-muted">Sản phẩm này chưa có đánh giá nào.</p>');
+				return;
+			}
+			renderReviews(data, contextPath);
+		},
+		error: function(xhr, status, error) {
+			console.error("AJAX Error (Reviews):", status, error);
+			reviewContainer.html('<p class="text-danger text-center">Lỗi tải dữ liệu đánh giá!</p>');
+		}
+	});
+}
+
+// Render danh sách đánh giá vào container
+function renderReviews(reviews, contextPath) { // ✅ Nhận thêm contextPath
+	let html = '';
+	reviews.forEach(review => {
+		// Tạo chuỗi HTML cho các ngôi sao
+		let stars = '';
+		for (let i = 1; i <= 5; i++) {
+			stars += `<i class="bi bi-star${i <= review.rating ? '-fill' : ''} text-warning"></i>`;
+		}
+
+		html += `
+            <div class="d-flex mb-3 border-bottom pb-2">
+                <div class="flex-shrink-0">
+                    <i class="bi bi-person-circle fs-2 text-secondary"></i>
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong class="text-primary-custom">${review.username}</strong>
+                        <div class="review-stars">${stars}</div>
+                    </div>
+                    <p class="mb-1 fst-italic text-muted">"${review.comment}"</p>
+
+                    <div class="mt-2 text-end">
+                        <button class="btn btn-sm btn-outline-warning me-2" 
+                                onclick="openEditReviewModal(${review.reviewId}, ${review.rating}, '${review.comment.replace(/'/g, "\\'")}')">
+                            <i class="bi bi-pencil-fill"></i> Sửa
+                        </button>
+						<button class="btn btn-sm btn-outline-danger"
+						                                data-bs-toggle="modal"
+						                                data-bs-target="#confirmDeleteReviewModal"
+						                                data-delete-url="${contextPath}/admin/reviews/delete?id=${review.reviewId}">
+						                           <i class="bi bi-trash-fill"></i> Xóa
+						                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+	});
+	$('#reviewContainer').html(html);
+}
+
+function openEditReviewModal(reviewId, rating, comment) {
+	// Điền dữ liệu cũ vào form trong modal
+	$('#editReviewId').val(reviewId);
+	$('#editReviewComment').val(comment);
+
+	// Set sao cho đúng với rating
+	$('#editReviewRating').val(rating);
+
+	// Mở modal
+	const modal = new bootstrap.Modal(document.getElementById('editReviewModal'));
+	modal.show();
+}
+
 // Khởi tạo khi DOM loaded
 document.addEventListener('DOMContentLoaded', function() {
 	// Khởi tạo DataTable
 	initProductTable();
+});
+// Khởi tạo khi DOM loaded
+document.addEventListener('DOMContentLoaded', function() {
+	// Khởi tạo DataTable
+	initProductTable();
+	// Script xử lý cho modal xác nhận xóa review
+	const confirmDeleteReviewModal = document.getElementById('confirmDeleteReviewModal');
+	if (confirmDeleteReviewModal) {
+		confirmDeleteReviewModal.addEventListener('show.bs.modal', function(event) {
+			// Lấy button đã kích hoạt modal
+			const button = event.relatedTarget;
+
+			// Lấy URL xóa từ thuộc tính data-delete-url của button
+			const deleteUrl = button.getAttribute('data-delete-url');
+
+			// Tìm nút "Xóa" bên trong modal
+			const confirmBtn = confirmDeleteReviewModal.querySelector('#deleteReviewConfirmBtn');
+
+			// Gán URL vào thuộc tính href của nút "Xóa"
+			confirmBtn.href = deleteUrl;
+		});
+	}
 });

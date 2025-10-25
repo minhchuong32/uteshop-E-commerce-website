@@ -3,14 +3,28 @@
 
 <html>
 <head>
-    <title>Thống kê doanh thu</title>
+<title>Thống kê doanh thu</title>
 </head>
 
 <body class="bg-light">
 	<div class="container py-4">
-		<h3 class="text-primary-custom fw-bold mb-4">
-			<i class="bi bi-bar-chart"></i> Quản lý doanh thu sàn thương mại
-		</h3>
+
+		<div class="d-sm-flex align-items-center justify-content-between mb-4">
+			<h3 class="text-primary-custom fw-bold mb-4">
+				<i class="bi bi-bar-chart"></i>Thống kê Doanh thu
+			</h3>
+
+			<%-- NÚT BẤM XUẤT BÁO CÁO PDF --%>
+			<c:url var="exportUrl" value="/admin/revenue/report">
+				<%-- Truyền tham số fee hiện tại để báo cáo PDF tính toán chính xác --%>
+				<c:param name="fee" value="${feeRate / 100}" />
+			</c:url>
+			<a href="${exportUrl}"
+				class="d-none d-sm-inline-block btn btn-sm btn-primary-custom shadow-sm"
+				id="exportPdfBtn"> <i class="bi bi-file-earmark-pdf-fill me-1"></i>
+				Xuất Báo cáo PDF
+			</a>
+		</div>
 		<form method="get"
 			action="${pageContext.request.contextPath}/admin/revenue"
 			class="row g-3 mb-4" onsubmit="return validateDateRange();">
@@ -110,7 +124,8 @@
 			<div class="col-md-6">
 				<div class="card shadow-sm h-100">
 					<div class="card-body">
-						<h5 class="text-primary-custom mb-3">Tỷ lệ doanh thu và phí sàn</h5>
+						<h5 class="text-primary-custom mb-3">Tỷ lệ doanh thu và phí
+							sàn</h5>
 						<canvas id="feeChart" height="160"></canvas>
 					</div>
 				</div>
@@ -137,7 +152,7 @@
 		</div>
 	</div>
 
-    <%-- 
+	<%-- 
         =====================================================================
         TRUYỀN DỮ LIỆU TỪ JSP SANG FILE JAVASCRIPT BÊN NGOÀI
         - Tạo một object JavaScript `revenuePageData`.
@@ -145,7 +160,7 @@
         - File revenue-list.js sẽ đọc dữ liệu từ object toàn cục này.
         =====================================================================
     --%>
-    <script>
+	<script>
         const revenuePageData = {
             months: [${months}],
             revenues: [${revenues}],

@@ -121,18 +121,3 @@
 		</div>
 	</div>
 </div>
-
-<script>
-  // Tự động ẩn alert sau 3 giây
-  document.addEventListener("DOMContentLoaded", function() {
-    const alertEl = document.querySelector(".alert");
-    if (alertEl) {
-      setTimeout(() => {
-        alertEl.classList.add("fade");
-        alertEl.style.transition = "opacity 0.5s ease";
-        alertEl.style.opacity = "0";
-        setTimeout(() => alertEl.remove(), 500); // Xóa khỏi DOM sau khi mờ
-      }, 3000);
-    }
-  });
-</script>

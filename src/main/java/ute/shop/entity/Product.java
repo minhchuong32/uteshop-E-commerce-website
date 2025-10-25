@@ -64,7 +64,7 @@ public class Product {
 //    private List<OrderDetail> orderDetails = new ArrayList<>();
 
 	// Liên kết với đánh giá
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews = new ArrayList<>();
 
 	// Danh sách ảnh liên quan

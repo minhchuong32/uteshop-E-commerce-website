@@ -1,5 +1,10 @@
 package ute.shop.controller.admin;
 
+import java.util.Base64;
+
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -11,9 +16,11 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.layout.properties.VerticalAlignment;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -43,77 +50,80 @@ public class OrderController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String uri = req.getRequestURI();
-		// === XUẤT BÁO CÁO PDF ===
-		if (uri.endsWith("/report")) {
-			generateOrderReportPdf(req, resp);
-			resp.sendRedirect(req.getContextPath() + "/admin/orders");
-			return;
-		}
+		try {
 
-		// Lấy dữ liệu chung
-		List<User> shippers = userService.getUsersByRole("shipper");
-		List<Carrier> carriers = carrierService.findAll();
-
-		req.setAttribute("shippers", shippers);
-		req.setAttribute("carriers", carriers);
-		// === Trang danh sách đơn hàng ===
-		if (uri.endsWith("/orders")) {
-			List<Order> orders = orderService.findAllForAdmin();
-			List<Object[]> stats = deliveryService.getPerformanceStats();
-			req.setAttribute("orders", orders);
-			req.setAttribute("stats", stats);
-			req.setAttribute("page", "orders");
-			req.setAttribute("view", "/views/admin/orders/list.jsp");
-			req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
-		}
-		// === Trang form chỉnh sửa ===
-		else if (uri.contains("/form")) {
-			String orderIdParam = req.getParameter("orderId");
-			String deliveryIdParam = req.getParameter("deliveryId");
-
-			if (orderIdParam == null || deliveryIdParam == null) {
-				resp.sendRedirect(req.getContextPath() + "/admin/orders");
+			// === XUẤT BÁO CÁO PDF ===
+			if (uri.endsWith("/report")) {
+				generateOrderReportPdf(req, resp);
 				return;
 			}
 
-			try {
-				// Lấy order
-				int orderId = Integer.parseInt(orderIdParam);
-				Order order = orderService.getById(orderId);
+			// Lấy dữ liệu chung
+			List<User> shippers = userService.getUsersByRole("shipper");
+			List<Carrier> carriers = carrierService.findAll();
 
-				// Lấy delivery
-				int deliveryId = Integer.parseInt(deliveryIdParam);
-				Delivery delivery = deliveryService.getById(deliveryId);
+			req.setAttribute("shippers", shippers);
+			req.setAttribute("carriers", carriers);
+			// === Trang danh sách đơn hàng ===
+			if (uri.endsWith("/orders")) {
+				List<Order> orders = orderService.findAllForAdmin();
+				List<Object[]> stats = deliveryService.getPerformanceStats();
+				req.setAttribute("orders", orders);
+				req.setAttribute("stats", stats);
+				req.setAttribute("page", "orders");
+				req.setAttribute("view", "/views/admin/orders/list.jsp");
+				req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
+			}
+			// === Trang form chỉnh sửa ===
+			else if (uri.contains("/form")) {
+				String orderIdParam = req.getParameter("orderId");
+				String deliveryIdParam = req.getParameter("deliveryId");
 
-				// Lấy danh sách địa chỉ của khách hàng để cho admin chọn
-				if (order != null && order.getUser() != null) {
-					List<ShippingAddress> addresses = shippingAddressService
-							.getAddressesByUser(order.getUser().getUserId());
-					req.setAttribute("shippingAddresses", addresses);
+				if (orderIdParam == null || deliveryIdParam == null) {
+					resp.sendRedirect(req.getContextPath() + "/admin/orders?error=errorIdForm");
+					return;
 				}
 
-				req.setAttribute("order", order);
-				req.setAttribute("delivery", delivery);
-				req.setAttribute("page", "orders");
-				req.setAttribute("view", "/views/admin/orders/form.jsp");
-				req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
-			} catch (NumberFormatException e) {
-				resp.sendRedirect(req.getContextPath() + "/admin/orders");
+				try {
+					// Lấy order
+					int orderId = Integer.parseInt(orderIdParam);
+					Order order = orderService.getById(orderId);
+
+					// Lấy delivery
+					int deliveryId = Integer.parseInt(deliveryIdParam);
+					Delivery delivery = deliveryService.getById(deliveryId);
+
+					// Lấy danh sách địa chỉ của khách hàng để cho admin chọn
+					if (order != null && order.getUser() != null) {
+						List<ShippingAddress> addresses = shippingAddressService
+								.getAddressesByUser(order.getUser().getUserId());
+						req.setAttribute("shippingAddresses", addresses);
+					}
+
+					req.setAttribute("order", order);
+					req.setAttribute("delivery", delivery);
+					req.setAttribute("page", "orders");
+					req.setAttribute("view", "/views/admin/orders/form.jsp");
+					req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
+				} catch (NumberFormatException e) {
+					resp.sendRedirect(req.getContextPath() + "/admin/orders?error=errorIdForm");
+				}
 			}
-		}
-		// === Xóa ===
-		else if (uri.endsWith("/delete")) {
-			try {
-				int deliveryId = Integer.parseInt(req.getParameter("deliveryId"));
-				int orderId = Integer.parseInt(req.getParameter("orderId"));
-				deliveryService.delete(deliveryId);
-				orderService.delete(orderId);
-				req.getSession().setAttribute("message",
-						"Đã xóa Delivery ID = " + deliveryId + " và Order ID = " + orderId);
-			} catch (NumberFormatException e) {
-				req.getSession().setAttribute("error", "ID không hợp lệ!");
+			// === Xóa ===
+			else if (uri.endsWith("/delete")) {
+				try {
+					int deliveryId = Integer.parseInt(req.getParameter("deliveryId"));
+					int orderId = Integer.parseInt(req.getParameter("orderId"));
+					deliveryService.delete(deliveryId);
+					orderService.delete(orderId);
+					resp.sendRedirect(req.getContextPath() + "/admin/orders?message=DelSuccess");
+				} catch (NumberFormatException e) {
+					resp.sendRedirect(req.getContextPath() + "/admin/orders?error=errorDel");
+				}
 			}
-			resp.sendRedirect(req.getContextPath() + "/admin/orders");
+		} catch (Exception e) {
+			e.printStackTrace();
+			resp.sendRedirect(req.getContextPath() + "/admin/orders?error=errorGet");
 		}
 	}
 
@@ -137,16 +147,14 @@ public class OrderController extends HttpServlet {
 
 			// Kiểm tra Order ID
 			if (orderIdParam == null || orderIdParam.isEmpty()) {
-				req.getSession().setAttribute("error", "Order ID không hợp lệ!");
-				resp.sendRedirect(req.getContextPath() + "/admin/orders");
+				resp.sendRedirect(req.getContextPath() + "/admin/orders?error=errorIdOrder");
 				return;
 			}
 
 			int orderId = Integer.parseInt(orderIdParam);
 			Order order = orderService.getById(orderId);
 			if (order == null) {
-				req.getSession().setAttribute("error", "Đơn hàng không tồn tại!");
-				resp.sendRedirect(req.getContextPath() + "/admin/orders");
+				resp.sendRedirect(req.getContextPath() + "/admin/orders?error=errorNullOrder");
 				return;
 			}
 
@@ -190,28 +198,22 @@ public class OrderController extends HttpServlet {
 				}
 			}
 
-			req.getSession().setAttribute("message", "Cập nhật thành công!");
-			// Sửa redirect để bao gồm cả deliveryId
-			resp.sendRedirect(
-					req.getContextPath() + "/admin/orders/form?orderId=" + orderId + "&deliveryId=" + deliveryIdParam);
+			resp.sendRedirect(req.getContextPath() + "/admin/orders?message=EditSuccess");
 
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
-			req.getSession().setAttribute("error", "ID không hợp lệ!");
-			resp.sendRedirect(req.getContextPath() + "/admin/orders");
+			resp.sendRedirect(req.getContextPath() + "/admin/orders?error=errorID");
 		} catch (Exception e) {
 			e.printStackTrace();
-			req.getSession().setAttribute("error", "Lỗi khi cập nhật: " + e.getMessage());
-			resp.sendRedirect(req.getContextPath() + "/admin/orders/form?orderId=" + orderIdParam + "&deliveryId="
-					+ deliveryIdParam);
+			resp.sendRedirect(req.getContextPath() + "/admin/orders?error=errorUpdate");
 		}
 	}
 
 	private void generateOrderReportPdf(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		// Tạo một cookie để báo hiệu cho JavaScript biết quá trình tải đã bắt đầu
-	    Cookie downloadCookie = new Cookie("download_token", "completed");
-	    downloadCookie.setPath("/"); // Đảm bảo cookie có thể được đọc từ mọi nơi trên trang
-	    resp.addCookie(downloadCookie);
+		Cookie downloadCookie = new Cookie("download_token", "completed");
+		downloadCookie.setPath("/"); // Đảm bảo cookie có thể được đọc từ mọi nơi trên trang
+		resp.addCookie(downloadCookie);
 		// Lấy dữ liệu cần thiết
 		List<Order> orders = orderService.findAllForAdmin();
 		List<Object[]> stats = deliveryService.getPerformanceStats();
@@ -241,7 +243,36 @@ public class OrderController extends HttpServlet {
 					.setBold().setTextAlignment(TextAlignment.CENTER));
 			document.add(new Paragraph("Ngày xuất: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()))
 					.setFont(vietnameseFont).setFontSize(9).setTextAlignment(TextAlignment.CENTER).setMarginBottom(15));
+			InputStream logoStream = getServletContext().getResourceAsStream("/images/uteshop_logo.png"); // Thay đổi
+																											// đường dẫn
+																											// nếu cần
+			if (logoStream != null) {
+				ImageData logoData = ImageDataFactory.create(logoStream.readAllBytes());
+				Image logo = new Image(logoData);
+				logo.setWidth(UnitValue.createPointValue(40)); // Kích thước logo (điểm ảnh), điều chỉnh cho phù hợp
+				logo.setHeight(UnitValue.createPointValue(40));
+				logo.setMarginRight(10); // Khoảng cách với text
 
+				// Tạo một Table nhỏ để chứa logo và tên sàn trên cùng một dòng
+				Table headerTable = new Table(UnitValue.createPercentArray(new float[] { 1, 6 }))
+						.useAllAvailableWidth();
+				headerTable.addCell(new Cell().add(logo).setBorder(null).setVerticalAlignment(VerticalAlignment.MIDDLE)
+						.setHorizontalAlignment(HorizontalAlignment.RIGHT));
+				headerTable.addCell(new Cell()
+						.add(new Paragraph("UTESHOP - BÁO CÁO QUẢN LÝ ĐƠN HÀNG").setFont(vietnameseFont).setFontSize(18)
+								.setBold().setFontColor(ColorConstants.BLUE)) // Có thể thêm màu sắc
+						.setBorder(null).setVerticalAlignment(VerticalAlignment.MIDDLE)
+						.setHorizontalAlignment(HorizontalAlignment.LEFT));
+				document.add(headerTable.setMarginBottom(10)); // Khoảng cách với nội dung tiếp theo
+			} else {
+				// Nếu không tìm thấy logo, chỉ thêm tên sàn và tiêu đề chính
+				document.add(new Paragraph("UTESHOP - BÁO CÁO TỔNG THỂ QUẢN LÝ ĐƠN HÀNG").setFont(vietnameseFont)
+						.setFontSize(18).setBold().setTextAlignment(TextAlignment.CENTER));
+			}
+
+			// Tiêu đề phụ (ngày xuất)
+			document.add(new Paragraph("Ngày xuất: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()))
+					.setFont(vietnameseFont).setFontSize(9).setTextAlignment(TextAlignment.CENTER).setMarginBottom(15));
 			// Thống kê tổng quan
 			long totalOrders = orders.size();
 			long successfulDeliveries = orders.stream().filter(o -> "Đã giao".equals(o.getStatus())).count();
@@ -261,7 +292,26 @@ public class OrderController extends HttpServlet {
 			overviewTable.addCell(createCell(String.valueOf(canceledOrders), vietnameseFont, false));
 			overviewTable.addCell(createCell(df.format(successRate) + "%", vietnameseFont, false));
 			document.add(overviewTable.setMarginBottom(15));
+			String base64Image = req.getParameter("chartImageData");
 
+			// Chỉ thêm biểu đồ nếu dữ liệu ảnh được gửi lên
+			if (base64Image != null && !base64Image.isEmpty()) {
+				document.add(
+						new Paragraph("Biểu đồ hiệu suất giao hàng").setFont(vietnameseFont).setFontSize(14).setBold());
+
+				// Dữ liệu Base64 từ JS có dạng: "data:image/png;base64,iVBORw0KGgo..."
+				// Ta cần bỏ phần đầu "data:image/png;base64,"
+				byte[] imageBytes = Base64.getDecoder().decode(base64Image.split(",")[1]);
+
+				ImageData imageData = ImageDataFactory.create(imageBytes);
+				Image chartImg = new Image(imageData);
+
+				// Điều chỉnh kích thước ảnh cho phù hợp với trang
+				chartImg.setWidth(UnitValue.createPercentValue(80));
+				chartImg.setHorizontalAlignment(com.itextpdf.layout.properties.HorizontalAlignment.CENTER);
+
+				document.add(chartImg.setMarginBottom(15));
+			}
 			// Bảng hiệu suất Shipper
 			document.add(
 					new Paragraph("Hiệu suất giao hàng của Shipper").setFont(vietnameseFont).setFontSize(14).setBold());
@@ -279,15 +329,15 @@ public class OrderController extends HttpServlet {
 			// Bảng chi tiết đơn hàng
 			document.add(new Paragraph("Chi tiết các đơn hàng").setFont(vietnameseFont).setFontSize(14).setBold());
 
-			// SỬA LỖI 1: Thêm một cột vào định nghĩa (từ 6 thành 7 cột)
+			// Thêm một cột vào định nghĩa (từ 6 thành 7 cột)
 			Table orderTable = new Table(UnitValue.createPercentArray(new float[] { 1, 2, 2, 2, 1.5f, 1.5f, 1.5f }))
 					.useAllAvailableWidth();
 
-			// SỬA LỖI 2: Thêm tiêu đề cho cột mới "Hãng vận chuyển"
+			// Thêm tiêu đề cho cột mới "Hãng vận chuyển"
 			orderTable.addHeaderCell(createHeaderCell("ID", vietnameseFont));
 			orderTable.addHeaderCell(createHeaderCell("Khách hàng", vietnameseFont));
 			orderTable.addHeaderCell(createHeaderCell("Shipper", vietnameseFont));
-			orderTable.addHeaderCell(createHeaderCell("Hãng vận chuyển", vietnameseFont)); // <-- TIÊU ĐỀ MỚI
+			orderTable.addHeaderCell(createHeaderCell("Hãng vận chuyển", vietnameseFont));
 			orderTable.addHeaderCell(createHeaderCell("Tổng tiền", vietnameseFont));
 			orderTable.addHeaderCell(createHeaderCell("Trạng thái", vietnameseFont));
 			orderTable.addHeaderCell(createHeaderCell("Ngày tạo", vietnameseFont));
@@ -327,6 +377,7 @@ public class OrderController extends HttpServlet {
 			document.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+			resp.sendRedirect(req.getContextPath() + "/admin/orders?error=errorExportPdf");
 		}
 	}
 
