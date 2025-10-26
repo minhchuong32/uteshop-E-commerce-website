@@ -110,6 +110,13 @@ public class LoginController extends HttpServlet {
 			return;
 		}
 
+		String status = user.getStatus();
+		if ("banned".equals(status)) {
+			request.setAttribute("alert", "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên!");
+			request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+			return;
+		}
+
 		// ===== Tạo mới JWT token và cookie =====
 		Cookie oldJwtCookie = new Cookie("jwt_token", "");
 		oldJwtCookie.setMaxAge(0);
@@ -129,10 +136,10 @@ public class LoginController extends HttpServlet {
 		String role = user.getRole() != null ? user.getRole().toLowerCase() : "";
 
 		switch (role) {
-		    case "admin" -> response.sendRedirect(context + "/admin/home");
-		    case "shipper" -> response.sendRedirect(context + "/shipper/home");
-		    case "vendor", "user" -> response.sendRedirect(context + "/user/home");
-		    default -> response.sendRedirect(context + "/web/home");
+		case "admin" -> response.sendRedirect(context + "/admin/home");
+		case "shipper" -> response.sendRedirect(context + "/shipper/home");
+		case "vendor", "user" -> response.sendRedirect(context + "/user/home");
+		default -> response.sendRedirect(context + "/web/home");
 		}
 		return;
 	}

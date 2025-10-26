@@ -83,12 +83,6 @@ public class ContactController extends HttpServlet {
 				resp.sendRedirect(req.getContextPath() + "/admin/contacts?error=notFound");
 				return;
 			}
-
-			// =================================================================
-			// == BẮT ĐẦU TẠO URL TUYỆT ĐỐI CHO LOGO ==
-			// =================================================================
-			// Cách 2: Host trên server : (https://uteshop.com),Ví dụ:
-			// https://uteshop.com/assets/images/logo/uteshop-logo.png
 			// Lấy thông tin server để tạo Base URL (ví dụ:
 			// http://localhost:8080/uteshop)
 			String scheme = req.getScheme(); // http
@@ -106,37 +100,21 @@ public class ContactController extends HttpServlet {
 			}
 			urlBuilder.append(contextPath);
 
-			// =================================================================
-			// == TIẾP TỤC XÂY DỰNG NỘI DUNG EMAIL HTML ==
-			// =================================================================
 			StringBuilder emailBodyHtml = new StringBuilder();
-			// =================================================================
-			// == BẮT ĐẦU NỘI DUNG EMAIL HTML ĐÃ CẬP NHẬT ==
-			// =================================================================
 			emailBodyHtml.append("<!DOCTYPE html><html lang='vi'><head><meta charset='UTF-8'>")
 					// --- PHẦN CSS ---
 					.append("<style>")
 					.append("body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; margin: 0; padding: 0; }")
 					.append(".container { width: 100%; max-width: 600px; margin: 20px auto; padding: 25px; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }")
-
-					// CSS CHO HEADER DẠNG BANNER
 					.append(".header { background-color: #00558D; color: #ffffff; padding: 25px; text-align: center; margin: -25px -25px 25px -25px; border-radius: 12px 12px 0 0; }")
-					.append(".header h1 { margin: 0; font-size: 28px; letter-spacing: 1px; }") // Style cho chữ
-																								// "UteShop"
-
+					.append(".header h1 { margin: 0; font-size: 28px; letter-spacing: 1px; }")
 					.append(".content { margin-bottom: 20px; }").append(".content h3 { color: #222; }")
 					.append(".admin-reply { background-color: #e7f3ff; border-left: 4px solid #007bff; padding: 16px; margin: 20px 0; border-radius: 8px; }")
 					.append(".quote { background-color: #f8f9fa; border-left: 4px solid #6c757d; padding: 16px; margin-top: 20px; border-radius: 8px; font-style: italic; color: #495057; }")
 					.append(".footer { font-size: 0.9em; text-align: center; color: #777; margin-top: 30px; }")
 					.append("</style></head><body>")
-
-					// --- PHẦN HTML BODY ---
 					.append("<div class='container'>")
-
-					// THÊM HEADER BANNER MỚI
-					// Thay thế logo và tiêu đề cũ bằng banner này.
 					.append("<div class='header'><h1>UteShop</h1></div>")
-
 					.append("<div class='content'>").append("<h3>Chào ").append(originalContact.getFullName())
 					.append(",</h3>")
 					.append("<p>Cảm ơn bạn đã liên hệ với UteShop. Chúng tôi xin phản hồi về yêu cầu của bạn như sau:</p>")
@@ -147,9 +125,7 @@ public class ContactController extends HttpServlet {
 					.append("</div>").append("</div>").append("<div class='footer'>")
 					.append("<p>Trân trọng,<br><strong>Đội ngũ UteShop</strong></p>").append("</div>")
 					.append("</div></body></html>");
-			// =================================================================
-			// == KẾT THÚC NỘI DUNG EMAIL HTML ==
-			// =================================================================
+
 			// Gửi email
 			SendMail mailer = new SendMail();
 			mailer.sendMail(recipientEmail, subject, emailBodyHtml.toString());
