@@ -79,9 +79,9 @@
 	</div>
 </div>
 
-<div class="text-end mb-3">
+<div class="mb-3">
 	<a href="${pageContext.request.contextPath}/admin/promotions/add"
-		class="btn btn-success"> <i class="bi bi-plus-circle"></i> Thêm
+		class="btn btn-primary-custom"> <i class="bi bi-plus"></i> Thêm
 		khuyến mãi
 	</a>
 </div>

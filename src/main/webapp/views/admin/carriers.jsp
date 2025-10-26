@@ -37,9 +37,9 @@
 		<i class="bi bi-truck"></i> Quản lý đơn vị vận chuyển
 	</h3>
 
-	<div class="mb-3 text-end">
-		<button id="btnAddCarrier" class="btn btn-primary">
-			<i class="bi bi-plus-circle"></i> Thêm đơn vị vận chuyển
+	<div class="mb-3">
+		<button id="btnAddCarrier" class="btn btn-primary-custom">
+			<i class="bi bi-plus-lg"></i> Thêm đơn vị vận chuyển
 		</button>
 	</div>
 
@@ -65,21 +65,25 @@
 									type="currency" currencySymbol="₫" /></td>
 							<td>${carrier.carrierDescription}</td>
 							<td class="text-center">
-								<button class="btn btn-sm btn-warning editBtn"
+								<!-- Nút Sửa -->
+								<button type="button"
+									class="btn btn-sm btn-outline-warning editBtn me-2"
 									data-id="${carrier.carrierId}"
 									data-name="${carrier.carrierName}"
 									data-fee="${carrier.carrierFee}"
-									data-description="${carrier.carrierDescription}">
-									<i class="bi bi-pencil"></i> Sửa
-								</button> <!-- Xóa --> <a href="javascript:void(0);"
-								class="text-danger me-2 btn btn-delete" data-bs-toggle="modal"
-								data-bs-target="#confirmDeleteModal"
-								data-id="${carrier.carrierId}"
-								data-url="${pageContext.request.contextPath}/admin/carriers/delete"
-								title="Xóa"> <i class="bi bi-trash-fill fs-5"></i>
-							</a>
+									data-description="${carrier.carrierDescription}" title="Sửa">
+									<i class="bi bi-pencil-square fs-5"></i>
+								</button> <!-- Nút Xóa -->
+								<button type="button" class="btn btn-sm btn-outline-danger"
+									data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+									data-id="${carrier.carrierId}"
+									data-url="${pageContext.request.contextPath}/admin/carriers/delete"
+									title="Xóa">
+									<i class="bi bi-trash-fill fs-5"></i>
+								</button>
 
 							</td>
+
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -111,7 +115,7 @@
 					</div>
 					<div class="mb-3">
 						<label class="form-label fw-semibold">Phí vận chuyển (VNĐ)</label>
-						<input type="number" class="form-control" name="carrierFee"
+						<input type="number" min="0" step="0.01" class="form-control" name="carrierFee"
 							min="0" required>
 					</div>
 					<div class="mb-3">

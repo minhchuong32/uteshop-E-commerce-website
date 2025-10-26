@@ -41,7 +41,7 @@
 	<!-- Nút thêm -->
 	<div class="mb-3">
 		<a href="${pageContext.request.contextPath}/admin/products/add"
-			class="btn btn-success"> <i class="bi bi-plus"></i> Thêm sản phẩm
+			class="btn btn-primary-custom"> <i class="bi bi-plus"></i> Thêm sản phẩm
 		</a>
 	</div>
 
@@ -79,16 +79,20 @@
 							<td class="text-center"><i
 								class="bi bi-star-fill text-warning"></i> ${p.averageRating > 0 ? String.format("%.1f", p.averageRating) : "N/A"}
 							</td>
-							<td class="text-center"><a
-								href="${pageContext.request.contextPath}/admin/products/edit?id=${p.productId}"
-								class="text-warning me-3"> <i
-									class="bi bi-pencil-square fs-5"></i>
-							</a> <!-- Xóa --> <a href="javascript:void(0);"
-								class="text-danger me-2" data-bs-toggle="modal"
-								data-bs-target="#confirmDeleteModal" data-id="${p.productId}"
-								data-url="${pageContext.request.contextPath}/admin/products/delete"
-								title="Xóa"> <i class="bi bi-trash-fill fs-5"></i>
-							</a></td>
+							<td class="text-center">
+								<!-- Sửa -->
+								<button type="button" class="btn btn-warning btn-sm me-2"
+									title="Sửa sản phẩm"
+									onclick="window.location.href='${pageContext.request.contextPath}/admin/products/edit?id=${p.productId}'">
+									<i class="bi bi-pencil-square"></i>
+								</button> <!-- Xóa -->
+								<button type="button" class="btn btn-danger btn-sm deleteBtn"
+									title="Xóa sản phẩm" data-bs-toggle="modal"
+									data-bs-target="#confirmDeleteModal" data-id="${p.productId}"
+									data-url="${pageContext.request.contextPath}/admin/products/delete">
+									<i class="bi bi-trash-fill"></i>
+								</button>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -218,22 +222,31 @@
 </div>
 
 <!-- Modal xác nhận xóa review-->
-<div class="modal fade" id="confirmDeleteReviewModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="confirmDeleteReviewModal" tabindex="-1"
+	aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content shadow-lg border-0 rounded-3">
 			<div class="modal-header bg-danger text-white">
 				<h5 class="modal-title">
-					<i class="bi bi-exclamation-triangle-fill me-2"></i> Xác nhận xóa Đánh giá
+					<i class="bi bi-exclamation-triangle-fill me-2"></i> Xác nhận xóa
+					Đánh giá
 				</h5>
-				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+				<button type="button" class="btn-close btn-close-white"
+					data-bs-dismiss="modal" aria-label="Đóng"></button>
 			</div>
 			<div class="modal-body">
-				<p>Bạn có chắc muốn xóa đánh giá này không? Hành động này <strong>không thể hoàn tác</strong>.</p>
+				<p>
+					Bạn có chắc muốn xóa đánh giá này không? Hành động này <strong>không
+						thể hoàn tác</strong>.
+				</p>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
-				<a id="deleteReviewConfirmBtn" href="#" class="btn btn-danger rounded-pill px-4">
-					<i class="bi bi-trash-fill me-1"></i> Xóa
+				<button type="button"
+					class="btn btn-outline-secondary rounded-pill px-4"
+					data-bs-dismiss="modal">Hủy</button>
+				<a id="deleteReviewConfirmBtn" href="#"
+					class="btn btn-danger rounded-pill px-4"> <i
+					class="bi bi-trash-fill me-1"></i> Xóa
 				</a>
 			</div>
 		</div>

@@ -10,7 +10,8 @@
 	<!-- Nút thêm mới -->
 	<div class="mb-3">
 		<a href="${pageContext.request.contextPath}/admin/shops/add"
-			class="btn btn-success"> <i class="bi bi-plus"></i> Thêm cửa hàng
+			class="btn btn-primary-custom"> <i class="bi bi-plus"></i> Thêm
+			cửa hàng
 		</a>
 	</div>
 
@@ -108,18 +109,18 @@
 
 							<!-- Hành động -->
 							<td class="text-center">
-								<!-- Sửa --> <a
-								href="${pageContext.request.contextPath}/admin/shops/edit?id=${s.shopId}"
-								class="text-warning me-2" title="Sửa"> <i
-									class="bi bi-pencil-square fs-5"></i>
-							</a> <!-- Xóa --> <a href="javascript:void(0);"
-								class="text-danger me-2" data-bs-toggle="modal"
-								data-bs-target="#confirmDeleteModal" data-id="${s.shopId}"
-								data-url="${pageContext.request.contextPath}/admin/shops/delete"
-								title="Xóa"> <i class="bi bi-trash-fill fs-5"></i>
-							</a>
-
-							</td>
+								<!-- Nút Sửa -->
+								<button type="button"
+									class="btn btn-outline-warning btn-sm me-2" title="Sửa"
+									onclick="window.location.href='${pageContext.request.contextPath}/admin/shops/edit?id=${s.shopId}'">
+									<i class="bi bi-pencil-square fs-5"></i>
+								</button> <!-- Nút Xóa -->
+								<button type="button" class="btn btn-outline-danger btn-sm"
+									title="Xóa" data-bs-toggle="modal"
+									data-bs-target="#confirmDeleteModal" data-id="${s.shopId}"
+									data-url="${pageContext.request.contextPath}/admin/shops/delete">
+									<i class="bi bi-trash-fill fs-5"></i>
+								</button>
 						</tr>
 					</c:forEach>
 				</tbody>

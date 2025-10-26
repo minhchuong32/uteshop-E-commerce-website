@@ -1,5 +1,3 @@
-// product-list.js - Quản lý sản phẩm
-
 // Khởi tạo DataTable cho bảng sản phẩm
 function initProductTable() {
 	$('#productTable').DataTable({
@@ -24,8 +22,7 @@ function initProductTable() {
 function handleProductRowClick(contextPath) {
 	$('#productTable tbody').on('click', 'tr.product-row', function(e) {
 		// Bỏ qua nếu click vào nút xóa / sửa
-		if ($(e.target).closest('a').length > 0) return;
-
+		if ($(e.target).closest('button').length > 0 || $(e.target).is('i')) return;
 		const id = $(this).data('id');
 		const name = $(this).data('name');
 		const desc = $(this).data('desc') || 'Chưa có mô tả';

@@ -41,7 +41,7 @@
 	<!-- Nút thêm mới -->
 	<div class="mb-3">
 		<a href="${pageContext.request.contextPath}/admin/categories/add"
-			class="btn btn-success"> <i class="bi bi-plus"></i> Thêm danh mục
+			class="btn btn-primary-custom"> <i class="bi bi-plus"></i> Thêm danh mục
 		</a>
 	</div>
 

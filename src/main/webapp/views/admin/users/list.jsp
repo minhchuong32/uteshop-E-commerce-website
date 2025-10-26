@@ -39,17 +39,15 @@
 		</div>
 	</c:if>
 
-	<%-- TIÊU ĐỀ VÀ NÚT THÊM MỚI --%>
-	<div class="d-flex justify-content-between align-items-center mb-3">
-		<h3 class="text-primary-custom fw-bold mb-0">
-			<i class="bi bi-people-fill me-2"></i> Quản lý người dùng
-		</h3>
+	<h3 class="text-primary-custom fw-bold mb-4">
+		<i class="bi bi-people-fill me-2"></i> Quản lý người dùng
+	</h3>
+	<div class="mb-3">
 		<a href="${pageContext.request.contextPath}/admin/users/add"
-			class="btn btn-success"> <i class="bi bi-plus-lg"></i> Thêm người
-			dùng
+			class="btn btn-primary-custom"> <i class="bi bi-plus-lg"></i>
+			Thêm người dùng
 		</a>
 	</div>
-
 	<%-- BẢNG DỮ LIỆU --%>
 	<div class="card shadow-sm border-0">
 		<div class="card-body">
@@ -111,36 +109,49 @@
 									</c:choose></td>
 								<td class="text-center">
 									<div class="btn-group btn-group-sm">
-										<a
-											href="${pageContext.request.contextPath}/admin/users/edit?id=${u.userId}"
-											class="btn btn-outline-primary" title="Sửa"> <i
-											class="bi bi-pencil-square"></i>
-										</a>
+
+										<!-- Edit -->
+										<button type="button" class="btn btn-warning btn-sm me-2"
+											title="Sửa danh mục"
+											onclick="window.location.href='${pageContext.request.contextPath}/admin/users/edit?id=${u.userId}'">
+											<i class="bi bi-pencil-square"></i>
+										</button>
+
+										<!-- Delete -->
 										<button type="button"
-											class="btn btn-outline-danger"
-											data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
-											data-id="${u.userId}"
-											data-url="${pageContext.request.contextPath}/admin/users/delete"
-											title="Xóa người dùng">
+											class="btn btn-danger btn-sm me-2 deleteBtn"
+											title="Xóa người dùng" data-bs-toggle="modal"
+											data-bs-target="#confirmDeleteModal" data-id="${u.userId}"
+											data-url="${pageContext.request.contextPath}/admin/users/delete">
 											<i class="bi bi-trash-fill"></i>
 										</button>
 
+										<!-- Lock / Unlock -->
 										<c:choose>
 											<c:when test="${u.status eq 'active'}">
-												<a
-													href="${pageContext.request.contextPath}/admin/users/lock?id=${u.userId}"
-													class="btn btn-outline-secondary" title="Khóa tài khoản">
+												<button type="button"
+													class="btn btn-outline-secondary btn-sm me-2"
+													title="Khóa tài khoản"
+													onclick="window.location.href='${pageContext.request.contextPath}/admin/users/lock?id=${u.userId}'">
 													<i class="bi bi-lock-fill"></i>
-												</a>
+												</button>
 											</c:when>
 											<c:otherwise>
-												<a
-													href="${pageContext.request.contextPath}/admin/users/unlock?id=${u.userId}"
-													class="btn btn-outline-success" title="Mở tài khoản">
+												<button type="button" class="btn btn-outline-success btn-sm me-2"
+													title="Mở tài khoản"
+													onclick="window.location.href='${pageContext.request.contextPath}/admin/users/unlock?id=${u.userId}'">
 													<i class="bi bi-unlock-fill"></i>
-												</a>
+												</button>
 											</c:otherwise>
 										</c:choose>
+										<!-- Liên hệ -->
+										<button type="button" class="btn btn-info btn-sm"
+											title="Liên hệ người dùng"
+											onclick="window.location.href='${pageContext.request.contextPath}/admin/users/contact?id=${u.userId}'">
+											<i class="bi bi-envelope-fill"></i>
+										</button>
+
+
 									</div>
 								</td>
 							</tr>
