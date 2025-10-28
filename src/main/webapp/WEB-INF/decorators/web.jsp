@@ -22,7 +22,7 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/assets/css/common.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/css/user-home.css">
+	href="${pageContext.request.contextPath}/assets/css/user/user-home.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/assets/css/detail-product.css">
 

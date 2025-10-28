@@ -301,6 +301,6 @@
 		</div>
 	</div>
 
-	<script src="${pageContext.request.contextPath}/assets/js/user-home.js"></script>
+	<script src="${pageContext.request.contextPath}/assets/js/user/user-home.js"></script>
 </body>
 </html>

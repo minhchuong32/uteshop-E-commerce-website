@@ -13,8 +13,6 @@
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
 	rel="stylesheet" />
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
 	rel="stylesheet">
@@ -22,11 +20,13 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/assets/css/common.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/css/user-home.css">
+	href="${pageContext.request.contextPath}/assets/css/user/user-home.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/assets/css/detail-product.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/chat.css">
-
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/chat.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/user/chatbot.css">
 </head>
 <body>
 	<!-- Modern Loading Overlay -->
@@ -46,12 +46,14 @@
 		<h5 class="fw-bold text-primary-custom">Đang tải UteShop...</h5>
 	</div>
 
-	<%@ include file="/commons/user/header.jsp" %>
+	<%@ include file="/commons/user/header.jsp"%>
 	<div id="main-content">
 		<sitemesh:write property="body" />
 	</div>
 	<%@ include file="/commons/user/footer.jsp"%>
-	<!-- Script điều khiển hiệu ứng loading -->
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="${pageContext.request.contextPath}/assets/js/loading.js"></script>
 
 </body>

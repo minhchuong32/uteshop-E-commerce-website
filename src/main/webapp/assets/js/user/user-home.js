@@ -17,10 +17,9 @@ document.addEventListener("DOMContentLoaded", function() {
 	prevBtn.addEventListener("click", () => {
 		slider.scrollBy({ left: -itemWidth, behavior: "smooth" });
 	});
-});
 
-//logic chuyển đổi layout 
-document.addEventListener("DOMContentLoaded", function() {
+
+	//logic chuyển đổi layout 
 	const btnGrid = document.getElementById("btnGrid");
 	const btnList = document.getElementById("btnList");
 	const gridView = document.getElementById("gridView");
@@ -44,4 +43,3 @@ document.addEventListener("DOMContentLoaded", function() {
 		gridView.classList.add("d-none");
 	});
 });
-

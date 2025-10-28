@@ -27,8 +27,7 @@
 								<img id="mainImg"
 									src="${pageContext.request.contextPath}/assets${img.imageUrl.startsWith('/') ? img.imageUrl : '/' + img.imageUrl}"
 									alt="${product.name}" class="product-detail-img mb-3"
-									style="height: 500px; object-fit: contain; background: #f9f9f9;"
-									 />
+									style="height: 500px; object-fit: contain; background: #f9f9f9;" />
 							</c:otherwise>
 						</c:choose>
 					</c:if>
@@ -135,28 +134,10 @@
 				<div class="d-flex gap-2 mb-3">
 					<c:choose>
 						<c:when test="${not empty minVariant and minVariant.stock > 0}">
-							<!-- Nếu chưa đăng nhập -->
-							<c:if test="${empty sessionScope.account}">
-								<form action="${pageContext.request.contextPath}/login"
-									method="get" onsubmit="return validateSelection()">
-									<input type="hidden" name="redirect"
-										value="${pageContext.request.requestURI}">
-									<button type="submit" class="btn btn-primary-custom w-100">
-										<i class="bi bi-cart-plus"></i> Thêm vào giỏ
-									</button>
-								</form>
-							</c:if>
-							<c:if test="${empty sessionScope.account}">
-								<form action="${pageContext.request.contextPath}/login"
-									method="get" onsubmit="return validateSelection()">
-									<input type="hidden" name="redirect"
-										value="${pageContext.request.requestURI}"> <input
-										type="hidden" name="quantity" id="formQtyNow" value="1">
-									<input type="hidden" name="action" value="buyNow">
-									<button type="submit" class="btn btn-dark w-100">Mua
-										ngay</button>
-								</form>
-							</c:if>
+							<a href="${pageContext.request.contextPath}/login"
+								class="btn btn-primary-custom w-100"> <i
+								class="bi bi-box-arrow-in-right"></i> Đăng nhập để mua
+							</a>
 						</c:when>
 
 						<c:otherwise>
@@ -207,7 +188,7 @@
 			</div>
 		</div>
 
-	
+
 
 		<!-- BẢNG THÔNG TIN SẢN PHẨM -->
 		<div class="card mt-4 border-0 shadow-sm">
@@ -295,7 +276,7 @@
 				<div class="mb-4 d-flex align-items-start">
 					<!-- Avatar -->
 					<img
-						src="${pageContext.request.contextPath}/uploads/${sessionScope.account.avatar}"
+						src="${pageContext.request.contextPath}/uploads/${requestScope.account.avatar}"
 						alt="Avatar" class="rounded-circle me-3"
 						style="width: 50px; height: 50px; object-fit: cover;">
 

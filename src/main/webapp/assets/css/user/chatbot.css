@@ -1,0 +1,375 @@
+/* ================== Z-INDEX HIERARCHY ================== */
+/*
+  Thứ tự z-index (từ thấp đến cao):
+  - Content: auto (default)
+  - Chatbot container: 1000
+  - Scroll to top button: 1055
+  - Chatbot toggler button: 1050
+  - Header/Navbar: 1060
+  - Dropdown menu: 1070
+  - Preloader: 9999
+*/
+
+/* ================== FIX MAIN CONTENT BLOCKING CLICKS ================== */
+/* Đảm bảo #main-content không chặn click vào các nút fixed */
+#main-content {
+	position: relative;
+	z-index: 1; /* Thấp hơn tất cả các fixed elements */
+}
+
+/* --- Nút bật/tắt Chatbot --- */
+#chatbot-toggler {
+	position: fixed;
+	bottom: 90px; /* Nằm trên nút scroll (20px + 50px + 20px spacing) */
+	right: 20px;
+	width: 50px;
+	height: 50px;
+	background-color: #00558D;
+	color: white;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 24px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	border: none;
+	z-index: 1050; /* Cao hơn scroll button và chatbot container */
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#chatbot-toggler:hover {
+	transform: scale(1.1);
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Khung Chatbot --- */
+#chatbot-container {
+	position: fixed;
+	bottom: 150px; /* Nằm trên nút chatbot toggler (90px + 50px + 10px spacing) */
+	right: 20px;
+	width: 350px;
+	max-width: 90vw;
+	max-height: 500px; /* Giới hạn chiều cao để không che khuất quá nhiều */
+	background-color: #fff;
+	border-radius: 15px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	z-index: 1000; /* Thấp hơn các nút điều khiển */
+	
+	/* Hiệu ứng ẩn/hiện */
+	transform: scale(0) translateY(20px);
+	opacity: 0;
+	transform-origin: bottom right;
+	transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+	            opacity 0.3s ease-out,
+	            visibility 0s 0.3s; /* Delay visibility để animation hoàn tất */
+	visibility: hidden;
+	pointer-events: none; /* Không thể tương tác khi ẩn */
+}
+
+#chatbot-container.show {
+	transform: scale(1) translateY(0);
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto; /* Cho phép tương tác khi hiện */
+	transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+	            opacity 0.3s ease-out;
+}
+
+/* --- Header Chatbot --- */
+#chatbot-header {
+	background-color: #00558D;
+	color: white;
+	padding: 12px 15px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-weight: 600;
+	flex-shrink: 0; /* Không bị co lại */
+}
+
+#chatbot-closer {
+	background: none;
+	border: none;
+	color: white;
+	font-size: 24px;
+	cursor: pointer;
+	padding: 0;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	transition: background-color 0.2s ease;
+}
+
+#chatbot-closer:hover {
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Khu vực tin nhắn --- */
+#chatbot-messages {
+	flex: 1;
+	min-height: 0; /* Quan trọng cho flex scroll */
+	padding: 15px;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	background-color: #f8f9fa;
+}
+
+/* Custom scrollbar cho messages */
+#chatbot-messages::-webkit-scrollbar {
+	width: 6px;
+}
+
+#chatbot-messages::-webkit-scrollbar-track {
+	background: #e9ecef;
+}
+
+#chatbot-messages::-webkit-scrollbar-thumb {
+	background: #00558D;
+	border-radius: 3px;
+}
+
+#chatbot-messages::-webkit-scrollbar-thumb:hover {
+	background: #004474;
+}
+
+.chatbot-message {
+	padding: 10px 14px;
+	border-radius: 18px;
+	max-width: 80%;
+	word-wrap: break-word;
+	font-size: 0.9rem;
+	line-height: 1.4;
+	animation: messageSlideIn 0.3s ease-out;
+}
+
+@keyframes messageSlideIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Tin nhắn của người dùng */
+.user-message {
+	background-color: #00558D;
+	color: white;
+	border-bottom-right-radius: 4px;
+	align-self: flex-end;
+}
+
+/* Tin nhắn của bot */
+.bot-message {
+	background-color: #e9ecef;
+	color: #333;
+	border-bottom-left-radius: 4px;
+	align-self: flex-start;
+}
+
+/* --- Khu vực nhập liệu --- */
+#chatbot-input-container {
+	display: flex;
+	align-items: center;
+	border-top: 1px solid #dee2e6;
+	padding: 10px;
+	background-color: white;
+	flex-shrink: 0; /* Không bị co lại */
+}
+
+#chatbot-input {
+	flex: 1;
+	border: 1px solid #ccc;
+	border-radius: 20px;
+	padding: 8px 15px;
+	outline: none;
+	margin-right: 10px;
+	font-size: 0.9rem;
+	transition: border-color 0.2s ease;
+}
+
+#chatbot-input:focus {
+	border-color: #00558D;
+	box-shadow: 0 0 0 3px rgba(0, 85, 141, 0.1);
+}
+
+#chatbot-send {
+	background: none;
+	border: none;
+	font-size: 20px;
+	color: #00558D;
+	cursor: pointer;
+	padding: 5px;
+	width: 36px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#chatbot-send:hover {
+	background-color: rgba(0, 85, 141, 0.1);
+	transform: scale(1.1);
+}
+
+#chatbot-send:active {
+	transform: scale(0.95);
+}
+
+/* --- Nút Scroll To Top --- */
+#s {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	width: 50px;
+	height: 50px;
+	background-color: #6c757d; /* Màu khác với chatbot để phân biệt */
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 50%;
+	border: none; /* Xóa border mặc định của button */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	z-index: 1055; /* CAO HƠN chatbot toggler để có thể click được */
+	
+	/* Trạng thái ẩn/hiện */
+	opacity: 0;
+	visibility: hidden;
+	transform: scale(0.8);
+	transition: opacity 0.3s ease, 
+	            visibility 0.3s ease, 
+	            transform 0.3s ease,
+	            background-color 0.2s ease;
+}
+
+#s.show {
+	opacity: 1;
+	visibility: visible;
+	transform: scale(1);
+}
+
+#s:hover {
+	background-color: #5a6268;
+	transform: scale(1.1);
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+#s:active {
+	transform: scale(0.95);
+}
+
+#chatbot-suggestions-container {
+	display: flex;
+	flex-wrap: wrap; /* Cho phép xuống dòng nếu nhiều gợi ý */
+	gap: 10px; /* Tăng khoảng cách một chút */
+	padding: 10px 0 5px 0; /* Thêm chút đệm dưới */
+	align-self: flex-start; /* Căn lề trái giống bot */
+	animation: messageSlideIn 0.3s ease-out; /* Dùng animation chung */
+}
+
+.chatbot-suggestion-btn {
+	background-color: #e9f4ff; /* Màu nền xanh nhạt, mềm mại */
+	border: none; /* Bỏ border cho sạch sẽ */
+	color: #00558D; /* Màu chữ chính */
+	font-size: 0.85rem;
+	font-weight: 500; /* Hơi đậm một chút */
+	padding: 8px 14px; /* Tăng padding cho nút "thoáng" hơn */
+	border-radius: 18px; /* Bo tròn tương tự tin nhắn */
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Thêm bóng đổ nhẹ */
+}
+
+.chatbot-suggestion-btn:hover {
+	background-color: #dbeeff; /* Màu nền đậm hơn khi hover */
+	color: #004474; /* Màu chữ đậm hơn */
+	transform: translateY(-2px); /* Hiệu ứng "nhấc" nút lên */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ rõ hơn */
+}
+
+.chatbot-suggestion-btn:active {
+	/* Hiệu ứng khi nhấn nút */
+	transform: translateY(0);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+	background-color: #cce4ff;
+}
+
+/* ================== RESPONSIVE ================== */
+@media (max-width: 576px) {
+	#chatbot-container {
+		width: calc(100vw - 40px); /* Full width trừ margin */
+		right: 20px;
+		left: 20px;
+		bottom: 150px;
+		max-height: 400px; /* Giảm chiều cao trên mobile */
+	}
+	
+	#chatbot-toggler,
+	#s {
+		width: 45px;
+		height: 45px;
+		font-size: 20px;
+	}
+	
+	#chatbot-toggler {
+		bottom: 80px;
+	}
+	
+	.chatbot-message {
+		max-width: 85%;
+		font-size: 0.85rem;
+	}
+}
+
+@media (max-width: 400px) {
+	#chatbot-container {
+		max-height: 350px;
+	}
+	
+	#chatbot-messages {
+		padding: 10px;
+	}
+	
+	.chatbot-message {
+		padding: 8px 12px;
+	}
+}
+
+/* ================== UTILITIES ================== */
+/* Đảm bảo các widget không bị che bởi fixed footer nếu có */
+.support-widget {
+	/* Class chung cho các nút hỗ trợ */
+	transition: all 0.3s ease;
+}
+
+/* Animation khi load trang */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+#chatbot-toggler,
+#s {
+	animation: fadeInUp 0.6s ease-out 0.5s both;
+}

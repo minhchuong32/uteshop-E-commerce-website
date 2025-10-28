@@ -76,7 +76,7 @@
 
                                     <!-- Nút chat realtime -->
                                     <div class="text-end mt-3">
-                                        <a href="${pageContext.request.contextPath}/user/chat?complaintId=${n.relatedComplaint.complaintId}"
+                                        <a href="${pageContext.request.contextPath}/user/complaints/chat?complaintId=${n.relatedComplaint.complaintId}"
                                            class="btn btn-sm btn-success">
                                             <i class="bi bi-chat-dots-fill"></i> Chat với Admin
                                         </a>

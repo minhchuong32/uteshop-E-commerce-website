@@ -11,7 +11,11 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ComplaintMessage {
-
+	// Enum này định nghĩa các loại tin nhắn hợp lệ.
+    public enum MessageType {
+        TEXT,
+        FILE
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "message_id")
@@ -36,9 +40,10 @@ public class ComplaintMessage {
      * - @Column: Định nghĩa cột trong database.
      * - @Builder.Default: Đảm bảo rằng nếu không chỉ định, loại tin nhắn sẽ mặc định là "TEXT".
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "message_type", nullable = false, length = 20)
     @Builder.Default
-    private String messageType = "TEXT";
+    private MessageType messageType = MessageType.TEXT; // Thay đổi từ String sang Enum
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", updatable = false)

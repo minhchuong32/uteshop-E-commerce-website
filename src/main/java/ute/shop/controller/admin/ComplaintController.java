@@ -4,12 +4,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import ute.shop.dto.MessageDTO;
 import ute.shop.entity.*;
 import ute.shop.service.impl.*;
 import ute.shop.service.*;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
 		maxFileSize = 1024 * 1024 * 10, // 10MB
@@ -48,14 +51,30 @@ public class ComplaintController extends HttpServlet {
 			} else if (uri.endsWith("/delete")) {
 				int id = Integer.parseInt(req.getParameter("id"));
 				complaintService.delete(id);
-				 resp.sendRedirect(req.getContextPath() + "/admin/complaints?message=DelSuccess");
+				resp.sendRedirect(req.getContextPath() + "/admin/complaints?message=DelSuccess");
 			} else if (uri.endsWith("/chat")) {
 				int complaintId = Integer.parseInt(req.getParameter("id"));
+
+				User admin = (User) req.getAttribute("account");
+				if (admin == null) {
+					admin = (User) req.getSession().getAttribute("account");
+				}
+				req.setAttribute("account", admin);
+
+				// Lấy dữ liệu gốc từ database
 				Complaint complaint = complaintService.findById(complaintId);
-				List<ComplaintMessage> messages = msgService.findByComplaintId(complaintId);
+				List<ComplaintMessage> originalMessages = msgService.findByComplaintId(complaintId);
+
+				// Chuyển đổi sang DTO
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				List<MessageDTO> messageDTOs = originalMessages.stream()
+						.map(msg -> new MessageDTO((long) msg.getSender().getUserId(), msg.getSender().getUsername(),
+								msg.getSender().getAvatar(), msg.getMessageType().name(), msg.getContent(),
+								msg.getOriginalFilename(), sdf.format(msg.getCreatedAt())))
+						.collect(Collectors.toList());
 
 				req.setAttribute("complaint", complaint);
-				req.setAttribute("messages", messages);
+				req.setAttribute("messages", messageDTOs);
 				req.setAttribute("page", "complaints");
 				req.setAttribute("view", "/views/admin/complaints/chat.jsp");
 				req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
@@ -70,8 +89,8 @@ public class ComplaintController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String uri = req.getRequestURI();
 
-		if (uri.endsWith("/edit")) {
-			try {
+		try {
+			if (uri.endsWith("/edit")) {
 				int id = Integer.parseInt(req.getParameter("complaintId"));
 				String status = req.getParameter("status");
 
@@ -79,10 +98,11 @@ public class ComplaintController extends HttpServlet {
 				c.setStatus(status);
 
 				complaintService.update(c);
-			} catch (Exception e) {
-				e.printStackTrace();
+				resp.sendRedirect(req.getContextPath() + "/admin/complaints?message=EditSuccess");
 			}
-			resp.sendRedirect(req.getContextPath() + "/admin/complaints?message=EditSuccess");
+		} catch (Exception e) {
+			e.printStackTrace();
+			resp.sendRedirect(req.getContextPath() + "/admin/complaints?error=errorPost");
 		}
 	}
 }

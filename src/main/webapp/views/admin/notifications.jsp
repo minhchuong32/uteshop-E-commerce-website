@@ -50,7 +50,7 @@
 										pattern="dd/MM/yyyy HH:mm" /></td>
 								<td class="text-center"><a
 									href="${pageContext.request.contextPath}/admin/notifications/view?id=${n.id}"
-									class="btn btn-sm btn-outline-primary"> <i
+									class="btn btn-sm btn-outline-primary-custom"> <i
 										class="bi bi-chat-dots-fill"></i> Xem chi tiết
 								</a></td>
 							</tr>

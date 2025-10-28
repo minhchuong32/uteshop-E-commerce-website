@@ -51,7 +51,7 @@ public class UserNotificationController extends HttpServlet {
                         if(noti.getRelatedComplaint().getComplaintId() !=  0) {
                         	// chuyển hướng đến trang chat khiếu nại tương ứng
                         	resp.sendRedirect(req.getContextPath()
-                        			+ "/user/chat?complaintId=" + noti.getRelatedComplaint().getComplaintId());                        	
+                        			+ "/user/complaints/chat?complaintId=" + noti.getRelatedComplaint().getComplaintId());                        	
                         	return;
                         }
                     }

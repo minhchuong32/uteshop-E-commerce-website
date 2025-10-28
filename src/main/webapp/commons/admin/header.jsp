@@ -47,7 +47,7 @@
                                             <a class="dropdown-item small text-wrap"
                                                href="${pageContext.request.contextPath}/admin/notifications/view?id=${n.id}">
                                                 <div class="d-flex align-items-start">
-                                                    <i class="bi bi-chat-dots-fill text-primary me-2 fs-5"></i>
+                                                    <i class="bi bi-chat-dots-fill text-primary-custom me-2 fs-5"></i>
                                                     <div>
                                                         <strong class="text-dark">
                                                             Khiếu nại #${n.relatedComplaint.complaintId}
@@ -73,7 +73,7 @@
 
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item text-center text-primary fw-semibold"
+                                <a class="dropdown-item text-center text-primary-custom fw-semibold"
                                    href="${pageContext.request.contextPath}/admin/notifications">
                                     Xem tất cả
                                 </a>

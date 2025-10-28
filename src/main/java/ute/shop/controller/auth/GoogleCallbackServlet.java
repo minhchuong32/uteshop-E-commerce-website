@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import ute.shop.dao.IUserDao;
 import ute.shop.dao.impl.UserDaoImpl;
 import ute.shop.entity.User;
+import ute.shop.utils.Constant;
 import ute.shop.utils.GoogleOAuthUtils;
 import ute.shop.utils.GoogleOAuthUtils.GoogleUserInfo;
 import ute.shop.utils.JwtUtil;
@@ -65,7 +66,13 @@ public class GoogleCallbackServlet extends HttpServlet {
 
 				}
 			}
-
+			String status = user.getStatus();
+			if ("banned".equals(status)) {
+				request.setAttribute("alert", "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên!");
+				request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
+				return;
+			}
+			
 			// XÓA COOKIE CŨ
 			Cookie oldJwtCookie = new Cookie("jwt_token", "");
 			oldJwtCookie.setMaxAge(0);
