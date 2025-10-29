@@ -35,7 +35,7 @@
 			<!-- Product Info -->
 			<div class="product-info">
 				<img
-					src="${pageContext.request.contextPath}/assets/${product.imageUrl}"
+					src="${pageContext.request.contextPath}/assets${product.imageUrl}"
 					alt="${product.name}" class="product-image">
 				<div class="product-details">
 					<h6>${product.name}</h6>
@@ -50,14 +50,15 @@
 			</div>
 
 			<!-- Alerts -->
-			<c:if test="${not empty successMessage}">
+			<c:if test="${not empty successMessage || not empty param.success}">
 				<div class="alert alert-success">
-					<i class="fas fa-check-circle"></i> ${successMessage}
+					<i class="fas fa-check-circle"></i> ${successMessage != null ? successMessage : param.success}
 				</div>
 			</c:if>
-			<c:if test="${not empty errorMessage}">
+
+			<c:if test="${not empty errorMessage || not empty param.error}">
 				<div class="alert alert-danger">
-					<i class="fas fa-exclamation-circle"></i> ${errorMessage}
+					<i class="fas fa-exclamation-circle"></i> ${errorMessage != null ? errorMessage : param.error}
 				</div>
 			</c:if>
 
@@ -120,13 +121,13 @@
 									test="${fn:endsWith(review.mediaUrl, '.mp4') || fn:endsWith(review.mediaUrl, '.mov')}">
 									<video controls>
 										<source
-											src="${pageContext.request.contextPath}/${review.mediaUrl}"
+											src="${pageContext.request.contextPath}/assets${review.mediaUrl}"
 											type="video/mp4">
 									</video>
 								</c:when>
 								<c:otherwise>
 									<img
-										src="${pageContext.request.contextPath}/${review.mediaUrl}"
+										src="${pageContext.request.contextPath}/assets${review.mediaUrl}"
 										alt="Review media">
 								</c:otherwise>
 							</c:choose>

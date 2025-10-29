@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -33,59 +35,58 @@ public class ReviewAddController extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private final IReviewService reviewService = new ReviewServiceImpl();
     private final IProductService productService = new ProductServiceImpl();
+    private String realProjectPath = "D:\\LT WEB\\uteshop-E-commerce-website\\src\\main\\webapp\\assets\\images\\reviews";
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    	User user = (User) req.getAttribute("account");
-        if (user == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-            return;
-        }
-        int productId = Integer.parseInt(req.getParameter("productId"));
-        Product product = productService.findById(productId);
+    	 User user = (User) req.getAttribute("account");
+         if (user == null) {
+             resp.sendRedirect(req.getContextPath() + "/login");
+             return;
+         }
 
-        req.setAttribute("product", product);
-        req.getRequestDispatcher("/views/user/order/review.jsp").forward(req, resp);
+         int productId = Integer.parseInt(req.getParameter("productId"));
+         Product product = productService.findById(productId);
+
+         req.setAttribute("product", product);
+         req.getRequestDispatcher("/views/user/order/review.jsp").forward(req, resp);
     }
     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     	resp.setCharacterEncoding("UTF-8");
-    	User user = (User) req.getAttribute("account");
+        User user = (User) req.getAttribute("account");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-		int productId = Integer.parseInt(req.getParameter("productId"));
-		Product product = productService.findById(productId);
-		int rating = Integer.parseInt(req.getParameter("rating"));
-		String comment = req.getParameter("comment");
+        int productId = Integer.parseInt(req.getParameter("productId"));
+        Product product = productService.findById(productId);
+        int rating = Integer.parseInt(req.getParameter("rating"));
+        String comment = req.getParameter("comment");
 
-		// ===================== UPLOAD FILE =====================
-		String mediaUrl = null;
-		Part filePart = req.getPart("mediaFile");
-		if (filePart != null && filePart.getSize() > 0) {
-			String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
+        String mediaUrl = null;
+        Part filePart = req.getPart("mediaFile");
 
-			// đường dẫn lưu file thực tế trong thư mục 
-			String uploadDir = req.getServletContext().getRealPath("/assets/images/reviews");
-			File dir = new File(uploadDir);
-			if (!dir.exists()) dir.mkdirs();
+        if (filePart != null && filePart.getSize() > 0) {
+            String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();           
 
-			// lưu file lên server
-			filePart.write(uploadDir + File.separator + fileName);
+            File uploadFolder = new File(realProjectPath);
+            if (!uploadFolder.exists()) uploadFolder.mkdirs();
 
-			// lưu URL tương đối (để load ảnh/video trong JSP)
-			mediaUrl = "/assets/images/reviews/" + fileName;
-		}
-		// =======================================================
+            File uploadedFile = new File(uploadFolder, fileName);
+            filePart.write(uploadedFile.getAbsolutePath());
 
-		Review review = new Review(null, product, user, rating, comment, mediaUrl);
-		reviewService.addReview(review);
+            // 🔹 Đường dẫn lưu trong DB 
+            mediaUrl = "/images/reviews/" + fileName;
+        }
 
-		req.getSession().setAttribute("success", "Cảm ơn bạn đã đánh giá sản phẩm!");
-		String status = URLEncoder.encode("Đã giao", StandardCharsets.UTF_8);
-		resp.sendRedirect(req.getContextPath() + "/user/orders?status=" + status);
+        Review review = new Review(null, product, user, rating, comment, mediaUrl);
+        reviewService.addReview(review);
+
+        req.setAttribute("success", "Cảm ơn bạn đã đánh giá sản phẩm!");
+        String status = URLEncoder.encode("Đã giao", StandardCharsets.UTF_8);
+        resp.sendRedirect(req.getContextPath() + "/user/orders?status=" + status);
     }
 
 }

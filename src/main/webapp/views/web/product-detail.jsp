@@ -315,13 +315,13 @@
 											<video controls
 												style="width: 200px; border-radius: 8px; display: block; margin-top: 6px;">
 												<source
-													src="${pageContext.request.contextPath}/${r.mediaUrl}"
+													src="${pageContext.request.contextPath}/assets${r.mediaUrl}"
 													type="video/mp4">
 												Trình duyệt không hỗ trợ phát video.
 											</video>
 										</c:when>
 										<c:otherwise>
-											<img src="${pageContext.request.contextPath}/${r.mediaUrl}"
+											<img src="${pageContext.request.contextPath}/assets${r.mediaUrl}"
 												alt="Ảnh đánh giá"
 												style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px; display: block; margin-top: 6px;">
 										</c:otherwise>

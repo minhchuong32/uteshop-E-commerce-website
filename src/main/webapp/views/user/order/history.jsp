@@ -10,6 +10,9 @@
 		<div class="alert alert-success text-center fw-bold mt-3 mb-3">
 			${successMessage}</div>
 	</c:if>
+	<c:if test="${not empty errorMessage}">
+		<div class="alert alert-danger text-center">${errorMessage}</div>
+	</c:if>
 
 	<h3 class="fw-bold text-primary-custom mt-4 mb-4">Lịch sử đơn hàng</h3>
 
@@ -88,6 +91,21 @@
 							href="#detail-${o.orderId}" role="button" aria-expanded="false">
 							Xem chi tiết </a>
 
+						<!-- Nút thanh toán VNPay (chỉ hiện khi trạng thái là "Chờ thanh toán VNPAY") -->
+						<c:if test="${o.status eq 'Chờ thanh toán VNPAY'}">
+							<form method="get"
+								action="${pageContext.request.contextPath}/user/payment/vnpay"
+								style="display: inline;">
+								<input type="hidden" name="paymentTotal"
+									value="${o.totalAmount}" /> 
+								<input type="hidden"
+									name="orderIds" value="${o.orderId}" />
+								<button type="submit"
+									class="btn btn-outline-primary btn-sm mt-1">
+									<i class="bi bi-credit-card-fill me-1"></i> Tiếp tục thanh toán
+								</button>
+							</form>
+						</c:if>
 						<!-- Nút hủy đơn hàng: chỉ hiển thị nếu trạng thái là "Mới" -->
 						<c:if
 							test="${o.status eq 'Mới' 
@@ -103,6 +121,9 @@
 								</button>
 							</form>
 						</c:if>
+
+
+
 
 						<!-- Nút khiếu nại chỉ hiển thị nếu đơn hàng đã giao -->
 						<c:if test="${o.status eq 'Đã giao'}">
