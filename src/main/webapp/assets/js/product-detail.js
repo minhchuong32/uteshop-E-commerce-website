@@ -1,4 +1,4 @@
-console.log("product-detail.js new2");
+console.log("product-detail.js fix alert");
 
 // ==========================
 // DOM Elements Cache
@@ -310,54 +310,65 @@ function setupBuyNow() {
 // Add to Cart Handler
 // ==========================
 function addToCart() {
-	if (!validateSelection()) return;
+	if (!validateSelection()) {
+			return;
+		}
 
-		const variantInput = getEl("variantId");
-		const qtyInput = getEl("qty");
-		const productDetail = getEl("product-detail");
-		let appContext = productDetail?.dataset?.context || "";
+		var variantInput = getEl("variantId");
+		var qtyInput = getEl("qty");
+		var productDetail = getEl("product-detail");
+		var appContext = "";
 
-		const selected = getSelectedOptions();
-		const variantText = Object.entries(selected)
-			.map(([k, v]) => `${k}: ${v}`)
-			.join(" – ");
+		if (productDetail && productDetail.dataset && productDetail.dataset.context) {
+			appContext = productDetail.dataset.context;
+		}
+
+		var selected = getSelectedOptions();
+		var variantText = "";
+		for (var key in selected) {
+			if (selected.hasOwnProperty(key)) {
+				if (variantText !== "") variantText += " – ";
+				variantText += key + ": " + selected[key];
+			}
+		}
 
 		if (!variantInput || !variantInput.value) {
 			showAlert("Vui lòng chọn đủ thuộc tính sản phẩm.", "warning");
 			return;
 		}
 
-		const params = new URLSearchParams({
-			variantId: variantInput.value,
-			quantity: qtyInput ? qtyInput.value : 1
-		});
+		var params = "variantId=" + encodeURIComponent(variantInput.value)
+			+ "&quantity=" + encodeURIComponent(qtyInput ? qtyInput.value : 1);
 
-		fetch(appContext + "/user/cart/add", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded",
-				// ⚠️ nếu bạn dùng JWT thì giữ dòng dưới:
-				"Authorization": "Bearer " + localStorage.getItem("token")
-			},
-			body: params.toString()
-		})
-			.then(res => {
-				// Do servlet /user/cart/add đang redirect chứ không trả JSON
-				// ta chỉ cần hiển thị alert mà không cần parse kết quả
-				if (res.ok) {
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", appContext + "/user/cart/add", true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+		// ⚠️ Nếu bạn đang dùng JWT thì giữ dòng này
+		var token = localStorage.getItem("token");
+		if (token) {
+			xhr.setRequestHeader("Authorization", "Bearer " + token);
+		}
+
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === 4) {
+				if (xhr.status >= 200 && xhr.status < 300) {
 					showAlert(
-						`Đã thêm vào giỏ: ${variantText} (x${qtyInput.value})`,
+						"Đã thêm vào giỏ: " + variantText + " (x" + qtyInput.value + ")",
 						"success",
-						8000 // 👉 hiển thị 8 giây
+						8000
 					);
 				} else {
-					showAlert("❌ Không thể thêm sản phẩm vào giỏ hàng.", "danger", 6000);
+					showAlert("Không thể thêm sản phẩm vào giỏ hàng.", "danger", 6000);
 				}
-			})
-			.catch(err => {
-				console.error("❌ Lỗi thêm giỏ:", err);
-				showAlert("Không thể thêm sản phẩm vào giỏ.", "danger", 6000);
-			});
+			}
+		};
+
+		xhr.onerror = function () {
+			showAlert("Không thể kết nối đến máy chủ.", "danger", 6000);
+		};
+
+		xhr.send(params);
 }
 
 
