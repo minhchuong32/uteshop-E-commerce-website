@@ -50,14 +50,15 @@
 			</div>
 
 			<!-- Alerts -->
-			<c:if test="${not empty successMessage}">
+			<c:if test="${not empty successMessage || not empty param.success}">
 				<div class="alert alert-success">
-					<i class="fas fa-check-circle"></i> ${successMessage}
+					<i class="fas fa-check-circle"></i> ${successMessage != null ? successMessage : param.success}
 				</div>
 			</c:if>
-			<c:if test="${not empty errorMessage}">
+
+			<c:if test="${not empty errorMessage || not empty param.error}">
 				<div class="alert alert-danger">
-					<i class="fas fa-exclamation-circle"></i> ${errorMessage}
+					<i class="fas fa-exclamation-circle"></i> ${errorMessage != null ? errorMessage : param.error}
 				</div>
 			</c:if>
 

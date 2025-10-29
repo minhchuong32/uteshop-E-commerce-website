@@ -35,6 +35,7 @@ public class ReviewAddController extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private final IReviewService reviewService = new ReviewServiceImpl();
     private final IProductService productService = new ProductServiceImpl();
+    private String realProjectPath = "D:\\LT WEB\\uteshop-E-commerce-website\\src\\main\\webapp\\assets\\images\\reviews";
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     	 User user = (User) req.getAttribute("account");
@@ -64,43 +65,26 @@ public class ReviewAddController extends HttpServlet{
         int rating = Integer.parseInt(req.getParameter("rating"));
         String comment = req.getParameter("comment");
 
-        // ===================== UPLOAD FILE =====================
         String mediaUrl = null;
         Part filePart = req.getPart("mediaFile");
+
         if (filePart != null && filePart.getSize() > 0) {
-            String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
+            String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();           
 
-            // 🔹 Đường dẫn thật trong thư mục deploy (Tomcat)
-            String deployDir = req.getServletContext().getRealPath("/assets/images/reviews");
-            File deployFolder = new File(deployDir);
-            if (!deployFolder.exists()) deployFolder.mkdirs();
+            File uploadFolder = new File(realProjectPath);
+            if (!uploadFolder.exists()) uploadFolder.mkdirs();
 
-            // 🔹 Đường dẫn thật trong project (ví dụ D:/workspace/ute-shop/src/main/webapp/assets/images/reviews)
-            String projectDir = System.getProperty("user.dir") + File.separator +
-                    "src" + File.separator + "main" + File.separator +
-                    "webapp" + File.separator + "assets" + File.separator + "images" + File.separator + "reviews";
-            File projectFolder = new File(projectDir);
-            if (!projectFolder.exists()) projectFolder.mkdirs();
+            File uploadedFile = new File(uploadFolder, fileName);
+            filePart.write(uploadedFile.getAbsolutePath());
 
-            // 🔹 Tạo file đích trong cả 2 nơi (deploy + project)
-            File fileInDeploy = new File(deployFolder, fileName);
-            File fileInProject = new File(projectFolder, fileName);
-
-            // 🔹 Ghi file tạm trước (Tomcat lưu Part)
-            filePart.write(fileInDeploy.getAbsolutePath());
-
-            // 🔹 Copy lại vào project
-            Files.copy(fileInDeploy.toPath(), fileInProject.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-            // 🔹 Đường dẫn tương đối để hiển thị ảnh/video
+            // 🔹 Đường dẫn lưu trong DB 
             mediaUrl = "/images/reviews/" + fileName;
         }
-        // =======================================================
 
         Review review = new Review(null, product, user, rating, comment, mediaUrl);
         reviewService.addReview(review);
 
-        req.getSession().setAttribute("success", "Cảm ơn bạn đã đánh giá sản phẩm!");
+        req.setAttribute("success", "Cảm ơn bạn đã đánh giá sản phẩm!");
         String status = URLEncoder.encode("Đã giao", StandardCharsets.UTF_8);
         resp.sendRedirect(req.getContextPath() + "/user/orders?status=" + status);
     }

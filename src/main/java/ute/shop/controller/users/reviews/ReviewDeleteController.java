@@ -22,9 +22,11 @@ public class ReviewDeleteController extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final IReviewService reviewService = new ReviewServiceImpl();
+	private String realPath = "D:\\LT WEB\\uteshop-E-commerce-website\\src\\main\\webapp\\assets\\images\\reviews";
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
+
         User user = (User) req.getAttribute("account");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
@@ -39,26 +41,25 @@ public class ReviewDeleteController extends HttpServlet {
             // =================== XÓA FILE ẢNH ===================
             String mediaUrl = review.getMediaUrl();
             if (mediaUrl != null && !mediaUrl.isEmpty()) {
-                // Đường dẫn file thực tế trong thư mục deploy
-                File fileInDeploy = new File(req.getServletContext().getRealPath("/assets" + mediaUrl));
-                if (fileInDeploy.exists()) fileInDeploy.delete();
-
-                // Đường dẫn file trong thư mục project (src/main/webapp/assets)
-                String projectDir = System.getProperty("user.dir") + File.separator +
-                        "src" + File.separator + "main" + File.separator +
-                        "webapp" + File.separator + "assets" + File.separator +
-                        "images" + File.separator + "reviews";
-
                 String fileName = mediaUrl.replace("/images/reviews/", "");
-                File fileInProject = new File(projectDir, fileName);
-                if (fileInProject.exists()) fileInProject.delete();
+
+                File fileInProject = new File(realPath, fileName);
+                if (fileInProject.exists() && fileInProject.isFile()) {
+                    if (fileInProject.delete()) {
+                        System.out.println("✅ Đã xóa file: " + fileInProject.getAbsolutePath());
+                    } else {
+                        System.out.println("⚠ Không thể xóa file: " + fileInProject.getAbsolutePath());
+                    }
+                } else {
+                    System.out.println("⚠ Không tìm thấy file: " + fileInProject.getAbsolutePath());
+                }
             }
 
             // =================== XÓA REVIEW ===================
             reviewService.deleteReview(reviewId);
-            req.getSession().setAttribute("success", "Xóa đánh giá thành công!");
+            req.setAttribute("success", "Xóa đánh giá thành công!");
         } else {
-            req.getSession().setAttribute("error", "Không thể xóa đánh giá này!");
+            req.setAttribute("error", "Không thể xóa đánh giá này!");
         }
 
         String status = URLEncoder.encode("Đã giao", StandardCharsets.UTF_8);
