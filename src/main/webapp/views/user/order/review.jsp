@@ -35,7 +35,7 @@
 			<!-- Product Info -->
 			<div class="product-info">
 				<img
-					src="${pageContext.request.contextPath}/assets/${product.imageUrl}"
+					src="${pageContext.request.contextPath}/assets${product.imageUrl}"
 					alt="${product.name}" class="product-image">
 				<div class="product-details">
 					<h6>${product.name}</h6>
@@ -120,13 +120,13 @@
 									test="${fn:endsWith(review.mediaUrl, '.mp4') || fn:endsWith(review.mediaUrl, '.mov')}">
 									<video controls>
 										<source
-											src="${pageContext.request.contextPath}/${review.mediaUrl}"
+											src="${pageContext.request.contextPath}/assets${review.mediaUrl}"
 											type="video/mp4">
 									</video>
 								</c:when>
 								<c:otherwise>
 									<img
-										src="${pageContext.request.contextPath}/${review.mediaUrl}"
+										src="${pageContext.request.contextPath}/assets${review.mediaUrl}"
 										alt="Review media">
 								</c:otherwise>
 							</c:choose>

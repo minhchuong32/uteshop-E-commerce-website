@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -38,30 +40,28 @@ public class ReviewEditController extends HttpServlet {
             return;
         }
 
-		int productId = Integer.parseInt(req.getParameter("productId"));
-		Product product = productService.findById(productId);
+        int productId = Integer.parseInt(req.getParameter("productId"));
+        Product product = productService.findById(productId);
+        Review review = reviewService.getByUserAndProduct(user, product);
 
-		Review review = reviewService.getByUserAndProduct(user, product);
-
-		req.setAttribute("product", product);
-		req.setAttribute("review", review);
-		req.getRequestDispatcher("/views/user/order/review.jsp").forward(req, resp);
+        req.setAttribute("product", product);
+        req.setAttribute("review", review);
+        req.getRequestDispatcher("/views/user/order/review.jsp").forward(req, resp);
 	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
-		User user = (User) req.getAttribute("account");
+        User user = (User) req.getAttribute("account");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-
         int reviewId = Integer.parseInt(req.getParameter("reviewId"));
         Review review = reviewService.getById(reviewId);
         if (review == null || !review.getUser().getUserId().equals(user.getUserId())) {
-        	String status = URLEncoder.encode("Đã giao", StandardCharsets.UTF_8);
+            String status = URLEncoder.encode("Đã giao", StandardCharsets.UTF_8);
             resp.sendRedirect(req.getContextPath() + "/user/orders?status=" + status);
             return;
         }
@@ -69,32 +69,51 @@ public class ReviewEditController extends HttpServlet {
         int rating = Integer.parseInt(req.getParameter("rating"));
         String comment = req.getParameter("comment");
 
-        Part filePart = req.getPart("mediaFile");
-        String oldMediaUrl = req.getParameter("oldMediaUrl");
+        String oldMediaUrl = review.getMediaUrl();
         String newMediaUrl = oldMediaUrl;
 
+        Part filePart = req.getPart("mediaFile");
         if (filePart != null && filePart.getSize() > 0) {
-            String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
-            String uploadDir = req.getServletContext().getRealPath("/assets/images/reviews");
-            File dir = new File(uploadDir);
-            if (!dir.exists()) dir.mkdirs();
+            // Tạo tên file mới
+            String originalName = filePart.getSubmittedFileName();
+            String fileName = System.currentTimeMillis() + "_" + originalName;
 
-            // Ghi file lên server
-            filePart.write(uploadDir + File.separator + fileName);
+            // ================= Ghi vào thư mục deploy =================
+            String deployDir = req.getServletContext().getRealPath("/assets/images/reviews");
+            File deployFolder = new File(deployDir);
+            if (!deployFolder.exists()) deployFolder.mkdirs();
 
-            // Cập nhật đường dẫn mới
-            newMediaUrl = "/assets/images/reviews/" + fileName;
+            File fileInDeploy = new File(deployFolder, fileName);
+            filePart.write(fileInDeploy.getAbsolutePath());
 
-            // ✅ (Tuỳ chọn) Xóa file cũ nếu tồn tại
+            // ================= Copy sang thư mục project =================
+            String projectDir = System.getProperty("user.dir") + File.separator +
+                    "src" + File.separator + "main" + File.separator +
+                    "webapp" + File.separator + "assets" + File.separator +
+                    "images" + File.separator + "reviews";
+            File projectFolder = new File(projectDir);
+            if (!projectFolder.exists()) projectFolder.mkdirs();
+
+            File fileInProject = new File(projectFolder, fileName);
+            Files.copy(fileInDeploy.toPath(), fileInProject.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            // Cập nhật đường dẫn DB (chỉ lưu phần sau /assets)
+            newMediaUrl = "/images/reviews/" + fileName;
+
+            // ================= Xóa file cũ (nếu có) =================
             if (oldMediaUrl != null && !oldMediaUrl.isEmpty()) {
-                File oldFile = new File(req.getServletContext().getRealPath(oldMediaUrl));
-                if (oldFile.exists()) oldFile.delete();
+                File oldFileInDeploy = new File(req.getServletContext().getRealPath("/assets/" + oldMediaUrl));
+                if (oldFileInDeploy.exists()) oldFileInDeploy.delete();
+
+                File oldFileInProject = new File(projectDir, oldMediaUrl.replace("images/reviews/", ""));
+                if (oldFileInProject.exists()) oldFileInProject.delete();
             }
         }
+
+        // ================= Cập nhật review =================
         review.setRating(rating);
         review.setComment(comment);
         review.setMediaUrl(newMediaUrl);
-
         reviewService.updateReview(review);
 
         req.getSession().setAttribute("success", "Cập nhật đánh giá thành công!");

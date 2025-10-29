@@ -1,5 +1,6 @@
 package ute.shop.controller.users.reviews;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -16,19 +17,44 @@ import ute.shop.service.impl.ReviewServiceImpl;
 
 @WebServlet("/user/review/delete")
 public class ReviewDeleteController extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final IReviewService reviewService = new ReviewServiceImpl();
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setCharacterEncoding("UTF-8");
-		User user = (User) req.getAttribute("account");
+        User user = (User) req.getAttribute("account");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
+
         int reviewId = Integer.parseInt(req.getParameter("reviewId"));
         Review review = reviewService.getById(reviewId);
 
         if (review != null && review.getUser().getUserId().equals(user.getUserId())) {
+
+            // =================== XÓA FILE ẢNH ===================
+            String mediaUrl = review.getMediaUrl();
+            if (mediaUrl != null && !mediaUrl.isEmpty()) {
+                // Đường dẫn file thực tế trong thư mục deploy
+                File fileInDeploy = new File(req.getServletContext().getRealPath("/assets" + mediaUrl));
+                if (fileInDeploy.exists()) fileInDeploy.delete();
+
+                // Đường dẫn file trong thư mục project (src/main/webapp/assets)
+                String projectDir = System.getProperty("user.dir") + File.separator +
+                        "src" + File.separator + "main" + File.separator +
+                        "webapp" + File.separator + "assets" + File.separator +
+                        "images" + File.separator + "reviews";
+
+                String fileName = mediaUrl.replace("/images/reviews/", "");
+                File fileInProject = new File(projectDir, fileName);
+                if (fileInProject.exists()) fileInProject.delete();
+            }
+
+            // =================== XÓA REVIEW ===================
             reviewService.deleteReview(reviewId);
             req.getSession().setAttribute("success", "Xóa đánh giá thành công!");
         } else {
