@@ -10,6 +10,9 @@
 		<div class="alert alert-success text-center fw-bold mt-3 mb-3">
 			${successMessage}</div>
 	</c:if>
+	<c:if test="${not empty errorMessage}">
+		<div class="alert alert-danger text-center">${errorMessage}</div>
+	</c:if>
 
 	<h3 class="fw-bold text-primary-custom mt-4 mb-4">Lịch sử đơn hàng</h3>
 

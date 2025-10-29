@@ -243,7 +243,10 @@ public class CheckoutController extends HttpServlet {
 
 	    if (allSuccess) {
 	        switch (payment) {
-	            case "COD" -> resp.sendRedirect(req.getContextPath() + "/user/orders");
+	        	case "COD" -> {
+	            String redirectUrl = req.getContextPath() + "/user/orders?order_status=success";
+	            resp.sendRedirect(redirectUrl);
+	        	}
 	            case "MOMO" -> resp.sendRedirect(req.getContextPath() + "/user/payment/momo?paymentTotal="
 	                    + allShopTotal + "&orderIds=" + orderIds + "&shopNames=" + shopNames);
 	            case "VNPAY" -> {
@@ -259,6 +262,11 @@ public class CheckoutController extends HttpServlet {
 	            }
 	        }
 	    }
+	    else {
+	        String redirectUrl = req.getContextPath() + "/user/orders?order_status=fail";
+	        resp.sendRedirect(redirectUrl);
+	    }
+
 
 	}
 }

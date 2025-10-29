@@ -35,9 +35,18 @@ public class OrderHistoryController extends HttpServlet {
         // ✅ Step 2: Handle flash messages from URL parameters (The JWT Way)
         // This replaces the session logic.
         String reviewStatus = req.getParameter("review_status");
-        if ("success".equals(reviewStatus)) {
-            req.setAttribute("successMessage", "Cảm ơn bạn! Đánh giá đã được gửi thành công.");
+        String orderStatus = req.getParameter("order_status");
+        if ("success".equals(orderStatus)) {
+            req.setAttribute("successMessage", "Đặt hàng thành công! Cảm ơn bạn đã mua sắm.");
+        } else if ("fail".equals(orderStatus)) {
+            req.setAttribute("errorMessage", "Đặt hàng thất bại. Vui lòng thử lại.");
         }
+        
+		if ("success".equals(reviewStatus)) {
+			req.setAttribute("successMessage", "Cảm ơn bạn đã đánh giá sản phẩm!");
+		} else if ("fail".equals(reviewStatus)) {
+			req.setAttribute("errorMessage", "Đánh giá sản phẩm thất bại. Vui lòng thử lại.");
+		}
         
         // This part for filtering orders is also correct.
         String orderStatusFilter = req.getParameter("status");

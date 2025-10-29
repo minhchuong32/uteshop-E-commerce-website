@@ -4,6 +4,7 @@
 <html lang="vi">
 <head>
 <title>${product.name}|UteShop</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 <body>
@@ -111,16 +112,15 @@
 				<div class="d-flex gap-2 mb-3">
 					<c:choose>
 						<c:when test="${not empty minVariant and minVariant.stock > 0}">
-							<form id="addToCartForm"
-								action="${pageContext.request.contextPath}/user/cart/add"
-								method="post" class="flex-fill"
-								onsubmit="return validateSelection()">
+							<form id="addToCartForm" class="flex-fill">
 								<input type="hidden" name="variantId" id="variantId"> <input
 									type="hidden" name="quantity" id="formQty" value="1">
-								<button type="submit" class="btn btn-primary-custom w-100">
+								<button type="button" class="btn btn-primary-custom w-100"
+									onclick="addToCart()">
 									<i class="bi bi-cart-plus"></i> Thêm vào giỏ
 								</button>
 							</form>
+
 
 							<form id="buyNowForm" method="post" class="flex-fill">
 								<input type="hidden" name="variantId" id="variantIdNow">
@@ -308,25 +308,15 @@
 		</div>
 	</div>
 
-	<!-- Alert Toast -->
+	<!-- Alert -->
 	<div id="tempAlert"
-		class="alert d-none position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg rounded-3"
-		style="z-index: 1055; min-width: 300px;"></div>
+	class="alert d-none position-fixed start-50 translate-middle-x shadow-lg rounded-3"
+	style="z-index: 2000; top: 80px; min-width: 320px;"></div>
+
 
 	<!-- Product Data -->
 	<div id="product-detail" data-product-id="${product.productId}"
 		data-context="${pageContext.request.contextPath}" class="d-none"></div>
-
-	<c:if test="${not empty sessionScope.cartMessage}">
-		<script>
-			document.addEventListener("DOMContentLoaded", () => {
-				showAlert("${fn:escapeXml(sessionScope.cartMessage)}", 
-					"${sessionScope.cartMessageType}", 3000);
-			});
-		</script>
-		<c:remove var="cartMessage" scope="session" />
-		<c:remove var="cartMessageType" scope="session" />
-	</c:if>
 
 	<script
 		src="${pageContext.request.contextPath}/assets/js/product-detail.js"></script>
