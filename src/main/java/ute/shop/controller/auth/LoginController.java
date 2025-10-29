@@ -116,6 +116,33 @@ public class LoginController extends HttpServlet {
 			request.getRequestDispatcher(Constant.LOGIN).forward(request, response);
 			return;
 		}
+		
+		// Lấy giá trị của checkbox "Ghi nhớ tôi"
+	    String remember = request.getParameter("remember");
+
+	    // ===== TẠO COOKIE GHI NHỚ TÀI KHOẢN  =====
+	    if ("true".equals(remember)) {
+	        // Nếu người dùng chọn "Ghi nhớ", tạo cookie cho email và password
+	        Cookie emailCookie = new Cookie("rememberEmail", user.getEmail());
+	        Cookie passwordCookie = new Cookie("rememberPassword", password);
+	        
+	        // Đặt thời gian sống cho cookie (1 ngày)
+	        emailCookie.setMaxAge(24 * 60 * 60);
+	        passwordCookie.setMaxAge(24 * 60 * 60);
+	        
+	        response.addCookie(emailCookie);
+	        response.addCookie(passwordCookie);
+	    } else {
+	        // Nếu người dùng không chọn, xóa cookie cũ (nếu có)
+	        Cookie emailCookie = new Cookie("rememberEmail", "");
+	        Cookie passwordCookie = new Cookie("rememberPassword", "");
+	        
+	        emailCookie.setMaxAge(0); // Set max age = 0 để xóa cookie
+	        passwordCookie.setMaxAge(0);
+	        
+	        response.addCookie(emailCookie);
+	        response.addCookie(passwordCookie);
+	    }
 
 		// ===== Tạo mới JWT token và cookie =====
 		Cookie oldJwtCookie = new Cookie("jwt_token", "");
