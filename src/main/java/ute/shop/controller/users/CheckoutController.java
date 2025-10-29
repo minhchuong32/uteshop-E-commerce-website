@@ -189,7 +189,7 @@ public class CheckoutController extends HttpServlet {
 			order.setPaymentMethod(payment);
 			switch (payment) {
 			case "COD" -> order.setStatus("Mới");
-			case "MOMO" -> order.setStatus("Chờ thanh toán MOMO");
+			case "MOMO" -> order.setStatus("Mới");
 			case "VNPAY" -> order.setStatus("Chờ thanh toán VNPAY");
 			default -> {
 				order.setStatus("Mới");
@@ -216,7 +216,7 @@ public class CheckoutController extends HttpServlet {
 	        delivery.setCreatedAt(new Date());
 	        switch (payment) {
 			case "COD" -> delivery.setStatus("Mới");
-			case "MOMO" -> delivery.setStatus("Chờ thanh toán MOMO");
+			case "MOMO" -> delivery.setStatus("Mới");
 			case "VNPAY" -> delivery.setStatus("Chờ thanh toán VNPAY");
 			default -> {
 				delivery.setStatus("Mới");
