@@ -20,7 +20,6 @@ public class UserDaoImpl implements IUserDao {
 		}
 	}
 
-	// trong file UserDaoImpl.java
 	@Override
 	public User insert(User user) { // Thay đổi kiểu trả về
 		EntityManager em = JPAConfig.getEntityManager();

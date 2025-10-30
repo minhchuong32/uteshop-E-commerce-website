@@ -27,6 +27,8 @@ public interface IUserService {
 
     // Tìm user theo email
     Optional<User> findByEmail(String email);
+    
+    Optional<User> findByUsername(String username);
 
     // Tìm user theo id
     Optional<User> getUserById(int id);

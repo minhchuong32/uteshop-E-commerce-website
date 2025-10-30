@@ -145,5 +145,10 @@ public class UserServiceImpl implements IUserService {
 		return userDao.findByGoogleId(googleId);
 	}
 
+	@Override
+	public Optional<User> findByUsername(String username) {
+		return userDao.findByUsername(username);
+	}
+
 
 }
