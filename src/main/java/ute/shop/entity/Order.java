@@ -47,7 +47,7 @@ public class Order {
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
     //Địa chỉ giao hàng (Order)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "shipping_address_id", nullable = true)
     private ShippingAddress shippingAddress;
     
