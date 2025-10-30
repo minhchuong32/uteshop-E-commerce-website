@@ -58,13 +58,20 @@ Uteshop-servlet/
 o	Username: chuongminh3225@gmail.com
 o	Password: 123
 - **HƯỚNG DẪN THANH TOÁN VNPAY:**
+
   B1: Chọn VNPAY ở trang thanh toán
+
   B2: Chọn thanh toán bằng thẻ nội địa
+
   B3: Nhập thông tin thanh toán như sau
 _Ngân hàng	NCB
+
 Số thẻ	9704198526191432198
+
 Tên chủ thẻ	NGUYEN VAN A
+
 Ngày phát hành	07/15
+
 Mật khẩu OTP	123456_
 ---
 ## 👥 3. Phân chia công việc
