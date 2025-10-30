@@ -25,7 +25,12 @@
                 <tr>
                     <td>${d.deliveryId}</td>
                     <td>${d.order.user.username}</td>
-                    <td>${d.order.address}</td>
+                    <td>
+					    ${d.order.shippingAddress.addressLine}, 
+					    ${d.order.shippingAddress.ward}, 
+					    ${d.order.shippingAddress.district}, 
+					    ${d.order.shippingAddress.city}
+					</td>
                     <td>${d.order.totalAmount}</td>
                     <td>${d.status}</td>
                     <td>
@@ -68,7 +73,13 @@
                 <tr>
                     <td>${d.deliveryId}</td>
                     <td>${d.order.user.username}</td>
-                    <td>${d.order.address}</td>
+                    <td>
+					    ${d.order.shippingAddress.addressLine}, 
+					    ${d.order.shippingAddress.ward}, 
+					    ${d.order.shippingAddress.district}, 
+					    ${d.order.shippingAddress.city}
+					</td>
+
                     <td>${d.order.totalAmount}</td>
                     <td>${d.status}</td>
                     <td>
@@ -129,7 +140,13 @@
                 <tr>
                     <td>${d.deliveryId}</td>
                     <td>${d.order.user.username}</td>
-                    <td>${d.order.address}</td>
+                    <td>
+					    ${d.order.shippingAddress.addressLine}, 
+					    ${d.order.shippingAddress.ward}, 
+					    ${d.order.shippingAddress.district}, 
+					    ${d.order.shippingAddress.city}
+					</td>
+
                     <td>${d.order.totalAmount}</td>
                     <td>${d.status}</td>
                     <td>
