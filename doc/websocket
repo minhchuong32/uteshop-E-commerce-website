@@ -1,0 +1,67 @@
+1. Kết nối (OnOpen):
+
+Khi người dùng mở trang chat, trình duyệt kết nối đến server qua endpoint /chat/{complaintId}/{userId}.
+
+Server kiểm tra quyền hợp lệ (chỉ Admin hoặc chủ khiếu nại mới được vào phòng chat).
+
+Nếu hợp lệ, server thêm session vào phòng chat (room) tương ứng với complaintId.
+
+2. Gửi và nhận tin nhắn (OnMessage):
+
+Khi một người gửi tin, server nhận dữ liệu JSON (MessageDTO).
+
+Server chuyển JSON → đối tượng ComplaintMessage, lưu vào CSDL qua ComplaintMessageService.
+
+Đồng thời tạo thông báo (Notification) cho người nhận.
+
+Sau đó, server broadcast (phát) tin nhắn đó đến mọi người trong cùng phòng chat.
+
+3. Ngắt kết nối (OnClose):
+
+Khi người dùng đóng tab hoặc mất kết nối, server xóa session khỏi phòng.
+
+Nếu phòng trống, server xóa luôn room đó để tiết kiệm tài nguyên.
+
+4. Xử lý lỗi (OnError):
+
+Khi có lỗi trong kết nối hoặc gửi tin, server ghi log lỗi để xử lý.
+
+
+
+@startuml
+actor NguoiDung
+participant "Trinh duyet (WebSocket Client)" as Client
+participant "ChatServerEndpoint" as Server
+participant "ComplaintService" as ComplaintService
+participant "UserService" as UserService
+participant "ComplaintMessageService" as MsgService
+participant "NotificationService" as NotiService
+
+== Ket noi WebSocket ==
+NguoiDung -> Client: Mo ket noi /chat/{complaintId}/{userId}
+Client -> Server: @OnOpen()
+Server -> ComplaintService: findById(complaintId)
+Server -> UserService: getUserById(userId)
+Server --> Server: Kiem tra quyen truy cap
+Server -> Server: Them session vao phong tuong ung
+
+== Gui tin nhan ==
+NguoiDung -> Client: Nhap va gui tin nhan
+Client -> Server: @OnMessage(jsonMessage)
+Server -> ComplaintService: findById(complaintId)
+Server -> UserService: getUserById(senderId)
+Server -> MsgService: insert(new ComplaintMessage)
+Server -> NotiService: createAndSaveNotification(sender, complaint)
+Server -> Server: Tao MessageDTO (Gson -> JSON)
+Server -> Server: broadcast(message, tat ca session trong phong)
+Server --> Client: sendText(message)
+Client -> NguoiDung: Hien thi tin nhan moi tren giao dien
+
+== Dong ket noi ==
+NguoiDung -> Client: Dong cua so chat
+Client -> Server: @OnClose()
+Server -> Server: Xoa session khoi phong
+
+== Loi ==
+Server -> Server: @OnError() (ghi log loi)
+@enduml

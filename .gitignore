@@ -33,8 +33,7 @@ tmp/
 # Environment & Config
 # ========================
 # File chứa thông tin nhạy cảm (Google OAuth, DB, v.v.)
-src/main/resources/config.properties
-src/main/resources/application.properties
+# src/main/resources/config.properties
 .env
 *.env
 .env.*

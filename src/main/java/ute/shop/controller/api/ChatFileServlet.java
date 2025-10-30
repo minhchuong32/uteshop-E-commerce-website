@@ -17,7 +17,6 @@ import java.nio.file.Paths;
 public class ChatFileServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
-    // ✅ PHẢI TRÙNG với UPLOAD_DIR trong ChatFileUploadServlet
     private static final String UPLOAD_DIR = "C:/uteshop-uploads/chat-files";
 
     @Override

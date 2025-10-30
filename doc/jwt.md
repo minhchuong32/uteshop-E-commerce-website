@@ -1,4 +1,24 @@
 ## 0 Luồng hoạt động:
+- Nguyên lý:
+
+Người dùng nhập email và mật khẩu.
+
+Server kiểm tra thông tin hợp lệ trong database.
+
+Nếu đúng, server tạo một chuỗi JWT (JSON Web Token) chứa thông tin cơ bản (userId, email, role...).
+
+JWT được ký bằng khóa bí mật (SECRET_KEY) để đảm bảo tính toàn vẹn.
+
+Server gửi JWT về trình duyệt dưới dạng cookie HttpOnly.
+
+Các request sau đó từ client sẽ gửi JWT kèm theo, giúp server xác thực danh tính mà không cần lưu session.
+
+- Ưu điểm:
+
+Không cần lưu session trên server → giảm tải bộ nhớ.
+
+Dễ mở rộng cho API, microservice.
+
 Đăng nhập: Người dùng gửi email và mật khẩu. Server xác thực thông tin.
 
 Tạo Token: Nếu xác thực thành công, server sẽ tạo một chuỗi JWT chứa thông tin của người dùng (ví dụ: email, vai trò) 

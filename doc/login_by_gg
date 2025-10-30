@@ -1,6 +1,8 @@
 Cấu hình Google
 Google Cloud Console
 Lấy Client ID, Secret
+
+- nguyên lý: 
 Người dùng vào trang login.jsp, nhấp vào nút "Đăng nhập với Google".
 
 Trình duyệt gửi yêu cầu đến /login-google.

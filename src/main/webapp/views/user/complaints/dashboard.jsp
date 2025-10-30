@@ -42,7 +42,7 @@
                         </td>
                         <td><fmt:formatDate value="${c.createdAt}" pattern="dd/MM/yyyy HH:mm" /></td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/user/complaints/chat?id=${c.complaintId}"
+                            <a href="${pageContext.request.contextPath}/user/complaints/chat?complaintId=${c.complaintId}"
                                class="btn btn-primary btn-sm" title="Trao đổi với Admin">
                                 <i class="bi bi-chat-dots-fill"></i> Chat
                             </a>
