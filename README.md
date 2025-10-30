@@ -1,14 +1,23 @@
 
 # Chú thích cấu trúc: 
 controller/ → Servlet nhận request từ client, gọi service.
+
 dao/ + dao/impl/ → Tầng truy xuất DB (JPA).
+
 model/ → POJO class, ánh xạ bảng DB.
+
 service/ + service/impl/ → Xử lý logic nghiệp vụ (gọi dao).
+
 utils/ → DBConnect, helper (hash password, validate...).
+
 filter/ → Lọc request (bảo mật, encoding UTF-8).
+
 webapp/WEB-INF/views/ → JSP 
+
 assets/ → CSS, JS, hình ảnh.
+
 test/ → JUnit test DAO + Service.
+
 
 # 🛒 UTESHOP-SERVLET PROJECT
 
@@ -35,7 +44,10 @@ Uteshop-servlet/
 │   │   │   └── filter/       # AuthFilter, EncodingFilter
 │   │   ├── resources/  
 │   │   │   ├── META-INF/   
-│   │           └──persistence.xml  #Cấu hình kết nối CSDL   
+│   │   │   │    └──persistence.xml  #Cấu hình kết nối CSDL
+│   │   │   ├── vnpay_config.properties #Cấu hình kết nối VNPAY
+│   │   │   │
+│   │   │   └── config.properties #Cấu hình xác thực JWT
 │   │   └── webapp/
 │   │       ├── WEB-INF/
 │   │       │   ├── views/    # JSP pages
@@ -52,7 +64,7 @@ Uteshop-servlet/
 - Cài **SQL Server** (tham khảo hướng dẫn trên YouTube).
 - Tạo database uteshopdb
 - Tải mã nguồn UTEShop từ GitHub nhóm.
-- Chạy script /db/uteshop_insert_db_sqlserver.sql để tạo CSDL.
+- Chạy script /db/uteshop_insert_db_sqlserver.sql và edit.sql để thêm data vào CSDL (hoặc sử dụng file /db/uteshopdb.bak) 
 - Khởi động Tomcat --> truy cập http://localhost:8080/uteshop.
 - Đăng nhập bằng tài khoản Admin mặc định:
 o	Username: chuongminh3225@gmail.com
@@ -64,15 +76,16 @@ o	Password: 123
   B2: Chọn thanh toán bằng thẻ nội địa
 
   B3: Nhập thông tin thanh toán như sau
-_Ngân hàng	NCB
+_Ngân hàng	NCB_
 
-Số thẻ	9704198526191432198
+_Số thẻ	9704198526191432198_
 
-Tên chủ thẻ	NGUYEN VAN A
+_Tên chủ thẻ	NGUYEN VAN A_
 
-Ngày phát hành	07/15
+_Ngày phát hành	07/15_
 
-Mật khẩu OTP	123456_
+_Mật khẩu OTP	123456_
+
 ---
 ## 👥 3. Phân chia công việc
 ### **Nguyễn Thị Thanh Thùy – Vendor + Shipper**
@@ -119,17 +132,10 @@ Mật khẩu OTP	123456_
   - Tối ưu và hoàn thiện cơ sở dữ liệu.  
 ---
 
-## 📑 4. Tài liệu & Báo cáo
-
-- **docs/diagrams/** → UML, Use Case, ERD, Sequence.
-- **docs/report.docx** → Báo cáo cuối kỳ.
-
----
-
-## 🚀 5. Công nghệ sử dụng
+## 🚀 4. Công nghệ sử dụng
 
 **Ngôn ngữ lập trình chính**  
-- **Java (JDK 23)**  
+- **Java (JDK 22)**  
   → Xây dựng logic xử lý nghiệp vụ và các module quản lý người dùng, sản phẩm, đơn hàng,…
 
 **Giao diện người dùng**  
@@ -160,7 +166,7 @@ Mật khẩu OTP	123456_
 - **Git + GitHub**  
   → Hỗ trợ làm việc nhóm, kiểm soát phiên bản và triển khai thử nghiệm.
 
-## 🚀 6. Target
+## 🚀 5. Target
 ### Làm chuẩn theo yêu cầu cơ bản
 🔹 Chức năng chung
 - Tìm kiếm và lọc sản phẩm.  
@@ -223,21 +229,11 @@ Mật khẩu OTP	123456_
 - Cập nhật trạng thái giao hàng. 
 - Thống kê số lượng đơn hàng được giao.
 
-### Điểm cộng kỹ thuật
-- Session + Cookie + Filter (ghi nhớ đăng nhập, chặn trang không đúng quyền).
-- Upload ảnh sản phẩm (multipart/form-data).
-- Hash mật khẩu (MD5/SHA-256) thay vì lưu plain text.
-- Phân trang (Pagination) sản phẩm. 
+### Điểm cộng sáng tạo (đã thực hiện)
+- Tích hợp thanh toán giả lập: VNPAY
+- Xuất file pdf báo cáo theo tiêu chí
+- Sử dụng websocket trong liên hệ giữa admin và user/guest
+- Ứng dụng chatbot hỏi đáo cho guest/user
+- Đăng nhập/Đăng ký bằng tài khoản google
 
-### Điểm cộng giao diện
-- Dùng Bootstrap để làm UI responsive.
-- Giao diện chia layout: header (menu), sidebar (danh mục), body (danh sách sản phẩm), footer.
-- Trang quản trị riêng cho Admin (quản lý users, shops, orders, reports).
-
-### Điểm cộng sáng tạo 
-- Tích hợp thanh toán giả lập: (COD, MoMo, VNPAY – chỉ cần fake flow, không cần cổng thật).
-- Hệ thống khuyến mãi (Promotion): giảm giá theo % hoặc số tiền cố định.
-- Hệ thống giao hàng (Delivery): Shipper nhận đơn và cập nhật trạng thái.
-- Tìm kiếm nâng cao: theo tên, giá, category.
-- Dashboard báo cáo: Doanh thu theo tháng, số lượng đơn hàng, top sản phẩm bán chạy (chart JS).
 
