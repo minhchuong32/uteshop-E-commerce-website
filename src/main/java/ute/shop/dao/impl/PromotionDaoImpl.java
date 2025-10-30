@@ -39,12 +39,12 @@ public class PromotionDaoImpl implements IPromotionDao {
 			String jpql = """
 					    SELECT p FROM Promotion p
 					    WHERE p.shop.shopId = :shopId
-					      AND :today BETWEEN p.startDate AND p.endDate
+
 					    ORDER BY p.product.productId NULLS FIRST
 					""";
 			TypedQuery<Promotion> q = em.createQuery(jpql, Promotion.class);
 			q.setParameter("shopId", shopId);
-			q.setParameter("today", java.sql.Date.valueOf(LocalDate.now()));
+
 			return q.getResultList();
 		} finally {
 			em.close();
