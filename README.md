@@ -168,11 +168,12 @@ _Mật khẩu OTP	123456_
 
 ## 🚀 5. Target
 ### Làm chuẩn theo yêu cầu cơ bản
-🔹 Chức năng chung
+_Chức năng chung_
 - Tìm kiếm và lọc sản phẩm.  
 - Đăng ký tài khoản có gửi mã OTP kích hoạt qua Email.  
 - Đăng nhập, đăng xuất, quên mật khẩu (gửi mã OTP qua Email).  
-- Mật khẩu được mã hóa để đảm bảo an toàn.  
+- Mật khẩu được mã hóa để đảm bảo an toàn.
+--- 
 **Guest (Khách truy cập)**
 - Xem trang chủ, hiển thị các sản phẩm bán chạy (trên 10 sản phẩm) của các shop, sắp xếp theo doanh số giảm dần.  
 - Xem chi tiết sản phẩm nhưng không thể mua hoặc đánh giá.  
@@ -197,7 +198,8 @@ _Mật khẩu OTP	123456_
   - Xem lại sản phẩm đã xem.  
   - Đánh giá sản phẩm đã mua.  
   - Bình luận sản phẩm (tối thiểu 50 ký tự, có thể kèm hình ảnh / video).  
-  - Chọn và sử dụng mã giảm giá khi thanh toán.  
+  - Chọn và sử dụng mã giảm giá khi thanh toán.
+---
 **Vendor (Chủ cửa hàng / Seller)**
 - Có toàn bộ quyền của User.  
 - Đăng ký shop và quản lý trang chủ của shop.  
@@ -233,7 +235,7 @@ _Mật khẩu OTP	123456_
 - Tích hợp thanh toán giả lập: VNPAY
 - Xuất file pdf báo cáo theo tiêu chí
 - Sử dụng websocket trong liên hệ giữa admin và user/guest
-- Ứng dụng chatbot hỏi đáo cho guest/user
+- Ứng dụng chatbot hỏi đáp cho guest/user
 - Đăng nhập/Đăng ký bằng tài khoản google
 
 
