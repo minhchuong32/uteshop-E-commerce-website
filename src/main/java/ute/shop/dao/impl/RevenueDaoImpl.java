@@ -57,8 +57,7 @@ public class RevenueDaoImpl implements IRevenueDao {
         try {
             String hql = """
                 SELECT MONTH(o.createdAt), SUM(o.totalAmount)
-                FROM Order o
-                WHERE o.status = :status
+                 FROM Order o JOIN o.deliveries d WHERE d.status = :status
                   AND YEAR(o.createdAt) = YEAR(CURRENT_TIMESTAMP)
                 GROUP BY MONTH(o.createdAt)
                 ORDER BY MONTH(o.createdAt)
@@ -78,8 +77,7 @@ public class RevenueDaoImpl implements IRevenueDao {
         try {
             StringBuilder hql = new StringBuilder("""
                 SELECT MONTH(o.createdAt), SUM(o.totalAmount)
-                FROM Order o
-                WHERE o.status = :status
+                 FROM Order o JOIN o.deliveries d WHERE d.status = :status
                   AND YEAR(o.createdAt) = YEAR(CURRENT_TIMESTAMP)
             """);
 
