@@ -20,6 +20,7 @@ import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.LineSeparator;
 
 import ute.shop.entity.Delivery;
+import ute.shop.entity.ShippingAddress;
 import ute.shop.service.IDeliveryService;
 import ute.shop.service.impl.DeliveryServiceImpl;
 
@@ -105,22 +106,32 @@ public class DeliveryFormController extends HttpServlet {
         Table infoTable = new Table(UnitValue.createPercentArray(new float[]{30, 70}))
                 .useAllAvailableWidth();
 
-        infoTable.addCell(new Cell().add(new Paragraph("📦 Mã đơn:")));
+        infoTable.addCell(new Cell().add(new Paragraph("Mã đơn:")));
         infoTable.addCell(new Cell().add(new Paragraph(String.valueOf(d.getDeliveryId()))));
 
-        infoTable.addCell(new Cell().add(new Paragraph("👤 Khách hàng:")));
+        infoTable.addCell(new Cell().add(new Paragraph("Khách hàng:")));
         infoTable.addCell(new Cell().add(new Paragraph(d.getOrder().getUser().getUsername())));
 
-        infoTable.addCell(new Cell().add(new Paragraph("🏠 Địa chỉ:")));
-//        infoTable.addCell(new Cell().add(new Paragraph(d.getOrder().getAddress())));
+        infoTable.addCell(new Cell().add(new Paragraph("Địa chỉ:")));
+        ShippingAddress addr = d.getOrder().getShippingAddress();
 
-        infoTable.addCell(new Cell().add(new Paragraph("💰 Tổng tiền:")));
+        if (addr != null) {
+            String fullAddress = addr.getAddressLine();
+            if (addr.getWard() != null) fullAddress += ", " + addr.getWard();
+            if (addr.getDistrict() != null) fullAddress += ", " + addr.getDistrict();
+            if (addr.getCity() != null) fullAddress += ", " + addr.getCity();
+            infoTable.addCell(new Cell().add(new Paragraph(fullAddress)));
+        } else {
+            infoTable.addCell(new Cell().add(new Paragraph("Không có")));
+        }
+
+        infoTable.addCell(new Cell().add(new Paragraph("Tổng tiền:")));
         infoTable.addCell(new Cell().add(new Paragraph(String.valueOf(d.getOrder().getTotalAmount()))));
 
-        infoTable.addCell(new Cell().add(new Paragraph("📱 Người nhận:")));
+        infoTable.addCell(new Cell().add(new Paragraph("Người nhận:")));
         infoTable.addCell(new Cell().add(new Paragraph(receiverName + " (" + phone + ")")));
 
-        infoTable.addCell(new Cell().add(new Paragraph("📝 Ghi chú:")));
+        infoTable.addCell(new Cell().add(new Paragraph("Ghi chú:")));
         infoTable.addCell(new Cell().add(new Paragraph(note != null && !note.isEmpty() ? note : "Không có")));
 
         document.add(infoTable);
