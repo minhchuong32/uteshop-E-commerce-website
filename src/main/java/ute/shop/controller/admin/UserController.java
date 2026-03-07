@@ -291,7 +291,7 @@ public class UserController extends HttpServlet {
 					.append("<p>Trân trọng,<br><strong>Đội ngũ UteShop</strong></p>").append("</div>")
 					.append("</div></body></html>");
 
-	        SendMail mailer = new SendMail();
+	        SendMail mailer = SendMail.getInstance();
 	        mailer.sendMail(recipientEmail, subject, emailBodyHtml.toString());
 	        resp.sendRedirect(req.getContextPath() + "/admin/users?message=contactSent");
 

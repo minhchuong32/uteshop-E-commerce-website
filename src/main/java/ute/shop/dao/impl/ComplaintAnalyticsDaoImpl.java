@@ -11,7 +11,7 @@ public class ComplaintAnalyticsDaoImpl implements IComplaintAnalyticsDao {
 
     @Override
     public long countAll() {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             Query q = em.createQuery("SELECT COUNT(c.complaintId) FROM Complaint c");
             return (long) q.getSingleResult();
@@ -22,7 +22,7 @@ public class ComplaintAnalyticsDaoImpl implements IComplaintAnalyticsDao {
 
     @Override
     public List<Object[]> countByStatus() {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             String hql = "SELECT c.status, COUNT(c) FROM Complaint c GROUP BY c.status";
             return em.createQuery(hql).getResultList();
@@ -33,7 +33,7 @@ public class ComplaintAnalyticsDaoImpl implements IComplaintAnalyticsDao {
 
     @Override
     public List<Object[]> countByMonth() {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             String hql = """
                 SELECT MONTH(c.createdAt), COUNT(c)
@@ -49,7 +49,7 @@ public class ComplaintAnalyticsDaoImpl implements IComplaintAnalyticsDao {
 
     @Override
     public List<Object[]> topUsers(int limit) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             String hql = """
                 SELECT c.user.name, COUNT(c)

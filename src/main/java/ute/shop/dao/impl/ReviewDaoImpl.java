@@ -15,7 +15,7 @@ public class ReviewDaoImpl implements IReviewDao {
 
 	@Override
 	public List<Review> findByProductId(Integer productId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.createQuery(
 				    "SELECT r FROM Review r JOIN FETCH r.user WHERE r.product.productId = :pid", Review.class)
@@ -29,7 +29,7 @@ public class ReviewDaoImpl implements IReviewDao {
 
 	@Override
 	public void insert(Review review) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(review);
@@ -41,7 +41,7 @@ public class ReviewDaoImpl implements IReviewDao {
 
 	@Override
 	public boolean hasReviewed(User user, Product product) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             String jpql = "SELECT COUNT(r) FROM Review r WHERE r.user = :user AND r.product = :product";
             Long count = em.createQuery(jpql, Long.class)
@@ -56,7 +56,7 @@ public class ReviewDaoImpl implements IReviewDao {
 
 	@Override
 	public void update(Review review) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(review);
@@ -68,7 +68,7 @@ public class ReviewDaoImpl implements IReviewDao {
 
 	@Override
 	public void delete(Integer id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 	    try {
 	        em.getTransaction().begin();
 	        Review r = em.find(Review.class, id);
@@ -90,7 +90,7 @@ public class ReviewDaoImpl implements IReviewDao {
 
 	@Override
 	public Review findById(Integer id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             return em.find(Review.class, id);
         } finally {
@@ -100,7 +100,7 @@ public class ReviewDaoImpl implements IReviewDao {
 
 	@Override
 	public Review findByUserAndProduct(User user, Product product) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             TypedQuery<Review> q = em.createQuery(
                 "SELECT r FROM Review r WHERE r.user = :user AND r.product = :product", Review.class);
@@ -115,7 +115,7 @@ public class ReviewDaoImpl implements IReviewDao {
 
 	@Override
 	public List<Review> findByProduct(Product product) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             return em.createQuery(
                 "SELECT r FROM Review r WHERE r.product = :product", Review.class)

@@ -12,7 +12,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public List<Product> findAll() {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.createQuery("SELECT p FROM Product p", Product.class).getResultList();
 		} finally {
@@ -22,7 +22,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public Product findById(Integer id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		Product product = em.find(Product.class, id);
 		if (product != null) {
 			product.getImages().size();
@@ -37,7 +37,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public Product findById_fix(Integer id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			Product p = em.createQuery("""
 					    SELECT DISTINCT p FROM Product p
@@ -54,7 +54,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public List<Product> findTopProducts(int limit) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.createQuery("SELECT p FROM Product p ORDER BY p.productId DESC", Product.class)
 					.setMaxResults(limit).getResultList();
@@ -66,7 +66,7 @@ public class ProductDaoImpl implements IProductDao {
 	// Đếm tổng số sản phẩm
 	@Override
 	public long countAll() {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.createQuery("SELECT COUNT(p) FROM Product p", Long.class).getSingleResult();
 		} finally {
@@ -77,7 +77,7 @@ public class ProductDaoImpl implements IProductDao {
 	// Lấy sản phẩm phân trang
 	@Override
 	public List<Product> findByPage(int page, int pageSize) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.createQuery("SELECT p FROM Product p ORDER BY p.productId DESC", Product.class)
 					.setFirstResult((page - 1) * pageSize).setMaxResults(pageSize).getResultList();
@@ -88,7 +88,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public List<Product> findByShopId(int shopId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.createQuery("SELECT p FROM Product p WHERE p.shop.shopId = :sid", Product.class)
 					.setParameter("sid", shopId).getResultList();
@@ -99,7 +99,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public Product findById(int productId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.find(Product.class, productId);
 		} finally {
@@ -109,7 +109,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public void save(Product product) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -127,7 +127,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public void update(Product product) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -143,7 +143,7 @@ public class ProductDaoImpl implements IProductDao {
 
 //	@Override
 //	public void delete(int productId) {
-//		EntityManager em = JPAConfig.getEntityManager();
+//		EntityManager em = JPAConfig.getInstance().getEntityManager();
 //	    EntityTransaction tx = em.getTransaction();
 //	    try {
 //	        tx.begin();
@@ -159,7 +159,7 @@ public class ProductDaoImpl implements IProductDao {
 //	}
 	@Override
 	public void delete(int productId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 
 		try {
@@ -193,7 +193,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public List<Product> findByCategory(Integer categoryId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em
 					.createQuery("SELECT DISTINCT p FROM Product p " + "LEFT JOIN FETCH p.variants v "
@@ -206,7 +206,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public List<Product> findTopByCategoryId(Integer categoryId, int limit) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT p FROM Product p WHERE p.category.categoryId = :cid ORDER BY p.productId DESC";
 			return em.createQuery(jpql, Product.class).setParameter("cid", categoryId).setMaxResults(limit)
@@ -219,7 +219,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public List<Product> searchByKeyword(String keyword, int page, int size) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT p FROM Product p " + "WHERE LOWER(p.name) LIKE :kw OR p.description LIKE :kw";
 			return em.createQuery(jpql, Product.class).setParameter("kw", "%" + keyword.toLowerCase() + "%")
@@ -231,7 +231,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public long countByKeyword(String keyword) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT COUNT(p) FROM Product p WHERE LOWER(p.name) LIKE :kw";
 			return em.createQuery(jpql, Long.class).setParameter("kw", "%" + keyword.toLowerCase() + "%")
@@ -244,7 +244,7 @@ public class ProductDaoImpl implements IProductDao {
 	@Override
 	public List<Product> filterProducts(Integer categoryId, Double minPrice, Double maxPrice, String sortBy, int page,
 			int size) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			StringBuilder jpql = new StringBuilder("SELECT p FROM ProductVariant v JOIN v.product p WHERE 1=1");
 
@@ -283,7 +283,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public long countFilterProducts(Integer categoryId, Double minPrice, Double maxPrice) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			StringBuilder jpql = new StringBuilder(
 					"SELECT COUNT(DISTINCT p) FROM Product p JOIN p.variants v WHERE 1=1");
@@ -312,7 +312,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public Product findByIdWithVariants(int productId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT p FROM Product p LEFT JOIN FETCH p.variants WHERE p.id = :pid";
 			return em.createQuery(jpql, Product.class).setParameter("pid", productId).getSingleResult();
@@ -324,7 +324,7 @@ public class ProductDaoImpl implements IProductDao {
 	// vendor dashboard
 	@Override
 	public long countByShopId(int shopId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT COUNT(p) FROM Product p WHERE p.shop.shopId = :sid";
 			return em.createQuery(jpql, Long.class).setParameter("sid", shopId).getSingleResult();
@@ -336,7 +336,7 @@ public class ProductDaoImpl implements IProductDao {
 	@Override
 	// Top sản phẩm bán chạy theo shop
 	public List<Object[]> getTopSellingProducts(int shopId, int limit) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String hql = """
 					    SELECT od.productVariant.product, SUM(od.quantity), SUM(od.price * od.quantity)
@@ -356,7 +356,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public List<Object[]> getProductCountByCategory(int shopId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = """
 					    SELECT p.category.name, COUNT(p)
@@ -373,7 +373,7 @@ public class ProductDaoImpl implements IProductDao {
 	// Lấy top sản phẩm bán chạy (theo tổng số lượng trong OrderDetail)
 	@Override
 	public List<Object[]> findBestSellingProducts(int limit) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = """
 					    SELECT
@@ -408,7 +408,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public void deleteExtraImage(Long imageId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -426,7 +426,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public ProductVariant findVariantById(Long variantId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.find(ProductVariant.class, variantId);
 		} catch (Exception e) {
@@ -437,7 +437,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public List<Product> searchByKeywordAndShop(String keyword, int shopId, int page, int size) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = """
 					    SELECT DISTINCT p FROM Product p
@@ -457,7 +457,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	public long countByKeywordAndShop(String keyword, int shopId) {
 
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 
 		try {
 
@@ -490,7 +490,7 @@ public class ProductDaoImpl implements IProductDao {
 	@Override
 	public List<Product> filterProductsByShop(int shopId, Integer categoryId, Double minPrice, Double maxPrice,
 			String sortBy, int page, int size) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			StringBuilder jpql = new StringBuilder("""
 					    SELECT p FROM ProductVariant v
@@ -543,7 +543,7 @@ public class ProductDaoImpl implements IProductDao {
 
 	@Override
 	public long countFilterProductsByShop(int shopId, Integer categoryId, Double minPrice, Double maxPrice) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			StringBuilder jpql = new StringBuilder("""
 					    SELECT COUNT(DISTINCT p) FROM ProductVariant v

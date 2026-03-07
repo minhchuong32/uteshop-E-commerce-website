@@ -12,7 +12,7 @@ public class ComplaintDaoImpl implements IComplaintDao {
 
 	@Override
 	public List<Complaint> findAll() {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			TypedQuery<Complaint> query = em.createQuery("SELECT c FROM Complaint c " + "LEFT JOIN FETCH c.user "
 					+ "LEFT JOIN FETCH c.order " + "ORDER BY c.createdAt DESC", Complaint.class);
@@ -24,7 +24,7 @@ public class ComplaintDaoImpl implements IComplaintDao {
 
 	@Override
 	public Complaint findById(int id) {
-	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityManager em = JPAConfig.getInstance().getEntityManager();
 	    try {
 	        String jpql = "SELECT c FROM Complaint c " +
 	                      "LEFT JOIN FETCH c.user " +
@@ -44,7 +44,7 @@ public class ComplaintDaoImpl implements IComplaintDao {
 
 	@Override
 	public void insert(Complaint c) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -60,7 +60,7 @@ public class ComplaintDaoImpl implements IComplaintDao {
 
 	@Override
 	public void update(Complaint c) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -76,7 +76,7 @@ public class ComplaintDaoImpl implements IComplaintDao {
 
 	@Override
 	public void delete(int id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -93,7 +93,7 @@ public class ComplaintDaoImpl implements IComplaintDao {
 	}
 	
 	public List<Complaint> findByUserId(int userId) {
-	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityManager em = JPAConfig.getInstance().getEntityManager();
 	    try {
 	        String jpql = "SELECT c FROM Complaint c WHERE c.user.userId = :uid ORDER BY c.createdAt DESC";
 	        return em.createQuery(jpql, Complaint.class)
@@ -106,7 +106,7 @@ public class ComplaintDaoImpl implements IComplaintDao {
 	
 	@Override
 	public long countAll() {
-	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityManager em = JPAConfig.getInstance().getEntityManager();
 	    try {
 	        String jpql = "SELECT COUNT(c) FROM Complaint c";
 	        return em.createQuery(jpql, Long.class).getSingleResult();

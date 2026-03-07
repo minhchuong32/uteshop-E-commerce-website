@@ -292,7 +292,7 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 
 	@Override
 	public boolean insert(Delivery delivery) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 	    EntityTransaction tx = em.getTransaction();
 	    try {
 	        tx.begin();
@@ -321,7 +321,7 @@ public class DeliveryDaoImpl implements IDeliveryDao {
 	public boolean updateStatusForDeliveries(List<Integer> orderIds, String status) {
 		if (orderIds == null || orderIds.isEmpty()) return false;
 
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();

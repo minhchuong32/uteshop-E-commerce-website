@@ -18,7 +18,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Order> getAll() {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.createQuery("SELECT o FROM Order o ORDER BY o.createdAt DESC", Order.class).getResultList();
 		} finally {
@@ -28,7 +28,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Order> findAllForAdmin() {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 
 		List<Order> list = em
 				.createQuery("SELECT DISTINCT o FROM Order o " + "LEFT JOIN FETCH o.deliveries d "
@@ -42,7 +42,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public Order getById(int id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.find(Order.class, id);
 		} finally {
@@ -52,7 +52,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public Order insert(Order order) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -77,7 +77,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public void update(Order order) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -94,7 +94,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public void delete(int id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -113,7 +113,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Order> findByUser(User user) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT DISTINCT o FROM Order o " + "LEFT JOIN FETCH o.orderDetails d "
 					+ "LEFT JOIN FETCH d.productVariant pv " + "LEFT JOIN FETCH pv.product p "
@@ -128,7 +128,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public boolean hasPurchased(int userId, int productId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			Long count = em
 					.createQuery(
@@ -147,7 +147,7 @@ public class OrderDaoImpl implements IOrderDao {
 	// Vendor dashboard
 	@Override
 	public long countOrdersByShop(int shopId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT COUNT(DISTINCT o) " + "FROM Order o JOIN o.orderDetails od "
 					+ "WHERE od.productVariant.product.shop.shopId = :sid";
@@ -159,7 +159,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public long countDistinctCustomersByShop(int shopId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT COUNT(DISTINCT o.user.userId) " + "FROM Order o JOIN o.orderDetails od "
 					+ "WHERE od.productVariant.product.shop.shopId = :sid";
@@ -171,7 +171,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Object[]> getOrderTrendByShop(int shopId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String sql = """
 					    SELECT CONVERT(date, o.created_at) AS orderDate,
@@ -193,7 +193,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Object[]> getOrderStatusCountByShop(int shopId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = """
 					    SELECT o.status, COUNT(o)
@@ -209,7 +209,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Order> getOrdersByShopAndStatuses(int shopId, List<String> statuses) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em
 					.createQuery("SELECT DISTINCT o FROM Order o JOIN o.orderDetails od "
@@ -223,7 +223,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public User getOrderShipper(Order order) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			List<User> list = em
 					.createQuery("SELECT d.shipper FROM Delivery d WHERE d.order = :order ORDER BY d.createdAt ASC",
@@ -237,7 +237,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public long countAllOrders() {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.createQuery("SELECT COUNT(o) FROM Order o", Long.class).getSingleResult();
 		} finally {
@@ -247,7 +247,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Order> findRecentOrders(int limit) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = """
 					    SELECT DISTINCT o FROM Order o
@@ -264,7 +264,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Order> findByUserId(Integer userId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.createQuery("SELECT o FROM Order o WHERE o.user.userId = :uid ORDER BY o.createdAt DESC",
 					Order.class).setParameter("uid", userId).getResultList();
@@ -275,7 +275,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public Order getById(Integer id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT o FROM Order o " + "LEFT JOIN FETCH o.orderDetails d "
 					+ "LEFT JOIN FETCH d.productVariant pv " + "LEFT JOIN FETCH pv.product p "
@@ -292,7 +292,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Order> getOrdersByUserAndStatus(int userId, String status) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT DISTINCT o FROM Order o " + "LEFT JOIN FETCH o.orderDetails d "
 					+ "LEFT JOIN FETCH d.productVariant pv " + "LEFT JOIN FETCH pv.product p "
@@ -317,7 +317,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public boolean updateStatus(int orderId, String status) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 
 		try {
@@ -359,7 +359,7 @@ public class OrderDaoImpl implements IOrderDao {
 	// Vendor thong ke bo sung
 	@Override
 	public List<Object[]> getPaymentMethodStatsByShop(int shopId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String sql = """
 					    SELECT o.payment_method, COUNT(o.order_id)
@@ -378,7 +378,7 @@ public class OrderDaoImpl implements IOrderDao {
 
 	@Override
 	public List<Map<String, Object>> getReturnCancelRateByMonth(int shopId, int month, int year) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String sql = """
 					    SELECT
@@ -423,7 +423,7 @@ public class OrderDaoImpl implements IOrderDao {
 		System.out.println("Đang cập nhật order");
 	    if (orderIds == null || orderIds.isEmpty()) return false;
 
-	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityManager em = JPAConfig.getInstance().getEntityManager();
 	    EntityTransaction tx = em.getTransaction();
 
 	    try {

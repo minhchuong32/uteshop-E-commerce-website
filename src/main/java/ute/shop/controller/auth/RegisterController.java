@@ -67,7 +67,7 @@ public class RegisterController extends HttpServlet {
 		boolean isSuccess = service.register(username, password, email, "User", "active");
 
 		if (isSuccess) {
-			SendMail sm = new SendMail();
+			SendMail sm = SendMail.getInstance();
 			sm.sendMail(email, "Shopping.iotstar.vn - Đăng ký thành công",
 					"<h3>Chào " + username + "!</h3>"
 							+ "<p>Chúc mừng bạn đã đăng ký thành công tại <b>Shopping</b>.</p>"

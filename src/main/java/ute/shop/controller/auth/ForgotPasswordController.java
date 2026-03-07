@@ -16,7 +16,7 @@ import ute.shop.utils.SendMail;
 public class ForgotPasswordController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     IUserService userService = new UserServiceImpl();
-    SendMail sm = new SendMail();
+    SendMail sm = SendMail.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

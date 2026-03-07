@@ -127,7 +127,7 @@ public class ContactController extends HttpServlet {
 					.append("</div></body></html>");
 
 			// Gửi email
-			SendMail mailer = new SendMail();
+			SendMail mailer = SendMail.getInstance();
 			mailer.sendMail(recipientEmail, subject, emailBodyHtml.toString());
 
 			resp.sendRedirect(req.getContextPath() + "/admin/contacts?message=replySuccess");

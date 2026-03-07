@@ -10,7 +10,7 @@ import ute.shop.entity.Category;
 public class CategoryDaoImpl implements ICategoryDao {
 
 	public List<Category> findAll() {
-	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityManager em = JPAConfig.getInstance().getEntityManager();
 	    try {
 	        String jpql = "SELECT DISTINCT c FROM Category c LEFT JOIN FETCH c.products";
 	        return em.createQuery(jpql, Category.class).getResultList();
@@ -22,7 +22,7 @@ public class CategoryDaoImpl implements ICategoryDao {
 
     @Override
     public Category findById(Integer id) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             return em.find(Category.class, id);
         } finally {
@@ -32,7 +32,7 @@ public class CategoryDaoImpl implements ICategoryDao {
 
     @Override
     public void save(Category category) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -48,7 +48,7 @@ public class CategoryDaoImpl implements ICategoryDao {
 
     @Override
     public void update(Category category) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -64,7 +64,7 @@ public class CategoryDaoImpl implements ICategoryDao {
 
     @Override
     public void delete(int id) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -81,7 +81,7 @@ public class CategoryDaoImpl implements ICategoryDao {
     
 	@Override
 	public long countAll() {
-	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityManager em = JPAConfig.getInstance().getEntityManager();
 	    try {
 	        String jpql = "SELECT COUNT(c) FROM Category c";
 	        return em.createQuery(jpql, Long.class).getSingleResult();

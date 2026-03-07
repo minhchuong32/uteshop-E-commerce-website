@@ -16,7 +16,7 @@ public class RevenueDaoImpl implements IRevenueDao {
 	//			→ kết quả trả về = 100,000,000 - (100,000,000 * 0.1) = 90,000,000.
     @Override
     public BigDecimal getTotalRevenue(BigDecimal platformFeeRate) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         BigDecimal total = BigDecimal.ZERO;
 
         try {
@@ -34,7 +34,7 @@ public class RevenueDaoImpl implements IRevenueDao {
    // Tính phí nền tảng thu được (phần trăm doanh thu của người bán trả cho sàn): totalAmount * platformFeeRate
     @Override
     public BigDecimal getTotalPlatformFee(BigDecimal platformFeeRate) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         BigDecimal total = BigDecimal.ZERO;
 
         try {
@@ -53,7 +53,7 @@ public class RevenueDaoImpl implements IRevenueDao {
     //    Lấy doanh thu theo từng tháng trong năm hiện tại.
     @Override
     public List<Object[]> getRevenueByMonth() {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             String hql = """
                 SELECT MONTH(o.createdAt), SUM(o.totalAmount)
@@ -73,7 +73,7 @@ public class RevenueDaoImpl implements IRevenueDao {
     // Lấy doanh thu trong khoảng thời gian hoặc theo cửa hàng cụ thể.
     @Override
     public List<Object[]> getRevenueByFilter(Date startDate, Date endDate, Integer shopId) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             StringBuilder hql = new StringBuilder("""
                 SELECT MONTH(o.createdAt), SUM(o.totalAmount)
@@ -109,7 +109,7 @@ public class RevenueDaoImpl implements IRevenueDao {
     // Tính doanh thu riêng của từng shop dựa trên chi tiết đơn hàng (OrderDetail).
     @Override
     public BigDecimal getTotalRevenueByShop(int shopId) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             String hql = """
                 SELECT COALESCE(SUM(od.price * od.quantity), 0)
@@ -130,7 +130,7 @@ public class RevenueDaoImpl implements IRevenueDao {
     // Trả về danh sách doanh thu theo tháng cho shop cụ thể.
     @Override
     public List<Object[]> getRevenueByMonthByShop(int shopId) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             String hql = """
                 SELECT MONTH(o.createdAt), SUM(od.price * od.quantity)

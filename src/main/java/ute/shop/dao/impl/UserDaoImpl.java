@@ -12,7 +12,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public List<User> findAll() {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.createQuery("SELECT u FROM User u", User.class).getResultList();
 		} finally {
@@ -22,7 +22,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public User insert(User user) { // Thay đổi kiểu trả về
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -41,7 +41,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public boolean update(User user) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -60,7 +60,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public void delete(int id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -79,7 +79,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public Optional<User> findByEmail(String email) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);
 			q.setParameter("email", email);
@@ -91,7 +91,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public Optional<User> findByUsername(String username) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
 			q.setParameter("username", username);
@@ -103,7 +103,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public Optional<User> getUserById(int id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return Optional.ofNullable(em.find(User.class, id));
 		} finally {
@@ -113,7 +113,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public boolean updatePassword(String email, String newPassword) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -138,7 +138,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public void updateStatus(int id, String status) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -159,7 +159,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public boolean updatePwd(User user, boolean changePwd) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();
@@ -193,7 +193,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public List<User> getUsersByRole(String role) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			// Truy vấn tất cả user có role trùng khớp (ví dụ: "Vendor")
 			TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.role = :role", User.class);
@@ -209,7 +209,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public long countAllUsers() {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.createQuery("SELECT COUNT(u) FROM User u", Long.class).getSingleResult();
 		} finally {
@@ -219,7 +219,7 @@ public class UserDaoImpl implements IUserDao {
 
 	@Override
 	public Optional<User> findByGoogleId(String googleId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			TypedQuery<User> q = em.createQuery("SELECT u FROM User u WHERE u.googleId = :googleId", User.class);
 			q.setParameter("googleId", googleId);

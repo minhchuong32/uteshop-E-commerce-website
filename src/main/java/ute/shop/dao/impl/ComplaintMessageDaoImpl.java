@@ -12,7 +12,7 @@ public class ComplaintMessageDaoImpl implements IComplaintMessageDao {
 
 
     public List<ComplaintMessage> findByComplaintId(int complaintId) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             String jpql = "SELECT m FROM ComplaintMessage m "
                         + "LEFT JOIN FETCH m.sender "
@@ -28,7 +28,7 @@ public class ComplaintMessageDaoImpl implements IComplaintMessageDao {
 
     @Override
     public ComplaintMessage insert(ComplaintMessage message) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();

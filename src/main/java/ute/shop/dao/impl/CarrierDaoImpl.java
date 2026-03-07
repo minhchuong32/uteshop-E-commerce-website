@@ -11,20 +11,20 @@ public class CarrierDaoImpl implements ICarrierDao {
 
     @Override
     public List<Carrier> findAll() {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         TypedQuery<Carrier> query = em.createQuery("SELECT c FROM Carrier c", Carrier.class);
         return query.getResultList();
     }
 
     @Override
     public Carrier findById(int id) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         return em.find(Carrier.class, id);
     }
 
     @Override
     public void save(Carrier carrier) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(carrier);
@@ -36,7 +36,7 @@ public class CarrierDaoImpl implements ICarrierDao {
 
     @Override
     public void update(Carrier carrier) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(carrier);
@@ -48,7 +48,7 @@ public class CarrierDaoImpl implements ICarrierDao {
 
     @Override
     public void delete(int id) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
             Carrier c = em.find(Carrier.class, id);

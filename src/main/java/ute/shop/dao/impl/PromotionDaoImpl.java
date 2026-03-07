@@ -13,7 +13,7 @@ public class PromotionDaoImpl implements IPromotionDao {
 
 	@Override
 	public Promotion findById(int id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.find(Promotion.class, id);
 		} finally {
@@ -23,7 +23,7 @@ public class PromotionDaoImpl implements IPromotionDao {
 
 	@Override
 	public List<Promotion> findAll() {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			TypedQuery<Promotion> query = em.createQuery("SELECT p FROM Promotion p", Promotion.class);
 			return query.getResultList();
@@ -34,7 +34,7 @@ public class PromotionDaoImpl implements IPromotionDao {
 
 	@Override
 	public List<Promotion> findValidByShop(int shopId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = """
 					    SELECT p FROM Promotion p
@@ -53,7 +53,7 @@ public class PromotionDaoImpl implements IPromotionDao {
 
 	@Override
 	public void insert(Promotion p) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			em.getTransaction().begin();
 			em.persist(p);
@@ -69,7 +69,7 @@ public class PromotionDaoImpl implements IPromotionDao {
 
 	@Override
 	public void update(Promotion p) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			em.getTransaction().begin();
 			em.merge(p);
@@ -85,7 +85,7 @@ public class PromotionDaoImpl implements IPromotionDao {
 
 	@Override
 	public void delete(int id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			em.getTransaction().begin();
 			Promotion p = em.find(Promotion.class, id);
@@ -103,7 +103,7 @@ public class PromotionDaoImpl implements IPromotionDao {
 
 	@Override
 	public long countAll() {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT COUNT(c) FROM Promotion c";
 			return em.createQuery(jpql, Long.class).getSingleResult();
@@ -114,7 +114,7 @@ public class PromotionDaoImpl implements IPromotionDao {
 
 	@Override
 	public List<Promotion> findValidByProduct(int productId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             String jpql = """
                 SELECT p FROM Promotion p
@@ -132,7 +132,7 @@ public class PromotionDaoImpl implements IPromotionDao {
 
 	@Override
 	public List<Promotion> findAllValid() {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             String jpql = """
                 SELECT p FROM Promotion p

@@ -14,7 +14,7 @@ public class CartItemDaoImpl implements ICartItemDao {
 
     @Override
     public boolean insert(CartItem item) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -32,7 +32,7 @@ public class CartItemDaoImpl implements ICartItemDao {
 
     @Override
     public boolean update(CartItem item) {
-    	EntityManager em = JPAConfig.getEntityManager();
+    	EntityManager em = JPAConfig.getInstance().getEntityManager();
     	EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -50,7 +50,7 @@ public class CartItemDaoImpl implements ICartItemDao {
 
     @Override
     public boolean delete(Integer cartItemId) {
-    	EntityManager em = JPAConfig.getEntityManager();
+    	EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -72,7 +72,7 @@ public class CartItemDaoImpl implements ICartItemDao {
 
     @Override
     public CartItem findById(Integer cartItemId) {
-    	EntityManager em = JPAConfig.getEntityManager();
+    	EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             return em.find(CartItem.class, cartItemId);
         } finally {
@@ -82,7 +82,7 @@ public class CartItemDaoImpl implements ICartItemDao {
 
     @Override
     public List<CartItem> findByUser(User user) {
-    	EntityManager em = JPAConfig.getEntityManager();
+    	EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             return em.createQuery("""
                 SELECT c FROM CartItem c
@@ -101,7 +101,7 @@ public class CartItemDaoImpl implements ICartItemDao {
 
 	@Override
 	public CartItem findByUserAndVariant(User user, ProductVariant variant) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
             return em.createQuery("SELECT c FROM CartItem c WHERE c.user = :user AND c.productVariant = :variant", CartItem.class)
                      .setParameter("user", user)
@@ -116,7 +116,7 @@ public class CartItemDaoImpl implements ICartItemDao {
 
 	@Override
 	public List<CartItem> getCartByIds(String[] ids) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 	    try {
 	        List<Integer> idList = Arrays.stream(ids)
 	            .map(Integer::parseInt)

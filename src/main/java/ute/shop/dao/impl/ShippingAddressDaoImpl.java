@@ -13,7 +13,7 @@ public class ShippingAddressDaoImpl implements IShippingAddressDao {
 
 	@Override
 	public List<ShippingAddress> findByUserId(int userId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             TypedQuery<ShippingAddress> query = em.createQuery(
                 "SELECT s FROM ShippingAddress s WHERE s.user.userId = :uid ORDER BY s.createdAt DESC",
@@ -28,7 +28,7 @@ public class ShippingAddressDaoImpl implements IShippingAddressDao {
 
 	@Override
 	public ShippingAddress findById(int id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             return em.find(ShippingAddress.class, id);
         } finally {
@@ -38,7 +38,7 @@ public class ShippingAddressDaoImpl implements IShippingAddressDao {
 
 	@Override
 	public void insert(ShippingAddress address) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(address);
@@ -53,7 +53,7 @@ public class ShippingAddressDaoImpl implements IShippingAddressDao {
 
 	@Override
 	public void update(ShippingAddress address) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
             em.merge(address);
@@ -68,7 +68,7 @@ public class ShippingAddressDaoImpl implements IShippingAddressDao {
 
 	@Override
 	public void delete(int id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
             ShippingAddress addr = em.find(ShippingAddress.class, id);
@@ -84,7 +84,7 @@ public class ShippingAddressDaoImpl implements IShippingAddressDao {
 
 	@Override
 	public void unsetOtherDefaults(int userId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -103,7 +103,7 @@ public class ShippingAddressDaoImpl implements IShippingAddressDao {
 
 	@Override
 	public void unsetOtherDefaults(int userId, int excludeId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();

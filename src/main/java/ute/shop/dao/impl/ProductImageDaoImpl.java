@@ -13,7 +13,7 @@ public class ProductImageDaoImpl implements ProductImageDao {
 	
 	@Override
 	public ProductImage update(ProductImage image) {
-	    EntityManager em = JPAConfig.getEntityManager();
+	    EntityManager em = JPAConfig.getInstance().getEntityManager();
 	    EntityTransaction tx = em.getTransaction();
 	    try {
 	        tx.begin();
@@ -31,7 +31,7 @@ public class ProductImageDaoImpl implements ProductImageDao {
 
     @Override
     public List<ProductImage> findByProductId(Long productId) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             return em.createQuery("SELECT pi FROM ProductImage pi WHERE pi.product.id = :pid", ProductImage.class)
                      .setParameter("pid", productId)
@@ -43,7 +43,7 @@ public class ProductImageDaoImpl implements ProductImageDao {
 
     @Override
     public ProductImage findById(Long id) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             return em.find(ProductImage.class, id);
         } finally {
@@ -53,7 +53,7 @@ public class ProductImageDaoImpl implements ProductImageDao {
 
     @Override
     public ProductImage save(ProductImage image) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -74,7 +74,7 @@ public class ProductImageDaoImpl implements ProductImageDao {
 
     @Override
     public void delete(Long productId) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();

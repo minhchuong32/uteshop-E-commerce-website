@@ -9,7 +9,7 @@ import java.util.List;
 public class NotificationDaoImpl implements INotificationDao {
 	
 	public List<Notification> getAllByUserId(int userId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 	    try {
 	        String jpql = "SELECT DISTINCT n FROM Notification n "
 	                     + "LEFT JOIN FETCH n.relatedComplaint c "
@@ -28,7 +28,7 @@ public class NotificationDaoImpl implements INotificationDao {
 
 
 	public List<Notification> findByUserId(int userId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT n FROM Notification n " + "LEFT JOIN FETCH n.relatedComplaint "
 					+ "WHERE n.user.userId = :uid " + "ORDER BY n.createdAt DESC";
@@ -39,7 +39,7 @@ public class NotificationDaoImpl implements INotificationDao {
 	}
 
 	public Notification findById(int id) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			return em.find(Notification.class, id);
 		} finally {
@@ -48,7 +48,7 @@ public class NotificationDaoImpl implements INotificationDao {
 	}
 
 	public void update(Notification noti) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			em.getTransaction().begin();
 			em.merge(noti);
@@ -62,7 +62,7 @@ public class NotificationDaoImpl implements INotificationDao {
 	}
 
 	public List<Notification> findUnreadByUserId(int userId) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		try {
 			String jpql = "SELECT n FROM Notification n WHERE n.user.userId = :uid AND n.read = false ORDER BY n.createdAt DESC";
 			return em.createQuery(jpql, Notification.class).setParameter("uid", userId).setMaxResults(10)
@@ -73,7 +73,7 @@ public class NotificationDaoImpl implements INotificationDao {
 	}
 
 	public void insert(Notification n) {
-		EntityManager em = JPAConfig.getEntityManager();
+		EntityManager em = JPAConfig.getInstance().getEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		try {
 			tx.begin();

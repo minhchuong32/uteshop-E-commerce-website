@@ -15,7 +15,7 @@ public class ProductVariantDaoImpl implements IProductVariantDao {
 
     @Override
     public ProductVariant findById(Integer variantId) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             return em.find(ProductVariant.class, variantId);
         } finally {
@@ -25,7 +25,7 @@ public class ProductVariantDaoImpl implements IProductVariantDao {
 
     @Override
     public ProductVariant findByOptions(Integer productId, Map<String, Object> selectedOptions) {
-    	EntityManager em = JPAConfig.getEntityManager();
+    	EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             if (selectedOptions == null || selectedOptions.isEmpty()) {
             	System.out.println("[DAO] ❌ Không có lựa chọn nào được truyền vào");
@@ -54,7 +54,7 @@ public class ProductVariantDaoImpl implements IProductVariantDao {
     // Thêm mới variant
     @Override
     public void save(ProductVariant variant) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -71,7 +71,7 @@ public class ProductVariantDaoImpl implements IProductVariantDao {
     // Cập nhật variant
     @Override
     public void update(ProductVariant variant) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -88,7 +88,7 @@ public class ProductVariantDaoImpl implements IProductVariantDao {
     // Xóa variant theo id
     @Override
     public void delete(Integer variantId) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -106,7 +106,7 @@ public class ProductVariantDaoImpl implements IProductVariantDao {
     // Xóa toàn bộ variant của 1 sản phẩm
     @Override
     public void deleteByProductId(Integer productId) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -125,7 +125,7 @@ public class ProductVariantDaoImpl implements IProductVariantDao {
     // Lấy danh sách variant theo productId
     @Override
     public List<ProductVariant> findByProductId(Integer productId) {
-        EntityManager em = JPAConfig.getEntityManager();
+        EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             TypedQuery<ProductVariant> query = em.createQuery(
                 "SELECT v FROM ProductVariant v WHERE v.product.productId = :pid", ProductVariant.class);

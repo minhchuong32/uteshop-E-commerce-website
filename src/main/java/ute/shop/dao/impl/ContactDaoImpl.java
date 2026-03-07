@@ -12,7 +12,7 @@ public class ContactDaoImpl implements IContactDao {
 
     @Override
     public boolean insert(Contact c) {
-    	 EntityManager em = JPAConfig.getEntityManager();
+    	 EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -31,7 +31,7 @@ public class ContactDaoImpl implements IContactDao {
 
     @Override
     public List<Contact> findAll() {
-         EntityManager em = JPAConfig.getEntityManager();
+         EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             String jpql = "SELECT c FROM Contact c ORDER BY c.createdAt DESC";
             TypedQuery<Contact> query = em.createQuery(jpql, Contact.class);
@@ -43,7 +43,7 @@ public class ContactDaoImpl implements IContactDao {
 
     @Override
     public Contact findById(int contactId) {
-         EntityManager em = JPAConfig.getEntityManager();
+         EntityManager em = JPAConfig.getInstance().getEntityManager();
         try {
             return em.find(Contact.class, contactId);
         } finally {
@@ -53,7 +53,7 @@ public class ContactDaoImpl implements IContactDao {
 
     @Override
     public boolean delete(int contactId) {
-         EntityManager em = JPAConfig.getEntityManager();
+         EntityManager em = JPAConfig.getInstance().getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
