@@ -27,14 +27,14 @@ public class PaymentVnpayController extends HttpServlet {
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// ✅ Kiểm tra JWT (user đã được set trong filter)
+		// Kiểm tra JWT (user đã được set trong filter)
         User user = (User) req.getAttribute("account");
         if (user == null) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         }
 
-        // ✅ Lấy thông tin đơn hàng từ request (truyền từ frontend hoặc trang checkout)
+        // Lấy thông tin đơn hàng từ request (truyền từ frontend hoặc trang checkout)
         String totalStr = req.getParameter("paymentTotal");
         String orderIds = req.getParameter("orderIds");
         String shopNames = req.getParameter("shopNames");
@@ -52,7 +52,7 @@ public class PaymentVnpayController extends HttpServlet {
             return;
         }
 
-        // ✅ Chuẩn bị dữ liệu VNPay
+        // Chuẩn bị dữ liệu VNPay
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", "2.1.0");
         vnp_Params.put("vnp_Command", "pay");
@@ -74,7 +74,7 @@ public class PaymentVnpayController extends HttpServlet {
         cld.add(Calendar.MINUTE, 15);
         vnp_Params.put("vnp_ExpireDate", formatter.format(cld.getTime()));
 
-     // ✅ Build query string & secure hash thống nhất
+        // Build query string & secure hash thống nhất
         List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
         Collections.sort(fieldNames);
         StringBuilder query = new StringBuilder();
@@ -92,15 +92,13 @@ public class PaymentVnpayController extends HttpServlet {
             }
         }
 
-        // ✅ Tạo chữ ký bằng chính hàm trong VnPayConfig
+        // Tạo chữ ký bằng chính hàm trong VnPayConfig
         String secureHash = VnPayConfig.hashAllFields(vnp_Params);
         query.append("&vnp_SecureHash=").append(secureHash);
 
-        // ✅ Ghép URL
+        // Ghép URL
         String paymentUrl = VnPayConfig.getVnpUrl() + "?" + query;
         resp.sendRedirect(paymentUrl);
 
-    }
-
-    
+    } 
 }

@@ -74,11 +74,25 @@ public class UserComplaintController extends HttpServlet {
 
 				// Chuyển đổi sang DTO
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				
+//				List<MessageDTO> messageDTOs = originalMessages.stream()
+//						.map(msg -> new MessageDTO((long) msg.getSender().getUserId(), msg.getSender().getUsername(),
+//								msg.getSender().getAvatar(), msg.getMessageType().name(), msg.getContent(),
+//								msg.getOriginalFilename(), sdf.format(msg.getCreatedAt())))
+//						.collect(Collectors.toList());
+				
 				List<MessageDTO> messageDTOs = originalMessages.stream()
-						.map(msg -> new MessageDTO((long) msg.getSender().getUserId(), msg.getSender().getUsername(),
-								msg.getSender().getAvatar(), msg.getMessageType().name(), msg.getContent(),
-								msg.getOriginalFilename(), sdf.format(msg.getCreatedAt())))
-						.collect(Collectors.toList());
+				        .map(msg -> new MessageDTO.Builder()
+				                .senderId(msg.getSender().getUserId().longValue())
+				                .senderUsername(msg.getSender().getUsername())
+				                .senderAvatar(msg.getSender().getAvatar())
+				                .type(msg.getMessageType().name())
+				                .content(msg.getContent())
+				                .originalFilename(msg.getOriginalFilename())
+				                .createdAt(sdf.format(msg.getCreatedAt()))
+				                .build())
+				        .collect(Collectors.toList());
+				
 
 				req.setAttribute("complaint", complaint);
 				req.setAttribute("messages", messageDTOs);

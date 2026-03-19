@@ -55,44 +55,54 @@ public class ChatServerEndpoint {
 
 	@OnMessage
 	public void onMessage(String jsonMessage, Session session) {
-		int complaintId = (int) session.getUserProperties().get("complaintId");
-		int senderId = (int) session.getUserProperties().get("userId");
 
-		Complaint complaint = complaintService.findById(complaintId);
-		Optional<User> senderOptional = userService.getUserById(senderId);
+	    int complaintId = (int) session.getUserProperties().get("complaintId");
+	    int senderId = (int) session.getUserProperties().get("userId");
 
-		if (complaint == null || senderOptional.isEmpty()) {
-			System.err.println("Complaint or Sender not found!");
-			return;
-		}
+	    Complaint complaint = complaintService.findById(complaintId);
+	    Optional<User> senderOptional = userService.getUserById(senderId);
 
-		User sender = senderOptional.get();
-		MessageDTO receivedMsg = gson.fromJson(jsonMessage, MessageDTO.class);
+	    if (complaint == null || senderOptional.isEmpty()) {
+	        System.err.println("Complaint or Sender not found!");
+	        return;
+	    }
 
-		ComplaintMessage newMessage = new ComplaintMessage();
-		newMessage.setComplaint(complaint);
-		newMessage.setSender(sender);
-		newMessage.setContent(receivedMsg.getContent());
-		newMessage.setMessageType(ComplaintMessage.MessageType.valueOf(receivedMsg.getType().toUpperCase())); 
-		newMessage.setOriginalFilename(receivedMsg.getOriginalFilename());
+	    User sender = senderOptional.get();
 
-		newMessage = msgService.insert(newMessage);
+	    MessageDTO receivedMsg = gson.fromJson(jsonMessage, MessageDTO.class);
 
-		createAndSaveNotification(sender, complaint);
+	    // ===== Lưu message DB =====
+	    ComplaintMessage newMessage = new ComplaintMessage();
+	    newMessage.setComplaint(complaint);
+	    newMessage.setSender(sender);
+	    newMessage.setContent(receivedMsg.getContent());
+	    newMessage.setMessageType(
+	            ComplaintMessage.MessageType.valueOf(receivedMsg.getType().toUpperCase()));
+	    newMessage.setOriginalFilename(receivedMsg.getOriginalFilename());
 
-		//  Tạo đối tượng DTO để broadcast, đảm bảo cấu trúc nhất quán
-		MessageDTO messageToSend = new MessageDTO(
-				(long) sender.getUserId(),
-				sender.getUsername(),
-				sender.getAvatar(),
-				newMessage.getMessageType().name(), // Lấy lại từ Entity đã lưu để đảm bảo đúng
-				newMessage.getContent(),
-				newMessage.getOriginalFilename(),
-				new SimpleDateFormat("dd/MM/yyyy HH:mm").format(newMessage.getCreatedAt())
-		);
-		String finalJsonMessage = gson.toJson(messageToSend);
+	    newMessage = msgService.insert(newMessage);
 
-		broadcast(complaintId, finalJsonMessage);
+	    // ===== Tạo notification =====
+	    createAndSaveNotification(sender, complaint);
+
+	    // ===== Format thời gian =====
+	    String createdAt = new SimpleDateFormat("HH:mm dd/MM/yyyy")
+	            .format(newMessage.getCreatedAt());
+
+	    // ===== Builder MessageDTO =====
+	    MessageDTO messageToSend = new MessageDTO.Builder()
+	    		.senderId(sender.getUserId().longValue())
+	            .senderUsername(sender.getUsername())
+	            .senderAvatar(sender.getAvatar())
+	            .type(newMessage.getMessageType().name())
+	            .content(newMessage.getContent())
+	            .originalFilename(newMessage.getOriginalFilename())
+	            .createdAt(createdAt)
+	            .build();
+
+	    String finalJsonMessage = gson.toJson(messageToSend);
+
+	    broadcast(complaintId, finalJsonMessage);
 	}
 
 	@OnClose

@@ -11,6 +11,11 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/user/payment/momo")
 public class PaymentMomoController extends HttpServlet {
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	BigDecimal total = (BigDecimal) req.getSession().getAttribute("paymentTotal");
