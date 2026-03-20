@@ -15,8 +15,8 @@ import ute.shop.entity.Shop;
 import ute.shop.service.ICategoryService;
 import ute.shop.service.IProductService;
 import ute.shop.service.IShopService;
+import ute.shop.service.decorator.PriceDecoratorProductService;
 import ute.shop.service.impl.CategoryServiceImpl;
-import ute.shop.service.impl.ProductServiceImpl;
 import ute.shop.service.impl.ShopServiceImpl;
 
 @WebServlet("/web/shop/detail")
@@ -24,7 +24,8 @@ public class ShopDetailController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final IShopService shopService = new ShopServiceImpl();
 	private final ICategoryService categoryService = new CategoryServiceImpl();
-	private final IProductService productService = new ProductServiceImpl();
+//	private final IProductService productService = new ProductServiceImpl();
+	 private final IProductService productService = new PriceDecoratorProductService();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

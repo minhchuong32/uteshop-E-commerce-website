@@ -9,8 +9,8 @@ import ute.shop.entity.Product;
 import ute.shop.entity.ProductVariant;
 import ute.shop.service.ICategoryService;
 import ute.shop.service.IProductService;
+import ute.shop.service.decorator.PriceDecoratorProductService;
 import ute.shop.service.impl.CategoryServiceImpl;
-import ute.shop.service.impl.ProductServiceImpl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -20,7 +20,8 @@ import java.util.List;
 public class HomeController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final ICategoryService categoryService = new CategoryServiceImpl();
-	private final IProductService productService = new ProductServiceImpl();
+//	private final IProductService productService = new ProductServiceImpl();
+	 private final IProductService productService = new PriceDecoratorProductService();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,21 +57,21 @@ public class HomeController extends HttpServlet {
 			totalProducts = productService.countFilterProducts(categoryId, minPrice, maxPrice);
 			products = productService.filterProducts(categoryId, minPrice, maxPrice, sortBy, page, size);
 		}
-		for (Product p : products) {
-            if (p.getVariants() != null && !p.getVariants().isEmpty()) {
-                ProductVariant minVariant = p.getVariants().stream()
-                        .min((v1, v2) -> v1.getPrice().compareTo(v2.getPrice()))
-                        .orElse(p.getVariants().get(0));
-
-                // Gán giá hiển thị cho product
-                p.setPrice(minVariant.getPrice());
-
-                // Lưu variant vào request để JSP guest dùng hiển thị oldPrice
-                req.setAttribute("variant_" + p.getProductId(), minVariant);
-            } else {
-                p.setPrice(BigDecimal.ZERO);
-            }
-        }
+//		for (Product p : products) {
+//            if (p.getVariants() != null && !p.getVariants().isEmpty()) {
+//                ProductVariant minVariant = p.getVariants().stream()
+//                        .min((v1, v2) -> v1.getPrice().compareTo(v2.getPrice()))
+//                        .orElse(p.getVariants().get(0));
+//
+//                // Gán giá hiển thị cho product
+//                p.setPrice(minVariant.getPrice());
+//
+//                // Lưu variant vào request để JSP guest dùng hiển thị oldPrice
+//                req.setAttribute("variant_" + p.getProductId(), minVariant);
+//            } else {
+//                p.setPrice(BigDecimal.ZERO);
+//            }
+//        }
 
 		int totalPages = (int) Math.ceil((double) totalProducts / size);
 
