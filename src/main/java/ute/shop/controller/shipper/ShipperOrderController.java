@@ -3,6 +3,7 @@ package ute.shop.controller.shipper;
 import ute.shop.entity.Delivery;
 import ute.shop.entity.Notification;
 import ute.shop.entity.User;
+import ute.shop.observer.OrderEventPublisher;
 import ute.shop.service.IDeliveryService;
 import ute.shop.service.impl.DeliveryServiceImpl;
 import ute.shop.service.impl.NotificationServiceImpl;
@@ -102,26 +103,29 @@ public class ShipperOrderController extends HttpServlet {
             
             Delivery d = deliveryService.getById(Integer.parseInt(deliveryIdStr));
             if (d != null && d.getOrder() != null) {
-                var order = d.getOrder();
-                var shop = order.getShop();
-
-                // Gửi cho User
-                Notification notiUser = Notification.builder()
-                        .user(order.getUser())
-                        .title("Đơn hàng #" + order.getOrderId() + " đã được nhận bởi shipper")
-                        .message("Shipper " + shipperLogin.getUsername() + " đã nhận đơn và sẽ sớm giao hàng cho bạn.")
-                        .build();
-                notificationService.insert(notiUser);
-
-                // Gửi cho Vendor (chủ shop)
-                if (shop != null && shop.getUser() != null) {
-                    Notification notiVendor = Notification.builder()
-                            .user(shop.getUser())
-                            .title("Shipper đã nhận đơn hàng #" + order.getOrderId())
-                            .message("Shipper " + shipperLogin.getUsername() + " đã nhận đơn hàng của bạn để giao.")
-                            .build();
-                    notificationService.insert(notiVendor);
-                }
+//                var order = d.getOrder();
+//                var shop = order.getShop();
+//
+//                // Gửi cho User
+//                Notification notiUser = Notification.builder()
+//                        .user(order.getUser())
+//                        .title("Đơn hàng #" + order.getOrderId() + " đã được nhận bởi shipper")
+//                        .message("Shipper " + shipperLogin.getUsername() + " đã nhận đơn và sẽ sớm giao hàng cho bạn.")
+//                        .build();
+//                notificationService.insert(notiUser);
+//
+//                // Gửi cho Vendor (chủ shop)
+//                if (shop != null && shop.getUser() != null) {
+//                    Notification notiVendor = Notification.builder()
+//                            .user(shop.getUser())
+//                            .title("Shipper đã nhận đơn hàng #" + order.getOrderId())
+//                            .message("Shipper " + shipperLogin.getUsername() + " đã nhận đơn hàng của bạn để giao.")
+//                            .build();
+//                    notificationService.insert(notiVendor);
+//                }
+            	
+            	OrderEventPublisher.getInstance()
+                .publish(d.getOrder(), "Đang giao", shipperLogin.getUsername());
             }
 
             resp.sendRedirect(req.getContextPath() + "/shipper/orders");

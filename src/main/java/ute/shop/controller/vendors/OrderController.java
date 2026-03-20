@@ -16,6 +16,7 @@ import ute.shop.entity.Notification;
 import ute.shop.entity.Order;
 import ute.shop.entity.Shop;
 import ute.shop.entity.User;
+import ute.shop.observer.OrderEventPublisher;
 import ute.shop.service.IDeliveryService;
 import ute.shop.service.impl.DeliveryServiceImpl;
 import ute.shop.service.impl.NotificationServiceImpl;
@@ -166,14 +167,19 @@ public class OrderController extends HttpServlet {
 				if (order != null) {
 					switch (action) {
 					case "confirm":
+//						order.setStatus("Đã xác nhận");
+//						orderService.update(order);
+//						// TODO: gửi notification đến user
+//						Notification n1 = Notification.builder().user(order.getUser())
+//								.title("Đơn hàng #" + order.getOrderId() + " đã được xác nhận")
+//								.message("Cửa hàng đã xác nhận đơn hàng của bạn. Đơn đang được chuẩn bị để giao.")
+//								.build();
+//						notificationService.insert(n1);
+						
 						order.setStatus("Đã xác nhận");
 						orderService.update(order);
-						// TODO: gửi notification đến user
-						Notification n1 = Notification.builder().user(order.getUser())
-								.title("Đơn hàng #" + order.getOrderId() + " đã được xác nhận")
-								.message("Cửa hàng đã xác nhận đơn hàng của bạn. Đơn đang được chuẩn bị để giao.")
-								.build();
-						notificationService.insert(n1);
+						OrderEventPublisher.getInstance()
+						    .publish(order, "Đã xác nhận", "Cửa hàng");
 
 						if (order.getDeliveries() != null) {
 							for (Delivery d : order.getDeliveries()) {
