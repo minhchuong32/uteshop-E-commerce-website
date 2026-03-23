@@ -1,22 +1,4 @@
 
-# Chú thích cấu trúc: 
-controller/ → Servlet nhận request từ client, gọi service.
-
-dao/ + dao/impl/ → Tầng truy xuất DB (JPA).
-
-model/ → POJO class, ánh xạ bảng DB.
-
-service/ + service/impl/ → Xử lý logic nghiệp vụ (gọi dao).
-
-utils/ → DBConnect, helper (hash password, validate...).
-
-filter/ → Lọc request (bảo mật, encoding UTF-8).
-
-webapp/WEB-INF/views/ → JSP 
-
-assets/ → CSS, JS, hình ảnh.
-
-test/ → JUnit test DAO + Service.
 
 
 # 🛒 UTESHOP-SERVLET PROJECT
@@ -60,6 +42,26 @@ Uteshop-servlet/
 │
 └── db/							#Query thêm dữ liệu mẫu
 ```
+
+# Chú thích cấu trúc: 
+controller/ → Servlet nhận request từ client, gọi service.
+
+dao/ + dao/impl/ → Tầng truy xuất DB (JPA).
+
+model/ → POJO class, ánh xạ bảng DB.
+
+service/ + service/impl/ → Xử lý logic nghiệp vụ (gọi dao).
+
+utils/ → DBConnect, helper (hash password, validate...).
+
+filter/ → Lọc request (bảo mật, encoding UTF-8).
+
+webapp/WEB-INF/views/ → JSP 
+
+assets/ → CSS, JS, hình ảnh.
+
+test/ → JUnit test DAO + Service.
+
 ## ⚙️ 2. Các bước cài đặt
 - Cài **SQL Server** (tham khảo hướng dẫn trên YouTube).
 - Tạo database uteshopdb
