@@ -19,6 +19,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import ute.shop.service.impl.*;
+import ute.shop.report.RevenueReportGenerator;
 import ute.shop.service.*;
 
 import java.io.IOException;
@@ -39,9 +40,14 @@ public class RevenueController extends HttpServlet {
 		String uri = req.getRequestURI();
 
 		// === Nếu truy cập /admin/revenue/report thì sinh file PDF ===
+//		if (uri.endsWith("/report")) {
+//			generateRevenueReportPdf(req, resp);
+//			return;
+//		}
+		
 		if (uri.endsWith("/report")) {
-			generateRevenueReportPdf(req, resp);
-			return;
+		    new RevenueReportGenerator().generate(req, resp);
+		    return;
 		}
 		try {
 			// phân tích tăng trưởng
@@ -126,79 +132,79 @@ public class RevenueController extends HttpServlet {
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi khi tải thống kê doanh thu");
 		}
 	}
-	private void generateRevenueReportPdf(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		Cookie downloadCookie = new Cookie("download_token", "completed");
-	    downloadCookie.setPath("/"); 
-	    resp.addCookie(downloadCookie);
-	    
-		resp.setContentType("application/pdf");
-		resp.setHeader("Content-Disposition", "attachment; filename=\"BaoCaoDoanhThu.pdf\"");
-
-		try (PdfWriter writer = new PdfWriter(resp.getOutputStream());
-			 PdfDocument pdf = new PdfDocument(writer);
-			 Document document = new Document(pdf, PageSize.A4)) { // Giấy A4 đứng
-
-			document.setMargins(30, 30, 30, 30);
-
-			// Lấy font tiếng Việt (giống hệt OrderController)
-			InputStream fontStream = getServletContext().getResourceAsStream("/fonts/Roboto-Regular.ttf");
-			if (fontStream == null) {
-				throw new IOException("Không tìm thấy file font tại /fonts/Roboto-Regular.ttf");
-			}
-			byte[] fontBytes = fontStream.readAllBytes();
-			PdfFont vietnameseFont = PdfFontFactory.createFont(fontBytes, "Identity-H", EmbeddingStrategy.PREFER_EMBEDDED, true);
-
-			// Tiêu đề
-			document.add(new Paragraph("BÁO CÁO TỔNG QUAN DOANH THU")
-					.setFont(vietnameseFont).setFontSize(18).setBold()
-					.setTextAlignment(TextAlignment.CENTER));
-			document.add(new Paragraph("Ngày xuất: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()))
-					.setFont(vietnameseFont).setFontSize(9)
-					.setTextAlignment(TextAlignment.CENTER).setMarginBottom(20));
-			
-			// --- Lấy dữ liệu từ Service (giống hệt logic trong showRevenuePage) ---
-			String feeParam = req.getParameter("fee");
-			BigDecimal platformFeeRate = new BigDecimal(feeParam != null ? feeParam : "0.10");
-			BigDecimal totalRevenue = revenueService.getTotalRevenueAfterFee(platformFeeRate);
-			BigDecimal platformFee = revenueService.getTotalPlatformFee(platformFeeRate);
-			List<Object[]> revenueData = revenueService.getRevenueByMonth();
-			String advancedAnalysis = revenueService.analyzeGrowthAndForecast(revenueData);
-
-			// Phần thống kê tổng quan
-			document.add(new Paragraph("Thống kê tổng quan").setFont(vietnameseFont).setFontSize(14).setBold());
-			Table overviewTable = new Table(UnitValue.createPercentArray(new float[]{3, 2})).useAllAvailableWidth();
-			overviewTable.addCell(createHeaderCell("Hạng mục", vietnameseFont));
-			overviewTable.addCell(createHeaderCell("Giá trị", vietnameseFont));
-			overviewTable.addCell(createCell("Doanh thu sau phí của Shop", vietnameseFont, false));
-			overviewTable.addCell(createCell(formatCurrency(totalRevenue), vietnameseFont, false));
-			overviewTable.addCell(createCell("Phí sàn UTESHOP thu được", vietnameseFont, false));
-			overviewTable.addCell(createCell(formatCurrency(platformFee), vietnameseFont, false));
-			document.add(overviewTable.setMarginBottom(20));
-
-			// Phần phân tích & dự báo
-			document.add(new Paragraph("Phân tích & Dự báo").setFont(vietnameseFont).setFontSize(14).setBold());
-			document.add(new Paragraph(advancedAnalysis).setFont(vietnameseFont).setFontSize(10).setItalic().setMarginBottom(20));
-			
-			// Bảng chi tiết doanh thu theo tháng
-			document.add(new Paragraph("Chi tiết doanh thu theo tháng (Toàn hệ thống)").setFont(vietnameseFont).setFontSize(14).setBold());
-			Table monthlyTable = new Table(UnitValue.createPercentArray(new float[]{1, 2})).useAllAvailableWidth();
-			monthlyTable.addHeaderCell(createHeaderCell("Tháng", vietnameseFont));
-			monthlyTable.addHeaderCell(createHeaderCell("Doanh thu (trước phí)", vietnameseFont));
-
-			for (Object[] row : revenueData) {
-				int month = ((Number) row[0]).intValue();
-				BigDecimal amount = (BigDecimal) row[1];
-				monthlyTable.addCell(createCell("Tháng " + month, vietnameseFont, false));
-				monthlyTable.addCell(createCell(formatCurrency(amount), vietnameseFont, false));
-			}
-			document.add(monthlyTable);
-			
-			document.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	private void generateRevenueReportPdf(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+//		Cookie downloadCookie = new Cookie("download_token", "completed");
+//	    downloadCookie.setPath("/"); 
+//	    resp.addCookie(downloadCookie);
+//	    
+//		resp.setContentType("application/pdf");
+//		resp.setHeader("Content-Disposition", "attachment; filename=\"BaoCaoDoanhThu.pdf\"");
+//
+//		try (PdfWriter writer = new PdfWriter(resp.getOutputStream());
+//			 PdfDocument pdf = new PdfDocument(writer);
+//			 Document document = new Document(pdf, PageSize.A4)) { // Giấy A4 đứng
+//
+//			document.setMargins(30, 30, 30, 30);
+//
+//			// Lấy font tiếng Việt (giống hệt OrderController)
+//			InputStream fontStream = getServletContext().getResourceAsStream("/fonts/Roboto-Regular.ttf");
+//			if (fontStream == null) {
+//				throw new IOException("Không tìm thấy file font tại /fonts/Roboto-Regular.ttf");
+//			}
+//			byte[] fontBytes = fontStream.readAllBytes();
+//			PdfFont vietnameseFont = PdfFontFactory.createFont(fontBytes, "Identity-H", EmbeddingStrategy.PREFER_EMBEDDED, true);
+//
+//			// Tiêu đề
+//			document.add(new Paragraph("BÁO CÁO TỔNG QUAN DOANH THU")
+//					.setFont(vietnameseFont).setFontSize(18).setBold()
+//					.setTextAlignment(TextAlignment.CENTER));
+//			document.add(new Paragraph("Ngày xuất: " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()))
+//					.setFont(vietnameseFont).setFontSize(9)
+//					.setTextAlignment(TextAlignment.CENTER).setMarginBottom(20));
+//			
+//			// --- Lấy dữ liệu từ Service (giống hệt logic trong showRevenuePage) ---
+//			String feeParam = req.getParameter("fee");
+//			BigDecimal platformFeeRate = new BigDecimal(feeParam != null ? feeParam : "0.10");
+//			BigDecimal totalRevenue = revenueService.getTotalRevenueAfterFee(platformFeeRate);
+//			BigDecimal platformFee = revenueService.getTotalPlatformFee(platformFeeRate);
+//			List<Object[]> revenueData = revenueService.getRevenueByMonth();
+//			String advancedAnalysis = revenueService.analyzeGrowthAndForecast(revenueData);
+//
+//			// Phần thống kê tổng quan
+//			document.add(new Paragraph("Thống kê tổng quan").setFont(vietnameseFont).setFontSize(14).setBold());
+//			Table overviewTable = new Table(UnitValue.createPercentArray(new float[]{3, 2})).useAllAvailableWidth();
+//			overviewTable.addCell(createHeaderCell("Hạng mục", vietnameseFont));
+//			overviewTable.addCell(createHeaderCell("Giá trị", vietnameseFont));
+//			overviewTable.addCell(createCell("Doanh thu sau phí của Shop", vietnameseFont, false));
+//			overviewTable.addCell(createCell(formatCurrency(totalRevenue), vietnameseFont, false));
+//			overviewTable.addCell(createCell("Phí sàn UTESHOP thu được", vietnameseFont, false));
+//			overviewTable.addCell(createCell(formatCurrency(platformFee), vietnameseFont, false));
+//			document.add(overviewTable.setMarginBottom(20));
+//
+//			// Phần phân tích & dự báo
+//			document.add(new Paragraph("Phân tích & Dự báo").setFont(vietnameseFont).setFontSize(14).setBold());
+//			document.add(new Paragraph(advancedAnalysis).setFont(vietnameseFont).setFontSize(10).setItalic().setMarginBottom(20));
+//			
+//			// Bảng chi tiết doanh thu theo tháng
+//			document.add(new Paragraph("Chi tiết doanh thu theo tháng (Toàn hệ thống)").setFont(vietnameseFont).setFontSize(14).setBold());
+//			Table monthlyTable = new Table(UnitValue.createPercentArray(new float[]{1, 2})).useAllAvailableWidth();
+//			monthlyTable.addHeaderCell(createHeaderCell("Tháng", vietnameseFont));
+//			monthlyTable.addHeaderCell(createHeaderCell("Doanh thu (trước phí)", vietnameseFont));
+//
+//			for (Object[] row : revenueData) {
+//				int month = ((Number) row[0]).intValue();
+//				BigDecimal amount = (BigDecimal) row[1];
+//				monthlyTable.addCell(createCell("Tháng " + month, vietnameseFont, false));
+//				monthlyTable.addCell(createCell(formatCurrency(amount), vietnameseFont, false));
+//			}
+//			document.add(monthlyTable);
+//			
+//			document.close();
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	// --- CÁC PHƯƠNG THỨC TIỆN ÍCH (COPY TỪ ORDERCONTROLLER) ---
 	private String formatCurrency(BigDecimal amount) {
