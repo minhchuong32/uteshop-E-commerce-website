@@ -1,5 +1,6 @@
 package ute.shop.controller.admin;
 
+import ute.shop.command.UserCommandInvoker;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -12,6 +13,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import ute.shop.command.ContactUserCommand;
+import ute.shop.command.DeleteUserCommand;
+import ute.shop.command.LockUserCommand;
+import ute.shop.command.UnlockUserCommand;
 import ute.shop.entity.User;
 import ute.shop.service.IUserService;
 import ute.shop.service.impl.UserServiceImpl;
@@ -26,6 +31,7 @@ import ute.shop.utils.SendMail;
 public class UserController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final IUserService userService = new UserServiceImpl();
+	private final UserCommandInvoker invoker = new UserCommandInvoker();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -72,20 +78,23 @@ public class UserController extends HttpServlet {
 				req.setAttribute("view", "/views/admin/users/edit.jsp");
 				req.getRequestDispatcher("/WEB-INF/decorators/admin.jsp").forward(req, resp);
 
-			} else if (uri.endsWith("/delete")) {
-				int id = Integer.parseInt(req.getParameter("id"));
-				userService.delete(id);
-				resp.sendRedirect(req.getContextPath() + "/admin/users?message=successDel");
-
 			} else if (uri.endsWith("/lock")) {
-				int id = Integer.parseInt(req.getParameter("id"));
-				userService.updateStatus(id, "banned");
-				resp.sendRedirect(req.getContextPath() + "/admin/users?message=successLock");
+			    int id = Integer.parseInt(req.getParameter("id"));
+			    boolean ok = invoker.invoke(new LockUserCommand(userService, id));
+			    resp.sendRedirect(req.getContextPath() + "/admin/users?message="
+			            + (ok ? "successLock" : "errorLock"));
 
 			} else if (uri.endsWith("/unlock")) {
-				int id = Integer.parseInt(req.getParameter("id"));
-				userService.updateStatus(id, "active");
-				resp.sendRedirect(req.getContextPath() + "/admin/users?message=successUnlock");
+			    int id = Integer.parseInt(req.getParameter("id"));
+			    boolean ok = invoker.invoke(new UnlockUserCommand(userService, id));
+			    resp.sendRedirect(req.getContextPath() + "/admin/users?message="
+			            + (ok ? "successUnlock" : "errorUnlock"));
+
+			} else if (uri.endsWith("/delete")) {
+			    int id = Integer.parseInt(req.getParameter("id"));
+			    boolean ok = invoker.invoke(new DeleteUserCommand(userService, id));
+			    resp.sendRedirect(req.getContextPath() + "/admin/users?message="
+			            + (ok ? "successDel" : "errorDel"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -291,8 +300,11 @@ public class UserController extends HttpServlet {
 					.append("<p>Trân trọng,<br><strong>Đội ngũ UteShop</strong></p>").append("</div>")
 					.append("</div></body></html>");
 
-	        SendMail mailer = SendMail.getInstance();
-	        mailer.sendMail(recipientEmail, subject, emailBodyHtml.toString());
+//	        SendMail mailer = SendMail.getInstance();
+//	        mailer.sendMail(recipientEmail, subject, emailBodyHtml.toString());
+			boolean ok = invoker.invoke(new ContactUserCommand(user, subject, messageContent));
+			resp.sendRedirect(req.getContextPath() + "/admin/users?message="
+			        + (ok ? "contactSent" : "mailError"));
 	        resp.sendRedirect(req.getContextPath() + "/admin/users?message=contactSent");
 
 	    } catch (Exception e) {
