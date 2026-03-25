@@ -101,6 +101,7 @@ public class PaymentVnpayController extends HttpServlet {
 //        resp.sendRedirect(paymentUrl);
 //
 //    } 
+	
 // PaymentVnpayController.java - doGet() SAU KHI ÁP DỤNG ADAPTER
 @Override
 protected void doGet(HttpServletRequest req, HttpServletResponse resp)

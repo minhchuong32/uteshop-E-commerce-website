@@ -83,26 +83,26 @@ public class ShipperOrderController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getRequestURI();
 
-        //  Nhận đơn (assign)
-        if (uri.endsWith("/assign")) {
-            
-            User shipperLogin = (User) req.getAttribute("account");
-
-            if (shipperLogin == null) {
-                resp.sendRedirect(req.getContextPath() + "/login");
-                return;
-            }
-
-            String deliveryIdStr = req.getParameter("deliveryId");
-            if (deliveryIdStr != null) {
-                Integer deliveryId = Integer.parseInt(deliveryIdStr);
-                Integer shipperId = shipperLogin.getUserId();
-
-                deliveryService.assignToShipper(deliveryId, shipperId);
-            }
-            
-            Delivery d = deliveryService.getById(Integer.parseInt(deliveryIdStr));
-            if (d != null && d.getOrder() != null) {
+//        //  Nhận đơn (assign)
+//        if (uri.endsWith("/assign")) {
+//            
+//            User shipperLogin = (User) req.getAttribute("account");
+//
+//            if (shipperLogin == null) {
+//                resp.sendRedirect(req.getContextPath() + "/login");
+//                return;
+//            }
+//
+//            String deliveryIdStr = req.getParameter("deliveryId");
+//            if (deliveryIdStr != null) {
+//                Integer deliveryId = Integer.parseInt(deliveryIdStr);
+//                Integer shipperId = shipperLogin.getUserId();
+//
+//                deliveryService.assignToShipper(deliveryId, shipperId);
+//            }
+//            
+//            Delivery d = deliveryService.getById(Integer.parseInt(deliveryIdStr));
+//            if (d != null && d.getOrder() != null) {
 //                var order = d.getOrder();
 //                var shop = order.getShop();
 //
@@ -123,50 +123,105 @@ public class ShipperOrderController extends HttpServlet {
 //                            .build();
 //                    notificationService.insert(notiVendor);
 //                }
-            	
-            	OrderEventPublisher.getInstance()
-                .publish(d.getOrder(), "Đang giao", shipperLogin.getUsername());
+//            	
+//            }
+//
+//            resp.sendRedirect(req.getContextPath() + "/shipper/orders");
+//            return;
+//        }
+//
+//        //  Cập nhật trạng thái đơn hàng
+//        if (uri.endsWith("/orders")) {
+//            String deliveryIdStr = req.getParameter("deliveryId");
+//            String status = req.getParameter("status");
+//
+//            if (deliveryIdStr != null && status != null) {
+//                Integer deliveryId = Integer.parseInt(deliveryIdStr);
+//                deliveryService.updateStatus(deliveryId, status);
+//                
+//                Delivery d = deliveryService.getById(deliveryId);
+//                if (d != null && d.getOrder() != null) {
+//                    var order = d.getOrder();
+//                    var shop = order.getShop();
+//
+//                    String messageForUser = "Đơn hàng #" + order.getOrderId() + " hiện đang ở trạng thái: " + status;
+//                    String messageForVendor = "Shipper đã cập nhật trạng thái đơn hàng #" + order.getOrderId() + " thành: " + status;
+//
+//                    // Gửi cho User
+//                    Notification notiUser = Notification.builder()
+//                            .user(order.getUser())
+//                            .title("Cập nhật đơn hàng #" + order.getOrderId())
+//                            .message(messageForUser)
+//                            .build();
+//                    notificationService.insert(notiUser);
+//
+//                    // Gửi cho Vendor
+//                    if (shop != null && shop.getUser() != null) {
+//                        Notification notiVendor = Notification.builder()
+//                                .user(shop.getUser())
+//                                .title("Trạng thái đơn hàng #" + order.getOrderId() + " đã thay đổi")
+//                                .message(messageForVendor)
+//                                .build();
+//                        notificationService.insert(notiVendor);
+//                    }
+//                	
+//                	
+//                }
+//            }
+        
+
+        // ==================== NHẬN ĐƠN (ASSIGN) ====================
+        if (uri.endsWith("/assign")) {
+
+            User shipperLogin = (User) req.getAttribute("account");
+            if (shipperLogin == null) {
+                resp.sendRedirect(req.getContextPath() + "/login");
+                return;
+            }
+
+            String deliveryIdStr = req.getParameter("deliveryId");
+            if (deliveryIdStr == null) {
+                resp.sendRedirect(req.getContextPath() + "/shipper/orders");
+                return;
+            }
+
+            Integer deliveryId = Integer.parseInt(deliveryIdStr);
+
+            //  Gán shipper vào đơn
+            deliveryService.assignToShipper(deliveryId, shipperLogin.getUserId());
+
+            //  Dùng Observer — không tạo Notification thủ công nữa
+            Delivery d = deliveryService.getById(deliveryId);
+            if (d != null && d.getOrder() != null) {
+                OrderEventPublisher.getInstance()
+                        .publish(d.getOrder(), "Đang giao", shipperLogin.getUsername());
             }
 
             resp.sendRedirect(req.getContextPath() + "/shipper/orders");
             return;
         }
 
-        //  Cập nhật trạng thái đơn hàng
+        // ==================== CẬP NHẬT TRẠNG THÁI ====================
         if (uri.endsWith("/orders")) {
+
             String deliveryIdStr = req.getParameter("deliveryId");
-            String status = req.getParameter("status");
+            String status        = req.getParameter("status");
 
-            if (deliveryIdStr != null && status != null) {
-                Integer deliveryId = Integer.parseInt(deliveryIdStr);
-                deliveryService.updateStatus(deliveryId, status);
-                
-                Delivery d = deliveryService.getById(deliveryId);
-                if (d != null && d.getOrder() != null) {
-                    var order = d.getOrder();
-                    var shop = order.getShop();
+            if (deliveryIdStr == null || status == null) {
+                resp.sendRedirect(req.getContextPath() + "/shipper/orders");
+                return;
+            }
 
-                    String messageForUser = "Đơn hàng #" + order.getOrderId() + " hiện đang ở trạng thái: " + status;
-                    String messageForVendor = "Shipper đã cập nhật trạng thái đơn hàng #" + order.getOrderId() + " thành: " + status;
+            Integer deliveryId = Integer.parseInt(deliveryIdStr);
 
-                    // Gửi cho User
-                    Notification notiUser = Notification.builder()
-                            .user(order.getUser())
-                            .title("Cập nhật đơn hàng #" + order.getOrderId())
-                            .message(messageForUser)
-                            .build();
-                    notificationService.insert(notiUser);
+            //  Cập nhật trạng thái giao hàng
+            deliveryService.updateStatus(deliveryId, status);
 
-                    // Gửi cho Vendor
-                    if (shop != null && shop.getUser() != null) {
-                        Notification notiVendor = Notification.builder()
-                                .user(shop.getUser())
-                                .title("Trạng thái đơn hàng #" + order.getOrderId() + " đã thay đổi")
-                                .message(messageForVendor)
-                                .build();
-                        notificationService.insert(notiVendor);
-                    }
-                }
+            //  Dùng Observer — xóa hoàn toàn đoạn tạo notiUser/notiVendor thủ công
+            Delivery d = deliveryService.getById(deliveryId);
+            if (d != null && d.getOrder() != null) {
+                OrderEventPublisher.getInstance()
+                        .publish(d.getOrder(), status, "Shipper");
             }
 
             resp.sendRedirect(req.getContextPath() + "/shipper/orders");

@@ -325,6 +325,16 @@ public class CheckoutController extends HttpServlet {
 //                            + "/user/orders?order_status=fail"
 //            );
 //        }
+    	// Lấy địa chỉ
+    	// Lấy carrier, tính phí ship
+    	// Gom nhóm sản phẩm theo shop
+        // tính subtotal
+        // tạo Order, set status, set shop...
+        // tạo từng OrderDetail
+        // gọi orderService.save()
+        // xóa cartItem
+        // gom orderIds, shopNames
+    	
     	    User user = (User) req.getAttribute("account");
     	    if (user == null) { resp.sendRedirect(req.getContextPath() + "/login"); return; }
 

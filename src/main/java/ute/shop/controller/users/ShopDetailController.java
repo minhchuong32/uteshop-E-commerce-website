@@ -24,6 +24,7 @@ public class ShopDetailController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private final IShopService shopService = new ShopServiceImpl();
 	private final ICategoryService categoryService = new CategoryServiceImpl();
+	
 //	private final IProductService productService = new ProductServiceImpl();
 	 private final IProductService productService = new PriceDecoratorProductService();
 
@@ -109,6 +110,7 @@ public class ShopDetailController extends HttpServlet {
 //				p.setPrice(BigDecimal.ZERO);
 //			}
 //		}
+		req.setAttribute("products", products); // giá đã được gán tự động
 
 		int totalPages = (int) Math.ceil((double) totalProducts / size);
 

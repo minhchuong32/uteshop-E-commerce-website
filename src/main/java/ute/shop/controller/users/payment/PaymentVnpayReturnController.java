@@ -26,7 +26,7 @@ public class PaymentVnpayReturnController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// ✅ Kiểm tra JWT (filter đã set user vào request)
+		//  Kiểm tra JWT (filter đã set user vào request)
 		User user = (User) req.getAttribute("account");
 		if (user == null) {
 			resp.sendRedirect(req.getContextPath() + "/login");
@@ -50,7 +50,7 @@ public class PaymentVnpayReturnController extends HttpServlet {
 		String orderRef = fields.get("vnp_TxnRef"); 
 		String amount = fields.get("vnp_Amount");
 
-		// ✅ Tách nhiều orderId
+		//  Tách nhiều orderId
 		List<Integer> orderIds = new ArrayList<>();
 		if (orderRef != null && !orderRef.isEmpty()) {
 			orderIds = Arrays.stream(orderRef.split("[-_,]")).map(idStr -> {
@@ -81,7 +81,7 @@ public class PaymentVnpayReturnController extends HttpServlet {
 			req.setAttribute("message", "⚠️ Chữ ký không hợp lệ. Dữ liệu có thể bị chỉnh sửa!");
 		}
 
-		// ✅ Chuyển hướng về trang lịch sử đơn hàng
+		//  Chuyển hướng về trang lịch sử đơn hàng
 		resp.sendRedirect(req.getContextPath() + "/user/orders");
 	}
 }
