@@ -21,6 +21,7 @@ import ute.shop.service.IDeliveryService;
 import ute.shop.service.impl.DeliveryServiceImpl;
 import ute.shop.service.impl.NotificationServiceImpl;
 import ute.shop.service.impl.OrderServiceImpl;
+import ute.shop.state.OrderContext;
 
 @WebServlet(urlPatterns = { "/vendor/orders", "/vendor/orders/add", "/vendor/orders/detail", "/vendor/orders/delete",
 		"/vendor/orders/action" // Dành cho confirm / cancel
@@ -166,7 +167,8 @@ public class OrderController extends HttpServlet {
 				Order order = orderService.getById(orderId);
 				if (order != null) {
 					switch (action) {
-					case "confirm":
+					
+//					case "confirm":
 //						order.setStatus("Đã xác nhận");
 //						orderService.update(order);
 //						// TODO: gửi notification đến user
@@ -176,37 +178,66 @@ public class OrderController extends HttpServlet {
 //								.build();
 //						notificationService.insert(n1);
 						
-						order.setStatus("Đã xác nhận");
-						orderService.update(order);
-						OrderEventPublisher.getInstance()
-						    .publish(order, "Đã xác nhận", "Cửa hàng");
+//						order.setStatus("Đã xác nhận");
+//						orderService.update(order);
+//						OrderEventPublisher.getInstance()
+//						    .publish(order, "Đã xác nhận", "Cửa hàng");
+//
+//						if (order.getDeliveries() != null) {
+//							for (Delivery d : order.getDeliveries()) {
+//								deliveryService.updateStatus(d.getDeliveryId(), "Tìm Shipper");
+//							}
+//						}
+//						break;
+//					case "cancel":
+//						String reason = req.getParameter("reason");
+//						order.setStatus("Đã hủy");
+//						orderService.update(order);
+//						// TODO: gửi notification đến user
+//						String cancelMsg = "Đơn hàng của bạn đã bị hủy bởi cửa hàng.";
+//						if (reason != null && !reason.trim().isEmpty()) {
+//							cancelMsg += " Lý do: " + reason.trim();
+//						}
+//
+//						Notification cancelNoti = Notification.builder().user(order.getUser())
+//								.title("Đơn hàng #" + order.getOrderId() + " đã bị hủy").message(cancelMsg).build();
+//						notificationService.insert(cancelNoti);
+//
+//						if (order.getDeliveries() != null) {
+//							for (Delivery d : order.getDeliveries()) {
+//								deliveryService.updateStatus(d.getDeliveryId(), "Đã hủy");
+//							}
+//						}
+//						break;
+					
+					case "confirm": {
+					    try {
+					        OrderContext ctx = new OrderContext(order, orderService);
+					        ctx.confirm(); // State tự kiểm tra tính hợp lệ và cập nhật DB
+					        OrderEventPublisher.getInstance()
+					            .publish(order, "Đã xác nhận", "Cửa hàng");
+					        // Cập nhật delivery
+					        if (order.getDeliveries() != null) {
+					            for (Delivery d : order.getDeliveries()) {
+					                deliveryService.updateStatus(d.getDeliveryId(), "Tìm Shipper");
+					            }
+					        }
+					    } catch (IllegalStateException e) {
+					        System.err.println("Lỗi chuyển trạng thái: " + e.getMessage());
+					    }
+					    break;
+					}
 
-						if (order.getDeliveries() != null) {
-							for (Delivery d : order.getDeliveries()) {
-								deliveryService.updateStatus(d.getDeliveryId(), "Tìm Shipper");
-							}
-						}
-						break;
-					case "cancel":
-						String reason = req.getParameter("reason");
-						order.setStatus("Đã hủy");
-						orderService.update(order);
-						// TODO: gửi notification đến user
-						String cancelMsg = "Đơn hàng của bạn đã bị hủy bởi cửa hàng.";
-						if (reason != null && !reason.trim().isEmpty()) {
-							cancelMsg += " Lý do: " + reason.trim();
-						}
-
-						Notification cancelNoti = Notification.builder().user(order.getUser())
-								.title("Đơn hàng #" + order.getOrderId() + " đã bị hủy").message(cancelMsg).build();
-						notificationService.insert(cancelNoti);
-
-						if (order.getDeliveries() != null) {
-							for (Delivery d : order.getDeliveries()) {
-								deliveryService.updateStatus(d.getDeliveryId(), "Đã hủy");
-							}
-						}
-						break;
+					case "cancel": {
+					    try {
+					        OrderContext ctx = new OrderContext(order, orderService);
+					        ctx.cancel();
+					        // gửi notification...
+					    } catch (IllegalStateException e) {
+					        System.err.println("Lỗi chuyển trạng thái: " + e.getMessage());
+					    }
+					    break;
+					}
 					default:
 						System.out.println("Unknown action: " + action);
 					}
