@@ -18,6 +18,7 @@ import ute.shop.service.IShopService;
 import ute.shop.service.decorator.PriceDecoratorProductService;
 import ute.shop.service.impl.CategoryServiceImpl;
 import ute.shop.service.impl.ShopServiceImpl;
+import ute.shop.service.proxy.ProductServiceLoggingProxy;
 
 @WebServlet("/user/shop/detail")
 public class ShopDetailController extends HttpServlet {
@@ -25,8 +26,11 @@ public class ShopDetailController extends HttpServlet {
 	private final IShopService shopService = new ShopServiceImpl();
 	private final ICategoryService categoryService = new CategoryServiceImpl();
 	
-//	private final IProductService productService = new ProductServiceImpl();
-	 private final IProductService productService = new PriceDecoratorProductService();
+//	 private final IProductService productService = new PriceDecoratorProductService();
+	    private final IProductService productService =
+	            new ProductServiceLoggingProxy(   // Proxy bọc ngoài
+	                new PriceDecoratorProductService()  // Decorator bên trong
+	            );
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
