@@ -10,16 +10,22 @@ import ute.shop.service.ICategoryService;
 import ute.shop.service.IProductService;
 import ute.shop.service.decorator.PriceDecoratorProductService;
 import ute.shop.service.impl.CategoryServiceImpl;
+import ute.shop.service.proxy.ProductServiceLoggingProxy;
 
 import java.io.IOException;
 import java.util.List;
+
+
 
 @WebServlet(urlPatterns = { "/user/home" })
 public class HomeController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final ICategoryService categoryService = new CategoryServiceImpl();
-//    private final IProductService productService = new ProductServiceImpl();
-    private final IProductService productService = new PriceDecoratorProductService();
+//    private final IProductService productService = new PriceDecoratorProductService();
+    private final IProductService productService =
+            new ProductServiceLoggingProxy(   // Proxy bọc ngoài
+                new PriceDecoratorProductService()  // Decorator bên trong
+            );
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
