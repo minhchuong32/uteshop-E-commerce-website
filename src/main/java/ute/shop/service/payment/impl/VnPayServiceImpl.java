@@ -24,7 +24,6 @@ public class VnPayServiceImpl implements IPaymentService {
         );
 
         // Trả về path để controller redirect
-        return context.getContextPath() + "/user/payment/vnpay-redirect?url="
-               + URLEncoder.encode(rawUrl, StandardCharsets.UTF_8);
+        return rawUrl;
     }
 }

@@ -20,8 +20,12 @@ import ute.shop.entity.User;
 import ute.shop.service.IOrderService;
 import ute.shop.service.impl.OrderServiceImpl;
 
-@WebServlet("/user/payment/vnpay_return")
+@WebServlet("/user/payment/vnpay-redirect")
 public class PaymentVnpayReturnController extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final IOrderService orderService = new OrderServiceImpl();
 
 	@Override
@@ -49,6 +53,7 @@ public class PaymentVnpayReturnController extends HttpServlet {
 		String vnp_ResponseCode = fields.get("vnp_ResponseCode");
 		String orderRef = fields.get("vnp_TxnRef"); 
 		String amount = fields.get("vnp_Amount");
+		long amountLong = Long.parseLong(amount) / 100;
 
 		//  Tách nhiều orderId
 		List<Integer> orderIds = new ArrayList<>();

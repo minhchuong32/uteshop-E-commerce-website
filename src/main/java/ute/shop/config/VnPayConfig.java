@@ -44,9 +44,9 @@ public class VnPayConfig {
             if (sb.length() > 0) {
                 sb.append('&');
             }
-            sb.append(URLEncoder.encode(entry.getKey(), StandardCharsets.US_ASCII))
+            sb.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8))
               .append('=')
-              .append(URLEncoder.encode(entry.getValue(), StandardCharsets.US_ASCII));
+              .append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
         }
 
         return hmacSHA512(getHashSecret(), sb.toString());
