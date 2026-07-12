@@ -1,243 +1,387 @@
+# 🛒 UTEShop – Java Servlet E-Commerce Platform
 
+![Java](https://img.shields.io/badge/Java-22-orange)
+![Servlet](https://img.shields.io/badge/Java-Servlet-blue)
+![JSP](https://img.shields.io/badge/JSP-JSTL-green)
+![SQL Server](https://img.shields.io/badge/Database-SQL%20Server-red)
+![JPA](https://img.shields.io/badge/JPA-Hibernate-success)
+![Bootstrap](https://img.shields.io/badge/UI-Bootstrap%205-purple)
+![License](https://img.shields.io/badge/License-MIT-brightgreen)
 
+UTEShop is a mini e-commerce platform developed using **Java Servlet**, **JSP/JSTL**, **JPA**, and **SQL Server**. The application follows the **MVC + DAO + Service Layer** architecture and provides a complete online shopping experience for customers while supporting vendor, shipper, and administrator management.
 
-# 🛒 UTESHOP-SERVLET PROJECT
+The project was developed as an academic full-stack web application focusing on scalable architecture, authentication, payment integration, and role-based authorization.
 
-Dự án **Uteshop-servlet** là một ứng dụng web thương mại điện tử mini được xây dựng bằng **Java  Servlet + JSP/JSTL + Bootstrap + JPA + SQLServer + Decorator Sitemesh + JWT**, triển khai theo mô hình **MVC + DAO + Service Layer**.  
-Mục tiêu: xây dựng nền tảng mua hàng và quản lý sàn thương mại điện tử Mini chuyên về các sản phẩm công nghệ
+---
 
-## 📂 1. Cấu trúc dự án
+# ✨ Features
 
+## 👤 Guest
+
+- Browse products
+- Search and filter products
+- View product details
+- Register an account
+- Login with Email or Google
+
+---
+
+## 🛍 Customer
+
+- Manage personal profile
+- Manage multiple shipping addresses
+- Shopping cart
+- Wishlist
+- Recently viewed products
+- Product reviews
+- Product comments
+- Order management
+- Coupon support
+- Checkout with multiple payment methods
+
+Supported payments:
+
+- Cash on Delivery (COD)
+- VNPay
+- MoMo
+
+---
+
+## 🏪 Vendor
+
+- Register a shop
+- Manage products
+- Manage orders
+- Create promotions
+- Revenue dashboard
+- Sales statistics
+
+---
+
+## 🚚 Shipper
+
+- Receive assigned orders
+- Update delivery status
+- Delivery statistics
+
+---
+
+## 👨‍💼 Administrator
+
+- User management
+- Shop management
+- Product management
+- Category management
+- Promotion management
+- Shipping provider management
+- Complaint handling
+- System dashboard
+
+---
+
+# 🚀 Highlights
+
+- JWT Authentication
+- Google OAuth Login
+- OTP Email Verification
+- Password Encryption
+- VNPay Integration
+- PDF Report Export
+- WebSocket Live Chat
+- AI Chatbot
+- Responsive UI
+- MVC Architecture
+- DAO + Service Layer
+- JPA Persistence
+
+---
+
+# 🏗 System Architecture
+
+```text
+Browser
+    │
+    ▼
+Java Servlet Controller
+    │
+    ▼
+Service Layer
+    │
+    ▼
+DAO Layer (JPA)
+    │
+    ▼
+SQL Server Database
 ```
-Uteshop-servlet/
-│── .git/
-│── pom.xml                # Quản lý dependencies Maven
-│── src/
-│   ├── main/
-│   │   ├── java/ute/shop/
-│   │   │   ├── config/		# Cấu hình kết nối và quản lý JPA
-│   │   │   ├── controller/   # Servlet xử lý request
-│   │   │   ├── dao/          # Interface DAO
-│   │   │   ├── dao/impl/     # DAO Implementation (JDBC)
-│   │   │   ├── entity/       # Chứa các lớp mô hình dữ liệu.
-│   │   │   ├── service/      # Interface Service
-│   │   │   ├── service/impl/ # Business logic
-│   │   │   ├── utils/        # Helper class
-│   │   │   └── filter/       # AuthFilter, EncodingFilter
-│   │   ├── resources/  
-│   │   │   ├── META-INF/   
-│   │   │   │    └──persistence.xml  #Cấu hình kết nối CSDL
-│   │   │   ├── vnpay_config.properties #Cấu hình kết nối VNPAY
-│   │   │   │
-│   │   │   └── config.properties #Cấu hình xác thực JWT
-│   │   └── webapp/
-│   │       ├── WEB-INF/
-│   │       │   ├── views/    # JSP pages
-│   │       │   └── web.xml   # cấu hình Servlet
-│   │       ├── assets/       # CSS, JS, images
+
+The application follows the **MVC architecture** with a clear separation between presentation, business logic, and data access layers.
+
+---
+
+# 🛠 Tech Stack
+
+| Category | Technology |
+|-----------|------------|
+| Language | Java 22 |
+| Backend | Java Servlet |
+| View | JSP, JSTL |
+| ORM | JPA |
+| Database | SQL Server |
+| Authentication | JWT, Google OAuth |
+| Security | Password Hashing |
+| Payment | VNPay, MoMo |
+| Frontend | HTML5, CSS3, Bootstrap 5, JavaScript |
+| Template Engine | SiteMesh |
+| WebSocket | Jakarta WebSocket |
+| Build Tool | Maven |
+| IDE | Spring Tool Suite |
+| UML | Enterprise Architect |
+| Version Control | Git & GitHub |
+
+---
+
+# 📂 Project Structure
+
+```text
+UTEShop-Servlet
+│
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   ├── config
+│   │   │   ├── controller
+│   │   │   ├── dao
+│   │   │   ├── dao/impl
+│   │   │   ├── entity
+│   │   │   ├── service
+│   │   │   ├── service/impl
+│   │   │   ├── utils
+│   │   │   └── filter
+│   │   │
+│   │   ├── resources
+│   │   └── webapp
+│   │       ├── WEB-INF
+│   │       ├── assets
 │   │       └── index.jsp
-│   └── test/                 # Unit test
+│   │
+│   └── test
 │
-├── docs/                     # UML, báo cáo
-│
-└── db/							#Query thêm dữ liệu mẫu
+├── db
+├── docs
+└── pom.xml
 ```
 
-# Chú thích cấu trúc: 
-controller/ → Servlet nhận request từ client, gọi service.
-
-dao/ + dao/impl/ → Tầng truy xuất DB (JPA).
-
-model/ → POJO class, ánh xạ bảng DB.
-
-service/ + service/impl/ → Xử lý logic nghiệp vụ (gọi dao).
-
-utils/ → DBConnect, helper (hash password, validate...).
-
-filter/ → Lọc request (bảo mật, encoding UTF-8).
-
-webapp/WEB-INF/views/ → JSP 
-
-assets/ → CSS, JS, hình ảnh.
-
-test/ → JUnit test DAO + Service.
-
-## ⚙️ 2. Các bước cài đặt
-- Cài **SQL Server** (tham khảo hướng dẫn trên YouTube).
-- Tạo database uteshopdb
-- Tải mã nguồn UTEShop từ GitHub nhóm.
-- Chạy script /db/uteshop_insert_db_sqlserver.sql và edit.sql để thêm data vào CSDL (hoặc sử dụng file /db/uteshopdb.bak) 
-- Khởi động Tomcat --> truy cập http://localhost:8080/uteshop.
-- Đăng nhập bằng tài khoản Admin mặc định:
-o	Username: chuongminh3225@gmail.com
-o	Password: 123
-- **HƯỚNG DẪN THANH TOÁN VNPAY:**
-
-  B1: Chọn VNPAY ở trang thanh toán
-
-  B2: Chọn thanh toán bằng thẻ nội địa
-
-  B3: Nhập thông tin thanh toán như sau
-_Ngân hàng	NCB_
-
-_Số thẻ	9704198526191432198_
-
-_Tên chủ thẻ	NGUYEN VAN A_
-
-_Ngày phát hành	07/15_
-
-_Mật khẩu OTP	123456_
-
----
-## 👥 3. Phân chia công việc
-### **Nguyễn Thị Thanh Thùy – Vendor + Shipper**
-- **Tuần 1:**
-  - Vẽ và đặc tả use case liên quan đến Vendor và Shipper.  
-  - Phân tích luồng nghiệp vụ cho hai actor này.  
-- **Tuần 2:**
-  - Vẽ lược đồ tuần tự cho các chức năng Vendor và Shipper.  
-  - Thiết kế giao diện sơ bộ cho các màn hình quản lý cửa hàng và giao hàng.  
-- **Tuần 3:**
-  - Xây dựng các chức năng của Vendor: đăng ký cửa hàng, quản lý sản phẩm, quản lý đơn hàng.  
-- **Tuần 4:**
-  - Hoàn thiện chức năng thống kê doanh thu cho Vendor.  
-  - Phát triển và kiểm thử nghiệp vụ Shipper: nhận đơn, cập nhật trạng thái, xác nhận hoàn tất.  
-  - Tinh chỉnh giao diện liên quan.  
----
-### **Nguyễn Thanh Bình Minh – User + Guest**
-- **Tuần 1:**
-  - Vẽ và đặc tả use case liên quan đến User và Guest.  
-  - Phân tích hành vi người dùng và luồng đặt hàng.  
-- **Tuần 2:**
-  - Vẽ lược đồ tuần tự cho User và Guest.  
-  - Thiết kế giao diện trang chính và trang sản phẩm.  
-- **Tuần 3:**
-  - Xây dựng chức năng Guest: xem, tìm kiếm, xem chi tiết sản phẩm.  
-  - Xây dựng chức năng User: xem, tìm kiếm, xem chi tiết sản phẩm, quản lý giỏ hàng
-- **Tuần 4:**
-  - Phát triển các chức năng User nâng cao: đặt hàng, đánh giá/khiếu nại sản phẩm.  
-  - Hoàn thiện giao diện giỏ hàng và thanh toán.  
----
-### **Phạm Hàn Minh Chương – Admin + Login/Register**
-- **Tuần 1:**
-  - Vẽ và đặc tả use case cho Admin.  
-  - Thiết kế sơ đồ cơ sở dữ liệu tổng thể (bảng, khóa, quan hệ).  
-- **Tuần 2:**
-  - Vẽ lược đồ tuần tự cho Admin.  
-  - Xây dựng hệ thống đăng nhập, đăng ký, phân quyền người dùng.  
-- **Tuần 3:**
-  - Xây dựng chức năng Admin: quản lý người dùng, cửa hàng.  
-  - Bắt đầu xử lý khiếu nại.  
-- **Tuần 4:**
-  - Hoàn thiện các chức năng quản trị.  
-  - Kiểm thử hệ thống đăng nhập – phân quyền.  
-  - Tối ưu và hoàn thiện cơ sở dữ liệu.  
 ---
 
-## 🚀 4. Công nghệ sử dụng
+# 🔐 Authentication
 
-**Ngôn ngữ lập trình chính**  
-- **Java (JDK 22)**  
-  → Xây dựng logic xử lý nghiệp vụ và các module quản lý người dùng, sản phẩm, đơn hàng,…
+The application provides secure authentication using JWT.
 
-**Giao diện người dùng**  
-- **JSP, HTML, CSS, Bootstrap 5**  
-  → Thiết kế giao diện trực quan, thân thiện, tương thích đa nền tảng (PC, tablet, mobile).
+Features include:
 
-**Cơ sở dữ liệu**  
-- **SQL Server**  
-  → Lưu trữ dữ liệu sản phẩm, người dùng, đơn hàng, khuyến mãi,…
+- User Registration
+- Login
+- Logout
+- Forgot Password
+- OTP Email Verification
+- Google OAuth Login
+- Password Encryption
 
-**Truy cập dữ liệu**  
-- **JPA**  
-  → Kết nối, truy vấn và thao tác dữ liệu từ Java đến cơ sở dữ liệu.
-
-**Template Decorator**  
-- **Sitemesh**  
-  → Quản lý layout tổng thể cho các trang JSP, đảm bảo tính nhất quán về giao diện.
-
-**Phân tích & Thiết kế hệ thống**  
-- **Enterprise Architect**  
-  → Vẽ các sơ đồ UML: Use Case, Lược đồ lớp, Lược đồ tuần tự, Lược đồ hoạt động,…
-
-**Công cụ phát triển**  
-- **Spring Tool Suite (STS)**  
-  → IDE chính để lập trình, quản lý project và chạy thử ứng dụng.
-
-**Công cụ quản lý mã nguồn**  
-- **Git + GitHub**  
-  → Hỗ trợ làm việc nhóm, kiểm soát phiên bản và triển khai thử nghiệm.
-
-## 🚀 5. Target
-### Làm chuẩn theo yêu cầu cơ bản
-_Chức năng chung_
-- Tìm kiếm và lọc sản phẩm.  
-- Đăng ký tài khoản có gửi mã OTP kích hoạt qua Email.  
-- Đăng nhập, đăng xuất, quên mật khẩu (gửi mã OTP qua Email).  
-- Mật khẩu được mã hóa để đảm bảo an toàn.
---- 
-**Guest (Khách truy cập)**
-- Xem trang chủ, hiển thị các sản phẩm bán chạy (trên 10 sản phẩm) của các shop, sắp xếp theo doanh số giảm dần.  
-- Xem chi tiết sản phẩm nhưng không thể mua hoặc đánh giá.  
-**User (Người dùng)**
-- Truy cập trang chủ và trang sản phẩm theo danh mục.  
-- Hiển thị danh sách 20 sản phẩm mới, bán chạy, đánh giá cao, yêu thích, có phân trang hoặc lazy loading.  
-- Trang hồ sơ cá nhân (Profile):  
-- Quản lý thông tin người dùng.  
-- Quản lý nhiều địa chỉ nhận hàng khác nhau.  
-- Trang chi tiết sản phẩm: xem, thích sản phẩm, bình luận và đánh giá.  
-- Giỏ hàng được lưu trên database.  
-- Thanh toán: hỗ trợ COD, VNPAY, MOMO.  
-- Quản lý lịch sử mua hàng theo trạng thái:  
-  - Đơn hàng mới  
-  - Đã xác nhận  
-  - Đang giao  
-  - Đã giao  
-  - Đã hủy  
-  - Trả hàng / Hoàn tiền  
-- Tương tác sản phẩm:  
-  - Thích sản phẩm.  
-  - Xem lại sản phẩm đã xem.  
-  - Đánh giá sản phẩm đã mua.  
-  - Bình luận sản phẩm (tối thiểu 50 ký tự, có thể kèm hình ảnh / video).  
-  - Chọn và sử dụng mã giảm giá khi thanh toán.
 ---
-**Vendor (Chủ cửa hàng / Seller)**
-- Có toàn bộ quyền của User.  
-- Đăng ký shop và quản lý trang chủ của shop.  
-- Quản lý sản phẩm của mình (thêm, sửa, xóa, ẩn/hiện).  
-- Quản lý đơn hàng của shop theo trạng thái:  
-  - Đơn hàng mới  
-  - Đã xác nhận  
-  - Đang giao  
-  - Đã giao  
-  - Đã hủy  
-  - Trả hàng / Hoàn tiền  
-- Tạo chương trình khuyến mãi cho sản phẩm.  
-- Thống kê doanh thu và hiệu suất bán hàng của shop.  
+
+# 🛒 Main Modules
+
+### Product Management
+
+- CRUD Products
+- Categories
+- Product Images
+- Product Search
+- Product Filter
+
+### Shopping Cart
+
+- Add to Cart
+- Update Quantity
+- Remove Item
+- Persistent Cart
+
+### Order Management
+
+- Checkout
+- Order Tracking
+- Order History
+- Refund Request
+
+### Promotion
+
+- Coupons
+- Shop Promotions
+- System Promotions
+
+### Payment
+
+- COD
+- VNPay
+- MoMo
+
+### Communication
+
+- WebSocket Chat
+- AI Chatbot
+
+### Reports
+
+- Revenue Statistics
+- PDF Export
+
 ---
-**Admin (Quản trị viên)**
-- Tìm kiếm và quản lý người dùng.  
-- Quản lý sản phẩm của từng shop.  
-- Quản lý danh mục sản phẩm.  
-- Quản lý chiết khấu của ứng dụng cho các shop.  
-- Quản lý chương trình khuyến mãi chung:  
-  - Giảm % giá sản phẩm.  
-  - Giảm phí vận chuyển.  
-- Quản lý nhà vận chuyển:  
-  - Tên nhà vận chuyển.  
-  - Phí vận chuyển.  
+
+# ⚙️ Installation
+
+## Requirements
+
+- Java JDK 22
+- Apache Tomcat 10
+- SQL Server
+- Maven
+
 ---
-**Shipper (Người giao hàng)**
-- Quản lý đơn hàng được phân công giao.
-- Cập nhật trạng thái giao hàng. 
-- Thống kê số lượng đơn hàng được giao.
 
-### Điểm cộng sáng tạo (đã thực hiện)
-- Tích hợp thanh toán giả lập: VNPAY
-- Xuất file pdf báo cáo theo tiêu chí
-- Sử dụng websocket trong liên hệ giữa admin và user/guest
-- Ứng dụng chatbot hỏi đáp cho guest/user
-- Đăng nhập/Đăng ký bằng tài khoản google
+## Clone Repository
 
+```bash
+git clone https://github.com/your-username/UTEShop-servlet.git
+```
 
+---
+
+## Database
+
+Create a database named:
+
+```text
+uteshopdb
+```
+
+Import SQL scripts located in:
+
+```text
+db/
+```
+
+or restore:
+
+```text
+uteshopdb.bak
+```
+
+---
+
+## Configure Database
+
+Update database information inside:
+
+```text
+persistence.xml
+```
+
+---
+
+## Run Project
+
+Build the project.
+
+```bash
+mvn clean install
+```
+
+Deploy the generated WAR file to Apache Tomcat.
+
+Open:
+
+```
+http://localhost:8080/uteshop
+```
+
+---
+
+# 💳 VNPay Sandbox
+
+Use the following sandbox account for testing.
+
+| Field | Value |
+|---------|--------|
+| Bank | NCB |
+| Card Number | 9704198526191432198 |
+| Card Holder | NGUYEN VAN A |
+| Issue Date | 07/15 |
+| OTP | 123456 |
+
+---
+
+# 📸 Screenshots
+
+Add screenshots here.
+
+- Home Page
+- Product Detail
+- Shopping Cart
+- Checkout
+- Vendor Dashboard
+- Admin Dashboard
+
+---
+
+# 📈 Future Improvements
+
+- Elasticsearch
+- Redis Cache
+- Docker Deployment
+- Microservice Architecture
+- Recommendation System
+- AI Product Search
+- Mobile Application
+- CI/CD Pipeline
+
+---
+
+# 👨‍💻 My Contributions
+
+### Backend
+
+- Designed the database schema
+- Implemented JWT Authentication
+- Built Google OAuth Login
+- Developed Admin Management
+- Developed User Management
+- Implemented Complaint Management
+- Integrated VNPay Payment Gateway
+- Built WebSocket Chat
+- Implemented AI Chatbot Integration
+- Optimized JPA queries
+
+### Frontend
+
+- Designed Admin Dashboard
+- Developed Authentication UI
+- Built User Management Interface
+- Developed Shopping Cart
+- Responsive Bootstrap UI
+
+---
+
+# 📄 License
+
+This project was developed for educational purposes.
+
+---
+
+# 👤 Author
+
+**Pham Han Minh Chuong**
+**Nguyen Thi Thanh Thuy**
+**Nguyen Thanh Binh Minh**
+
+- GitHub: https://github.com/chuongminh32
+- Email: chuongminh3225@gmail.com
