@@ -379,8 +379,8 @@ This project was developed for educational purposes.
 
 # 👤 Author
 
-**Pham Han Minh Chuong**
-**Nguyen Thi Thanh Thuy**
+**Pham Han Minh Chuong** -
+**Nguyen Thi Thanh Thuy** -
 **Nguyen Thanh Binh Minh**
 
 - GitHub: https://github.com/chuongminh32
